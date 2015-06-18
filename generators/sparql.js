@@ -42,9 +42,9 @@ SparqlBlocks.Sparql.STMNT_BRK = "###\n";
 SparqlBlocks.Sparql.STMNT_BRK_RE = /###\n/;
 SparqlBlocks.Sparql.stmJoin = function(statements, joinStr) {
   var stmntArray = statements.split(SparqlBlocks.Sparql.STMNT_BRK_RE);
-  console.log('stmntArray (before pop):' + stmntArray);
+  // console.log('stmntArray (before pop):' + stmntArray);
   stmntArray.pop();
-  console.log('stmntArray (after pop):' + stmntArray);
+  // console.log('stmntArray (after pop):' + stmntArray);
   return stmntArray.join(joinStr);
 }
 

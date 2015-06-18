@@ -9,6 +9,10 @@
 <script src="../generators/sparql.js"></script>
 <script src="../generators/sparql/bgp.js"></script>
 <script src="../generators/sparql/main.js"></script>
+<script src="../generators/sparql/control.js"></script>
+<script src="../generators/sparql/text.js"></script>
+<script src="../generators/sparql/math.js"></script>
+<script src="../generators/sparql/logic.js"></script>
 
 <script src="../../blockly/msg/messages.js"></script>
 <!-- <script src="../blocks/logic.js"></script> -->
@@ -534,9 +538,7 @@ h1 {
       <block type="sparql_table"></block>
       <block type="sparql_column"></block>
       <block type="sparql_value_container"></block>
-      <block type="sparql_execution">
-        <value name="QUERY">
-          <block type="sparql_select">
+      <block type="sparql_select">
             <field name="LIMIT">5</field>
             <field name="ORDER_DIRECTION1">ASC</field>
             <field name="ORDER_DIRECTION2">ASC</field>
@@ -647,8 +649,6 @@ h1 {
               </block>
             </value>
           </block>
-        </value>
-      </block>
     </category>
 
   </xml>

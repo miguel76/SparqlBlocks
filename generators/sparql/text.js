@@ -84,15 +84,15 @@ SparqlBlocks.Sparql['sparql_text_isEmpty'] = function(block) {
 //   return [code, SparqlBlocks.Sparql.ORDER_MEMBER];
 // };
 
-// SparqlBlocks.Sparql['sparql_text_contains'] = function(block) {
-//   // Search the text for a substring.
-//   var argument0 = SparqlBlocks.Sparql.valueToCode(block, 'FIND',
-//       SparqlBlocks.Sparql.ORDER_NONE) || '\'\'';
-//   var argument1 = SparqlBlocks.Sparql.valueToCode(block, 'VALUE',
-//       SparqlBlocks.Sparql.ORDER_MEMBER) || '\'\'';
-//   var code = argument1 + '.' + operator + '(' + argument0 + ') + 1';
-//   return [code, SparqlBlocks.Sparql.ORDER_MEMBER];
-// };
+SparqlBlocks.Sparql['sparql_text_contains'] = function(block) {
+  // Search the text for a substring.
+  var argument0 = SparqlBlocks.Sparql.valueToCode(block, 'FIND',
+      SparqlBlocks.Sparql.ORDER_COMMA) || '\'\'';
+  var argument1 = SparqlBlocks.Sparql.valueToCode(block, 'VALUE',
+      SparqlBlocks.Sparql.ORDER_COMMA) || '\'\'';
+  var code = 'CONTAINS(' + argument1 + ', ' + argument0 + ')';
+  return [code, SparqlBlocks.Sparql.ORDER_FUNCTION_CALL];
+};
 
 SparqlBlocks.Sparql['sparql_text_charAt'] = function(block) {
   // Get letter at index.

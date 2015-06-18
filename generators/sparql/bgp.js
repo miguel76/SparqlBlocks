@@ -64,6 +64,5 @@ SparqlBlocks.Sparql['sparql_typedsubject_propertylist'] = function(block) {
                 '' ) +
             SparqlBlocks.Sparql.STMNT_BRK) :
           '';
-  console.log(code);
   return code;
 };

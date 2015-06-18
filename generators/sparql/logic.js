@@ -95,6 +95,6 @@ SparqlBlocks.Sparql['sparql_logic_ternary'] = function(block) {
       SparqlBlocks.Sparql.ORDER_COMMA) || '""';
   var value_else = SparqlBlocks.Sparql.valueToCode(block, 'ELSE',
       SparqlBlocks.Sparql.ORDER_COMMA) || '""';
-  var code = 'IF('value_if + ', ' + value_then + ', ' + value_else + ')';
+  var code = 'IF(' + value_if + ', ' + value_then + ', ' + value_else + ')';
   return [code, SparqlBlocks.Sparql.ORDER_FUNCTION_CALL];
 };
