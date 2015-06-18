@@ -40,6 +40,9 @@ Blockly.Blocks['sparql_column'] = {
     this.appendStatementInput("VALUES")
         .setCheck('ValueContainer');
     this.setOutput(true, "Column");
+    this.setDeletable(false);
+    this.setMovable(false);
+    this.setEditable(false);
     this.setTooltip('');
   }
 };
@@ -53,6 +56,8 @@ Blockly.Blocks['sparql_value_container'] = {
     this.setInputsInline(true);
     this.setPreviousStatement(true, "ValueContainer");
     this.setNextStatement(true, "ValueContainer");
+    this.setDeletable(false);
+    this.setMovable(false);
     this.setTooltip('');
   }
 };
@@ -65,6 +70,8 @@ Blockly.Blocks['sparql_table'] = {
     // this.setMutator(new Blockly.Mutator(['sparql_table_table',
     //                                      'sparql_table_column']));
     this.setOutput(true, "Table");
+    this.setDeletable(false);
+    this.setMovable(false);
     this.setTooltip('');
     this.colCount_ = 0;
   },
