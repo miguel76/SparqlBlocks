@@ -59,7 +59,7 @@ SparqlBlocks.Sparql['sparql_optional'] = function(block) {
       SparqlBlocks.Sparql.stmJoin(
           SparqlBlocks.Sparql.statementToCode(block, 'OP'),
           '.\n');
-  return (statements_op = '') ?
+  return (statements_op == '') ?
             '' :
-            'OPTIONAL {' + statements_op + '}' + SparqlBlocks.Sparql.STMNT_BRK;
+            'OPTIONAL {\n' + statements_op + '\n}' + SparqlBlocks.Sparql.STMNT_BRK;
 };

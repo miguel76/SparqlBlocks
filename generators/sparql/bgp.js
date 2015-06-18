@@ -27,7 +27,6 @@ goog.require('SparqlBlocks.Sparql');
 SparqlBlocks.Sparql['sparql_verb_object'] = function(block) {
   var value_verb = SparqlBlocks.Sparql.valueToCode(block, 'VERB', SparqlBlocks.Sparql.ORDER_ATOMIC);
   var value_object = SparqlBlocks.Sparql.valueToCode(block, 'OBJECT', SparqlBlocks.Sparql.ORDER_ATOMIC);
-  // TODO: Assemble JavaScript into code variable.
   var code =
       value_verb ?
         ( value_verb + ' ' +
@@ -54,7 +53,7 @@ SparqlBlocks.Sparql['sparql_typedsubject_propertylist'] = function(block) {
           SparqlBlocks.Sparql.statementToCode(block, 'PROPERTY_LIST'),
           ';\n');
   var code =
-      (value_subject || value_type || statements_property_list != '') ?
+      (value_type || statements_property_list != '') ?
           ( (value_subject ? value_subject : '[]') +
             (value_type ?
                 ' a ' + value_type + (statements_property_list != '' ? ';' : '') :
@@ -65,4 +64,40 @@ SparqlBlocks.Sparql['sparql_typedsubject_propertylist'] = function(block) {
             SparqlBlocks.Sparql.STMNT_BRK) :
           '';
   return code;
+};
+
+var generateAnonSubject = function(value_type, statements_property_list) {
+  var code =
+      (value_type || statements_property_list != '') ?
+          '[\n' +
+          (value_type ?
+                ' a ' + value_type + (statements_property_list != '' ? ';\n' : '') :
+                '' ) +
+          (statements_property_list != '' ?
+                statements_property_list :
+                '' ) +
+          '\n]' :
+          '[]';
+  return [code, SparqlBlocks.Sparql.ORDER_ATOMIC];
+}
+
+SparqlBlocks.Sparql['sparql_anontypedsubject_propertylist'] = function(block) {
+  var value_type =
+      SparqlBlocks.Sparql.valueToCode(
+          block,
+          'TYPE',
+          SparqlBlocks.Sparql.ORDER_ATOMIC);
+  var statements_property_list =
+      SparqlBlocks.Sparql.stmJoin(
+          SparqlBlocks.Sparql.statementToCode(block, 'PROPERTY_LIST'),
+          ';\n');
+  return generateAnonSubject(value_type, statements_property_list);
+};
+
+SparqlBlocks.Sparql['sparql_anonsubject_propertylist'] = function(block) {
+  var statements_property_list =
+      SparqlBlocks.Sparql.stmJoin(
+          SparqlBlocks.Sparql.statementToCode(block, 'PROPERTY_LIST'),
+          ';\n');
+  return generateAnonSubject(null, statements_property_list);
 };
