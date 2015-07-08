@@ -166,3 +166,18 @@ Blockly.Blocks['sparql_prefixed_iri'] = {
     this.setTooltip('');
   }
 };
+
+// https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#6ttvtd
+Blockly.Blocks['sparql_iri'] = {
+  init: function() {
+    this.setHelpUrl('http://www.example.com/');
+    this.setColour(20);
+    this.appendDummyInput()
+        .appendField("<")
+        .appendField(new Blockly.FieldTextInput("iri"), "IRI")
+        .appendField(">");
+    this.setInputsInline(true);
+    this.setOutput(true, "Iri");
+    this.setTooltip('');
+  }
+};

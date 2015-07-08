@@ -26,57 +26,7 @@ goog.require('Blockly.Blocks');
 goog.require('SparqlBlocks.Sparql');
 goog.require('SparqlBlocks.Blocks.types');
 var typeExt = SparqlBlocks.Blocks.types.getExtension;
-
-var sparqlExec = function(endpointUrl, query, callback) {
-  var queryUrl = endpointUrl + "?query=" + encodeURI(query);
-  $.ajax({
-    dataType: "json",
-    // accepts: "application/sparql-results+json",
-    url: queryUrl,
-    success: function(data) {
-      callback(null,data);
-    },
-    error: function(errorMsg) {
-      callback(errorMsg);
-    }
-  });
-}
-
-var defaultEndpointUrl = 'http://live.dbpedia.org/sparql';
-
-var sparqlExecAndAlert = function(endpointUrl, query) {
-  if (!endpointUrl) {
-    endpointUrl = defaultEndpointUrl;
-  }
-  sparqlExec(endpointUrl, query, function(err, data) {
-    if (err) {
-      alert("Error: " + err);
-    } else {
-      alert("Results:\n" + JSON.stringify(data));
-    }
-  })
-}
-
-var sparqlExecAndPublish = function(endpointUrl, query, workspace, connection) {
-  // get the table element
-  var table = $("#results");
-
-  // get the sparql variables from the 'head' of the data.
-  var headerVars = data.head.vars;
-
-  // using the vars, make some table headers and add them to the table;
-  var trHeaders = getTableHeaders(headerVars);
-  table.append(trHeaders);
-
-  // grab the actual results from the data.
-  var bindings = data.results.bindings;
-
-  // for each result, make a table row and add it to the table.
-  for(rowIdx in bindings){
-    table.append(getTableRow(headerVars, bindings[rowIdx]));
-  }
-
-}
+goog.require('SparqlBlocks.Core.exec');
 
 Blockly.Blocks['sparql_execution'] = {
   init: function() {
@@ -100,15 +50,9 @@ Blockly.Blocks['sparql_execution'] = {
       if (queryStr) {
         console.log('Ready to execute query: ' + queryStr);
         var connection = this.getInput('RESULTS').connection;
-        var progressBlock = Blockly.Block.obtain(this.workspace, 'sparql_execution_in_progress');
-        progressBlock.initSvg();
-        var targetBlock = connection.targetBlock();
-        if (targetBlock) {
-          targetBlock.dispose();
-        }
-        connection.connect(progressBlock.outputConnection);
-        progressBlock.render();
-        sparqlExecAndAlert(null, queryStr);
+        SparqlBlocks.Core.exec.sparqlExecAndPublish(
+            null, queryStr,
+            this.workspace, connection);
 
         // var blocks = this.rootBlock_.getDescendants();
         // for (var i = 0, child; child = blocks[i]; i++) {
@@ -138,6 +82,17 @@ Blockly.Blocks['sparql_execution_in_progress'] = {
     this.setColour(330);
     this.appendDummyInput()
         .appendField("execution in progress...");
+    this.setOutput(true, "Table");
+    this.setTooltip('');
+  }
+};
+
+Blockly.Blocks['sparql_execution_error'] = {
+  init: function() {
+    this.setHelpUrl('http://www.example.com/');
+    this.setColour(330);
+    this.appendDummyInput()
+        .appendField("Error executing query!");
     this.setOutput(true, "Table");
     this.setTooltip('');
   }

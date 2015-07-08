@@ -30,6 +30,16 @@ SparqlBlocks.Sparql['sparql_text'] = function(block) {
   return [code, SparqlBlocks.Sparql.ORDER_ATOMIC];
 };
 
+SparqlBlocks.Sparql['sparql_text_with_lang'] = function(block) {
+  // Text value.
+  var code = SparqlBlocks.Sparql.quote_(block.getFieldValue('TEXT'));
+  var text_lang = block.getFieldValue('LANG');
+  if (text_lang && text_lang.length > 0) {
+    code += '@' + text_lang;
+  }
+  return [code, SparqlBlocks.Sparql.ORDER_ATOMIC];
+};
+
 SparqlBlocks.Sparql['sparql_text_join'] = function(block) {
   // Create a string made up of any number of elements of any type.
   var code;
