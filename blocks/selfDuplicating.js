@@ -21,13 +21,13 @@
 
 (function() {
 
-  goog.provide('SparqlBlocks.SelfDuplicatingBlock');
+  goog.provide('SparqlBlocks.Blocks.SelfDuplicatingBlock');
   goog.require('goog.math.Coordinate');
 
   /**
   * Is a hovering element currently showing?
   */
-  SparqlBlocks.SelfDuplicatingBlock.visible = false;
+  SparqlBlocks.Blocks.SelfDuplicatingBlock.visible = false;
 
   /**
   * PID of suspended thread to clear tooltip on mouse out.
@@ -69,27 +69,27 @@
   /**
   * Horizontal offset between mouse cursor and tooltip.
   */
-  SparqlBlocks.SelfDuplicatingBlock.OFFSET_X = 0;
+  SparqlBlocks.Blocks.SelfDuplicatingBlock.OFFSET_X = 0;
 
   /**
   * Vertical offset between mouse cursor and tooltip.
   */
-  SparqlBlocks.SelfDuplicatingBlock.OFFSET_Y = 10;
+  SparqlBlocks.Blocks.SelfDuplicatingBlock.OFFSET_Y = 10;
 
   /**
   * Radius mouse can move before killing tooltip.
   */
-  SparqlBlocks.SelfDuplicatingBlock.RADIUS_OK = 100;
+  SparqlBlocks.Blocks.SelfDuplicatingBlock.RADIUS_OK = 100;
 
   /**
   * Delay before tooltip appears.
   */
-  SparqlBlocks.SelfDuplicatingBlock.HOVER_MS = 1000;
+  SparqlBlocks.Blocks.SelfDuplicatingBlock.HOVER_MS = 1000;
 
   /**
   * Horizontal padding between tooltip and screen edge.
   */
-  SparqlBlocks.SelfDuplicatingBlock.MARGINS = 5;
+  SparqlBlocks.Blocks.SelfDuplicatingBlock.MARGINS = 5;
 
   /**
   * The duplicated block.  Set once by Blockly.Tooltip.createDom.
@@ -123,7 +123,7 @@
   var hide_ = function(block, duplicateBlock) {
     return function() {
       console.log('in hide() function');
-      // console.log('SparqlBlocks.SelfDuplicatingBlock.visible: ' + SparqlBlocks.SelfDuplicatingBlock.visible);
+      // console.log('SparqlBlocks.Blocks.SelfDuplicatingBlock.visible: ' + SparqlBlocks.Blocks.SelfDuplicatingBlock.visible);
       console.log('duplicateBlock: ' + duplicateBlock);
       if (duplicateBlock) {
         var blockCoords = block.getRelativeToSurfaceXY();
@@ -137,7 +137,7 @@
         console.log('dy: ' + dy);
         console.log('dr^2: ' + Math.pow(dx, 2) + Math.pow(dy, 2));
         console.log('distance: ' + dr);
-        if (dr <= SparqlBlocks.SelfDuplicatingBlock.RADIUS_OK) {
+        if (dr <= SparqlBlocks.Blocks.SelfDuplicatingBlock.RADIUS_OK) {
           console.log('dispose');
           duplicateBlock.dispose();
           duplicateBlock = null;
@@ -146,7 +146,7 @@
       clearTimeout(showPid_);
     };
   };
-  SparqlBlocks.SelfDuplicatingBlock.hide = hide_;
+  SparqlBlocks.Blocks.SelfDuplicatingBlock.hide = hide_;
 
   /**
    * Create the duplicate and show it.
@@ -157,8 +157,9 @@
       // if (!block.duplicateBlock) {
         poisonedElement_ = element_;
         // duplicateBlock_ = block.duplicate_();
+        unbindMouseEvents_(block);
         var duplicateBlock = duplicateInPlace_(block);
-        unbindMouseEvents_(duplicateBlock);
+        bindMouseEvents_(block);
         Blockly.bindEvent_(
             duplicateBlock.getSvgRoot(), 'mouseout', null,
             onDuplicateMouseOut_(block, duplicateBlock))
@@ -284,13 +285,13 @@
         // Don't display a tooltip if a widget is open (tooltip would be under it).
         return;
       }
-      if (SparqlBlocks.SelfDuplicatingBlock.visible) {
+      if (SparqlBlocks.Blocks.SelfDuplicatingBlock.visible) {
         // Compute the distance between the mouse position when the tooltip was
         // shown and the current mouse position.  Pythagorean theorem.
         // var dx = lastX_ - e.clientX;
         // var dy = lastY_ - e.clientY;
         // var dr = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
-        // if (dr > SparqlBlocks.SelfDuplicatingBlock.RADIUS_OK) {
+        // if (dr > SparqlBlocks.Blocks.SelfDuplicatingBlock.RADIUS_OK) {
           hide_(block)();
         // }
       } else if (poisonedElement_ != element_) {
@@ -299,7 +300,7 @@
         // Maybe this time the mouse will stay put.  Schedule showing of tooltip.
         lastX_ = e.clientX;
         lastY_ = e.clientY;
-        showPid_ = setTimeout(show_(block), SparqlBlocks.SelfDuplicatingBlock.HOVER_MS);
+        showPid_ = setTimeout(show_(block), SparqlBlocks.Blocks.SelfDuplicatingBlock.HOVER_MS);
         }
     };
   };
@@ -312,6 +313,17 @@
     var be = block.boundEvents;
     // if (be) {
       Blockly.unbindEvent_(be.mouseover);
+      // Blockly.unbindEvent_(be.mouseout);
+      // Blockly.unbindEvent_(be.mousemove);
+    // }
+  };
+
+  /**
+   * Unbinds the required mouse events onto an SVG element.
+   * @param {!Element} element SVG element onto which tooltip is to be bound.
+   */
+  var unbindTheseMouseEvents_ = function(boundEvents) {
+      Blockly.unbindEvent_(boundEvents.mouseover);
       // Blockly.unbindEvent_(be.mouseout);
       // Blockly.unbindEvent_(be.mousemove);
     // }
@@ -332,6 +344,6 @@
         // mousemove: Blockly.bindEvent_(element, 'mousemove', null, onMouseMove_(block))
     };
   };
-  SparqlBlocks.SelfDuplicatingBlock.bindMouseEvents = bindMouseEvents_;
+  SparqlBlocks.Blocks.SelfDuplicatingBlock.bindMouseEvents = bindMouseEvents_;
 
 })();

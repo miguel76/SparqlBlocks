@@ -23,6 +23,7 @@
 
   goog.provide('SparqlBlocks.Core.output');
   goog.require('SparqlBlocks.Core.prefixes');
+  goog.require('SparqlBlocks.Blocks.SelfDuplicatingBlock');
 
   var blockFromStringLiteral_ = function(value, workspace) {
     var strBlock = null;
@@ -81,6 +82,10 @@
       // containerBlock.getInput('VALUE').connection;
     }
     if (valueBlock) {
+      valueBlock.setDeletable(false);
+      valueBlock.setMovable(false);
+      valueBlock.setEditable(false);
+      SparqlBlocks.Blocks.SelfDuplicatingBlock.bindMouseEvents(valueBlock);
       connection.connect(valueBlock.outputConnection);
       valueBlock.render();
     }

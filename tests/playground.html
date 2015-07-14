@@ -8,6 +8,8 @@
 
 <script src="../../blockly/blockly_uncompressed.js"></script>
 
+<script src="../blocks/selfDuplicating.js"></script>
+
 <script src="../core/prefixes.js"></script>
 <script src="../core/output.js"></script>
 <script src="../core/exec.js"></script>
@@ -32,7 +34,6 @@
 <!-- <script src="../blocks/mosio.js"></script> -->
 
 <script src="../blocks/types.js"></script>
-<script src="../blocks/selfDuplicating.js"></script>
 <script src="../blocks/variables.js"></script>
 <script src="../blocks/bgp.js"></script>
 <script src="../blocks/main.js"></script>
@@ -98,7 +99,6 @@ function start() {
   //          realtime: false,
   //          scrollbars: false
   //         });
-  Blockly.Xml.domToWorkspace(workspace, document.getElementById('sparqlResults'));
 }
 
 function toXml() {
@@ -176,9 +176,9 @@ h1 {
           <block type="sparql_typedsubject_propertylist"></block>
         </statement>
       </block>
-      <block type="sparql_var_binding"></block>
+      <!-- <block type="sparql_var_binding"></block> -->
       <block type="sparql_execution"></block>
-      <block type="sparql_select" inline="true">
+      <!-- <block type="sparql_select" inline="true">
         <field name="ORDER_DIRECTION1">ASC</field>
         <field name="ORDER_DIRECTION2">ASC</field>
         <field name="ORDER_DIRECTION3">ASC</field>
@@ -241,7 +241,7 @@ h1 {
             </next>
           </block>
         </statement>
-      </block>
+      </block> -->
       <block type="sparql_select">
         <field name="ORDER_DIRECTION1">ASC</field>
         <field name="ORDER_DIRECTION2">ASC</field>
@@ -693,80 +693,6 @@ h1 {
   </p>
   <hr>
 
-  <p>
-    <xml id="sparqlResults" style="display: none">
-      <block type="sparql_table" id="4" inline="true" x="20" y="20">
-        <mutation colcount="3"></mutation>
-        <value name="COL1">
-          <block type="sparql_column" id="14">
-            <field name="COLNAME">colName1</field>
-            <statement name="VALUES">
-              <block type="sparql_value_container" id="31" inline="true">
-                <value name="VALUE">
-                  <block type="sparql_prefixed_iri" id="27">
-                    <field name="PREFIX">prefix</field>
-                    <field name="LOCAL_NAME">localName</field>
-                  </block>
-                </value>
-                <next>
-                  <block type="sparql_value_container" id="35" inline="true">
-                    <value name="VALUE">
-                      <block type="sparql_prefixed_iri" id="43">
-                        <field name="PREFIX">prefix</field>
-                        <field name="LOCAL_NAME">localName</field>
-                      </block>
-                    </value>
-                  </block>
-                </next>
-              </block>
-            </statement>
-          </block>
-        </value>
-        <value name="COL2">
-          <block type="sparql_column" id="18">
-            <field name="COLNAME">colName2</field>
-            <statement name="VALUES">
-              <block type="sparql_value_container" id="65" inline="true">
-                <value name="VALUE">
-                  <block type="sparql_prefixed_iri" id="84">
-                    <field name="PREFIX">prefix</field>
-                    <field name="LOCAL_NAME">localName</field>
-                  </block>
-                </value>
-                <next>
-                  <block type="sparql_value_container" id="69" inline="true"></block>
-                </next>
-              </block>
-            </statement>
-          </block>
-        </value>
-        <value name="COL3">
-          <block type="sparql_column" id="22">
-            <field name="COLNAME">colName3</field>
-            <statement name="VALUES">
-              <block type="sparql_value_container" id="57" inline="true">
-                <value name="VALUE">
-                  <block type="sparql_text" id="53">
-                    <field name="TEXT"></field>
-                  </block>
-                </value>
-                <next>
-                  <block type="sparql_value_container" id="61" inline="true">
-                    <value name="VALUE">
-                      <block type="sparql_text" id="79">
-                        <field name="TEXT"></field>
-                      </block>
-                    </value>
-                  </block>
-                </next>
-              </block>
-            </statement>
-          </block>
-        </value>
-      </block>
-    </xml>
-    <div id="sparqlResultsArea" style="height: 260px; width: 350px;"></div>
-  </p>
 
   <!-- Realtime setup buttons. -->
 

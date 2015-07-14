@@ -25,7 +25,6 @@ goog.provide('SparqlBlocks.Blocks.tabular');
 goog.require('Blockly.Blocks');
 goog.require('SparqlBlocks.Blocks.types');
 var typeExt = SparqlBlocks.Blocks.types.getExtension;
-goog.require('SparqlBlocks.SelfDuplicatingBlock');
 
 //Blockly.Blocks.bgp.HUE = 120;
 // Blockly.Blocks.Sparql.varType = "Var";
@@ -60,7 +59,6 @@ Blockly.Blocks['sparql_value_container'] = {
     this.setDeletable(false);
     this.setMovable(false);
     this.setTooltip('');
-    SparqlBlocks.SelfDuplicatingBlock.bindMouseEvents(this);
   }
 };
 

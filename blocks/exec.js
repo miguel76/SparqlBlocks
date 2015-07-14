@@ -28,6 +28,13 @@ goog.require('SparqlBlocks.Blocks.types');
 var typeExt = SparqlBlocks.Blocks.types.getExtension;
 goog.require('SparqlBlocks.Core.exec');
 
+var unconnect_ = function(connection) {
+  var targetBlock = connection.targetBlock();
+  if (targetBlock) {
+    targetBlock.dispose();
+  }
+}
+
 Blockly.Blocks['sparql_execution'] = {
   init: function() {
     this.setHelpUrl('http://www.example.com/');
@@ -41,6 +48,10 @@ Blockly.Blocks['sparql_execution'] = {
     this.setTooltip('');
   },
   onchange: function() {
+    var resultsHolder = this.getInput('RESULTS');
+    if (!resultsHolder) return;
+    var resultsConnection = resultsHolder.connection;
+    if (!resultsConnection) return;
     var queryStr = SparqlBlocks.Sparql.valueToCode(
       this,
       'QUERY',
@@ -49,10 +60,9 @@ Blockly.Blocks['sparql_execution'] = {
       this.sparqlQueryStr = queryStr;
       if (queryStr) {
         console.log('Ready to execute query: ' + queryStr);
-        var connection = this.getInput('RESULTS').connection;
         SparqlBlocks.Core.exec.sparqlExecAndPublish(
             null, queryStr,
-            this.workspace, connection);
+            this.workspace, resultsConnection);
 
         // var blocks = this.rootBlock_.getDescendants();
         // for (var i = 0, child; child = blocks[i]; i++) {
@@ -70,6 +80,7 @@ Blockly.Blocks['sparql_execution'] = {
 
       } else {
         console.log('Empty query');
+        unconnect_(resultsConnection);
       }
 
     }
