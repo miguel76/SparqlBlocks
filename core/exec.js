@@ -35,7 +35,7 @@
     }
     var queryUrl = endpointUrl + "?query=" + encodeURIComponent(query);
     // console.log('queryUrl: ' + queryUrl);
-    $.ajax({
+    return $.ajax({
       dataType: "json",
       // accepts: "application/sparql-results+json",
       url: queryUrl,
@@ -49,7 +49,7 @@
   }
 
   var sparqlExecAndAlert_ = function(endpointUrl, query) {
-    sparqlExec_(endpointUrl, query, function(err, data) {
+    return sparqlExec_(endpointUrl, query, function(err, data) {
       if (err) {
         alert("Error: " + err);
       } else {
@@ -71,13 +71,13 @@
     block.render();
   }
 
-  var sparqlExecAndPublish_ = function(endpointUrl, query, workspace, connection) {
+  var sparqlExecAndPublish_ = function(endpointUrl, query, workspace, connection, callback) {
 
     var progressBlock = Blockly.Block.obtain(workspace, 'sparql_execution_in_progress');
     progressBlock.initSvg();
     connect_(connection, progressBlock);
 
-    sparqlExec_(endpointUrl, query, function(err, data) {
+    return sparqlExec_(endpointUrl, query, function(err, data) {
       var resultBlock = null;
       if (err) {
         resultBlock = Blockly.Block.obtain(workspace, 'sparql_execution_error');
@@ -86,6 +86,7 @@
       }
       resultBlock.initSvg();
       connect_(connection, resultBlock);
+      callback();
     });
   }
   SparqlBlocks.Core.exec.sparqlExecAndPublish = sparqlExecAndPublish_;

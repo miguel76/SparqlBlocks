@@ -58,11 +58,16 @@ Blockly.Blocks['sparql_execution'] = {
       SparqlBlocks.Sparql.ORDER_NONE);
     if ((!queryStr && !this.sparqlQueryStr) || queryStr != this.sparqlQueryStr) {
       this.sparqlQueryStr = queryStr;
+      if (this.queryReq) {
+        this.queryReq.abort();
+      }
       if (queryStr) {
         console.log('Ready to execute query: ' + queryStr);
-        SparqlBlocks.Core.exec.sparqlExecAndPublish(
+        var execComponent = this;
+        this.queryReq = SparqlBlocks.Core.exec.sparqlExecAndPublish(
             null, queryStr,
-            this.workspace, resultsConnection);
+            this.workspace, resultsConnection,
+            function() { execComponent.queryReq = null; } );
 
         // var blocks = this.rootBlock_.getDescendants();
         // for (var i = 0, child; child = blocks[i]; i++) {
@@ -81,6 +86,7 @@ Blockly.Blocks['sparql_execution'] = {
       } else {
         console.log('Empty query');
         unconnect_(resultsConnection);
+        this.queryReq = null;
       }
 
     }
