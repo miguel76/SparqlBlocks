@@ -37,7 +37,7 @@ Blockly.Blocks['sparql_variable'] = {
     this.setHelpUrl('http://www.example.com/');
     this.setColour(SparqlBlocks.Blocks.variables.HUE);
     this.appendDummyInput()
-        .appendField(new Blockly.FieldVariable(), "VARNAME");
+        .appendField(new Blockly.FieldVariable(), "VAR");
     this.setOutput(true, "Var");
     this.setTooltip('');
     // this.appendDummyInput()
@@ -74,15 +74,18 @@ Blockly.Blocks['sparql_variable'] = {
    * @param {!Array} options List of menu options to add to.
    * @this Blockly.Block
    */
-  customContextMenu: function(options) {
-    var option = {enabled: true};
-    var name = this.getFieldValue('VAR');
-    option.text = this.contextMenuMsg_.replace('%1', name);
-    var xmlField = goog.dom.createDom('field', null, name);
-    xmlField.setAttribute('name', 'VAR');
-    var xmlBlock = goog.dom.createDom('block', null, xmlField);
-    xmlBlock.setAttribute('type', this.contextMenuType_);
-    option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);
-    options.push(option);
-  }
+  // customContextMenu: function(options) {
+  //   var option = {enabled: true};
+  //   var name = this.getFieldValue('VAR');
+  //   option.text = this.contextMenuMsg_.replace('%1', name);
+  //   var xmlField = goog.dom.createDom('field', null, name);
+  //   xmlField.setAttribute('name', 'VAR');
+  //   var xmlBlock = goog.dom.createDom('block', null, xmlField);
+  //   xmlBlock.setAttribute('type', this.contextMenuType_);
+  //   option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);
+  //   options.push(option);
+  // }
 };
+
+Blockly.Blocks['variables_get'] = Blockly.Blocks['sparql_variable']
+Blockly.Blocks['variables_set'] = null;
