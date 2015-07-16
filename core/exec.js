@@ -42,8 +42,8 @@
       success: function(data) {
         callback(null,data);
       },
-      error: function(errorMsg) {
-        callback(errorMsg);
+      error: function(jqXHR, textStatus, errorThrown) {
+        callback({ jqXHR: jqXHR, textStatus: textStatus, errorThrown: errorThrown });
       }
     });
   }
@@ -71,6 +71,8 @@
     block.render();
   }
 
+  const DESCR_LENGTH = 40;
+
   var sparqlExecAndPublish_ = function(endpointUrl, query, workspace, connection, callback) {
 
     var progressBlock = Blockly.Block.obtain(workspace, 'sparql_execution_in_progress');
@@ -81,10 +83,29 @@
       var resultBlock = null;
       if (err) {
         resultBlock = Blockly.Block.obtain(workspace, 'sparql_execution_error');
+        resultBlock.initSvg();
+        var errorType = (err.textStatus) ? err.textStatus : "unknown problem";
+        if (err.jqXHR.status) {
+          errorType += " " + err.jqXHR.status;
+        }
+        if (err.jqXHR.statusText) {
+          errorType += ": " + err.jqXHR.statusText;
+        }
+        resultBlock.setFieldValue(errorType, 'ERRORTYPE');
+        var errorDescr = err.jqXHR.responseText;
+        if (errorDescr) {
+          var errorDescrShort = null;
+          if (errorDescr.length > DESCR_LENGTH) {
+            errorDescrShort = errorDescr.substr(0, DESCR_LENGTH - 3) + '...';
+          } else {
+            errorDescrShort = errorDescr;
+          }
+          resultBlock.setFieldValue(errorDescrShort, 'ERRORDESCR');
+          resultBlock.setTooltip(errorDescr);
+        }
       } else {
         resultBlock = SparqlBlocks.Core.output.blocksFromSelectResults(workspace, data);
       }
-      resultBlock.initSvg();
       connect_(connection, resultBlock);
       callback();
     });

@@ -101,6 +101,9 @@ Blockly.Blocks['sparql_execution_in_progress'] = {
         .appendField("execution in progress...");
     this.setOutput(true, "Table");
     this.setTooltip('');
+    this.setDeletable(false);
+    this.setMovable(false);
+    this.setEditable(false);
   }
 };
 
@@ -110,7 +113,16 @@ Blockly.Blocks['sparql_execution_error'] = {
     this.setColour(330);
     this.appendDummyInput()
         .appendField("Error executing query!");
+    this.appendDummyInput()
+        .appendField("Error Name")
+        .appendField(new Blockly.FieldTextInput("ERROR TYPE"), "ERRORTYPE");
+    this.appendDummyInput()
+        .appendField("Description")
+        .appendField(new Blockly.FieldTextInput("ERROR"), "ERRORDESCR");
     this.setOutput(true, "Table");
     this.setTooltip('');
+    this.setDeletable(false);
+    this.setMovable(false);
+    this.setEditable(false);
   }
 };
