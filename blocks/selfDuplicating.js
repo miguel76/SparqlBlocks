@@ -122,23 +122,14 @@
    */
   var hide_ = function(block, duplicateBlock) {
     return function() {
-      console.log('in hide() function');
       // console.log('SparqlBlocks.Blocks.SelfDuplicatingBlock.visible: ' + SparqlBlocks.Blocks.SelfDuplicatingBlock.visible);
-      console.log('duplicateBlock: ' + duplicateBlock);
       if (duplicateBlock) {
         var blockCoords = block.getRelativeToSurfaceXY();
         var duplicateBlockCoords = duplicateBlock.getRelativeToSurfaceXY();
-        console.log('blockCoords: ' + JSON.stringify(blockCoords));
-        console.log('duplicateBlockCoords: ' + duplicateBlockCoords);
         var dx = blockCoords.x - duplicateBlockCoords.x;
         var dy = blockCoords.y - duplicateBlockCoords.y;
         var dr = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
-        console.log('dx: ' + dx);
-        console.log('dy: ' + dy);
-        console.log('dr^2: ' + Math.pow(dx, 2) + Math.pow(dy, 2));
-        console.log('distance: ' + dr);
         if (dr <= SparqlBlocks.Blocks.SelfDuplicatingBlock.RADIUS_OK) {
-          console.log('dispose');
           duplicateBlock.dispose();
           duplicateBlock = null;
         }
@@ -184,7 +175,6 @@
       // If the tooltip is an object, treat it as a pointer to the next object in
       // the chain to look at.  Terminate when a string or function is found.
       var element = e.target;
-      console.log('mouseover');
       if (!Blockly.dragMode_) {
         show_(block)();
       }
@@ -210,9 +200,7 @@
       // a mouseOut followed instantly by a mouseOver.  Fork off the mouseOut
       // event and kill it if a mouseOver is received immediately.
       // This way the task only fully executes if mousing into the void.
-      console.log('mouseout');
       mouseOutPid_ = setTimeout(function() {
-            console.log('mouseout exec');
             element_ = null;
             poisonedElement_ = null;
             hide_(block)();
@@ -232,7 +220,6 @@
       // If the tooltip is an object, treat it as a pointer to the next object in
       // the chain to look at.  Terminate when a string or function is found.
       var element = e.target;
-      console.log('mouseover');
       if (duplicateBlock.mouseOutPid_) {
         clearTimeout(duplicateBlock.mouseOutPid_);
       }
@@ -250,10 +237,8 @@
       // a mouseOut followed instantly by a mouseOver.  Fork off the mouseOut
       // event and kill it if a mouseOver is received immediately.
       // This way the task only fully executes if mousing into the void.
-      console.log('dup mouseout');
       if (!Blockly.dragMode_) {
         duplicateBlock.mouseOutPid_ = setTimeout(function() {
-          console.log('dup mouseout exec');
           element_ = null;
           poisonedElement_ = null;
           hide_(block, duplicateBlock)();

@@ -102,7 +102,6 @@
   }
 
   var lookForIri_ = function(iri) {
-    console.log('Looking for <' + iri + '> ...');
     var prefix = reverseMap_[iri];
     if (prefix) {
       return { prefix: prefix, localPart: '' }
@@ -139,7 +138,6 @@
       }
       // addRule_(data[prefix], prefix);
     });
-    console.log(JSON.stringify(reverseMap_));
   });
 
   SparqlBlocks.Core.prefixes.lookForPrefix = lookForPrefix_;

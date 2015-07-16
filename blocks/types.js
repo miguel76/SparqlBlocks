@@ -53,7 +53,7 @@ goog.provide('SparqlBlocks.Blocks.types');
         extension = extension.concat(getExtension(children[i]));
       }
       typeObj.extension = extension;
-      console.log("Type extension for " + typeStr + " : " + extension);
+      // console.log("Type extension for " + typeStr + " : " + extension);
     }
     return typeObj.extension;
   };
