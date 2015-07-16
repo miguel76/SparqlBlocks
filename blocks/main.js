@@ -61,12 +61,6 @@ Blockly.Blocks['sparql_select'] = {
     this.appendDummyInput()
         .appendField("select all the variables");
 
-    this.appendDummyInput()
-        .appendField("and the first")
-        .appendField(
-            new Blockly.FieldTextInput("10"), "LIMIT")
-        .appendField("rows");
-
     this.appendStatementInput("WHERE")
         .setCheck("TriplesBlock")
         .appendField("where");
@@ -94,6 +88,11 @@ Blockly.Blocks['sparql_select'] = {
         .appendField(
           new Blockly.FieldDropdown([["↓", "ASC"], ["↑", "DESC"]]),
           "ORDER_DIRECTION3");
+
+    this.appendDummyInput()
+        .appendField("limited to the first")
+        .appendField(new Blockly.FieldTextInput("10"), "LIMIT")
+        .appendField("rows");
 
     // this.appendDummyInput()
     //     .appendField("ordered by");
