@@ -26,13 +26,40 @@ goog.require('Blockly.Blocks');
 goog.require('SparqlBlocks.Blocks.types');
 var typeExt = SparqlBlocks.Blocks.types.getExtension;
 
+var _init = function(newBlock) {
+  newBlock.setHelpUrl('http://www.w3.org/TR/sparql11-query/#QSynTriples');
+}
+
+var _initVerb = function(newBlock) {
+  _init(newBlock);
+  newBlock.setColour(65);
+}
+
+var _initSubject = function(newBlock) {
+  _init(newBlock);
+  newBlock.setColour(120);
+}
+
+var _varsInScopeFromInput = function(block, inputName) {
+  var inputConnection = block.getInputConnection(inputName);
+  if (inputConnection) {
+    var inputBlock = inputName.targetBlock;
+    if (inputBlock) {
+      var varsInScope = inputBlock.varsInScope();
+      if (varsInScope) {
+        return varsInScope;
+      }
+    }
+  }
+  return [];
+}
+
 //Blockly.Blocks.bgp.HUE = 120;
 
 // https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#rh3u29
 Blockly.Blocks['sparql_verb_objectlist'] = {
   init: function() {
-    this.setHelpUrl('http://www.example.com/');
-    this.setColour(65);
+    _initVerb(this);
     this.appendValueInput("VERB")
         .setCheck(typeExt("Verb"));
     //     .appendField("-[");
@@ -45,14 +72,18 @@ Blockly.Blocks['sparql_verb_objectlist'] = {
     this.setPreviousStatement(true, "PropertyList");
     this.setNextStatement(true, "PropertyList");
     this.setTooltip('');
+  },
+  getVarsInScope: function() {
+    return _.union(
+        _varsInScopeFromInput(this, "VERB"),
+        _varsInScopeFromInput(this, "OBJECT"));
   }
 };
 
 // https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#dt8jdf
 Blockly.Blocks['sparql_verb_object'] = {
   init: function() {
-    this.setHelpUrl('http://www.example.com/');
-    this.setColour(65);
+    _initVerb(this);
     this.appendValueInput("VERB")
         .setCheck(typeExt("Verb"));
         // .appendField("-[");
@@ -86,8 +117,7 @@ Blockly.Blocks['property_list_path'] = {
 // https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#otezbs
 Blockly.Blocks['sparql_subject_propertylist'] = {
   init: function() {
-    this.setHelpUrl('http://www.example.com/');
-    this.setColour(120);
+    _initSubject(this);
     this.appendValueInput("SUBJECT")
         .setCheck(typeExt("ResourceOrVar"));
     this.appendStatementInput("PROPERTY_LIST")
@@ -104,8 +134,7 @@ Blockly.Blocks['sparql_subject_propertylist'] = {
 // https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#otezbs
 Blockly.Blocks['sparql_typedsubject_propertylist'] = {
   init: function() {
-    this.setHelpUrl('http://www.example.com/');
-    this.setColour(120);
+    _initSubject(this);
     this.appendValueInput("SUBJECT")
         .setCheck(typeExt("ResourceOrVar"));
     this.appendValueInput("TYPE")
@@ -125,8 +154,7 @@ Blockly.Blocks['sparql_typedsubject_propertylist'] = {
 // https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#otezbs
 Blockly.Blocks['sparql_anonsubject_propertylist'] = {
   init: function() {
-    this.setHelpUrl('http://www.example.com/');
-    this.setColour(120);
+    _initSubject(this);
     this.appendStatementInput("PROPERTY_LIST")
         .setCheck("PropertyList")
 //        .appendField("◯━");
@@ -140,8 +168,7 @@ Blockly.Blocks['sparql_anonsubject_propertylist'] = {
 // https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#9y53zb
 Blockly.Blocks['sparql_subject_verb_objectlist'] = {
   init: function() {
-    this.setHelpUrl('http://www.example.com/');
-    this.setColour(120);
+    _initSubject(this);
     this.appendValueInput("SUBJECT")
         .setCheck(typeExt("ResourceOrVar"));
     this.appendValueInput("VERB")
@@ -164,8 +191,7 @@ Blockly.Blocks['sparql_subject_verb_objectlist'] = {
 // https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#6x98e2
 Blockly.Blocks['sparql_subject_verb_object'] = {
   init: function() {
-    this.setHelpUrl('http://www.example.com/');
-    this.setColour(120);
+    _initSubject(this);
     this.appendValueInput("SUBJECT")
         .setCheck(typeExt("ResourceOrVar"));
     this.appendValueInput("VERB")
