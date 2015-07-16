@@ -67,24 +67,24 @@ Blockly.Blocks['sparql_select'] = {
 
     this.appendValueInput("ORDER_FIELD1")
         .setCheck(typeExt("Expr"))
-        .appendField("ordered by");
-    this.appendDummyInput()
+        .appendField("ordered by")
+    // this.appendDummyInput()
         .appendField(
           new Blockly.FieldDropdown([["↓", "ASC"], ["↑", "DESC"]]),
           "ORDER_DIRECTION1");
 
     this.appendValueInput("ORDER_FIELD2")
         .setCheck(typeExt("Expr"))
-        .appendField(", by");
-    this.appendDummyInput()
+        .appendField(", by")
+    // this.appendDummyInput()
         .appendField(
           new Blockly.FieldDropdown([["↓", "ASC"], ["↑", "DESC"]]),
           "ORDER_DIRECTION2");
 
     this.appendValueInput("ORDER_FIELD3")
         .setCheck(typeExt("Expr"))
-        .appendField(", and by");
-    this.appendDummyInput()
+        .appendField(", and by")
+    // this.appendDummyInput()
         .appendField(
           new Blockly.FieldDropdown([["↓", "ASC"], ["↑", "DESC"]]),
           "ORDER_DIRECTION3");
