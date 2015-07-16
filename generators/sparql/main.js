@@ -31,31 +31,38 @@ SparqlBlocks.Sparql['sparql_select'] = function(block) {
           '.\n');
   var text_limit = block.getFieldValue('LIMIT');
   var code = 'SELECT DISTINCT * WHERE {\n' + statements_where + '\n}';
+  var orderByCode = null;
+  for (var i = 1; true; i++) {
+    var text_order =
+        SparqlBlocks.Sparql.valueToCode(
+            this, 'ORDER_FIELD' + i,
+            SparqlBlocks.Sparql.ORDER_NONE);
+    if (text_order) {
+      var text_orderDir = block.getFieldValue('ORDER_DIRECTION' + i);
+      if (orderByCode) {
+        orderByCode += ', ';
+      } else {
+        orderByCode = 'ORDER BY ';
+      }
+      if (text_orderDir && text_orderDir == 'DESC') {
+        orderByCode += 'DESC';
+      }
+      orderByCode += '(' + text_order + ')';
+    } else {
+      break;
+    }
+  }
+  if (orderByCode) {
+    code += '\n' + orderByCode;
+  }
   if (text_limit) {
     code += '\nLIMIT ' + text_limit;
   }
-
-  const WS = "\x20|\x09|\x0D|\x0A"
-  const	PN_CHARS_BASE	=
-      "[A-Z]|[a-z]|[\u00C0-\u00D6]|[\u00D8-\u00F6]|[\u00F8-\u02FF]" +
-      "|[\u0370-\u037D]|[\u037F-\u1FFF]|[\u200C-\u200D]|[\u2070-\u218F]" +
-      "|[\u2C00-\u2FEF]|[\u3001-\uD7FF]|[\uF900-\uFDCF]|[\uFDF0-\uFFFD]|[\u10000-\uEFFFF]";
-  const	PN_CHARS_U =	PN_CHARS_BASE  + "|\_";
-  const	PN_CHARS = PN_CHARS_U + "|\-|[0-9]|\u00B7|[\u0300-\u036F]|[\u203F-\u2040]";
-  const	PN_PREFIX	=	PN_CHARS_BASE + "((" + PN_CHARS + "|\.)*" + PN_CHARS + ")?";
-
-  const PNAME_NS = "(" + PN_PREFIX + ")(" + WS + ")*\:";
-
-  // var prefixStrings = code.match('/' + PNAME_NS + '/g');
-  // var prefixStrings = code.match(new RegExp(PNAME_NS, 'g'));
-  // var prefixStrings = "pippo ciccio : pluto clu: giy hui".match(new RegExp(PNAME_NS, 'g'));
 
   var prefixStrings =
       code.match(/[^(|!/\^,;\x20|\x09|\x0D|\x0A]+[\x20|\x09|\x0D|\x0A]*:/g).map( function(str) {
         return str.substr(0,str.length - 1).trim();
       });
-
-  console.log('prefixStrings: ' + prefixStrings);
 
   var prefixDeclaration = '';
   prefixStrings.forEach( function(prefix) {
