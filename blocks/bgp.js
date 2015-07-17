@@ -97,6 +97,19 @@ Blockly.Blocks['sparql_verb_object'] = {
   }
 };
 
+Blockly.Blocks['sparql_isa'] = {
+  init: function() {
+    _initVerb(this);
+    this.appendValueInput("TYPE")
+        .setCheck(typeExt("ResourceOrVar"))
+        .appendField("is a");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, "PropertyList");
+    this.setNextStatement(true, "PropertyList");
+    this.setTooltip('');
+  }
+};
+
 /*
 https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#adf4m7
 Blockly.Blocks['property_list_path'] = {
@@ -122,8 +135,8 @@ Blockly.Blocks['sparql_subject_propertylist'] = {
         .setCheck(typeExt("ResourceOrVar"));
     this.appendStatementInput("PROPERTY_LIST")
         .setCheck("PropertyList")
-//        .appendField("  ⌊");
-        .appendField("has");
+        .appendField("  ⌊");
+        // .appendField("has");
     this.setInputsInline(true);
     this.setPreviousStatement(true, "TriplesBlock");
     this.setNextStatement(true, "TriplesBlock");
