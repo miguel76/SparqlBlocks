@@ -104,6 +104,20 @@ SparqlBlocks.Sparql['sparql_text_contains'] = function(block) {
   return [code, SparqlBlocks.Sparql.ORDER_FUNCTION_CALL];
 };
 
+SparqlBlocks.Sparql['sparql_text_lang'] = function(block) {
+  // Search the text for a substring.
+  var lang =
+      SparqlBlocks.Sparql.valueToCode(
+          block, 'LANG',
+          SparqlBlocks.Sparql.ORDER_COMMA) || '\'\'';
+  var value =
+      SparqlBlocks.Sparql.valueToCode(
+          block, 'VALUE',
+          SparqlBlocks.Sparql.ORDER_NONE) || '\'\'';
+  var code = 'LANGMATCHES(LANG(' + value + '), ' + lang + ')';
+  return [code, SparqlBlocks.Sparql.ORDER_FUNCTION_CALL];
+};
+
 SparqlBlocks.Sparql['sparql_text_charAt'] = function(block) {
   // Get letter at index.
   // Note: Until January 2013 this block did not have the WHERE input.

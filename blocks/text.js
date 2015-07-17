@@ -367,7 +367,27 @@ Blockly.Blocks['sparql_text_contains'] = {
         .setCheck(typeExt('StringExpr'));
     this.appendValueInput('VALUE')
         .setCheck(typeExt('StringExpr'))
-        .appendField('in');
+        .appendField('is contained in');
+    this.setInputsInline(true);
+    this.setTooltip('');
+  }
+};
+
+Blockly.Blocks['sparql_text_lang'] = {
+  /**
+   * Block for finding a substring in the text.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.setHelpUrl(Blockly.Msg.TEXT_INDEXOF_HELPURL);
+    this.setColour(SparqlBlocks.Blocks.texts.HUE);
+    this.setOutput(true, 'BooleanExpr');
+    this.appendValueInput('VALUE')
+        .setCheck(typeExt('StringExpr'))
+        .appendField('language of');
+    this.appendValueInput('LANG')
+        .setCheck(typeExt('StringExpr'))
+        .appendField('is');
     this.setInputsInline(true);
     this.setTooltip('');
   }
