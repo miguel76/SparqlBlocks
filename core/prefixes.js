@@ -106,7 +106,6 @@
     if (prefix) {
       return { prefix: prefix, localPart: '' }
     }
-    iri = iri.substr(0,iri.length - 1);
     var base = null;
     var sepIndex = iri.lastIndexOf('#');
     if (sepIndex > -1) {
