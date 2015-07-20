@@ -90,10 +90,9 @@ Blockly.Blocks['sparql_math_single'] = {
     this.setHelpUrl(Blockly.Msg.MATH_SINGLE_HELPURL);
     this.setColour(SparqlBlocks.Blocks.math.HUE);
     this.setOutput(true, 'NumberExpr');
-    this.interpolateMsg('%1 %2',
-        ['OP', new Blockly.FieldDropdown(OPERATORS)],
-        ['NUM', typeExt('NumberExpr'), Blockly.ALIGN_RIGHT],
-        Blockly.ALIGN_RIGHT);
+    this.appendValueInput('NUM')
+     .setCheck(typeExt('NumberExpr'))
+     .appendField(new Blockly.FieldDropdown(OPERATORS), 'OP');
     // Assign 'this' to a variable for use in the tooltip closure below.
     var thisBlock = this;
     this.setTooltip(function() {
@@ -201,15 +200,26 @@ Blockly.Blocks['sparql_math_modulo'] = {
    * @this Blockly.Block
    */
   init: function() {
-    this.setHelpUrl(Blockly.Msg.MATH_MODULO_HELPURL);
-    this.setColour(SparqlBlocks.Blocks.math.HUE);
-    this.setOutput(true, 'NumberExpr');
-    this.interpolateMsg(Blockly.Msg.MATH_MODULO_TITLE,
-                        ['DIVIDEND', typeExt('NumberExpr'), Blockly.ALIGN_RIGHT],
-                        ['DIVISOR', typeExt('NumberExpr'), Blockly.ALIGN_RIGHT],
-                        Blockly.ALIGN_RIGHT);
-    this.setInputsInline(true);
-    this.setTooltip(Blockly.Msg.MATH_MODULO_TOOLTIP);
+    this.jsonInit({
+      "message0": Blockly.Msg.MATH_MODULO_TITLE,
+      "args0": [
+        {
+          "type": "input_value",
+          "name": "DIVIDEND",
+          "check": typeExt('NumberExpr')
+        },
+        {
+          "type": "input_value",
+          "name": "DIVISOR",
+          "check": typeExt('NumberExpr')
+        }
+      ],
+      "inputsInline": true,
+      "output": "NumberExpr",
+      "colour": SparqlBlocks.Blocks.math.HUE,
+      "tooltip": Blockly.Msg.MATH_MODULO_TOOLTIP,
+      "helpUrl": Blockly.Msg.MATH_MODULO_HELPURL
+    });
   }
 };
 
@@ -219,16 +229,31 @@ Blockly.Blocks['sparql_math_constrain'] = {
    * @this Blockly.Block
    */
   init: function() {
-    this.setHelpUrl(Blockly.Msg.MATH_CONSTRAIN_HELPURL);
-    this.setColour(SparqlBlocks.Blocks.math.HUE);
-    this.setOutput(true, 'NumberExpr');
-    this.interpolateMsg(Blockly.Msg.MATH_CONSTRAIN_TITLE,
-                        ['VALUE', typeExt('NumberExpr'), Blockly.ALIGN_RIGHT],
-                        ['LOW', typeExt('NumberExpr'), Blockly.ALIGN_RIGHT],
-                        ['HIGH', typeExt('NumberExpr'), Blockly.ALIGN_RIGHT],
-                        Blockly.ALIGN_RIGHT);
-    this.setInputsInline(true);
-    this.setTooltip(Blockly.Msg.MATH_CONSTRAIN_TOOLTIP);
+    this.jsonInit({
+      "message0": Blockly.Msg.MATH_CONSTRAIN_TITLE,
+      "args0": [
+        {
+          "type": "input_value",
+          "name": "VALUE",
+          "check": typeExt('NumberExpr')
+        },
+        {
+          "type": "input_value",
+          "name": "LOW",
+          "check": typeExt('NumberExpr')
+        },
+        {
+          "type": "input_value",
+          "name": "HIGH",
+          "check": typeExt('NumberExpr')
+        }
+      ],
+      "inputsInline": true,
+      "output": "NumberExpr",
+      "colour": SparqlBlocks.Blocks.math.HUE,
+      "tooltip": Blockly.Msg.MATH_CONSTRAIN_TOOLTIP,
+      "helpUrl": Blockly.Msg.MATH_CONSTRAIN_HELPURL
+    });
   }
 };
 
@@ -238,15 +263,26 @@ Blockly.Blocks['sparql_math_random_int'] = {
    * @this Blockly.Block
    */
   init: function() {
-    this.setHelpUrl(Blockly.Msg.MATH_RANDOM_INT_HELPURL);
-    this.setColour(SparqlBlocks.Blocks.math.HUE);
-    this.setOutput(true, 'NumberExpr');
-    this.interpolateMsg(Blockly.Msg.MATH_RANDOM_INT_TITLE,
-                        ['FROM', typeExt('NumberExpr'), Blockly.ALIGN_RIGHT],
-                        ['TO', typeExt('NumberExpr'), Blockly.ALIGN_RIGHT],
-                        Blockly.ALIGN_RIGHT);
-    this.setInputsInline(true);
-    this.setTooltip(Blockly.Msg.MATH_RANDOM_INT_TOOLTIP);
+    this.jsonInit({
+      "message0": Blockly.Msg.MATH_RANDOM_INT_TITLE,
+      "args0": [
+        {
+          "type": "input_value",
+          "name": "FROM",
+          "check": typeExt('NumberExpr')
+        },
+        {
+          "type": "input_value",
+          "name": "TO",
+          "check": typeExt('NumberExpr')
+        }
+      ],
+      "inputsInline": true,
+      "output": "NumberExpr",
+      "colour": SparqlBlocks.Blocks.math.HUE,
+      "tooltip": Blockly.Msg.MATH_RANDOM_INT_TOOLTIP,
+      "helpUrl": Blockly.Msg.MATH_RANDOM_INT_HELPURL
+    });
   }
 };
 

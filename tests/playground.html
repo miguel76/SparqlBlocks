@@ -102,11 +102,12 @@ function start() {
 }
 
 function toXml() {
-  var output = document.getElementById('importExport');
+  // var output = document.getElementById('importExport');
   var xml = Blockly.Xml.workspaceToDom(workspace);
-  output.value = Blockly.Xml.domToPrettyText(xml);
-  output.focus();
-  output.select();
+  console.log(Blockly.Xml.domToPrettyText(xml));
+  // output.value = Blockly.Xml.domToPrettyText(xml);
+  // output.focus();
+  // output.select();
 }
 
 function fromXml() {

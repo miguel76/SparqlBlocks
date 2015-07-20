@@ -138,13 +138,21 @@ Blockly.Blocks['sparql_logic_negate'] = {
    * @this Blockly.Block
    */
   init: function() {
-    this.setHelpUrl(Blockly.Msg.LOGIC_NEGATE_HELPURL);
-    this.setColour(SparqlBlocks.Blocks.logic.HUE);
-    this.setOutput(true, 'BooleanExpr');
-    this.interpolateMsg(Blockly.Msg.LOGIC_NEGATE_TITLE,
-                        ['BOOL', typeExt('BooleanExpr'), Blockly.ALIGN_RIGHT],
-                        Blockly.ALIGN_RIGHT);
-    this.setTooltip(Blockly.Msg.LOGIC_NEGATE_TOOLTIP);
+
+    this.jsonInit({
+      "message0": Blockly.Msg.LOGIC_NEGATE_TITLE,
+      "args0": [
+        {
+          "type": "input_value",
+          "name": "BOOL",
+          "check": typeExt('BooleanExpr')
+        }
+      ],
+      "output": "BooleanExpr",
+      "colour": SparqlBlocks.Blocks.logic.HUE,
+      "tooltip": Blockly.Msg.LOGIC_NEGATE_TOOLTIP,
+      "helpUrl": Blockly.Msg.LOGIC_NEGATE_HELPURL
+    });
   }
 };
 
