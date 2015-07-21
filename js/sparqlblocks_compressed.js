@@ -52,7 +52,7 @@ goog.defineClass.applyProperties_=function(a,b){for(var c in b)Object.prototype.
  See the License for the specific language governing permissions and
  limitations under the License.
 */
-var SparqlBlocks={Prefixes:{}},prefixMap_=null,reverseMap_={},lookForPrefix_=function(a){return prefixMap_[a]},lookForIri_=function(a){var b=reverseMap_[a];if(b)return{prefix:b,localPart:""};var c=null,b=a.lastIndexOf("#");-1<b?c=a.substr(0,b+1):(b=a.lastIndexOf("/"),-1<b&&(c=a.substr(0,b+1)));if(null!=c){if(c=lookForIri_(c))return{prefix:c.prefix,localPart:c.localPart+a.substr(b+1)}}else return null};
+var SparqlBlocks={Prefixes:{}},prefixMap_=null,reverseMap_={},lookForPrefix_=function(a){return prefixMap_[a]},lookForIri_=function(a){var b=reverseMap_[a];if(b)return{prefix:b,localPart:""};var c=null,d=a.substr(0,a.length-1),b=d.lastIndexOf("#");-1<b?c=a.substr(0,b+1):(b=d.lastIndexOf("/"),-1<b&&(c=a.substr(0,b+1)));if(null!=c){if(c=lookForIri_(c))return{prefix:c.prefix,localPart:c.localPart+a.substr(b+1)}}else return null};
 $.getJSON("../prefix.cc/all.file.json",function(a){prefixMap_=a;Object.keys(a).forEach(function(b){reverseMap_[a[b]]||(reverseMap_[a[b]]=b)})});SparqlBlocks.Prefixes.lookForPrefix=lookForPrefix_;SparqlBlocks.Prefixes.lookForIri=lookForIri_;/*
 
  Licensed under the Apache License, Version 2.0 (the "License");
