@@ -20,11 +20,12 @@
  */
 'use strict';
 
-( function() {
+// ( function() {
 
-  goog.provide('SparqlBlocks.Core.exec');
+  goog.provide('SparqlBlocks.Exec');
 
-  goog.require('SparqlBlocks.Core.output');
+  goog.require('SparqlBlocks.Output');
+  goog.require('SparqlBlocks.Sparql');
 
   var defaultEndpointUrl_ = 'http://live.dbpedia.org/sparql';
   // var defaultEndpointUrl_ = 'http://ldf.fi/ww1lod/sparql';
@@ -57,7 +58,7 @@
       }
     })
   }
-  SparqlBlocks.Core.exec.sparqlExecAndAlert = sparqlExecAndAlert_;
+  SparqlBlocks.Exec.sparqlExecAndAlert = sparqlExecAndAlert_;
 
   var sparqlExecAndBlock_ = function(endpointUrl, query, workspace, callback) {
   }
@@ -71,7 +72,7 @@
     block.render();
   }
 
-  const DESCR_LENGTH = 40;
+  var DESCR_LENGTH = 40;
 
   var sparqlExecAndPublish_ = function(endpointUrl, query, workspace, connection, callback) {
 
@@ -104,12 +105,43 @@
           resultBlock.setTooltip(errorDescr);
         }
       } else {
-        resultBlock = SparqlBlocks.Core.output.blocksFromSelectResults(workspace, data);
+        resultBlock = SparqlBlocks.Output.blocksFromSelectResults(workspace, data);
       }
       connect_(connection, resultBlock);
       callback();
     });
   }
-  SparqlBlocks.Core.exec.sparqlExecAndPublish = sparqlExecAndPublish_;
+  SparqlBlocks.Exec.sparqlExecAndPublish = sparqlExecAndPublish_;
 
-}) ();
+  SparqlBlocks.Exec.blockExec = function(block) {
+    var resultsHolder = block.getInput('RESULTS');
+    if (!resultsHolder) return;
+    var resultsConnection = resultsHolder.connection;
+    if (!resultsConnection) return;
+    var queryStr = SparqlBlocks.Sparql.valueToCode(
+      block,
+      'QUERY',
+      SparqlBlocks.Sparql.ORDER_NONE);
+    if ((!queryStr && !block.sparqlQueryStr) || queryStr != block.sparqlQueryStr) {
+      block.sparqlQueryStr = queryStr;
+      if (block.queryReq) {
+        block.queryReq.abort();
+      }
+      if (queryStr) {
+        console.log('Ready to execute query: ' + queryStr);
+        var execComponent = block;
+        block.queryReq = SparqlBlocks.Exec.sparqlExecAndPublish(
+            null, queryStr,
+            block.workspace, resultsConnection,
+            function() { execComponent.queryReq = null; } );
+      } else {
+        console.log('Empty query');
+        unconnect_(resultsConnection);
+        block.queryReq = null;
+      }
+
+    }
+
+  }
+
+// }) ();

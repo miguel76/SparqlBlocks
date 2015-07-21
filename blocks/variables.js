@@ -21,8 +21,8 @@
 
 goog.provide('SparqlBlocks.Blocks.variables');
 
-goog.require('Blockly.Blocks');
-
+// goog.require('Blockly.Blocks');
+goog.require('SparqlBlocks.Blocks');
 
 SparqlBlocks.Blocks.variables.HUE = 330;
 
@@ -68,7 +68,7 @@ Blockly.Blocks['sparql_variable'] = {
     if (Blockly.Names.equals(oldName, this.getFieldValue('VAR'))) {
       this.setFieldValue(newName, 'VAR');
     }
-  },
+  }
   /**
    * Add menu option to create getter/setter block for this setter/getter.
    * @param {!Array} options List of menu options to add to.

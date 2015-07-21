@@ -19,11 +19,11 @@
  */
 'use strict';
 
-(function() {
+// (function() {
 
-  goog.provide('SparqlBlocks.Core.output');
-  goog.require('SparqlBlocks.Core.prefixes');
-  goog.require('SparqlBlocks.Blocks.SelfDuplicatingBlock');
+  goog.provide('SparqlBlocks.Output');
+  goog.require('SparqlBlocks.Prefixes');
+  goog.require('SparqlBlocks.SelfDuplication');
 
   var blockFromStringLiteral_ = function(value, workspace) {
     var strBlock = null;
@@ -52,7 +52,7 @@
 
   var blockFromUri_ = function(value, workspace) {
     var iri = value.value;
-    var luRes = SparqlBlocks.Core.prefixes.lookForIri(iri);
+    var luRes = SparqlBlocks.Prefixes.lookForIri(iri);
     if (luRes != null) {
       var prefBlock = Blockly.Block.obtain(workspace, 'sparql_prefixed_iri');
       prefBlock.initSvg();
@@ -85,7 +85,7 @@
       valueBlock.setDeletable(false);
       valueBlock.setMovable(false);
       valueBlock.setEditable(false);
-      SparqlBlocks.Blocks.SelfDuplicatingBlock.bindMouseEvents(valueBlock);
+      SparqlBlocks.SelfDuplication.bindMouseEvents(valueBlock);
       connection.connect(valueBlock.outputConnection);
       valueBlock.render();
     }
@@ -174,7 +174,7 @@
 // return containerBlock;
     return tableBlock;
   }
-  SparqlBlocks.Core.output.blocksFromSelectResults = blocksFromSelectResults_;
+  SparqlBlocks.Output.blocksFromSelectResults = blocksFromSelectResults_;
 
   var fillTableFromSelectResults_ = function(table, data) {
 
@@ -195,6 +195,5 @@
 
   }
 
-// SparqlBlocks.Core
 
-})();
+// })();

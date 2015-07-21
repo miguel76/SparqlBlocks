@@ -19,9 +19,9 @@
  */
 'use strict';
 
-(function() {
+// (function() {
 
-  goog.provide('SparqlBlocks.Core.prefixes');
+  goog.provide('SparqlBlocks.Prefixes');
   // goog.require('goog.math.Coordinate');
 
   var prefixMap_ = null;
@@ -139,7 +139,7 @@
     });
   });
 
-  SparqlBlocks.Core.prefixes.lookForPrefix = lookForPrefix_;
-  SparqlBlocks.Core.prefixes.lookForIri = lookForIri_;
+  SparqlBlocks.Prefixes.lookForPrefix = lookForPrefix_;
+  SparqlBlocks.Prefixes.lookForIri = lookForIri_;
 
-})();
+// })();

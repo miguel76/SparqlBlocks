@@ -26,10 +26,9 @@
 
 goog.provide('SparqlBlocks.Blocks.tuple');
 
-goog.require('Blockly.Blocks');
-
-goog.require('SparqlBlocks.Blocks.types');
-var typeExt = SparqlBlocks.Blocks.types.getExtension;
+// goog.require('Blockly.Blocks');
+// goog.require('SparqlBlocks.Blocks');
+var typeExt = SparqlBlocks.Types.getExtension;
 
 Blockly.Blocks['sparql_tuple'] = {
   /**

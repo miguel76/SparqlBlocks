@@ -22,9 +22,9 @@
 
 goog.provide('SparqlBlocks.Blocks.bgp');
 
-goog.require('Blockly.Blocks');
-goog.require('SparqlBlocks.Blocks.types');
-var typeExt = SparqlBlocks.Blocks.types.getExtension;
+// goog.require('Blockly.Blocks');
+goog.require('SparqlBlocks.Blocks');
+var typeExt = SparqlBlocks.Types.getExtension;
 
 var _init = function(newBlock) {
   newBlock.setHelpUrl('http://www.w3.org/TR/sparql11-query/#QSynTriples');

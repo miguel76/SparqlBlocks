@@ -19,7 +19,7 @@
  */
 'use strict';
 
-goog.provide('SparqlBlocks.Sparql.texts');
+goog.provide('SparqlBlocks.Sparql.text');
 
 goog.require('SparqlBlocks.Sparql');
 

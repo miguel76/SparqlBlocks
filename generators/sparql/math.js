@@ -32,7 +32,7 @@ SparqlBlocks.Sparql['sparql_math_number'] = function(block) {
     return [numStr, SparqlBlocks.Sparql.ORDER_ATOMIC];
   }
   var asFloat = parseFloat(numStr);
-  if (asFloat != NaN) {
+  if (!isNaN(asFloat)) {
     return ["" + asFloat, SparqlBlocks.Sparql.ORDER_ATOMIC];
   }
   throw "Not a number: " + numStr;

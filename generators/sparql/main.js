@@ -22,7 +22,7 @@
 goog.provide('SparqlBlocks.Sparql.main');
 
 goog.require('SparqlBlocks.Sparql');
-goog.require('SparqlBlocks.Core.prefixes');
+// goog.require('SparqlBlocks.Prefixes');
 
 SparqlBlocks.Sparql['sparql_select'] = function(block) {
   var statements_where =
@@ -59,18 +59,23 @@ SparqlBlocks.Sparql['sparql_select'] = function(block) {
     code += '\nLIMIT ' + text_limit;
   }
 
-  var prefixStrings =
-      code.match(/[^(|!/\^,;\x20|\x09|\x0D|\x0A]+[\x20|\x09|\x0D|\x0A]*:/g).map( function(str) {
-        return str.substr(0,str.length - 1).trim();
-      });
+  var prefixMatches = code.match(/[^(|!/\^,;\x20|\x09|\x0D|\x0A]+[\x20|\x09|\x0D|\x0A]*:/g);
+  var prefixStrings = null;
+  if (prefixMatches) {
+    prefixStrings = prefixMatches.map( function(str) {
+      return str.substr(0,str.length - 1).trim();
+    });
+  }
 
   var prefixDeclaration = '';
-  prefixStrings.forEach( function(prefix) {
-    var extension = SparqlBlocks.Core.prefixes.lookForPrefix(prefix);
-    if (extension) {
-      prefixDeclaration += 'PREFIX ' + prefix + ':\t<' + extension + '>\n';
-    }
-  });
+  if (prefixStrings) {
+    prefixStrings.forEach( function(prefix) {
+      var extension = SparqlBlocks.Prefixes.lookForPrefix(prefix);
+      if (extension) {
+        prefixDeclaration += 'PREFIX ' + prefix + ':\t<' + extension + '>\n';
+      }
+    });
+  }
   if (prefixDeclaration.length > 0) {
     code = prefixDeclaration + '\n' + code;
   }

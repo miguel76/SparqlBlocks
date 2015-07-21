@@ -21,10 +21,10 @@
 
 goog.provide('SparqlBlocks.Blocks.logic');
 
-goog.require('Blockly.Blocks');
+// goog.require('Blockly.Blocks');
+goog.require('SparqlBlocks.Blocks');
 
-goog.require('SparqlBlocks.Blocks.types');
-var typeExt = SparqlBlocks.Blocks.types.getExtension;
+var typeExt = SparqlBlocks.Types.getExtension;
 
 SparqlBlocks.Blocks.logic.HUE = 210;
 

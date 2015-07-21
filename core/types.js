@@ -20,12 +20,12 @@
  */
 'use strict';
 
-goog.provide('SparqlBlocks.Blocks.types');
+goog.provide('SparqlBlocks.Types');
 
 //var typeList = Blockly.Blocks.Sparql.types.list = [];
 
-(function() {
-  var typeDict = SparqlBlocks.Blocks.types.dict = {};
+// (function() {
+  var typeDict = SparqlBlocks.Types.dict = {};
 
   var setType = function(typeStr, typeObj) {
     typeDict[typeStr] = typeObj;
@@ -81,6 +81,6 @@ goog.provide('SparqlBlocks.Blocks.types');
   setType("LiteralNumber", { parents: ["Literal", "NumberExpr" ] });
   setType("LiteralBoolean", { parents: ["Literal", "BooleanExpr" ] });
 
-  SparqlBlocks.Blocks.types.setType = setType;
-  SparqlBlocks.Blocks.types.getExtension = getExtension;
-})();
+  SparqlBlocks.Types.setType = setType;
+  SparqlBlocks.Types.getExtension = getExtension;
+// })();

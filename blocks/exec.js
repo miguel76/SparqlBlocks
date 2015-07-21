@@ -22,11 +22,10 @@
 
 goog.provide('SparqlBlocks.Blocks.exec');
 
-goog.require('Blockly.Blocks');
-goog.require('SparqlBlocks.Sparql');
-goog.require('SparqlBlocks.Blocks.types');
-var typeExt = SparqlBlocks.Blocks.types.getExtension;
-goog.require('SparqlBlocks.Core.exec');
+// goog.require('Blockly.Blocks');
+goog.require('SparqlBlocks.Blocks');
+var typeExt = SparqlBlocks.Types.getExtension;
+// goog.require('SparqlBlocks.Exec');
 
 var unconnect_ = function(connection) {
   var targetBlock = connection.targetBlock();
@@ -48,48 +47,7 @@ Blockly.Blocks['sparql_execution'] = {
     this.setTooltip('');
   },
   onchange: function() {
-    var resultsHolder = this.getInput('RESULTS');
-    if (!resultsHolder) return;
-    var resultsConnection = resultsHolder.connection;
-    if (!resultsConnection) return;
-    var queryStr = SparqlBlocks.Sparql.valueToCode(
-      this,
-      'QUERY',
-      SparqlBlocks.Sparql.ORDER_NONE);
-    if ((!queryStr && !this.sparqlQueryStr) || queryStr != this.sparqlQueryStr) {
-      this.sparqlQueryStr = queryStr;
-      if (this.queryReq) {
-        this.queryReq.abort();
-      }
-      if (queryStr) {
-        console.log('Ready to execute query: ' + queryStr);
-        var execComponent = this;
-        this.queryReq = SparqlBlocks.Core.exec.sparqlExecAndPublish(
-            null, queryStr,
-            this.workspace, resultsConnection,
-            function() { execComponent.queryReq = null; } );
-
-        // var blocks = this.rootBlock_.getDescendants();
-        // for (var i = 0, child; child = blocks[i]; i++) {
-        //   child.render();
-        // }
-        // // The root block should not be dragable or deletable.
-        // this.rootBlock_.setMovable(false);
-        // this.rootBlock_.setDeletable(false);
-        // var margin = this.workspace_.flyout_.CORNER_RADIUS * 2;
-        // var x = this.workspace_.flyout_.width_ + margin;
-        // if (this.block_.RTL) {
-        //   x = -x;
-        // }
-        // this.rootBlock_.moveBy(x, margin);
-
-      } else {
-        console.log('Empty query');
-        unconnect_(resultsConnection);
-        this.queryReq = null;
-      }
-
-    }
+    SparqlBlocks.Exec.blockExec(this);
   }
 };
 

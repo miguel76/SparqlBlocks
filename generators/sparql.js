@@ -21,7 +21,7 @@
 
 goog.provide('SparqlBlocks.Sparql');
 
-goog.require('Blockly.Generator');
+// goog.require('Blockly.Generator');
 
 
 /**
