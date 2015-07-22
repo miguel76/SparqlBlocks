@@ -25,9 +25,67 @@
   goog.require('SparqlBlocks.Prefixes');
   goog.require('SparqlBlocks.SelfDuplication');
 
+  var xsd_map_ = {};
+  var xsd_ = function(localName) {
+    var extended = xsd_map_[localName];
+    if (!extended) {
+      extended = "http://www.w3.org/2001/XMLSchema#" + localName;
+      xsd_map_[localName] = extended;
+    }
+    return extended;
+  }
+
+  var blockFromTypedLiteral_ = function(value, type, workspace) {
+    var typedBlock = null;
+    // console.log("block for type " + type + " and value " + value);
+    switch(type) {
+      case xsd_("integer"):
+      case xsd_("decimal"):
+      case xsd_("float"):
+      case xsd_("double"):
+      case xsd_("byte"): // -128…+127 (8 bit)
+      case xsd_("short"): // -32768…+32767 (16 bit)
+      case xsd_("int"): // -2147483648…+2147483647 (32 bit)
+      case xsd_("long"): // -9223372036854775808…+9223372036854775807 (64 bit)
+      case xsd_("unsignedByte"): // 0…255 (8 bit)
+      case xsd_("unsignedShort"): // 0…65535 (16 bit)
+      case xsd_("unsignedInt"): // 0…4294967295 (32 bit)
+      case xsd_("unsignedLong"): // 0…18446744073709551615 (64 bit)
+      case xsd_("positiveInteger"): // Integer numbers >0
+      case xsd_("nonNegativeInteger"): // Integer numbers ≥0
+      case xsd_("negativeInteger"): // Integer numbers <0
+      case xsd_("nonPositiveInteger"): // Integer numbers >0
+        typedBlock = Blockly.Block.obtain(workspace, 'sparql_math_number');
+        typedBlock.initSvg();
+        typedBlock.setFieldValue(value, 'NUM');
+        break;
+      case xsd_("boolean"):
+        typedBlock = Blockly.Block.obtain(workspace, 'sparql_logic_boolean');
+        typedBlock.initSvg();
+        typedBlock.setFieldValue(value, 'BOOL');
+        break;
+      default:
+        var luRes = SparqlBlocks.Prefixes.lookForIri(type);
+        if (luRes) {
+          typedBlock = Blockly.Block.obtain(workspace, 'sparql_text_with_type_pref');
+          typedBlock.initSvg();
+          typedBlock.setFieldValue(value, 'TEXT');
+          typedBlock.setFieldValue(luRes.prefix, 'DT_PREFIX');
+          typedBlock.setFieldValue(luRes.localPart, 'DT_LOCAL_NAME');
+        } else {
+          typedBlock = Blockly.Block.obtain(workspace, 'sparql_text_with_type_iri');
+          typedBlock.initSvg();
+          typedBlock.setFieldValue(value, 'TEXT');
+          typedBlock.setFieldValue(type, 'DT_IRI');
+        }
+    }
+    return typedBlock;
+  }
+
   var blockFromStringLiteral_ = function(value, workspace) {
     var strBlock = null;
     var lang = value["xml:lang"];
+    var datatype = value["datatype"];
     if (lang) {
       strBlock = Blockly.Block.obtain(workspace, 'sparql_text_with_lang');
       strBlock.initSvg();
@@ -43,8 +101,8 @@
 
   var blockFromLiteral_ = function(value, workspace) {
     var datatype = value.datatype;
-    if (datatype) {
-      return null;
+    if (datatype && datatype != xsd_("string") && datatype != xsd_("langString")) {
+      return blockFromTypedLiteral_(value.value, datatype, workspace);
     } else {
       return blockFromStringLiteral_(value, workspace);
     }
@@ -67,17 +125,28 @@
     }
   }
 
+  var blockFromBnode_ = function(value, workspace) {
+    var bnodeLabel = value.value;
+    var prefBlock = Blockly.Block.obtain(workspace, 'sparql_prefixed_iri');
+    prefBlock.initSvg();
+    prefBlock.setFieldValue('_', 'PREFIX');
+    prefBlock.setFieldValue(bnodeLabel, 'LOCAL_NAME');
+    return prefBlock;
+  }
+
   var blockFromValue_ = function(value, workspace, connection) {
     var valueBlock = null;
     if (value) {
       switch(value.type) {
         case "literal":
+        case "typed-literal":
           valueBlock = blockFromLiteral_(value, workspace);
           break;
         case "uri":
           valueBlock = blockFromUri_(value, workspace);
           break;
         case "bnode":
+          valueBlock = blockFromBnode_(value, workspace);
       }
       // containerBlock.getInput('VALUE').connection;
     }
