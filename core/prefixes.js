@@ -107,11 +107,12 @@
       return { prefix: prefix, localPart: '' }
     }
     var base = null;
-    var sepIndex = iri.lastIndexOf('#');
+    var toSearch = iri.substr(0, iri.length - 1);
+    var sepIndex = toSearch.lastIndexOf('#');
     if (sepIndex > -1) {
       base = iri.substr(0,sepIndex + 1);
     } else {
-      sepIndex = iri.lastIndexOf('/');
+      sepIndex = toSearch.lastIndexOf('/');
       if (sepIndex > -1) {
         base = iri.substr(0,sepIndex + 1);
       }
