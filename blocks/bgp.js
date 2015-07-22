@@ -89,7 +89,24 @@ Blockly.Blocks['sparql_verb_object'] = {
         // .appendField("-[");
     this.appendValueInput("OBJECT")
         .setCheck(typeExt("GraphTermOrVar"))
-        .appendField("→");
+        .appendField("is");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, "PropertyList");
+    this.setNextStatement(true, "PropertyList");
+    this.setTooltip('');
+  }
+};
+
+Blockly.Blocks['sparql_reverseVerb_object'] = {
+  init: function() {
+    _initVerb(this);
+    this.appendValueInput("VERB")
+        .setCheck(typeExt("Verb"))
+        .appendField("is");
+        // .appendField("-[");
+    this.appendValueInput("OBJECT")
+        .setCheck(typeExt("GraphTermOrVar"))
+        .appendField("of");
     this.setInputsInline(true);
     this.setPreviousStatement(true, "PropertyList");
     this.setNextStatement(true, "PropertyList");
@@ -156,7 +173,7 @@ Blockly.Blocks['sparql_typedsubject_propertylist'] = {
     this.appendStatementInput("PROPERTY_LIST")
         .setCheck("PropertyList")
 //        .appendField("  ⌊");
-        .appendField("  & has");
+        .appendField("  &");
     this.setInputsInline(true);
     this.setPreviousStatement(true, "TriplesBlock");
     this.setNextStatement(true, "TriplesBlock");
@@ -171,7 +188,7 @@ Blockly.Blocks['sparql_anonsubject_propertylist'] = {
     this.appendStatementInput("PROPERTY_LIST")
         .setCheck("PropertyList")
 //        .appendField("◯━");
-        .appendField("s.t. has");
+        .appendField("s.t.");
     this.setInputsInline(true);
     this.setOutput(true, "Resource");
     this.setTooltip('');

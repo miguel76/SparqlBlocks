@@ -49,11 +49,11 @@ Blockly.Blocks['sparql_union'] = {
     this.setHelpUrl('http://www.example.com/');
     this.setColour(260);
     this.appendStatementInput("OP1")
-        .setCheck("TriplesBlock")
-        .appendField("it happens that");
+        .setCheck("TriplesBlock");
+        // .appendField("this");
     this.appendStatementInput("OP2")
         .setCheck("TriplesBlock")
-        .appendField("and/or that");
+        .appendField("or");
     this.setInputsInline(true);
     this.setPreviousStatement(true, "TriplesBlock");
     this.setNextStatement(true, "TriplesBlock");
