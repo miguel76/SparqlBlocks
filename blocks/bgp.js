@@ -85,11 +85,12 @@ Blockly.Blocks['sparql_verb_object'] = {
   init: function() {
     _initVerb(this);
     this.appendValueInput("VERB")
-        .setCheck(typeExt("Verb"));
-        // .appendField("-[");
+        .setCheck(typeExt("Verb"))
+        .appendField("━┫");
     this.appendValueInput("OBJECT")
         .setCheck(typeExt("GraphTermOrVar"))
-        .appendField("is");
+        .appendField("┣━▶");
+        // .appendField("]➡");
     this.setInputsInline(true);
     this.setPreviousStatement(true, "PropertyList");
     this.setNextStatement(true, "PropertyList");
@@ -102,11 +103,11 @@ Blockly.Blocks['sparql_reverseVerb_object'] = {
     _initVerb(this);
     this.appendValueInput("VERB")
         .setCheck(typeExt("Verb"))
-        .appendField("is");
-        // .appendField("-[");
+        // .appendField("is");
+        .appendField("◀━┫");
     this.appendValueInput("OBJECT")
         .setCheck(typeExt("GraphTermOrVar"))
-        .appendField("of");
+        .appendField("┣━");
     this.setInputsInline(true);
     this.setPreviousStatement(true, "PropertyList");
     this.setNextStatement(true, "PropertyList");
