@@ -66,7 +66,7 @@ Blockly.Blocks['sparql_select'] = {
 
     this.appendValueInput("ORDER_FIELD1")
         .setCheck(typeExt("Expr"))
-        .appendField("ordered by")
+        .appendField("order by")
     // this.appendDummyInput()
         .appendField(
           new Blockly.FieldDropdown([["↓", "ASC"], ["↑", "DESC"]]),
@@ -74,22 +74,22 @@ Blockly.Blocks['sparql_select'] = {
 
     this.appendValueInput("ORDER_FIELD2")
         .setCheck(typeExt("Expr"))
-        .appendField(", by")
+        .appendField(", then by")
     // this.appendDummyInput()
         .appendField(
           new Blockly.FieldDropdown([["↓", "ASC"], ["↑", "DESC"]]),
           "ORDER_DIRECTION2");
 
-    this.appendValueInput("ORDER_FIELD3")
-        .setCheck(typeExt("Expr"))
-        .appendField(", and by")
-    // this.appendDummyInput()
-        .appendField(
-          new Blockly.FieldDropdown([["↓", "ASC"], ["↑", "DESC"]]),
-          "ORDER_DIRECTION3");
+    // this.appendValueInput("ORDER_FIELD3")
+    //     .setCheck(typeExt("Expr"))
+    //     .appendField(", then by")
+    // // this.appendDummyInput()
+    //     .appendField(
+    //       new Blockly.FieldDropdown([["↓", "ASC"], ["↑", "DESC"]]),
+    //       "ORDER_DIRECTION3");
 
     this.appendDummyInput()
-        .appendField("limited to the first")
+        .appendField("& limit to first")
         .appendField(new Blockly.FieldTextInput("10"), "LIMIT")
         .appendField("rows");
 
