@@ -25,6 +25,9 @@ goog.provide('SparqlBlocks.Blocks.logic');
 goog.require('SparqlBlocks.Blocks');
 
 var typeExt = SparqlBlocks.Types.getExtension;
+var typeContentExt = function(typeStr) {
+  return typeExt(typeStr == "Var" ? "Expr" : typeStr);
+}
 
 SparqlBlocks.Blocks.logic.HUE = 210;
 
@@ -86,7 +89,10 @@ Blockly.Blocks['sparql_logic_compare'] = {
     var blockB = this.getInputTargetBlock('B');
     // Kick blocks that existed prior to this change if they don't match.
     if (blockA && blockB &&
-        !blockA.outputConnection.checkType_(blockB.outputConnection)) {
+        !blockA.outputConnection.checkType_(blockB.outputConnection) &&
+        _.intersection(
+          typeContentExt(blockA.outputConnection.check_),
+          typeContentExt(blockB.outputConnection.check_)).length == 0 ) {
       // Mismatch between two inputs.  Disconnect previous and bump it away.
       for (var i = 0; i < this.prevBlocks_.length; i++) {
         var block = this.prevBlocks_[i];
