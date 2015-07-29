@@ -24,6 +24,17 @@ goog.provide('SparqlBlocks.Sparql.main');
 goog.require('SparqlBlocks.Sparql');
 // goog.require('SparqlBlocks.Prefixes');
 
+SparqlBlocks.Sparql.main.VIRTUOSO_PATCH = true;
+
+var localNameEsc = function(localName) {
+//  '\'
+  return localName.split('').map( function(char) {
+    return _.contains(
+      [ '_', '~', '.', '-', '!', '$' , '&', "'", '(', ')', '\\', '*', '+', ',', ';', '=', '/', '?', '#', '@', '%' ],
+      char) ? '\\' + char : char;
+  }).join('');
+}
+
 SparqlBlocks.Sparql['sparql_select'] = function(block) {
   var statements_where =
       SparqlBlocks.Sparql.stmJoin(
@@ -86,7 +97,16 @@ SparqlBlocks.Sparql['sparql_select'] = function(block) {
 SparqlBlocks.Sparql['sparql_prefixed_iri'] = function(block) {
   var text_prefix = block.getFieldValue('PREFIX');
   var text_local_name = block.getFieldValue('LOCAL_NAME');
-  var code = text_prefix + ':' + text_local_name;
+  var code = null;
+  if (SparqlBlocks.Sparql.main.VIRTUOSO_PATCH) {
+    var extension = SparqlBlocks.Prefixes.lookForPrefix(text_prefix);
+    if (extension) {
+      code = '<' + extension + text_local_name + '>';
+    }
+  }
+  if (!code) {
+    code = text_prefix + ':' + localNameEsc(text_local_name);
+  }
   return [code, SparqlBlocks.Sparql.ORDER_ATOMIC];
 };
 
