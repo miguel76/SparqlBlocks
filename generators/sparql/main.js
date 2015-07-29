@@ -28,10 +28,10 @@ SparqlBlocks.Sparql.main.VIRTUOSO_PATCH = true;
 
 var localNameEsc = function(localName) {
 //  '\'
-  return localName.split('').map( function(char) {
+  return localName.split('').map( function(c) {
     return _.contains(
       [ '_', '~', '.', '-', '!', '$' , '&', "'", '(', ')', '\\', '*', '+', ',', ';', '=', '/', '?', '#', '@', '%' ],
-      char) ? '\\' + char : char;
+      c) ? '\\' + c : c;
   }).join('');
 }
 
