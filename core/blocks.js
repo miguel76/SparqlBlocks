@@ -16,7 +16,7 @@
 
 /**
  * @fileoverview Core JavaScript library for SparqlBlocks.
- * @author fraser@google.com (Neil Fraser), miguel.ceriani@gmail.com (Miguel Ceriani)
+ * @author miguel.ceriani@gmail.com (Miguel Ceriani)
  */
 'use strict';
 
