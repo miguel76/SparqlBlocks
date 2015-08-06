@@ -119,27 +119,22 @@ SparqlBlocks.Blocks.block('sparql_select', {
     // this.setNextStatement(true, "QueryClauses");
     this.setTooltip('');
   },
+  saveQueryAsSparql: function() {
+    var sparqlFragment = SparqlBlocks.Sparql.blockToCode(this);
+    if (sparqlFragment) {
+      var outputBlob = new Blob([sparqlFragment], {type : 'application/sparql-query'});
+      saveAs(outputBlob, "query.rq" );
+    }
+  },
   customContextMenu: function(options) {
     var thisBlock = this;
-    var helpCommand = options.pop();
-    var isHelp = (helpCommand && helpCommand.text == "Help");
-    if (!isHelp && helpCommand) {
-      options.push(helpCommand);
-    }
-    options.push({
+    SparqlBlocks.Blocks.insertOptionBeforeHelp(options, {
       text: "Save Query as SPARQL",
       enabled: true,
       callback: function() {
-        var sparqlFragment = SparqlBlocks.Sparql.blockToCode(thisBlock);
-        if (sparqlFragment) {
-          var outputBlob = new Blob([sparqlFragment], {type : 'application/sparql-query'});
-          saveAs(outputBlob, "query.rq" );
-        }
+        thisBlock.saveQueryAsSparql();
       }
     });
-    if (isHelp) {
-      options.push(helpCommand);
-    }
   }
 });
 

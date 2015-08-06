@@ -48,6 +48,34 @@ SparqlBlocks.Blocks.block('sparql_execution', {
   },
   onchange: function() {
     SparqlBlocks.Exec.blockExec(this);
+  },
+  customContextMenu: function(options) {
+    if (this.sparqlQueryStr) {
+      var thisBlock = this;
+      SparqlBlocks.Blocks.insertOptionBeforeHelp(options, {
+        text: "Save Query as SPARQL",
+        enabled: true,
+        callback: function() {
+          var outputBlob = new Blob([thisBlock.sparqlQueryStr], {type : 'application/sparql-query'});
+          saveAs(outputBlob, "query.rq" );
+        }
+      });
+    }
+    if (this.resultsData) {
+      var thisBlock = this;
+      SparqlBlocks.Blocks.insertOptionBeforeHelp(options, {
+        text: "Save Results as JSON",
+        enabled: true,
+        callback: function() {
+          var jsonString = JSON.stringify(thisBlock.resultsData);
+          if (jsonString) {
+            var outputBlob =
+                new Blob([jsonString], {type : 'application/sparql-results+json'});
+            saveAs(outputBlob, "results.json" );
+          }
+        }
+      });
+    }
   }
 });
 

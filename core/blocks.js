@@ -56,3 +56,15 @@ SparqlBlocks.Blocks.block = function(blockName, block) {
   block.init = baseInit(block.init);
   Blockly.Blocks[blockName] = block;
 };
+
+SparqlBlocks.Blocks.insertOptionBeforeHelp = function (options, newOption) {
+  var helpCommand = options.pop();
+  var isHelp = (helpCommand && helpCommand.text == "Help");
+  if (!isHelp && helpCommand) {
+    options.push(helpCommand);
+  }
+  options.push(newOption);
+  if (isHelp) {
+    options.push(helpCommand);
+  }
+};

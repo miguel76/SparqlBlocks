@@ -177,12 +177,7 @@ SparqlBlocks.Blocks.block('sparql_table', {
   customContextMenu: function(options) {
     if (this.resultsData) {
       var thisBlock = this;
-      var helpCommand = options.pop();
-      var isHelp = (helpCommand && helpCommand.text == "Help");
-      if (!isHelp && helpCommand) {
-        options.push(helpCommand);
-      }
-      options.push({
+      SparqlBlocks.Blocks.insertOptionBeforeHelp(options, {
         text: "Save Results as JSON",
         enabled: true,
         callback: function() {
@@ -194,9 +189,6 @@ SparqlBlocks.Blocks.block('sparql_table', {
           }
         }
       });
-      if (isHelp) {
-        options.push(helpCommand);
-      }
     }
   }
 });

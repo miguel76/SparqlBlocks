@@ -108,7 +108,7 @@
         resultBlock = SparqlBlocks.Output.blocksFromSelectResults(workspace, data);
       }
       connect_(connection, resultBlock);
-      callback();
+      callback(data);
     });
   }
   SparqlBlocks.Exec.sparqlExecAndPublish = sparqlExecAndPublish_;
@@ -129,13 +129,17 @@
       }
       if (queryStr) {
         console.log('Ready to execute query: ' + queryStr);
-        var execComponent = block;
+        block.resultsData = null;
         block.queryReq = SparqlBlocks.Exec.sparqlExecAndPublish(
             null, queryStr,
             block.workspace, resultsConnection,
-            function() { execComponent.queryReq = null; } );
+            function(data) {
+              block.queryReq = null;
+              block.resultsData = data;
+            } );
       } else {
         console.log('Empty query');
+        block.resultsData = null;
         unconnect_(resultsConnection);
         block.queryReq = null;
       }
