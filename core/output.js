@@ -241,8 +241,6 @@
 //   connection.connect(elseBlock.previousConnection);
 // }
 // return containerBlock;
-    var jsonResults = new Blockly.Warning(tableBlock);
-    jsonResults.setText(JSON.stringify(data));
     return tableBlock;
   }
   SparqlBlocks.Output.blocksFromSelectResults = blocksFromSelectResults_;
