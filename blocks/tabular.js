@@ -31,7 +31,7 @@ var typeExt = SparqlBlocks.Types.getExtension;
 // Blockly.Blocks.Sparql.exprTypes = ["Var", "GraphTerm", "Number", "String"];
 
 // https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#s6azf3
-Blockly.Blocks['sparql_column'] = {
+SparqlBlocks.Blocks.block('sparql_column', {
   init: function() {
     this.setHelpUrl('http://www.example.com/');
     this.setColour(330);
@@ -45,9 +45,9 @@ Blockly.Blocks['sparql_column'] = {
     this.setEditable(false);
     this.setTooltip('');
   }
-};
+});
 
-Blockly.Blocks['sparql_value_container'] = {
+SparqlBlocks.Blocks.block('sparql_value_container', {
   init: function() {
     this.setHelpUrl('http://www.example.com/');
     this.setColour(330);
@@ -60,9 +60,9 @@ Blockly.Blocks['sparql_value_container'] = {
     this.setMovable(false);
     this.setTooltip('');
   }
-};
+});
 
-Blockly.Blocks['sparql_table'] = {
+SparqlBlocks.Blocks.block('sparql_table', {
   init: function() {
     this.setHelpUrl('http://www.example.com/');
     this.setColour(330);
@@ -174,9 +174,9 @@ Blockly.Blocks['sparql_table'] = {
           clauseBlock.nextConnection.targetBlock();
     }
   }
-};
+});
 
-Blockly.Blocks['sparql_table_table'] = {
+SparqlBlocks.Blocks.block('sparql_table_table', {
   /**
    * Mutator block for table container.
    * @this Blockly.Block
@@ -189,9 +189,9 @@ Blockly.Blocks['sparql_table_table'] = {
     this.setTooltip('');
     this.contextMenu = false;
   }
-};
+});
 
-Blockly.Blocks['sparql_table_column'] = {
+SparqlBlocks.Blocks.block('sparql_table_column', {
   /**
    * Mutator bolck for column.
    * @this Blockly.Block
@@ -205,4 +205,4 @@ Blockly.Blocks['sparql_table_column'] = {
     this.setTooltip('');
     this.contextMenu = false;
   }
-};
+});

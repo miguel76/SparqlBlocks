@@ -29,7 +29,7 @@ var typeExt = SparqlBlocks.Types.getExtension;
 //Blockly.Blocks.bgp.HUE = 120;
 
 // https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#otezbs
-Blockly.Blocks['sparql_filter'] = {
+SparqlBlocks.Blocks.block('sparql_filter', {
   init: function() {
     this.setHelpUrl('http://www.example.com/');
     this.setColour(210);
@@ -41,10 +41,10 @@ Blockly.Blocks['sparql_filter'] = {
     this.setNextStatement(true, "TriplesBlock");
     this.setTooltip('');
   }
-};
+});
 
 // https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#otezbs
-Blockly.Blocks['sparql_union'] = {
+SparqlBlocks.Blocks.block('sparql_union', {
   init: function() {
     this.setHelpUrl('http://www.example.com/');
     this.setColour(260);
@@ -59,9 +59,9 @@ Blockly.Blocks['sparql_union'] = {
     this.setNextStatement(true, "TriplesBlock");
     this.setTooltip('');
   }
-};
+});
 
-Blockly.Blocks['sparql_optional'] = {
+SparqlBlocks.Blocks.block('sparql_optional', {
   init: function() {
     this.setHelpUrl('http://www.example.com/');
     this.setColour(260);
@@ -73,4 +73,4 @@ Blockly.Blocks['sparql_optional'] = {
     this.setNextStatement(true, "TriplesBlock");
     this.setTooltip('');
   }
-};
+});

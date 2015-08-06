@@ -31,7 +31,7 @@ var typeExt = SparqlBlocks.Types.getExtension;
 // Blockly.Blocks.Sparql.exprTypes = ["Var", "GraphTerm", "Number", "String"];
 
 // https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#s6azf3
-Blockly.Blocks['sparql_construct'] = {
+SparqlBlocks.Blocks.block('sparql_construct', {
   init: function() {
     this.setHelpUrl('http://www.example.com/');
     this.setColour(290);
@@ -45,9 +45,9 @@ Blockly.Blocks['sparql_construct'] = {
         .setCheck("TriplesBlock");
     this.setTooltip('');
   }
-};
+});
 
-Blockly.Blocks['sparql_select'] = {
+SparqlBlocks.Blocks.block('sparql_select', {
   init: function() {
     this.setHelpUrl('http://www.example.com/');
     this.setColour(290);
@@ -118,11 +118,33 @@ Blockly.Blocks['sparql_select'] = {
     this.setInputsInline(true);
     // this.setNextStatement(true, "QueryClauses");
     this.setTooltip('');
+  },
+  customContextMenu: function(options) {
+    var thisBlock = this;
+    var helpCommand = options.pop();
+    var isHelp = (helpCommand.text == "Help");
+    if (!isHelp) {
+      options.push(helpCommand);
+    }
+    options.push({
+      text: "Save Query as SPARQL",
+      enabled: true,
+      callback: function() {
+        var sparqlFragment = SparqlBlocks.Sparql.blockToCode(thisBlock);
+        if (sparqlFragment) {
+          var outputBlob = new Blob([sparqlFragment], {type : 'application/sparql-query'});
+          saveAs(outputBlob, "query.rq" );
+        }
+      }
+    });
+    if (isHelp) {
+      options.push(helpCommand);
+    }
   }
-};
+});
 
 // // https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#k5jv58
-// Blockly.Blocks['sparql_variable'] = {
+// SparqlBlocks.Blocks.block('sparql_variable', {
 //   init: function() {
 //     this.setHelpUrl('http://www.example.com/');
 //     this.setColour(65);
@@ -131,10 +153,10 @@ Blockly.Blocks['sparql_select'] = {
 //     this.setOutput(true, "var");
 //     this.setTooltip('');
 //   }
-// };
+// });
 
 // https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#8nt67n
-Blockly.Blocks['sparql_var_binding'] = {
+SparqlBlocks.Blocks.block('sparql_var_binding', {
   init: function() {
     this.setHelpUrl('http://www.example.com/');
     this.setColour(330);
@@ -148,10 +170,10 @@ Blockly.Blocks['sparql_var_binding'] = {
     this.setNextStatement(true, "VarBindings");
     this.setTooltip('');
   }
-};
+});
 
 // https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#6ttvtd
-Blockly.Blocks['sparql_prefixed_iri'] = {
+SparqlBlocks.Blocks.block('sparql_prefixed_iri', {
   init: function() {
     this.setHelpUrl('http://www.example.com/');
     this.setColour(20);
@@ -163,10 +185,10 @@ Blockly.Blocks['sparql_prefixed_iri'] = {
     this.setOutput(true, "Iri");
     this.setTooltip('');
   }
-};
+});
 
 // https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#6ttvtd
-Blockly.Blocks['sparql_iri'] = {
+SparqlBlocks.Blocks.block('sparql_iri', {
   init: function() {
     this.setHelpUrl('http://www.example.com/');
     this.setColour(20);
@@ -178,4 +200,4 @@ Blockly.Blocks['sparql_iri'] = {
     this.setOutput(true, "Iri");
     this.setTooltip('');
   }
-};
+});

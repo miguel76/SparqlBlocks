@@ -22,3 +22,37 @@
 
 // Top level object for SparqlBlocks.
 goog.provide('SparqlBlocks.Blocks');
+// goog.require('SparqlBlocks.Blocks.block');
+
+SparqlBlocks.Blocks.block = function(blockName, block) {
+  var baseInit = function(callback) {
+    return function() {
+    // ['cut', 'copy', 'paste'].forEach(function(event) {
+    //   thisBlock.svgPath_.addEventListener(event, function(e) {
+    //     console.log(event);
+    //   });
+    // });
+      callback.call(this);
+    }
+  };
+  var baseCustomContextMenu = function(callback) {
+    return function(options) {
+    // options.push({
+    //   text: "Save Query as SPARQL",
+    //   enabled: true,
+    //   callback: saveQuerySparql
+    // });
+    // options.push({
+    //   text: "Copy Fragment as SPARQL",
+    //   enabled: true,
+    //   callback: copyFragmentSparql
+    // });
+      if (callback) {
+        callback.call(this, options);
+      }
+    };
+  };
+  block.customContextMenu = baseCustomContextMenu(block.customContextMenu);
+  block.init = baseInit(block.init);
+  Blockly.Blocks[blockName] = block;
+};

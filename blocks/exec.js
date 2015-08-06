@@ -34,7 +34,7 @@ var unconnect_ = function(connection) {
   }
 }
 
-Blockly.Blocks['sparql_execution'] = {
+SparqlBlocks.Blocks.block('sparql_execution', {
   init: function() {
     this.setHelpUrl('http://www.example.com/');
     this.setColour(330);
@@ -49,9 +49,9 @@ Blockly.Blocks['sparql_execution'] = {
   onchange: function() {
     SparqlBlocks.Exec.blockExec(this);
   }
-};
+});
 
-Blockly.Blocks['sparql_execution_in_progress'] = {
+SparqlBlocks.Blocks.block('sparql_execution_in_progress', {
   init: function() {
     this.setHelpUrl('http://www.example.com/');
     this.setColour(330);
@@ -63,9 +63,9 @@ Blockly.Blocks['sparql_execution_in_progress'] = {
     this.setMovable(false);
     this.setEditable(false);
   }
-};
+});
 
-Blockly.Blocks['sparql_execution_error'] = {
+SparqlBlocks.Blocks.block('sparql_execution_error', {
   init: function() {
     this.setHelpUrl('http://www.example.com/');
     this.setColour(330);
@@ -83,4 +83,4 @@ Blockly.Blocks['sparql_execution_error'] = {
     this.setMovable(false);
     this.setEditable(false);
   }
-};
+});

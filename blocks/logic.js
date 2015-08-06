@@ -31,7 +31,7 @@ var typeContentExt = function(typeStr) {
 
 SparqlBlocks.Blocks.logic.HUE = 210;
 
-Blockly.Blocks['sparql_logic_compare'] = {
+SparqlBlocks.Blocks.block('sparql_logic_compare', {
   /**
    * Block for comparison operator.
    * @this Blockly.Block
@@ -105,9 +105,9 @@ Blockly.Blocks['sparql_logic_compare'] = {
     this.prevBlocks_[0] = blockA;
     this.prevBlocks_[1] = blockB;
   }
-};
+});
 
-Blockly.Blocks['sparql_logic_operation'] = {
+SparqlBlocks.Blocks.block('sparql_logic_operation', {
   /**
    * Block for logical operations: 'and', 'or'.
    * @this Blockly.Block
@@ -136,9 +136,9 @@ Blockly.Blocks['sparql_logic_operation'] = {
       return TOOLTIPS[op];
     });
   }
-};
+});
 
-Blockly.Blocks['sparql_logic_negate'] = {
+SparqlBlocks.Blocks.block('sparql_logic_negate', {
   /**
    * Block for negation.
    * @this Blockly.Block
@@ -160,9 +160,9 @@ Blockly.Blocks['sparql_logic_negate'] = {
       "helpUrl": Blockly.Msg.LOGIC_NEGATE_HELPURL
     });
   }
-};
+});
 
-Blockly.Blocks['sparql_logic_boolean'] = {
+SparqlBlocks.Blocks.block('sparql_logic_boolean', {
   /**
    * Block for boolean data type: true and false.
    * @this Blockly.Block
@@ -178,9 +178,9 @@ Blockly.Blocks['sparql_logic_boolean'] = {
         .appendField(new Blockly.FieldDropdown(BOOLEANS), 'BOOL');
     this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
   }
-};
+});
 
-Blockly.Blocks['sparql_logic_null'] = {
+SparqlBlocks.Blocks.block('sparql_logic_null', {
   /**
    * Block for null data type.
    * @this Blockly.Block
@@ -193,9 +193,9 @@ Blockly.Blocks['sparql_logic_null'] = {
         .appendField(Blockly.Msg.LOGIC_NULL);
     this.setTooltip(Blockly.Msg.LOGIC_NULL_TOOLTIP);
   }
-};
+});
 
-Blockly.Blocks['sparql_logic_ternary'] = {
+SparqlBlocks.Blocks.block('sparql_logic_ternary', {
   /**
    * Block for ternary operator.
    * @this Blockly.Block
@@ -244,9 +244,9 @@ Blockly.Blocks['sparql_logic_ternary'] = {
     }
     this.prevParentConnection_ = parentConnection;
   }
-};
+});
 
-Blockly.Blocks['sparql_exists'] = {
+SparqlBlocks.Blocks.block('sparql_exists', {
   /**
    * Block for EXISTS.
    * @this Blockly.Block
@@ -260,9 +260,9 @@ Blockly.Blocks['sparql_exists'] = {
         .appendField("exists");
     this.setTooltip('');
   }
-};
+});
 
-Blockly.Blocks['sparql_not_exists'] = {
+SparqlBlocks.Blocks.block('sparql_not_exists', {
   /**
    * Block for NOT EXISTS.
    * @this Blockly.Block
@@ -276,4 +276,4 @@ Blockly.Blocks['sparql_not_exists'] = {
         .appendField("not exists");
     this.setTooltip('');
   }
-};
+});

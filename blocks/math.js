@@ -27,7 +27,7 @@ var typeExt = SparqlBlocks.Types.getExtension;
 
 SparqlBlocks.Blocks.math.HUE = 230;
 
-Blockly.Blocks['sparql_math_number'] = {
+SparqlBlocks.Blocks.block('sparql_math_number', {
   /**
    * Block for numeric value.
    * @this Blockly.Block
@@ -41,9 +41,9 @@ Blockly.Blocks['sparql_math_number'] = {
     this.setOutput(true, 'LiteralNumber');
     this.setTooltip(Blockly.Msg.MATH_NUMBER_TOOLTIP);
   }
-};
+});
 
-Blockly.Blocks['sparql_math_arithmetic'] = {
+SparqlBlocks.Blocks.block('sparql_math_arithmetic', {
   /**
    * Block for basic arithmetic operator.
    * @this Blockly.Block
@@ -76,9 +76,9 @@ Blockly.Blocks['sparql_math_arithmetic'] = {
       return TOOLTIPS[mode];
     });
   }
-};
+});
 
-Blockly.Blocks['sparql_math_single'] = {
+SparqlBlocks.Blocks.block('sparql_math_single', {
   /**
    * Block for advanced math operators with single operand.
    * @this Blockly.Block
@@ -104,9 +104,9 @@ Blockly.Blocks['sparql_math_single'] = {
       return TOOLTIPS[mode];
     });
   }
-};
+});
 
-Blockly.Blocks['sparql_math_number_property'] = {
+SparqlBlocks.Blocks.block('sparql_math_number_property', {
   /**
    * Block for checking if a number is even, odd, prime, whole, positive,
    * negative or if it is divisible by certain number.
@@ -172,9 +172,9 @@ Blockly.Blocks['sparql_math_number_property'] = {
       this.removeInput('DIVISOR');
     }
   }
-};
+});
 
-Blockly.Blocks['sparql_math_round'] = {
+SparqlBlocks.Blocks.block('sparql_math_round', {
   /**
    * Block for rounding functions.
    * @this Blockly.Block
@@ -192,9 +192,9 @@ Blockly.Blocks['sparql_math_round'] = {
         .appendField(new Blockly.FieldDropdown(OPERATORS), 'OP');
     this.setTooltip(Blockly.Msg.MATH_ROUND_TOOLTIP);
   }
-};
+});
 
-Blockly.Blocks['sparql_math_modulo'] = {
+SparqlBlocks.Blocks.block('sparql_math_modulo', {
   /**
    * Block for remainder of a division.
    * @this Blockly.Block
@@ -221,9 +221,9 @@ Blockly.Blocks['sparql_math_modulo'] = {
       "helpUrl": Blockly.Msg.MATH_MODULO_HELPURL
     });
   }
-};
+});
 
-Blockly.Blocks['sparql_math_constrain'] = {
+SparqlBlocks.Blocks.block('sparql_math_constrain', {
   /**
    * Block for constraining a number between two limits.
    * @this Blockly.Block
@@ -255,9 +255,9 @@ Blockly.Blocks['sparql_math_constrain'] = {
       "helpUrl": Blockly.Msg.MATH_CONSTRAIN_HELPURL
     });
   }
-};
+});
 
-Blockly.Blocks['sparql_math_random_int'] = {
+SparqlBlocks.Blocks.block('sparql_math_random_int', {
   /**
    * Block for random integer between [X] and [Y].
    * @this Blockly.Block
@@ -284,9 +284,9 @@ Blockly.Blocks['sparql_math_random_int'] = {
       "helpUrl": Blockly.Msg.MATH_RANDOM_INT_HELPURL
     });
   }
-};
+});
 
-Blockly.Blocks['sparql_math_random_float'] = {
+SparqlBlocks.Blocks.block('sparql_math_random_float', {
   /**
    * Block for random fraction between 0 and 1.
    * @this Blockly.Block
@@ -299,4 +299,4 @@ Blockly.Blocks['sparql_math_random_float'] = {
         .appendField(Blockly.Msg.MATH_RANDOM_FLOAT_TITLE_RANDOM);
     this.setTooltip(Blockly.Msg.MATH_RANDOM_FLOAT_TOOLTIP);
   }
-};
+});

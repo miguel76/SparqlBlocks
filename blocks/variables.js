@@ -26,7 +26,7 @@ goog.require('SparqlBlocks.Blocks');
 
 SparqlBlocks.Blocks.variables.HUE = 330;
 
-Blockly.Blocks['sparql_variable'] = {
+SparqlBlocks.Blocks.block('sparql_variable', {
   /**
    * Block for variable getter.
    * @this Blockly.Block
@@ -85,7 +85,7 @@ Blockly.Blocks['sparql_variable'] = {
   //   option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);
   //   options.push(option);
   // }
-};
+});
 
 Blockly.Blocks['variables_get'] = Blockly.Blocks['sparql_variable']
 Blockly.Blocks['variables_set'] = null;

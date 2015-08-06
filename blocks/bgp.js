@@ -57,7 +57,7 @@ var _varsInScopeFromInput = function(block, inputName) {
 //Blockly.Blocks.bgp.HUE = 120;
 
 // https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#rh3u29
-Blockly.Blocks['sparql_verb_objectlist'] = {
+SparqlBlocks.Blocks.block('sparql_verb_objectlist', {
   init: function() {
     _initVerb(this);
     this.appendValueInput("VERB")
@@ -78,10 +78,10 @@ Blockly.Blocks['sparql_verb_objectlist'] = {
         _varsInScopeFromInput(this, "VERB"),
         _varsInScopeFromInput(this, "OBJECT"));
   }
-};
+});
 
 // https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#dt8jdf
-Blockly.Blocks['sparql_verb_object'] = {
+SparqlBlocks.Blocks.block('sparql_verb_object', {
   init: function() {
     _initVerb(this);
     this.appendValueInput("VERB")
@@ -96,9 +96,9 @@ Blockly.Blocks['sparql_verb_object'] = {
     this.setNextStatement(true, "PropertyList");
     this.setTooltip('');
   }
-};
+});
 
-Blockly.Blocks['sparql_reverseVerb_object'] = {
+SparqlBlocks.Blocks.block('sparql_reverseVerb_object', {
   init: function() {
     _initVerb(this);
     this.appendValueInput("VERB")
@@ -113,9 +113,9 @@ Blockly.Blocks['sparql_reverseVerb_object'] = {
     this.setNextStatement(true, "PropertyList");
     this.setTooltip('');
   }
-};
+});
 
-Blockly.Blocks['sparql_isa'] = {
+SparqlBlocks.Blocks.block('sparql_isa', {
   init: function() {
     _initVerb(this);
     this.appendValueInput("TYPE")
@@ -126,11 +126,11 @@ Blockly.Blocks['sparql_isa'] = {
     this.setNextStatement(true, "PropertyList");
     this.setTooltip('');
   }
-};
+});
 
 /*
 https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#adf4m7
-Blockly.Blocks['property_list_path'] = {
+SparqlBlocks.Blocks.block('property_list_path', {
   init: function() {
     this.setHelpUrl('http://www.example.com/');
     this.setColour(260);
@@ -142,11 +142,11 @@ Blockly.Blocks['property_list_path'] = {
     this.setNextStatement(true, "property_list");
     this.setTooltip('');
   }
-};
+});
 */
 
 // https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#otezbs
-Blockly.Blocks['sparql_subject_propertylist'] = {
+SparqlBlocks.Blocks.block('sparql_subject_propertylist', {
   init: function() {
     _initSubject(this);
     this.appendValueInput("SUBJECT")
@@ -160,10 +160,10 @@ Blockly.Blocks['sparql_subject_propertylist'] = {
     this.setNextStatement(true, "TriplesBlock");
     this.setTooltip('');
   }
-};
+});
 
 // https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#otezbs
-Blockly.Blocks['sparql_typedsubject_propertylist'] = {
+SparqlBlocks.Blocks.block('sparql_typedsubject_propertylist', {
   init: function() {
     _initSubject(this);
     this.appendValueInput("SUBJECT")
@@ -180,10 +180,10 @@ Blockly.Blocks['sparql_typedsubject_propertylist'] = {
     this.setNextStatement(true, "TriplesBlock");
     this.setTooltip('');
   }
-};
+});
 
 // https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#otezbs
-Blockly.Blocks['sparql_anonsubject_propertylist'] = {
+SparqlBlocks.Blocks.block('sparql_anonsubject_propertylist', {
   init: function() {
     _initSubject(this);
     this.appendStatementInput("PROPERTY_LIST")
@@ -194,10 +194,10 @@ Blockly.Blocks['sparql_anonsubject_propertylist'] = {
     this.setOutput(true, "Resource");
     this.setTooltip('');
   }
-};
+});
 
 // https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#9y53zb
-Blockly.Blocks['sparql_subject_verb_objectlist'] = {
+SparqlBlocks.Blocks.block('sparql_subject_verb_objectlist', {
   init: function() {
     _initSubject(this);
     this.appendValueInput("SUBJECT")
@@ -217,10 +217,10 @@ Blockly.Blocks['sparql_subject_verb_objectlist'] = {
     this.setNextStatement(true, "TriplesBlock");
     this.setTooltip('');
   }
-};
+});
 
 // https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#6x98e2
-Blockly.Blocks['sparql_subject_verb_object'] = {
+SparqlBlocks.Blocks.block('sparql_subject_verb_object', {
   init: function() {
     _initSubject(this);
     this.appendValueInput("SUBJECT")
@@ -238,4 +238,4 @@ Blockly.Blocks['sparql_subject_verb_object'] = {
     this.setNextStatement(true, "TriplesBlock");
     this.setTooltip('');
   }
-};
+});

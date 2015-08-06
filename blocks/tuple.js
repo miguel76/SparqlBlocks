@@ -30,7 +30,7 @@ goog.provide('SparqlBlocks.Blocks.tuple');
 // goog.require('SparqlBlocks.Blocks');
 var typeExt = SparqlBlocks.Types.getExtension;
 
-Blockly.Blocks['sparql_tuple'] = {
+SparqlBlocks.Blocks.block('sparql_tuple', {
   /**
    * Block for if/elseif/else condition.
    * @this Blockly.Block
@@ -146,9 +146,9 @@ Blockly.Blocks['sparql_tuple'] = {
           clauseBlock.nextConnection.targetBlock();
     }
   }
-};
+});
 
-Blockly.Blocks['sparql_tuple_tuple'] = {
+SparqlBlocks.Blocks.block('sparql_tuple_tuple', {
   /**
    * Mutator block for if container.
    * @this Blockly.Block
@@ -161,9 +161,9 @@ Blockly.Blocks['sparql_tuple_tuple'] = {
     this.setTooltip('');
     this.contextMenu = false;
   }
-};
+});
 
-Blockly.Blocks['sparql_tuple_value'] = {
+SparqlBlocks.Blocks.block('sparql_tuple_value', {
   /**
    * Mutator bolck for else-if condition.
    * @this Blockly.Block
@@ -177,4 +177,4 @@ Blockly.Blocks['sparql_tuple_value'] = {
     this.setTooltip('');
     this.contextMenu = false;
   }
-};
+});

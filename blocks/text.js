@@ -28,7 +28,7 @@ var typeExt = SparqlBlocks.Types.getExtension;
 
 SparqlBlocks.Blocks.text.HUE = 160;
 
-Blockly.Blocks['sparql_text'] = {
+SparqlBlocks.Blocks.block('sparql_text', {
   /**
    * Block for text value.
    * @this Blockly.Block
@@ -58,9 +58,9 @@ Blockly.Blocks['sparql_text'] = {
     }
     return new Blockly.FieldImage(file, 12, 12, '"');
   }
-};
+});
 
-Blockly.Blocks['sparql_text_with_lang'] = {
+SparqlBlocks.Blocks.block('sparql_text_with_lang', {
   /**
    * Block for text value.
    * @this Blockly.Block
@@ -92,9 +92,9 @@ Blockly.Blocks['sparql_text_with_lang'] = {
     }
     return new Blockly.FieldImage(file, 12, 12, '"');
   }
-};
+});
 
-Blockly.Blocks['sparql_text_with_type_pref'] = {
+SparqlBlocks.Blocks.block('sparql_text_with_type_pref', {
   /**
    * Block for text value.
    * @this Blockly.Block
@@ -128,9 +128,9 @@ Blockly.Blocks['sparql_text_with_type_pref'] = {
     }
     return new Blockly.FieldImage(file, 12, 12, '"');
   }
-};
+});
 
-Blockly.Blocks['sparql_text_with_type_iri'] = {
+SparqlBlocks.Blocks.block('sparql_text_with_type_iri', {
   /**
    * Block for text value.
    * @this Blockly.Block
@@ -164,10 +164,10 @@ Blockly.Blocks['sparql_text_with_type_iri'] = {
     }
     return new Blockly.FieldImage(file, 12, 12, '"');
   }
-};
+});
 
 
-Blockly.Blocks['sparql_text_join'] = {
+SparqlBlocks.Blocks.block('sparql_text_join', {
   /**
    * Block for creating a string made up of any number of elements of any type.
    * @this Blockly.Block
@@ -291,9 +291,9 @@ Blockly.Blocks['sparql_text_join'] = {
     }
   },
   newQuote_: Blockly.Blocks['sparql_text'].newQuote_
-};
+});
 
-Blockly.Blocks['sparql_text_create_join_container'] = {
+SparqlBlocks.Blocks.block('sparql_text_create_join_container', {
   /**
    * Mutator block for container.
    * @this Blockly.Block
@@ -306,9 +306,9 @@ Blockly.Blocks['sparql_text_create_join_container'] = {
     this.setTooltip(Blockly.Msg.TEXT_CREATE_JOIN_TOOLTIP);
     this.contextMenu = false;
   }
-};
+});
 
-Blockly.Blocks['sparql_text_create_join_item'] = {
+SparqlBlocks.Blocks.block('sparql_text_create_join_item', {
   /**
    * Mutator block for add items.
    * @this Blockly.Block
@@ -322,9 +322,9 @@ Blockly.Blocks['sparql_text_create_join_item'] = {
     this.setTooltip(Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TOOLTIP);
     this.contextMenu = false;
   }
-};
+});
 
-Blockly.Blocks['sparql_text_append'] = {
+SparqlBlocks.Blocks.block('sparql_text_append', {
   /**
    * Block for appending to a variable in place.
    * @this Blockly.Block
@@ -366,9 +366,9 @@ Blockly.Blocks['sparql_text_append'] = {
       this.setFieldValue(newName, 'VAR');
     }
   }
-};
+});
 
-Blockly.Blocks['sparql_text_length'] = {
+SparqlBlocks.Blocks.block('sparql_text_length', {
   /**
    * Block for string length.
    * @this Blockly.Block
@@ -389,9 +389,9 @@ Blockly.Blocks['sparql_text_length'] = {
       "helpUrl": Blockly.Msg.TEXT_LENGTH_HELPURL
     });
   }
-};
+});
 
-Blockly.Blocks['sparql_text_isEmpty'] = {
+SparqlBlocks.Blocks.block('sparql_text_isEmpty', {
   /**
    * Block for is the string null?
    * @this Blockly.Block
@@ -412,9 +412,9 @@ Blockly.Blocks['sparql_text_isEmpty'] = {
       "helpUrl": Blockly.Msg.TEXT_ISEMPTY_HELPURL
     });
   }
-};
+});
 
-Blockly.Blocks['sparql_text_indexOf'] = {
+SparqlBlocks.Blocks.block('sparql_text_indexOf', {
   /**
    * Block for finding a substring in the text.
    * @this Blockly.Block
@@ -438,9 +438,9 @@ Blockly.Blocks['sparql_text_indexOf'] = {
     this.setInputsInline(true);
     this.setTooltip(Blockly.Msg.TEXT_INDEXOF_TOOLTIP);
   }
-};
+});
 
-Blockly.Blocks['sparql_text_contains'] = {
+SparqlBlocks.Blocks.block('sparql_text_contains', {
   /**
    * Block for finding a substring in the text.
    * @this Blockly.Block
@@ -457,9 +457,9 @@ Blockly.Blocks['sparql_text_contains'] = {
     this.setInputsInline(true);
     this.setTooltip('');
   }
-};
+});
 
-Blockly.Blocks['sparql_text_lang'] = {
+SparqlBlocks.Blocks.block('sparql_text_lang', {
   /**
    * Block for finding a substring in the text.
    * @this Blockly.Block
@@ -477,9 +477,9 @@ Blockly.Blocks['sparql_text_lang'] = {
     this.setInputsInline(true);
     this.setTooltip('');
   }
-};
+});
 
-Blockly.Blocks['sparql_text_charAt'] = {
+SparqlBlocks.Blocks.block('sparql_text_charAt', {
   /**
    * Block for getting a character from the string.
    * @this Blockly.Block
@@ -563,9 +563,9 @@ Blockly.Blocks['sparql_text_charAt'] = {
     });
     this.getInput('AT').appendField(menu, 'WHERE');
   }
-};
+});
 
-Blockly.Blocks['sparql_text_getSubstring'] = {
+SparqlBlocks.Blocks.block('sparql_text_getSubstring', {
   /**
    * Block for getting substring.
    * @this Blockly.Block
@@ -668,9 +668,9 @@ Blockly.Blocks['sparql_text_getSubstring'] = {
       this.moveInputBefore('AT1', 'AT2');
     }
   }
-};
+});
 
-Blockly.Blocks['sparql_text_changeCase'] = {
+SparqlBlocks.Blocks.block('sparql_text_changeCase', {
   /**
    * Block for changing capitalization.
    * @this Blockly.Block
@@ -688,9 +688,9 @@ Blockly.Blocks['sparql_text_changeCase'] = {
     this.setOutput(true, 'StringExpr');
     this.setTooltip(Blockly.Msg.TEXT_CHANGECASE_TOOLTIP);
   }
-};
+});
 
-Blockly.Blocks['sparql_text_trim'] = {
+SparqlBlocks.Blocks.block('sparql_text_trim', {
   /**
    * Block for trimming spaces.
    * @this Blockly.Block
@@ -708,4 +708,4 @@ Blockly.Blocks['sparql_text_trim'] = {
     this.setOutput(true, 'StringExpr');
     this.setTooltip(Blockly.Msg.TEXT_TRIM_TOOLTIP);
   }
-};
+});
