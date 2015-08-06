@@ -122,8 +122,8 @@ SparqlBlocks.Blocks.block('sparql_select', {
   customContextMenu: function(options) {
     var thisBlock = this;
     var helpCommand = options.pop();
-    var isHelp = (helpCommand.text == "Help");
-    if (!isHelp) {
+    var isHelp = (helpCommand && helpCommand.text == "Help");
+    if (!isHelp && helpCommand) {
       options.push(helpCommand);
     }
     options.push({
