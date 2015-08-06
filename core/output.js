@@ -210,7 +210,7 @@
         bindings.map( function(binding) { return binding[varName]; } ),
         workspace, colConnection );
     }
-
+    tableBlock.resultsData = data;
 
     // <block type="sparql_table">
     //   <mutation colcount="2"></mutation>

@@ -173,6 +173,31 @@ SparqlBlocks.Blocks.block('sparql_table', {
       clauseBlock = clauseBlock.nextConnection &&
           clauseBlock.nextConnection.targetBlock();
     }
+  },
+  customContextMenu: function(options) {
+    if (this.resultsData) {
+      var thisBlock = this;
+      var helpCommand = options.pop();
+      var isHelp = (helpCommand && helpCommand.text == "Help");
+      if (!isHelp && helpCommand) {
+        options.push(helpCommand);
+      }
+      options.push({
+        text: "Save Results as JSON",
+        enabled: true,
+        callback: function() {
+          var jsonString = JSON.stringify(thisBlock.resultsData);
+          if (jsonString) {
+            var outputBlob =
+                new Blob([jsonString], {type : 'application/sparql-results+json'});
+            saveAs(outputBlob, "results.json" );
+          }
+        }
+      });
+      if (isHelp) {
+        options.push(helpCommand);
+      }
+    }
   }
 });
 
