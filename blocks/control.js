@@ -31,7 +31,7 @@ var typeExt = SparqlBlocks.Types.getExtension;
 // https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#otezbs
 SparqlBlocks.Blocks.block('sparql_filter', {
   init: function() {
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('http://www.w3.org/TR/sparql11-query/#scopeFilters');
     this.setColour(210);
     this.appendValueInput("CONDITION")
         .setCheck(typeExt("BooleanExpr"))
@@ -46,7 +46,7 @@ SparqlBlocks.Blocks.block('sparql_filter', {
 // https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#otezbs
 SparqlBlocks.Blocks.block('sparql_union', {
   init: function() {
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('http://www.w3.org/TR/sparql11-query/#alternatives');
     this.setColour(260);
     this.appendStatementInput("OP1")
         .setCheck("TriplesBlock");
@@ -63,7 +63,7 @@ SparqlBlocks.Blocks.block('sparql_union', {
 
 SparqlBlocks.Blocks.block('sparql_optional', {
   init: function() {
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('http://www.w3.org/TR/sparql11-query/#optionals');
     this.setColour(260);
     this.appendStatementInput("OP")
         .setCheck("TriplesBlock")

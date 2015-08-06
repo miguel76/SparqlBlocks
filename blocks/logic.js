@@ -252,7 +252,7 @@ SparqlBlocks.Blocks.block('sparql_exists', {
    * @this Blockly.Block
    */
   init: function() {
-    this.setHelpUrl('');
+    this.setHelpUrl('http://www.w3.org/TR/sparql11-query/#neg-exists');
     this.setColour(SparqlBlocks.Blocks.logic.HUE);
     this.setOutput(true,'BooleanExpr');
     this.appendStatementInput("OP")
@@ -268,7 +268,7 @@ SparqlBlocks.Blocks.block('sparql_not_exists', {
    * @this Blockly.Block
    */
   init: function() {
-    this.setHelpUrl('');
+    this.setHelpUrl('http://www.w3.org/TR/sparql11-query/#neg-notexists');
     this.setColour(SparqlBlocks.Blocks.logic.HUE);
     this.setOutput(true,'BooleanExpr');
     this.appendStatementInput("OP")

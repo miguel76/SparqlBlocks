@@ -33,7 +33,7 @@ var typeExt = SparqlBlocks.Types.getExtension;
 // https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#s6azf3
 SparqlBlocks.Blocks.block('sparql_construct', {
   init: function() {
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('http://www.w3.org/TR/sparql11-query/#construct');
     this.setColour(290);
     this.appendDummyInput()
         .appendField("CONSTRUCT");
@@ -49,7 +49,7 @@ SparqlBlocks.Blocks.block('sparql_construct', {
 
 SparqlBlocks.Blocks.block('sparql_select', {
   init: function() {
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('http://www.w3.org/TR/sparql11-query/#select');
     this.setColour(290);
     // this.appendValueInput("VAR")
     //     .setCheck(["var", "graph_term"]);
@@ -158,7 +158,7 @@ SparqlBlocks.Blocks.block('sparql_select', {
 // https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#8nt67n
 SparqlBlocks.Blocks.block('sparql_var_binding', {
   init: function() {
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('http://www.w3.org/TR/sparql11-query/#selectExpressions');
     this.setColour(330);
     this.appendValueInput("EXPR")
         .setCheck(typeExt("Expr"));
@@ -175,7 +175,7 @@ SparqlBlocks.Blocks.block('sparql_var_binding', {
 // https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#6ttvtd
 SparqlBlocks.Blocks.block('sparql_prefixed_iri', {
   init: function() {
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('http://www.w3.org/TR/sparql11-query/#prefNames');
     this.setColour(20);
     this.appendDummyInput()
         .appendField(new Blockly.FieldTextInput("prefix"), "PREFIX")
@@ -190,7 +190,7 @@ SparqlBlocks.Blocks.block('sparql_prefixed_iri', {
 // https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#6ttvtd
 SparqlBlocks.Blocks.block('sparql_iri', {
   init: function() {
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('http://www.w3.org/TR/sparql11-query/#QSynIRI');
     this.setColour(20);
     this.appendDummyInput()
         .appendField("<")

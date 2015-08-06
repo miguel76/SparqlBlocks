@@ -446,7 +446,7 @@ SparqlBlocks.Blocks.block('sparql_text_contains', {
    * @this Blockly.Block
    */
   init: function() {
-    this.setHelpUrl(Blockly.Msg.TEXT_INDEXOF_HELPURL);
+    this.setHelpUrl("http://www.w3.org/TR/sparql11-query/#func-contains");
     this.setColour(SparqlBlocks.Blocks.text.HUE);
     this.setOutput(true, 'BooleanExpr');
     this.appendValueInput('FIND')
@@ -465,7 +465,7 @@ SparqlBlocks.Blocks.block('sparql_text_lang', {
    * @this Blockly.Block
    */
   init: function() {
-    this.setHelpUrl(Blockly.Msg.TEXT_INDEXOF_HELPURL);
+    this.setHelpUrl("http://www.w3.org/TR/sparql11-query/#func-lang");
     this.setColour(SparqlBlocks.Blocks.text.HUE);
     this.setOutput(true, 'BooleanExpr');
     this.appendValueInput('VALUE')

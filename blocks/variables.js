@@ -34,7 +34,7 @@ SparqlBlocks.Blocks.block('sparql_variable', {
   init: function() {
 
     // this.setHelpUrl(Blockly.Msg.VARIABLES_GET_HELPURL);
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl(Blockly.Msg.VARIABLES_GET_HELPURL);
     this.setColour(SparqlBlocks.Blocks.variables.HUE);
     this.appendDummyInput()
         .appendField(new Blockly.FieldVariable(), "VAR");

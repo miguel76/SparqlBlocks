@@ -36,7 +36,7 @@ var unconnect_ = function(connection) {
 
 SparqlBlocks.Blocks.block('sparql_execution', {
   init: function() {
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('http://www.w3.org/TR/2013/REC-sparql11-protocol-20130321/#query-operation');
     this.setColour(330);
     this.appendValueInput("QUERY")
         .setCheck("Select")
@@ -53,7 +53,7 @@ SparqlBlocks.Blocks.block('sparql_execution', {
 
 SparqlBlocks.Blocks.block('sparql_execution_in_progress', {
   init: function() {
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('http://www.w3.org/TR/2013/REC-sparql11-protocol-20130321/#query-operation');
     this.setColour(330);
     this.appendDummyInput()
         .appendField("execution in progress...");
@@ -67,7 +67,7 @@ SparqlBlocks.Blocks.block('sparql_execution_in_progress', {
 
 SparqlBlocks.Blocks.block('sparql_execution_error', {
   init: function() {
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('http://www.w3.org/TR/2013/REC-sparql11-protocol-20130321/#query-failure');
     this.setColour(330);
     this.appendDummyInput()
         .appendField("Error executing query!");

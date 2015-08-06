@@ -33,7 +33,7 @@ var typeExt = SparqlBlocks.Types.getExtension;
 // https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#s6azf3
 SparqlBlocks.Blocks.block('sparql_column', {
   init: function() {
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('http://www.w3.org/TR/sparql11-query/#sparqlQueryVariables');
     this.setColour(330);
     this.appendDummyInput()
         .appendField(new Blockly.FieldTextInput("colName"), "COLNAME");
@@ -49,7 +49,7 @@ SparqlBlocks.Blocks.block('sparql_column', {
 
 SparqlBlocks.Blocks.block('sparql_value_container', {
   init: function() {
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('http://www.w3.org/TR/sparql11-query/#docResultDesc');
     this.setColour(330);
     this.appendValueInput("VALUE")
         .setCheck(typeExt("GraphTerm"));
@@ -64,7 +64,7 @@ SparqlBlocks.Blocks.block('sparql_value_container', {
 
 SparqlBlocks.Blocks.block('sparql_table', {
   init: function() {
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('http://www.w3.org/TR/sparql11-query/#sparqlSolutions');
     this.setColour(330);
     this.setInputsInline(true);
     // this.setMutator(new Blockly.Mutator(['sparql_table_table',
