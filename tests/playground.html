@@ -649,6 +649,9 @@ h1 {
                         </block>
                       </value>
                       <value name="OBJECT">
+                        <block type="variables_get">
+                          <field name="VAR">range</field>
+                        </block>
                       </value>
                     </block>
                   </next>
@@ -676,10 +679,6 @@ h1 {
                         </block>
                       </value>
                       <value name="OBJECT">
-                        <block type="sparql_prefixed_iri" id="101">
-                          <field name="PREFIX">owl</field>
-                          <field name="LOCAL_NAME">Thing</field>
-                        </block>
                       </value>
                     </block>
                   </statement>
