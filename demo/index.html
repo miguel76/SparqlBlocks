@@ -133,8 +133,8 @@ h1 {
   font-family: monospace;
 }
 .blocklyTreeIcon {
-  border-width: 2px;
-  border-style: solid;
+  /*border-width: 2px;
+  border-style: solid;*/
   background-image: none;
 }
 
@@ -149,31 +149,35 @@ h1 {
 }
 
 .blocklyToolboxDiv #\:3 .blocklyTreeIcon {
-  /* Vocabulary */
+  background-color: #745ba5; /* Options */
 }
 
-.blocklyToolboxDiv #\:8 .blocklyTreeIcon {
+.blocklyToolboxDiv #\:5 .blocklyTreeIcon {
   background-color: #5b80a5; /* Logic */
 }
 
-.blocklyToolboxDiv #\:9 .blocklyTreeIcon {
+.blocklyToolboxDiv #\:6 .blocklyTreeIcon {
   background-color: #5b67a5; /* Math */
 }
 
-.blocklyToolboxDiv #\:a .blocklyTreeIcon {
+.blocklyToolboxDiv #\:7 .blocklyTreeIcon {
   background-color: #5ba58c; /* Text */
 }
 
-.blocklyToolboxDiv #\:c .blocklyTreeIcon {
-  background-color: #a55b80; /* Variables */
-}
-
-.blocklyToolboxDiv #\:d .blocklyTreeIcon {
+.blocklyToolboxDiv #\:8 .blocklyTreeIcon {
   background-color: #a5745b; /* Resources */
 }
 
-.blocklyToolboxDiv #\:f .blocklyTreeIcon {
-  background-color: #745ba5; /* Options */
+.blocklyToolboxDiv #\:a .blocklyTreeIcon {
+  background-color: #a55b80; /* Variables */
+}
+
+.blocklyToolboxDiv #\:c .blocklyTreeIcon {
+  /* Things */
+}
+
+.blocklyToolboxDiv #\:d .blocklyTreeIcon {
+  /* Vocabulary */
 }
 
 </style>
@@ -186,11 +190,30 @@ h1 {
 
   <xml id="toolbox" style="display: none">
     <category name="Exec/Query">
-      <!-- <block type="verb_objectlist"></block> -->
-      <block type="sparql_execution"></block>
+      <block type="sparql_execution_endpoint"></block>
       <block type="sparql_select">
         <statement name="WHERE">
-          <block type="sparql_typedsubject_propertylist"></block>
+          <block type="sparql_typedsubject_propertylist">
+            <value name="SUBJECT">
+              <block type="variables_get">
+                <field name="VAR">s</field>
+              </block>
+            </value>
+            <statement name="PROPERTY_LIST">
+              <block type="sparql_verb_object">
+                <value name="VERB">
+                  <block type="variables_get">
+                    <field name="VAR">p</field>
+                  </block>
+                </value>
+                <value name="OBJECT">
+                  <block type="variables_get">
+                    <field name="VAR">o</field>
+                  </block>
+                </value>
+              </block>
+            </statement>
+          </block>
         </statement>
       </block>
       <!-- <block type="sparql_var_binding"></block> -->
@@ -205,6 +228,158 @@ h1 {
       <!-- <block type="subject_verb_objectlist"></block>
       <block type="subject_verb_object"></block> -->
       <!-- <block type="sparql_variable"></block> -->
+    </category>
+    <category name="Options">
+      <block type="sparql_union"></block>
+      <block type="sparql_optional"></block>
+    </category>
+    <sep></sep>
+    <category name="Logic">
+      <block type="sparql_filter"></block>
+      <block type="sparql_logic_compare"></block>
+      <block type="sparql_logic_operation"></block>
+      <block type="sparql_logic_negate"></block>
+      <block type="sparql_logic_boolean"></block>
+      <!-- <block type="sparql_logic_null"></block> -->
+      <block type="sparql_logic_ternary"></block>
+      <block type="sparql_exists"></block>
+      <block type="sparql_not_exists"></block>
+    </category>
+    <category name="Math">
+      <block type="sparql_math_number"></block>
+      <block type="sparql_math_arithmetic"></block>
+      <block type="sparql_math_single"></block>
+      <!-- <block type="sparql_math_constant"></block> -->
+      <block type="sparql_math_number_property"></block>
+      <block type="sparql_math_round"></block>
+      <block type="sparql_math_modulo"></block>
+      <block type="sparql_math_constrain">
+        <value name="LOW">
+          <block type="sparql_math_number">
+            <field name="NUM">1</field>
+          </block>
+        </value>
+        <value name="HIGH">
+          <block type="sparql_math_number">
+            <field name="NUM">100</field>
+          </block>
+        </value>
+      </block>
+      <block type="sparql_math_random_int">
+        <value name="FROM">
+          <block type="sparql_math_number">
+            <field name="NUM">1</field>
+          </block>
+        </value>
+        <value name="TO">
+          <block type="sparql_math_number">
+            <field name="NUM">100</field>
+          </block>
+        </value>
+      </block>
+      <block type="sparql_math_random_float"></block>
+    </category>
+    <category name="Text">
+      <block type="sparql_text"></block>
+      <block type="sparql_text_join"></block>
+      <block type="sparql_text_length"></block>
+      <block type="sparql_text_isEmpty"></block>
+      <!-- <block type="sparql_text_indexOf">
+        <value name="VALUE">
+          <block type="variables_get">
+            <field name="VAR">text</field>
+          </block>
+        </value>
+      </block> -->
+      <block type="sparql_text_charAt">
+        <value name="VALUE">
+          <block type="variables_get">
+            <field name="VAR">text</field>
+          </block>
+        </value>
+      </block>
+      <block type="sparql_text_getSubstring">
+        <value name="STRING">
+          <block type="variables_get">
+            <field name="VAR">text</field>
+          </block>
+        </value>
+      </block>
+      <block type="sparql_text_changeCase"></block>
+      <block type="sparql_text_contains"></block>
+      <block type="sparql_text_lang"></block>
+      <!-- <block type="sparql_text_trim"></block> -->
+    </category>
+    <category name="Resources">
+      <block type="sparql_prefixed_iri"></block>
+      <block type="sparql_iri"></block>
+    </category>
+    <sep></sep>
+    <category name="Variables" custom="VARIABLE"></category>
+    <sep></sep>
+    <category name="Things">
+      <block type="sparql_select">
+        <statement name="WHERE">
+          <block type="sparql_typedsubject_propertylist">
+            <value name="SUBJECT">
+              <block type="variables_get">
+                <field name="VAR">resource</field>
+              </block>
+            </value>
+            <statement name="PROPERTY_LIST">
+              <block type="sparql_verb_object">
+                <value name="VERB">
+                  <block type="sparql_prefixed_iri">
+                    <field name="PREFIX">rdfs</field>
+                    <field name="LOCAL_NAME">label</field>
+                  </block>
+                </value>
+                <value name="OBJECT">
+                  <block type="variables_get">
+                    <field name="VAR">label</field>
+                  </block>
+                </value>
+              </block>
+            </statement>
+            <next>
+              <block type="sparql_filter">
+                <value name="CONDITION">
+                  <block type="sparql_text_contains">
+                    <value name="FIND">
+                      <block type="sparql_text">
+                        <field name="TEXT"></field>
+                      </block>
+                    </value>
+                    <value name="VALUE">
+                      <block type="variables_get">
+                        <field name="VAR">label</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <next>
+                  <block type="sparql_filter">
+                    <value name="CONDITION">
+                      <block type="sparql_text_lang">
+                        <value name="VALUE">
+                          <block type="variables_get">
+                            <field name="VAR">label</field>
+                          </block>
+                        </value>
+                        <value name="LANG">
+                          <block type="sparql_text">
+                            <field name="TEXT">en</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </statement>
+      </block>
     </category>
     <category name="Vocabulary">
       <category name="Classes">
@@ -433,6 +608,9 @@ h1 {
                         </block>
                       </value>
                       <value name="OBJECT">
+                        <block type="variables_get" id="97">
+                          <field name="VAR">range</field>
+                        </block>
                       </value>
                     </block>
                   </next>
@@ -460,10 +638,6 @@ h1 {
                         </block>
                       </value>
                       <value name="OBJECT">
-                        <block type="sparql_prefixed_iri" id="101">
-                          <field name="PREFIX">owl</field>
-                          <field name="LOCAL_NAME">Thing</field>
-                        </block>
                       </value>
                     </block>
                   </statement>
@@ -510,96 +684,7 @@ h1 {
         </block>
       </category>
     </category>
-    <sep></sep>
-    <category name="Logic">
-      <block type="sparql_filter"></block>
-      <block type="sparql_logic_compare"></block>
-      <block type="sparql_logic_operation"></block>
-      <block type="sparql_logic_negate"></block>
-      <block type="sparql_logic_boolean"></block>
-      <!-- <block type="sparql_logic_null"></block> -->
-      <block type="sparql_logic_ternary"></block>
-      <block type="sparql_exists"></block>
-      <block type="sparql_not_exists"></block>
-    </category>
-    <category name="Math">
-      <block type="sparql_math_number"></block>
-      <block type="sparql_math_arithmetic"></block>
-      <block type="sparql_math_single"></block>
-      <!-- <block type="sparql_math_constant"></block> -->
-      <block type="sparql_math_number_property"></block>
-      <block type="sparql_math_round"></block>
-      <block type="sparql_math_modulo"></block>
-      <block type="sparql_math_constrain">
-        <value name="LOW">
-          <block type="sparql_math_number">
-            <field name="NUM">1</field>
-          </block>
-        </value>
-        <value name="HIGH">
-          <block type="sparql_math_number">
-            <field name="NUM">100</field>
-          </block>
-        </value>
-      </block>
-      <block type="sparql_math_random_int">
-        <value name="FROM">
-          <block type="sparql_math_number">
-            <field name="NUM">1</field>
-          </block>
-        </value>
-        <value name="TO">
-          <block type="sparql_math_number">
-            <field name="NUM">100</field>
-          </block>
-        </value>
-      </block>
-      <block type="sparql_math_random_float"></block>
-    </category>
-    <category name="Text">
-      <block type="sparql_text"></block>
-      <block type="sparql_text_join"></block>
-      <block type="sparql_text_length"></block>
-      <block type="sparql_text_isEmpty"></block>
-      <!-- <block type="sparql_text_indexOf">
-        <value name="VALUE">
-          <block type="variables_get">
-            <field name="VAR">text</field>
-          </block>
-        </value>
-      </block> -->
-      <block type="sparql_text_charAt">
-        <value name="VALUE">
-          <block type="variables_get">
-            <field name="VAR">text</field>
-          </block>
-        </value>
-      </block>
-      <block type="sparql_text_getSubstring">
-        <value name="STRING">
-          <block type="variables_get">
-            <field name="VAR">text</field>
-          </block>
-        </value>
-      </block>
-      <block type="sparql_text_changeCase"></block>
-      <block type="sparql_text_contains"></block>
-      <block type="sparql_text_lang"></block>
-      <!-- <block type="sparql_text_trim"></block> -->
-    </category>
-    <sep></sep>
-    <category name="Variables" custom="VARIABLE"></category>
-    <category name="Resources">
-      <block type="sparql_prefixed_iri"></block>
-      <block type="sparql_iri"></block>
-    </category>
-    <sep></sep>
-    <category name="Options">
-      <block type="sparql_union"></block>
-      <block type="sparql_optional"></block>
-    </category>
   </xml>
-
 
 <!--
   <p><a href="javascript:void(workspace.setVisible(true))">Show</a>
