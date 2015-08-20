@@ -23,9 +23,11 @@ goog.provide('SparqlBlocks.Sparql.bgp');
 
 goog.require('SparqlBlocks.Sparql');
 
+
+
 SparqlBlocks.Sparql.bgp.extendVerb_ = function(verb) {
-  if (verb == "rdfs:subClassOf") {
-    return "rdfs:subClassOf*";
+  if (verb == "rdfs:subClassOf" || verb == "<http://www.w3.org/2000/01/rdf-schema#subClassOf>") {
+    return verb + "*";
   }
   return verb;
 }
@@ -50,7 +52,7 @@ SparqlBlocks.Sparql['sparql_verb_object'] = function(block) {
   var value_object = SparqlBlocks.Sparql.valueToCode(block, 'OBJECT', SparqlBlocks.Sparql.ORDER_ATOMIC);
   var code =
       value_verb ?
-        ( SparqlBlocks.Sparql.bgp.extendVerb_(value_verb) + ' ' +
+        ( (value_object ? SparqlBlocks.Sparql.bgp.extendVerb_(value_verb) : value_verb) + ' ' +
           (value_object ? value_object : '[]') +
           SparqlBlocks.Sparql.STMNT_BRK ) :
         '';
@@ -62,7 +64,7 @@ SparqlBlocks.Sparql['sparql_reverseVerb_object'] = function(block) {
   var value_object = SparqlBlocks.Sparql.valueToCode(block, 'OBJECT', SparqlBlocks.Sparql.ORDER_ATOMIC);
   var code =
       value_verb ?
-        ( '^' + SparqlBlocks.Sparql.bgp.extendVerb_(value_verb) + ' ' +
+        ( '^' + (value_object ? SparqlBlocks.Sparql.bgp.extendVerb_(value_verb) : value_verb) + ' ' +
           (value_object ? value_object : '[]') +
           SparqlBlocks.Sparql.STMNT_BRK ) :
         '';
