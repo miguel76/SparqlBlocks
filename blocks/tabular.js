@@ -69,7 +69,7 @@ SparqlBlocks.Blocks.block('sparql_table', {
     this.setInputsInline(true);
     // this.setMutator(new Blockly.Mutator(['sparql_table_table',
     //                                      'sparql_table_column']));
-    this.setOutput(true, "Table");
+    this.setPreviousStatement(true, "Table");
     this.setDeletable(false);
     this.setMovable(false);
     this.setTooltip('');

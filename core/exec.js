@@ -34,11 +34,42 @@
     if (!endpointUrl) {
       endpointUrl = defaultEndpointUrl_;
     }
-    var queryUrl = endpointUrl + "?query=" + encodeURIComponent(query);
+    var queryUrl =
+        endpointUrl +
+        "?query=" + encodeURIComponent(query);
     // console.log('queryUrl: ' + queryUrl);
+    // var xhr = new XMLHttpRequest();
+    // xhr.open("GET", queryUrl);
+    // xhr.setRequestHeader("Accept","application/sparql-results+json");
+    // xhr.onreadystatechange = function () {
+    //   if ( 4 != xmlhttp.readyState ) {
+    //     return;
+    //   }
+    //   if ( 200 != xmlhttp.status ) {
+    //     return;
+    //   }
+    //   console.log( xmlhttp.responseText );
+    // };
+    // xhr.send();
     return $.ajax({
+      // headers: {Accept: "application/sparql-results+json"},
+      headers: {Accept: "application/sparql-results+json"},
       dataType: "json",
-      // accepts: "application/sparql-results+json",
+      // jsonp: "jsonp",
+      method: "GET",
+      // cache: true,
+      // accepts: {"jsonp": "application/sparql-results+json"},
+      // accepts: {
+      //   "*": "application/sparql-results+json",
+      //   jsonp: "application/sparql-results+json"
+      // },
+      // beforeSend: function(jqXHR, settings) {
+      //   settings.dataType = "json";
+      //   settings.beforeSend = null;
+      //   $.ajax(settings);
+      //   return false;
+      //   // console.log(settings);
+      // },
       url: queryUrl,
       success: function(data) {
         callback(null,data);
@@ -68,7 +99,7 @@
     if (targetBlock) {
       targetBlock.dispose();
     }
-    connection.connect(block.outputConnection);
+    connection.connect(block.previousConnection);
     block.render();
   }
 
@@ -118,11 +149,14 @@
     if (!resultsHolder) return;
     var resultsConnection = resultsHolder.connection;
     if (!resultsConnection) return;
+    var endpointUri_txt = block.getFieldValue('ENDPOINT');
+    var endpointUri = endpointUri_txt ? encodeURI(endpointUri_txt) : null;
     var queryStr = SparqlBlocks.Sparql.valueToCode(
       block,
       'QUERY',
       SparqlBlocks.Sparql.ORDER_NONE);
-    if ((!queryStr && !block.sparqlQueryStr) || queryStr != block.sparqlQueryStr) {
+    if (endpointUri != block.endpointUri || queryStr != block.sparqlQueryStr) {
+      block.endpointUri = endpointUri;
       block.sparqlQueryStr = queryStr;
       if (block.queryReq) {
         block.queryReq.abort();
@@ -131,7 +165,7 @@
         console.log('Ready to execute query: ' + queryStr);
         block.resultsData = null;
         block.queryReq = SparqlBlocks.Exec.sparqlExecAndPublish(
-            null, queryStr,
+            endpointUri, queryStr,
             block.workspace, resultsConnection,
             function(data) {
               block.queryReq = null;

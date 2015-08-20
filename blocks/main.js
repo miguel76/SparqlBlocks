@@ -114,8 +114,9 @@ SparqlBlocks.Blocks.block('sparql_select', {
     //       new Blockly.FieldDropdown([["↓", "ASC"], ["↑", "DESC"]]),
     //       "ORDER_DIRECTION3");
 
-    this.setOutput(true, "Select");
+    // this.setOutput(true, "Select");
     this.setInputsInline(true);
+    this.setPreviousStatement(true, "Select");
     // this.setNextStatement(true, "QueryClauses");
     this.setTooltip('');
   },
