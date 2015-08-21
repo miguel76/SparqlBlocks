@@ -57,6 +57,9 @@
       dataType: "json",
       // jsonp: "jsonp",
       method: "GET",
+      xhrFields: {
+         withCredentials: true
+      },
       // cache: true,
       // accepts: {"jsonp": "application/sparql-results+json"},
       // accepts: {
