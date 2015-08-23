@@ -178,7 +178,7 @@ SparqlBlocks.Blocks.block('sparql_text_join', {
     this.itemCount_ = 2;
     this.updateShape_();
     this.setOutput(true, 'StringExpr');
-    this.setMutator(new Blockly.Mutator(['text_create_join_item']));
+    this.setMutator(new Blockly.Mutator(['sparql_text_create_join_item']));
     this.setTooltip(Blockly.Msg.TEXT_JOIN_TOOLTIP);
   },
   /**
@@ -208,11 +208,11 @@ SparqlBlocks.Blocks.block('sparql_text_join', {
    */
   decompose: function(workspace) {
     var containerBlock = Blockly.Block.obtain(workspace,
-                                           'text_create_join_container');
+                                           'sparql_text_create_join_container');
     containerBlock.initSvg();
     var connection = containerBlock.getInput('STACK').connection;
     for (var i = 0; i < this.itemCount_; i++) {
-      var itemBlock = Blockly.Block.obtain(workspace, 'text_create_join_item');
+      var itemBlock = Blockly.Block.obtain(workspace, 'sparql_text_create_join_item');
       itemBlock.initSvg();
       connection.connect(itemBlock.previousConnection);
       connection = itemBlock.nextConnection;
