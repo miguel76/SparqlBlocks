@@ -81,17 +81,12 @@ SparqlBlocks.Blocks.block('sparql_table', {
    * @this Blockly.Block
    */
   mutationToDom: function() {
-    if (!this.colCount_) {
-      return null;
-    }
     var container = document.createElement('mutation');
-    if (this.colCount_) {
-      container.setAttribute('colCount', this.colCount_);
-    }
+    container.setAttribute('colCount', this.colCount_);
     return container;
   },
   /**
-   * Parse XML to restore the else-if and else inputs.
+   * Parse XML to restore the columns.
    * @param {!Element} xmlElement XML storage element.
    * @this Blockly.Block
    */
