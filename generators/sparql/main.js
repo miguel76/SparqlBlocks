@@ -43,7 +43,7 @@ SparqlBlocks.Sparql['sparql_select'] = function(block) {
   var text_limit = block.getFieldValue('LIMIT');
   var code = 'SELECT DISTINCT * WHERE {\n' + statements_where + '\n}';
   var orderByCode = null;
-  for (var i = 1; true; i++) {
+  for (var i = 1; i <= block.orderFieldCount_; i++) {
     var text_order =
         SparqlBlocks.Sparql.valueToCode(
             this, 'ORDER_FIELD' + i,
@@ -59,8 +59,6 @@ SparqlBlocks.Sparql['sparql_select'] = function(block) {
         orderByCode += 'DESC';
       }
       orderByCode += '(' + text_order + ')';
-    } else {
-      break;
     }
   }
   if (orderByCode) {

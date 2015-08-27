@@ -64,60 +64,23 @@ SparqlBlocks.Blocks.block('sparql_select', {
         .setCheck("TriplesBlock")
         .appendField("where");
 
+    this.orderFieldCount_ = 1;
+
     this.appendValueInput("ORDER_FIELD1")
         .setCheck(typeExt("Expr"))
-        .appendField("order by")
-    // this.appendDummyInput()
+        .appendField("order by", "ORDER_LABEL1")
         .appendField(
           new Blockly.FieldDropdown([["↓", "ASC"], ["↑", "DESC"]]),
           "ORDER_DIRECTION1");
 
-    this.appendValueInput("ORDER_FIELD2")
-        .setCheck(typeExt("Expr"))
-        .appendField(", then by")
-    // this.appendDummyInput()
-        .appendField(
-          new Blockly.FieldDropdown([["↓", "ASC"], ["↑", "DESC"]]),
-          "ORDER_DIRECTION2");
-
-    // this.appendValueInput("ORDER_FIELD3")
-    //     .setCheck(typeExt("Expr"))
-    //     .appendField(", then by")
-    // // this.appendDummyInput()
-    //     .appendField(
-    //       new Blockly.FieldDropdown([["↓", "ASC"], ["↑", "DESC"]]),
-    //       "ORDER_DIRECTION3");
-
-    this.appendDummyInput()
+    this.appendDummyInput("AFTER_ORDER")
         .appendField("& limit to first")
         .appendField(new Blockly.FieldTextInput("10"), "LIMIT")
         .appendField("rows");
 
-    // this.appendDummyInput()
-    //     .appendField("ordered by");
-    //
-    // this.appendValueInput("ORDER_FIELD1")
-    //     .setCheck(typeExt("Expr"))
-    //     .appendField(
-    //       new Blockly.FieldDropdown([["↓", "ASC"], ["↑", "DESC"]]),
-    //       "ORDER_DIRECTION1");
-    //
-    // this.appendValueInput("ORDER_FIELD2")
-    //     .setCheck(typeExt("Expr"))
-    //     .appendField(
-    //       new Blockly.FieldDropdown([["↓", "ASC"], ["↑", "DESC"]]),
-    //       "ORDER_DIRECTION2");
-    //
-    // this.appendValueInput("ORDER_FIELD3")
-    //     .setCheck(typeExt("Expr"))
-    //     .appendField(
-    //       new Blockly.FieldDropdown([["↓", "ASC"], ["↑", "DESC"]]),
-    //       "ORDER_DIRECTION3");
-
     // this.setOutput(true, "Select");
     this.setInputsInline(true);
     this.setPreviousStatement(true, "Select");
-    // this.setNextStatement(true, "QueryClauses");
     this.setTooltip('');
   },
   saveQueryAsSparql: function() {
@@ -136,6 +99,63 @@ SparqlBlocks.Blocks.block('sparql_select', {
         thisBlock.saveQueryAsSparql();
       }
     });
+  },
+  onchange: function() {
+    var lastOrderInput = this.getInput('ORDER_FIELD' + this.orderFieldCount_);
+    var lastOrderConnection = lastOrderInput && lastOrderInput.connection.targetConnection;
+    if (lastOrderConnection) { // last order item is connected
+      if (this.orderFieldCount_ > 1) {
+        var inputName = 'ORDER_FIELD' + this.orderFieldCount_;
+        var labelFieldName = 'ORDER_LABEL' + this.orderFieldCount_;
+        var dirFieldName = 'ORDER_DIRECTION' + this.orderFieldCount_;
+        var input = this.getInput(inputName);
+        var dirField = new Blockly.FieldDropdown([["↓", "ASC"], ["↑", "DESC"]]);
+        dirField.setValue(this.getFieldValue(dirFieldName));
+        input.removeField(dirFieldName);
+        input.removeField(labelFieldName);
+        input.appendField(", then by", labelFieldName);
+        input.appendField(dirField, dirFieldName);
+      }
+      this.orderFieldCount_++;
+      var inputName = 'ORDER_FIELD' + this.orderFieldCount_;
+      this.appendValueInput(inputName)
+          .setCheck(typeExt("Expr"))
+          .appendField((this.orderFieldCount_ > 2 ? ", " : "") + "and then by",
+                       "ORDER_LABEL" + this.orderFieldCount_)
+          .appendField(
+            new Blockly.FieldDropdown([["↓", "ASC"], ["↑", "DESC"]]),
+            'ORDER_DIRECTION' + this.orderFieldCount_);
+      this.moveInputBefore(inputName, "AFTER_ORDER");
+    } else if (this.orderFieldCount_ > 1) {
+      var lastButOneOrderInput =
+          this.getInput('ORDER_FIELD' + (this.orderFieldCount_ - 1));
+      if (lastButOneOrderInput &&
+          !lastButOneOrderInput.connection.targetConnection) {
+        this.removeInput('ORDER_FIELD' + this.orderFieldCount_);
+        this.orderFieldCount_--;
+        while ( this.orderFieldCount_ > 1
+                && !(this.getInput('ORDER_FIELD' + (this.orderFieldCount_ - 1))
+                         .connection.targetConnection)) {
+          this.removeInput('ORDER_FIELD' + (this.orderFieldCount_ - 1));
+          this.orderFieldCount_--;
+        }
+        lastButOneOrderInput.name = 'ORDER_FIELD' + this.orderFieldCount_;
+        var labelFieldName = 'ORDER_LABEL' + this.orderFieldCount_;
+        var dirFieldName = 'ORDER_DIRECTION' + this.orderFieldCount_;
+        var prevLabelFieldName = lastButOneOrderInput.fieldRow[0].name;
+        var prevDirFieldName = lastButOneOrderInput.fieldRow[1].name;
+        var dirField = new Blockly.FieldDropdown([["↓", "ASC"], ["↑", "DESC"]]);
+        dirField.setValue(this.getFieldValue(prevDirFieldName));
+        lastButOneOrderInput.removeField(prevDirFieldName);
+        lastButOneOrderInput.removeField(prevLabelFieldName);
+        lastButOneOrderInput.appendField(
+              this.orderFieldCount_ > 1 ?
+                (this.orderFieldCount_ > 2 ? ", " : "") + "and then by" :
+                "order by",
+              labelFieldName);
+        lastButOneOrderInput.appendField(dirField, dirFieldName);
+      }
+    }
   }
 });
 
