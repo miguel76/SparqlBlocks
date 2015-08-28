@@ -156,6 +156,37 @@ SparqlBlocks.Blocks.block('sparql_select', {
         lastButOneOrderInput.appendField(dirField, dirFieldName);
       }
     }
+  },
+  /**
+   * Create XML to represent the number of order fields.
+   * @return {Element} XML storage element.
+   * @this Blockly.Block
+   */
+  mutationToDom: function() {
+    var container = document.createElement('mutation');
+    container.setAttribute('order_field_count', this.orderFieldCount_);
+    return container;
+  },
+  /**
+   * Parse XML to restore the order fields.
+   * @param {!Element} xmlElement XML storage element.
+   * @this Blockly.Block
+   */
+  domToMutation: function(xmlElement) {
+    this.orderFieldCount_ = parseInt(xmlElement.getAttribute('order_field_count'), 10);
+    for (var i = 2; i <= this.orderFieldCount_; i++) {
+      var inputName = 'ORDER_FIELD' + i;
+      var labelFieldName = 'ORDER_LABEL' + i;
+      var dirFieldName = 'ORDER_DIRECTION' + i;
+      var dirField = new Blockly.FieldDropdown([["↓", "ASC"], ["↑", "DESC"]]);
+      this.appendValueInput(inputName)
+          .setCheck(typeExt("Expr"))
+          .appendField(
+            (i > 2 ? ", " : "") + "and then by",
+            labelFieldName)
+          .appendField(dirField, dirFieldName);
+      this.moveInputBefore(inputName, "AFTER_ORDER");
+    }
   }
 });
 
