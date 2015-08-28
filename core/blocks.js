@@ -20,12 +20,12 @@
  */
 'use strict';
 
-// Top level object for SparqlBlocks.
 goog.provide('SparqlBlocks.Blocks');
 // goog.require('SparqlBlocks.Blocks.block');
 
-SparqlBlocks.Blocks.block = function(blockName, block) {
-  var baseInit = function(callback) {
+SparqlBlocks.Blocks = ( function() {
+
+  var baseInit_ = function(callback) {
     return function() {
     // ['cut', 'copy', 'paste'].forEach(function(event) {
     //   thisBlock.svgPath_.addEventListener(event, function(e) {
@@ -35,7 +35,8 @@ SparqlBlocks.Blocks.block = function(blockName, block) {
       callback.call(this);
     }
   };
-  var baseCustomContextMenu = function(callback) {
+
+  var baseCustomContextMenu_ = function(callback) {
     return function(options) {
     // options.push({
     //   text: "Save Query as SPARQL",
@@ -52,19 +53,28 @@ SparqlBlocks.Blocks.block = function(blockName, block) {
       }
     };
   };
-  block.customContextMenu = baseCustomContextMenu(block.customContextMenu);
-  block.init = baseInit(block.init);
-  Blockly.Blocks[blockName] = block;
-};
 
-SparqlBlocks.Blocks.insertOptionBeforeHelp = function (options, newOption) {
-  var helpCommand = options.pop();
-  var isHelp = (helpCommand && helpCommand.text == "Help");
-  if (!isHelp && helpCommand) {
-    options.push(helpCommand);
+  var block_ = function(blockName, block) {
+    block.customContextMenu = baseCustomContextMenu_(block.customContextMenu);
+    block.init = baseInit_(block.init);
+    Blockly.Blocks[blockName] = block;
+  };
+
+  var insertOptionBeforeHelp_ = function (options, newOption) {
+    var helpCommand = options.pop();
+    var isHelp = (helpCommand && helpCommand.text == "Help");
+    if (!isHelp && helpCommand) {
+      options.push(helpCommand);
+    }
+    options.push(newOption);
+    if (isHelp) {
+      options.push(helpCommand);
+    }
+  };
+
+  return {
+    block: block_,
+    insertOptionBeforeHelp: insertOptionBeforeHelp_
   }
-  options.push(newOption);
-  if (isHelp) {
-    options.push(helpCommand);
-  }
-};
+
+}) ();

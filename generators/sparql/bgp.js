@@ -23,136 +23,138 @@ goog.provide('SparqlBlocks.Sparql.bgp');
 
 goog.require('SparqlBlocks.Sparql');
 
+( function() {
 
-
-SparqlBlocks.Sparql.bgp.extendVerb_ = function(verb) {
-  if (verb == "rdfs:subClassOf" || verb == "<http://www.w3.org/2000/01/rdf-schema#subClassOf>") {
-    return verb + "*";
+  var extendVerb_ = function(verb) {
+    if (verb == "rdfs:subClassOf" || verb == "<http://www.w3.org/2000/01/rdf-schema#subClassOf>") {
+      return verb + "*";
+    }
+    return verb;
   }
-  return verb;
-}
 
-SparqlBlocks.Sparql['sparql_isa'] = function(block) {
-  var value_type =
-      SparqlBlocks.Sparql.valueToCode(
-          block,
-          'TYPE',
-          SparqlBlocks.Sparql.ORDER_ATOMIC);
-  var code =
-      value_type ?
-        ( 'a ' + value_type +
-          SparqlBlocks.Sparql.STMNT_BRK ) :
-        '';
-  return code;
-};
+  SparqlBlocks.Sparql['sparql_isa'] = function(block) {
+    var value_type =
+        SparqlBlocks.Sparql.valueToCode(
+            block,
+            'TYPE',
+            SparqlBlocks.Sparql.ORDER_ATOMIC);
+    var code =
+        value_type ?
+          ( 'a ' + value_type +
+            SparqlBlocks.Sparql.STMNT_BRK ) :
+          '';
+    return code;
+  };
 
 
-SparqlBlocks.Sparql['sparql_verb_object'] = function(block) {
-  var value_verb = SparqlBlocks.Sparql.valueToCode(block, 'VERB', SparqlBlocks.Sparql.ORDER_ATOMIC);
-  var value_object = SparqlBlocks.Sparql.valueToCode(block, 'OBJECT', SparqlBlocks.Sparql.ORDER_ATOMIC);
-  var code =
-      value_verb ?
-        ( (value_object ? SparqlBlocks.Sparql.bgp.extendVerb_(value_verb) : value_verb) + ' ' +
-          (value_object ? value_object : '[]') +
-          SparqlBlocks.Sparql.STMNT_BRK ) :
-        '';
-  return code;
-};
+  SparqlBlocks.Sparql['sparql_verb_object'] = function(block) {
+    var value_verb = SparqlBlocks.Sparql.valueToCode(block, 'VERB', SparqlBlocks.Sparql.ORDER_ATOMIC);
+    var value_object = SparqlBlocks.Sparql.valueToCode(block, 'OBJECT', SparqlBlocks.Sparql.ORDER_ATOMIC);
+    var code =
+        value_verb ?
+          ( (value_object ? extendVerb_(value_verb) : value_verb) + ' ' +
+            (value_object ? value_object : '[]') +
+            SparqlBlocks.Sparql.STMNT_BRK ) :
+          '';
+    return code;
+  };
 
-SparqlBlocks.Sparql['sparql_reverseVerb_object'] = function(block) {
-  var value_verb = SparqlBlocks.Sparql.valueToCode(block, 'VERB', SparqlBlocks.Sparql.ORDER_ATOMIC);
-  var value_object = SparqlBlocks.Sparql.valueToCode(block, 'OBJECT', SparqlBlocks.Sparql.ORDER_ATOMIC);
-  var code =
-      value_verb ?
-        ( '^' + (value_object ? SparqlBlocks.Sparql.bgp.extendVerb_(value_verb) : value_verb) + ' ' +
-          (value_object ? value_object : '[]') +
-          SparqlBlocks.Sparql.STMNT_BRK ) :
-        '';
-  return code;
-};
+  SparqlBlocks.Sparql['sparql_reverseVerb_object'] = function(block) {
+    var value_verb = SparqlBlocks.Sparql.valueToCode(block, 'VERB', SparqlBlocks.Sparql.ORDER_ATOMIC);
+    var value_object = SparqlBlocks.Sparql.valueToCode(block, 'OBJECT', SparqlBlocks.Sparql.ORDER_ATOMIC);
+    var code =
+        value_verb ?
+          ( '^' + (value_object ? extendVerb_(value_verb) : value_verb) + ' ' +
+            (value_object ? value_object : '[]') +
+            SparqlBlocks.Sparql.STMNT_BRK ) :
+          '';
+    return code;
+  };
 
-SparqlBlocks.Sparql['sparql_typedsubject_propertylist'] = function(block) {
-  var value_subject =
-      SparqlBlocks.Sparql.valueToCode(
-          block,
-          'SUBJECT',
-          SparqlBlocks.Sparql.ORDER_ATOMIC);// || '[]';
-  var value_type =
-      SparqlBlocks.Sparql.valueToCode(
-          block,
-          'TYPE',
-          SparqlBlocks.Sparql.ORDER_ATOMIC);
-  var statements_property_list =
-      SparqlBlocks.Sparql.stmJoin(
-          SparqlBlocks.Sparql.statementToCode(block, 'PROPERTY_LIST'),
-          ';\n');
-  var code =
-      (value_type || statements_property_list != '') ?
-          ( (value_subject ? value_subject : '[]') +
+  SparqlBlocks.Sparql['sparql_typedsubject_propertylist'] = function(block) {
+    var value_subject =
+        SparqlBlocks.Sparql.valueToCode(
+            block,
+            'SUBJECT',
+            SparqlBlocks.Sparql.ORDER_ATOMIC);// || '[]';
+    var value_type =
+        SparqlBlocks.Sparql.valueToCode(
+            block,
+            'TYPE',
+            SparqlBlocks.Sparql.ORDER_ATOMIC);
+    var statements_property_list =
+        SparqlBlocks.Sparql.stmJoin(
+            SparqlBlocks.Sparql.statementToCode(block, 'PROPERTY_LIST'),
+            ';\n');
+    var code =
+        (value_type || statements_property_list != '') ?
+            ( (value_subject ? value_subject : '[]') +
+              (value_type ?
+                  ' a ' + value_type + (statements_property_list != '' ? ';' : '') :
+                  '' ) +
+              (statements_property_list != '' ?
+                  '\n' + statements_property_list :
+                  '' ) +
+              SparqlBlocks.Sparql.STMNT_BRK) :
+            '';
+    return code;
+  };
+
+  SparqlBlocks.Sparql['sparql_subject_propertylist'] = function(block) {
+    var value_subject =
+        SparqlBlocks.Sparql.valueToCode(
+            block,
+            'SUBJECT',
+            SparqlBlocks.Sparql.ORDER_ATOMIC);// || '[]';
+    var statements_property_list =
+        SparqlBlocks.Sparql.stmJoin(
+            SparqlBlocks.Sparql.statementToCode(block, 'PROPERTY_LIST'),
+            ';\n');
+    var code =
+        (statements_property_list != '') ?
+            ( (value_subject ? value_subject : '[]') +
+              (statements_property_list != '' ?
+                  '\n' + statements_property_list :
+                  '' ) +
+              SparqlBlocks.Sparql.STMNT_BRK) :
+            '';
+    return code;
+  };
+
+  var generateAnonSubject = function(value_type, statements_property_list) {
+    var code =
+        (value_type || statements_property_list != '') ?
+            '[\n' +
             (value_type ?
-                ' a ' + value_type + (statements_property_list != '' ? ';' : '') :
-                '' ) +
+                  ' a ' + value_type + (statements_property_list != '' ? ';\n' : '') :
+                  '' ) +
             (statements_property_list != '' ?
-                '\n' + statements_property_list :
-                '' ) +
-            SparqlBlocks.Sparql.STMNT_BRK) :
-          '';
-  return code;
-};
+                  statements_property_list :
+                  '' ) +
+            '\n]' :
+            '[]';
+    return [code, SparqlBlocks.Sparql.ORDER_ATOMIC];
+  }
 
-SparqlBlocks.Sparql['sparql_subject_propertylist'] = function(block) {
-  var value_subject =
-      SparqlBlocks.Sparql.valueToCode(
-          block,
-          'SUBJECT',
-          SparqlBlocks.Sparql.ORDER_ATOMIC);// || '[]';
-  var statements_property_list =
-      SparqlBlocks.Sparql.stmJoin(
-          SparqlBlocks.Sparql.statementToCode(block, 'PROPERTY_LIST'),
-          ';\n');
-  var code =
-      (statements_property_list != '') ?
-          ( (value_subject ? value_subject : '[]') +
-            (statements_property_list != '' ?
-                '\n' + statements_property_list :
-                '' ) +
-            SparqlBlocks.Sparql.STMNT_BRK) :
-          '';
-  return code;
-};
+  SparqlBlocks.Sparql['sparql_anontypedsubject_propertylist'] = function(block) {
+    var value_type =
+        SparqlBlocks.Sparql.valueToCode(
+            block,
+            'TYPE',
+            SparqlBlocks.Sparql.ORDER_ATOMIC);
+    var statements_property_list =
+        SparqlBlocks.Sparql.stmJoin(
+            SparqlBlocks.Sparql.statementToCode(block, 'PROPERTY_LIST'),
+            ';\n');
+    return generateAnonSubject(value_type, statements_property_list);
+  };
 
-var generateAnonSubject = function(value_type, statements_property_list) {
-  var code =
-      (value_type || statements_property_list != '') ?
-          '[\n' +
-          (value_type ?
-                ' a ' + value_type + (statements_property_list != '' ? ';\n' : '') :
-                '' ) +
-          (statements_property_list != '' ?
-                statements_property_list :
-                '' ) +
-          '\n]' :
-          '[]';
-  return [code, SparqlBlocks.Sparql.ORDER_ATOMIC];
-}
+  SparqlBlocks.Sparql['sparql_anonsubject_propertylist'] = function(block) {
+    var statements_property_list =
+        SparqlBlocks.Sparql.stmJoin(
+            SparqlBlocks.Sparql.statementToCode(block, 'PROPERTY_LIST'),
+            ';\n');
+    return generateAnonSubject(null, statements_property_list);
+  };
 
-SparqlBlocks.Sparql['sparql_anontypedsubject_propertylist'] = function(block) {
-  var value_type =
-      SparqlBlocks.Sparql.valueToCode(
-          block,
-          'TYPE',
-          SparqlBlocks.Sparql.ORDER_ATOMIC);
-  var statements_property_list =
-      SparqlBlocks.Sparql.stmJoin(
-          SparqlBlocks.Sparql.statementToCode(block, 'PROPERTY_LIST'),
-          ';\n');
-  return generateAnonSubject(value_type, statements_property_list);
-};
-
-SparqlBlocks.Sparql['sparql_anonsubject_propertylist'] = function(block) {
-  var statements_property_list =
-      SparqlBlocks.Sparql.stmJoin(
-          SparqlBlocks.Sparql.statementToCode(block, 'PROPERTY_LIST'),
-          ';\n');
-  return generateAnonSubject(null, statements_property_list);
-};
+}) ();

@@ -24,8 +24,8 @@ goog.provide('SparqlBlocks.Types');
 
 //var typeList = Blockly.Blocks.Sparql.types.list = [];
 
-// (function() {
-  var typeDict = SparqlBlocks.Types.dict = {};
+SparqlBlocks.Types = (function() {
+  var typeDict = {};
 
   var setType = function(typeStr, typeObj) {
     typeDict[typeStr] = typeObj;
@@ -81,6 +81,8 @@ goog.provide('SparqlBlocks.Types');
   setType("LiteralNumber", { parents: ["Literal", "NumberExpr" ] });
   setType("LiteralBoolean", { parents: ["Literal", "BooleanExpr" ] });
 
-  SparqlBlocks.Types.setType = setType;
-  SparqlBlocks.Types.getExtension = getExtension;
-// })();
+  return {
+    setType: setType,
+    getExtension: getExtension
+  };
+})();

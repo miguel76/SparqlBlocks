@@ -20,15 +20,14 @@
  */
 'use strict';
 
-// ( function() {
+goog.provide('SparqlBlocks.Exec');
 
-  goog.provide('SparqlBlocks.Exec');
+goog.require('SparqlBlocks.Output');
+goog.require('SparqlBlocks.Sparql');
 
-  goog.require('SparqlBlocks.Output');
-  goog.require('SparqlBlocks.Sparql');
+SparqlBlocks.Exec = ( function() {
 
   var defaultEndpointUrl_ = 'http://live.dbpedia.org/sparql';
-  // var defaultEndpointUrl_ = 'http://ldf.fi/ww1lod/sparql';
 
   var sparqlExec_ = function(endpointUrl, query, callback) {
     if (!endpointUrl) {
@@ -37,42 +36,10 @@
     var queryUrl =
         endpointUrl +
         "?query=" + encodeURIComponent(query);
-    // console.log('queryUrl: ' + queryUrl);
-    // var xhr = new XMLHttpRequest();
-    // xhr.open("GET", queryUrl);
-    // xhr.setRequestHeader("Accept","application/sparql-results+json");
-    // xhr.onreadystatechange = function () {
-    //   if ( 4 != xmlhttp.readyState ) {
-    //     return;
-    //   }
-    //   if ( 200 != xmlhttp.status ) {
-    //     return;
-    //   }
-    //   console.log( xmlhttp.responseText );
-    // };
-    // xhr.send();
     return $.ajax({
-      // headers: {Accept: "application/sparql-results+json"},
       headers: {Accept: "application/sparql-results+json"},
       dataType: "json",
-      // jsonp: "jsonp",
       method: "GET",
-      // xhrFields: {
-      //    withCredentials: true
-      // },
-      // cache: true,
-      // accepts: {"jsonp": "application/sparql-results+json"},
-      // accepts: {
-      //   "*": "application/sparql-results+json",
-      //   jsonp: "application/sparql-results+json"
-      // },
-      // beforeSend: function(jqXHR, settings) {
-      //   settings.dataType = "json";
-      //   settings.beforeSend = null;
-      //   $.ajax(settings);
-      //   return false;
-      //   // console.log(settings);
-      // },
       url: queryUrl,
       success: function(data) {
         callback(null,data);
@@ -92,7 +59,6 @@
       }
     })
   }
-  SparqlBlocks.Exec.sparqlExecAndAlert = sparqlExecAndAlert_;
 
   var sparqlExecAndBlock_ = function(endpointUrl, query, workspace, callback) {
   }
@@ -104,6 +70,13 @@
     }
     connection.connect(block.previousConnection);
     block.render();
+  }
+
+  var unconnect_ = function(connection) {
+    var targetBlock = connection.targetBlock();
+    if (targetBlock) {
+      targetBlock.dispose();
+    }
   }
 
   var DESCR_LENGTH = 40;
@@ -145,9 +118,8 @@
       callback(data);
     });
   }
-  SparqlBlocks.Exec.sparqlExecAndPublish = sparqlExecAndPublish_;
 
-  SparqlBlocks.Exec.blockExec = function(block) {
+  var blockExec_ = function(block) {
     var resultsHolder = block.getInput('RESULTS');
     if (!resultsHolder) return;
     var resultsConnection = resultsHolder.connection;
@@ -185,4 +157,10 @@
 
   }
 
-// }) ();
+  return {
+    sparqlExecAndPublish: sparqlExecAndPublish_,
+    sparqlExecAndAlert: sparqlExecAndAlert_,
+    blockExec: blockExec_
+  };
+
+}) ();

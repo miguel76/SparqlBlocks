@@ -19,83 +19,13 @@
  */
 'use strict';
 
-// (function() {
+goog.provide('SparqlBlocks.Prefixes');
+// goog.require('goog.math.Coordinate');
 
-  goog.provide('SparqlBlocks.Prefixes');
-  // goog.require('goog.math.Coordinate');
+SparqlBlocks.Prefixes = (function() {
 
   var prefixMap_ = null;
   var reverseMap_ = {};
-
-  // var startState_ = {};
-  //
-  // var search_ = function(str, state) {
-  //   console.log('search_(' + str + ', ' + state + ')');
-  //   if ( state.options ) {
-  //     var optsNum = state.options.length;
-  //     for (var i; i < optsNum; i++) {
-  //       var currOption = currState.options[i];
-  //       if (str.startsWith(currOption.read)) {
-  //         return search_(str.slice(currOption.read.length), currOption.goTo);
-  //       }
-  //     }
-  //   }
-  //   console.log('returning { rest: ' + str + ', state: ' + state + ' }');
-  //   return { rest: str, state: state };
-  // }
-  //
-  // var addRule_ = function(extended, prefix) {
-  //   console.log('addRule_(' + extended + ', ' + prefix + ')')
-  //   var searchRes = search_(extended, startState_);
-  //   if (searchRes.rest.length == 0 && !searchRes.state.accept) {
-  //     searchRes.state.accept = prefix;
-  //   } else {
-  //     var opts = searchRes.state.options;
-  //     if (!opts) {
-  //       searchRes.state.options = opts = [];
-  //     }
-  //     var optsNum = opts.length;
-  //     for (var i = 0; i < optsNum; i++) {
-  //       var currOption = opts[i];
-  //       var maxCharNum = 0;
-  //       for (var charNum = 1; charNum <= extended.length; charNum++) {
-  //         if (currOption.read.startsWith(extended.slice(0,charNum))) {
-  //           maxCharNum = charNum;
-  //         } else {
-  //           break;
-  //         }
-  //       }
-  //       if (maxCharNum > 0) {
-  //         opts[i] = {
-  //           read: extended.slice(0,maxCharNum),
-  //           goTo: (maxCharNum < extended.length)
-  //                   ? {
-  //                     options: [
-  //                       { read: currOption.read.slice(maxCharNum),
-  //                         goTo: currOption.goTo },
-  //                       { read: extended.slice(maxCharNum),
-  //                         goTo: { accept: prefix } } ]
-  //                   }
-  //                   : {
-  //                     accept: prefix,
-  //                     options: [
-  //                       { read: currOption.read.slice(maxCharNum),
-  //                         goTo: currOption.goTo } ]
-  //                   }
-  //         };
-  //         console.log("Split after: " + extended.slice(0,maxCharNum));
-  //         return;
-  //       }
-  //     }
-  //
-  //     opts[optsNum] = {
-  //       read: extended,
-  //       goTo: { accept: prefix }
-  //     };
-  //     console.log("New option with: " + extended);
-  //
-  //   }
-  // }
 
   var lookForPrefix_ = function(prefix) {
     return prefixMap_[prefix];
@@ -136,11 +66,12 @@
       if (!reverseMap_[data[prefix]]) {
         reverseMap_[data[prefix]] = prefix;
       }
-      // addRule_(data[prefix], prefix);
     });
   });
 
-  SparqlBlocks.Prefixes.lookForPrefix = lookForPrefix_;
-  SparqlBlocks.Prefixes.lookForIri = lookForIri_;
+  return {
+    lookForPrefix: lookForPrefix_,
+    lookForIri: lookForIri_
+  }
 
-// })();
+})();

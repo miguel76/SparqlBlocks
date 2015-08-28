@@ -19,14 +19,14 @@
  */
 'use strict';
 
-// (function() {
+goog.provide('SparqlBlocks.SelfDuplication');
 
-  goog.provide('SparqlBlocks.SelfDuplication');
+SparqlBlocks.SelfDuplication = (function() {
 
   /**
   * Is a hovering element currently showing?
   */
-  SparqlBlocks.SelfDuplication.visible = false;
+  var visible_ = false;
 
   /**
   * PID of suspended thread to clear tooltip on mouse out.
@@ -66,35 +66,14 @@
   var poisonedElement_ = null;
 
   /**
-  * Horizontal offset between mouse cursor and tooltip.
-  */
-  SparqlBlocks.SelfDuplication.OFFSET_X = 0;
-
-  /**
-  * Vertical offset between mouse cursor and tooltip.
-  */
-  SparqlBlocks.SelfDuplication.OFFSET_Y = 10;
-
-  /**
   * Radius mouse can move before killing tooltip.
   */
-  SparqlBlocks.SelfDuplication.RADIUS_OK = 100;
+  var RADIUS_OK = 100;
 
   /**
   * Delay before tooltip appears.
   */
-  SparqlBlocks.SelfDuplication.HOVER_MS = 1000;
-
-  /**
-  * Horizontal padding between tooltip and screen edge.
-  */
-  SparqlBlocks.SelfDuplication.MARGINS = 5;
-
-  /**
-  * The duplicated block.  Set once by Blockly.Tooltip.createDom.
-  * @type Element
-  */
-  // var duplicateBlock_ = null;
+  var HOVER_MS = 1000;
 
   /**
    * Duplicate this block and its children.
@@ -121,14 +100,14 @@
    */
   var hide_ = function(block, duplicateBlock) {
     return function() {
-      // console.log('SparqlBlocks.SelfDuplication.visible: ' + SparqlBlocks.SelfDuplication.visible);
+      // console.log('visible_: ' + visible_);
       if (duplicateBlock) {
         var blockCoords = block.getRelativeToSurfaceXY();
         var duplicateBlockCoords = duplicateBlock.getRelativeToSurfaceXY();
         var dx = blockCoords.x - duplicateBlockCoords.x;
         var dy = blockCoords.y - duplicateBlockCoords.y;
         var dr = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
-        if (dr <= SparqlBlocks.SelfDuplication.RADIUS_OK) {
+        if (dr <= RADIUS_OK) {
           duplicateBlock.dispose();
           duplicateBlock = null;
         }
@@ -136,7 +115,6 @@
       clearTimeout(showPid_);
     };
   };
-  SparqlBlocks.SelfDuplication.hide = hide_;
 
   /**
    * Create the duplicate and show it.
@@ -269,13 +247,13 @@
         // Don't display a tooltip if a widget is open (tooltip would be under it).
         return;
       }
-      if (SparqlBlocks.SelfDuplication.visible) {
+      if (visible_) {
         // Compute the distance between the mouse position when the tooltip was
         // shown and the current mouse position.  Pythagorean theorem.
         // var dx = lastX_ - e.clientX;
         // var dy = lastY_ - e.clientY;
         // var dr = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
-        // if (dr > SparqlBlocks.SelfDuplication.RADIUS_OK) {
+        // if (dr > RADIUS_OK) {
           hide_(block)();
         // }
       } else if (poisonedElement_ != element_) {
@@ -284,7 +262,7 @@
         // Maybe this time the mouse will stay put.  Schedule showing of tooltip.
         lastX_ = e.clientX;
         lastY_ = e.clientY;
-        showPid_ = setTimeout(show_(block), SparqlBlocks.SelfDuplication.HOVER_MS);
+        showPid_ = setTimeout(show_(block), HOVER_MS);
         }
     };
   };
@@ -328,6 +306,9 @@
         // mousemove: Blockly.bindEvent_(element, 'mousemove', null, onMouseMove_(block))
     };
   };
-  SparqlBlocks.SelfDuplication.bindMouseEvents = bindMouseEvents_;
 
-// })();
+  return {
+    bindMouseEvents: bindMouseEvents_
+  };
+
+})();

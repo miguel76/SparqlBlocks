@@ -19,11 +19,11 @@
  */
 'use strict';
 
-// (function() {
+goog.provide('SparqlBlocks.Output');
+goog.require('SparqlBlocks.Prefixes');
+goog.require('SparqlBlocks.SelfDuplication');
 
-  goog.provide('SparqlBlocks.Output');
-  goog.require('SparqlBlocks.Prefixes');
-  goog.require('SparqlBlocks.SelfDuplication');
+SparqlBlocks.Output = (function() {
 
   var xsd_map_ = {};
   var xsd_ = function(localName) {
@@ -37,7 +37,6 @@
 
   var blockFromTypedLiteral_ = function(value, type, workspace) {
     var typedBlock = null;
-    // console.log("block for type " + type + " and value " + value);
     switch(type) {
       case xsd_("integer"):
       case xsd_("decimal"):
@@ -212,39 +211,8 @@
     }
     tableBlock.colCount_ = colNum;
     tableBlock.resultsData = data;
-
-    // <block type="sparql_table">
-    //   <mutation colcount="2"></mutation>
-    //   <value name="COL1">
-    //     <block type="sparql_column">
-    //       <field name="COLNAME">type</field>
-    //       <statement name="VALUES">
-    //         <block type="sparql_value_container">
-    //           <value name="VALUE">
-    //             <block type="sparql_prefixed_iri">
-    //               <field name="PREFIX">prefix</field>
-    //               <field name="LOCAL_NAME">localName</field>
-    //             </block>
-    //           </value>
-    //           <next>
-
-// containerBlock.initSvg();
-// var connection = containerBlock.getInput('STACK').connection;
-// for (var i = 1; i <= this.elseifCount_; i++) {
-//   var elseifBlock = Blockly.Block.obtain(workspace, 'controls_if_elseif');
-//   elseifBlock.initSvg();
-//   connection.connect(elseifBlock.previousConnection);
-//   connection = elseifBlock.nextConnection;
-// }
-// if (this.elseCount_) {
-//   var elseBlock = Blockly.Block.obtain(workspace, 'controls_if_else');
-//   elseBlock.initSvg();
-//   connection.connect(elseBlock.previousConnection);
-// }
-// return containerBlock;
     return tableBlock;
   }
-  SparqlBlocks.Output.blocksFromSelectResults = blocksFromSelectResults_;
 
   var fillTableFromSelectResults_ = function(table, data) {
 
@@ -265,5 +233,8 @@
 
   }
 
+  return {
+    blocksFromSelectResults: blocksFromSelectResults_
+  }
 
-// })();
+})();

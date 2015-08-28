@@ -22,100 +22,102 @@
 goog.provide('SparqlBlocks.Sparql.main');
 
 goog.require('SparqlBlocks.Sparql');
-// goog.require('SparqlBlocks.Prefixes');
 
-SparqlBlocks.Sparql.main.VIRTUOSO_PATCH = true;
+( function() {
 
-var localNameEsc = function(localName) {
-//  '\'
-  return localName.split('').map( function(c) {
-    return _.contains(
-      [ '_', '~', '.', '-', '!', '$' , '&', "'", '(', ')', '\\', '*', '+', ',', ';', '=', '/', '?', '#', '@', '%' ],
-      c) ? '\\' + c : c;
-  }).join('');
-}
+  var VIRTUOSO_PATCH = true;
 
-SparqlBlocks.Sparql['sparql_select'] = function(block) {
-  var statements_where =
-      SparqlBlocks.Sparql.stmJoin(
-          SparqlBlocks.Sparql.statementToCode(block, 'WHERE'),
-          '.\n');
-  var text_limit = block.getFieldValue('LIMIT');
-  var code = 'SELECT DISTINCT * WHERE {\n' + statements_where + '\n}';
-  var orderByCode = null;
-  for (var i = 1; i <= block.orderFieldCount_; i++) {
-    var text_order =
-        SparqlBlocks.Sparql.valueToCode(
-            this, 'ORDER_FIELD' + i,
-            SparqlBlocks.Sparql.ORDER_NONE);
-    if (text_order) {
-      var text_orderDir = block.getFieldValue('ORDER_DIRECTION' + i);
-      if (orderByCode) {
-        orderByCode += ', ';
-      } else {
-        orderByCode = 'ORDER BY ';
+  var localNameEsc = function(localName) {
+    return localName.split('').map( function(c) {
+      return _.contains(
+        [ '_', '~', '.', '-', '!', '$' , '&', "'", '(', ')', '\\', '*', '+', ',', ';', '=', '/', '?', '#', '@', '%' ],
+        c) ? '\\' + c : c;
+    }).join('');
+  }
+
+  SparqlBlocks.Sparql['sparql_select'] = function(block) {
+    var statements_where =
+        SparqlBlocks.Sparql.stmJoin(
+            SparqlBlocks.Sparql.statementToCode(block, 'WHERE'),
+            '.\n');
+    var text_limit = block.getFieldValue('LIMIT');
+    var code = 'SELECT DISTINCT * WHERE {\n' + statements_where + '\n}';
+    var orderByCode = null;
+    for (var i = 1; i <= block.orderFieldCount_; i++) {
+      var text_order =
+          SparqlBlocks.Sparql.valueToCode(
+              this, 'ORDER_FIELD' + i,
+              SparqlBlocks.Sparql.ORDER_NONE);
+      if (text_order) {
+        var text_orderDir = block.getFieldValue('ORDER_DIRECTION' + i);
+        if (orderByCode) {
+          orderByCode += ', ';
+        } else {
+          orderByCode = 'ORDER BY ';
+        }
+        if (text_orderDir && text_orderDir == 'DESC') {
+          orderByCode += 'DESC';
+        }
+        orderByCode += '(' + text_order + ')';
       }
-      if (text_orderDir && text_orderDir == 'DESC') {
-        orderByCode += 'DESC';
-      }
-      orderByCode += '(' + text_order + ')';
     }
-  }
-  if (orderByCode) {
-    code += '\n' + orderByCode;
-  }
-  if (text_limit) {
-    code += '\nLIMIT ' + text_limit;
-  }
+    if (orderByCode) {
+      code += '\n' + orderByCode;
+    }
+    if (text_limit) {
+      code += '\nLIMIT ' + text_limit;
+    }
 
-  var prefixMatches = code.match(/[^(|!/\^,;\x20|\x09|\x0D|\x0A]+[\x20|\x09|\x0D|\x0A]*:/g);
-  var prefixStrings = null;
-  if (prefixMatches) {
-    prefixStrings = prefixMatches.map( function(str) {
-      return str.substr(0,str.length - 1).trim();
-    });
-  }
+    var prefixMatches = code.match(/[^(|!/\^,;\x20|\x09|\x0D|\x0A]+[\x20|\x09|\x0D|\x0A]*:/g);
+    var prefixStrings = null;
+    if (prefixMatches) {
+      prefixStrings = prefixMatches.map( function(str) {
+        return str.substr(0,str.length - 1).trim();
+      });
+    }
 
-  var prefixDeclaration = '';
-  if (prefixStrings) {
-    prefixStrings.forEach( function(prefix) {
-      var extension = SparqlBlocks.Prefixes.lookForPrefix(prefix);
+    var prefixDeclaration = '';
+    if (prefixStrings) {
+      prefixStrings.forEach( function(prefix) {
+        var extension = SparqlBlocks.Prefixes.lookForPrefix(prefix);
+        if (extension) {
+          prefixDeclaration += 'PREFIX ' + prefix + ':\t<' + extension + '>\n';
+        }
+      });
+    }
+    if (prefixDeclaration.length > 0) {
+      code = prefixDeclaration + '\n' + code;
+    }
+
+    return [code, SparqlBlocks.Sparql.ORDER_ATOMIC];
+  };
+
+  SparqlBlocks.Sparql['sparql_prefixed_iri'] = function(block) {
+    var text_prefix = block.getFieldValue('PREFIX');
+    var text_local_name = block.getFieldValue('LOCAL_NAME');
+    var code = null;
+    if (VIRTUOSO_PATCH) {
+      var extension = SparqlBlocks.Prefixes.lookForPrefix(text_prefix);
       if (extension) {
-        prefixDeclaration += 'PREFIX ' + prefix + ':\t<' + extension + '>\n';
+        code = '<' + extension + text_local_name + '>';
       }
-    });
-  }
-  if (prefixDeclaration.length > 0) {
-    code = prefixDeclaration + '\n' + code;
-  }
-
-  return [code, SparqlBlocks.Sparql.ORDER_ATOMIC];
-};
-
-SparqlBlocks.Sparql['sparql_prefixed_iri'] = function(block) {
-  var text_prefix = block.getFieldValue('PREFIX');
-  var text_local_name = block.getFieldValue('LOCAL_NAME');
-  var code = null;
-  if (SparqlBlocks.Sparql.main.VIRTUOSO_PATCH) {
-    var extension = SparqlBlocks.Prefixes.lookForPrefix(text_prefix);
-    if (extension) {
-      code = '<' + extension + text_local_name + '>';
     }
-  }
-  if (!code) {
-    code = text_prefix + ':' + localNameEsc(text_local_name);
-  }
-  return [code, SparqlBlocks.Sparql.ORDER_ATOMIC];
-};
+    if (!code) {
+      code = text_prefix + ':' + localNameEsc(text_local_name);
+    }
+    return [code, SparqlBlocks.Sparql.ORDER_ATOMIC];
+  };
 
-SparqlBlocks.Sparql['sparql_iri'] = function(block) {
-  var text_iri = block.getFieldValue('IRI');
-  var code = '<' + text_iri + '>';
-  return [code, SparqlBlocks.Sparql.ORDER_ATOMIC];
-};
+  SparqlBlocks.Sparql['sparql_iri'] = function(block) {
+    var text_iri = block.getFieldValue('IRI');
+    var code = '<' + text_iri + '>';
+    return [code, SparqlBlocks.Sparql.ORDER_ATOMIC];
+  };
 
-SparqlBlocks.Sparql['variables_get'] = function(block) {
-  var text_var = block.getFieldValue('VAR');
-  var code = '?' + text_var;
-  return [code, SparqlBlocks.Sparql.ORDER_ATOMIC];
-};
+  SparqlBlocks.Sparql['variables_get'] = function(block) {
+    var text_var = block.getFieldValue('VAR');
+    var code = '?' + text_var;
+    return [code, SparqlBlocks.Sparql.ORDER_ATOMIC];
+  };
+
+}) ();

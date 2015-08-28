@@ -23,43 +23,46 @@ goog.provide('SparqlBlocks.Sparql.control');
 
 goog.require('SparqlBlocks.Sparql');
 
+( function() {
 
-SparqlBlocks.Sparql['sparql_filter'] = function(block) {
-  var value_condition =
-      SparqlBlocks.Sparql.valueToCode(
-          block,
-          'CONDITION',
-          SparqlBlocks.Sparql.ORDER_NONE);
-  return value_condition ?
-            'FILTER(' + value_condition + ')' + SparqlBlocks.Sparql.STMNT_BRK :
-            '';
-};
+  SparqlBlocks.Sparql['sparql_filter'] = function(block) {
+    var value_condition =
+        SparqlBlocks.Sparql.valueToCode(
+            block,
+            'CONDITION',
+            SparqlBlocks.Sparql.ORDER_NONE);
+    return value_condition ?
+              'FILTER(' + value_condition + ')' + SparqlBlocks.Sparql.STMNT_BRK :
+              '';
+  };
 
-SparqlBlocks.Sparql['sparql_union'] = function(block) {
-  var statements_op1 =
-      SparqlBlocks.Sparql.stmJoin(
-          SparqlBlocks.Sparql.statementToCode(block, 'OP1'),
-          '.\n');
-  var statements_op2 =
-      SparqlBlocks.Sparql.stmJoin(
-          SparqlBlocks.Sparql.statementToCode(block, 'OP2'),
-          '.\n');
-  return (statements_op1 == '') ?
-            ( (statements_op2 == '') ?
-                  '' :
-                  '{\n' + statements_op2 + '\n}' + SparqlBlocks.Sparql.STMNT_BRK ) :
-            ( (statements_op2 == '') ?
-                  '{\n' + statements_op1 + '\n}' + SparqlBlocks.Sparql.STMNT_BRK :
-                  '{\n' + statements_op1 + '\n} UNION {\n' + statements_op2 + '\n}' +
-                      SparqlBlocks.Sparql.STMNT_BRK )
-};
+  SparqlBlocks.Sparql['sparql_union'] = function(block) {
+    var statements_op1 =
+        SparqlBlocks.Sparql.stmJoin(
+            SparqlBlocks.Sparql.statementToCode(block, 'OP1'),
+            '.\n');
+    var statements_op2 =
+        SparqlBlocks.Sparql.stmJoin(
+            SparqlBlocks.Sparql.statementToCode(block, 'OP2'),
+            '.\n');
+    return (statements_op1 == '') ?
+              ( (statements_op2 == '') ?
+                    '' :
+                    '{\n' + statements_op2 + '\n}' + SparqlBlocks.Sparql.STMNT_BRK ) :
+              ( (statements_op2 == '') ?
+                    '{\n' + statements_op1 + '\n}' + SparqlBlocks.Sparql.STMNT_BRK :
+                    '{\n' + statements_op1 + '\n} UNION {\n' + statements_op2 + '\n}' +
+                        SparqlBlocks.Sparql.STMNT_BRK )
+  };
 
-SparqlBlocks.Sparql['sparql_optional'] = function(block) {
-  var statements_op =
-      SparqlBlocks.Sparql.stmJoin(
-          SparqlBlocks.Sparql.statementToCode(block, 'OP'),
-          '.\n');
-  return (statements_op == '') ?
-            '' :
-            'OPTIONAL {\n' + statements_op + '\n}' + SparqlBlocks.Sparql.STMNT_BRK;
-};
+  SparqlBlocks.Sparql['sparql_optional'] = function(block) {
+    var statements_op =
+        SparqlBlocks.Sparql.stmJoin(
+            SparqlBlocks.Sparql.statementToCode(block, 'OP'),
+            '.\n');
+    return (statements_op == '') ?
+              '' :
+              'OPTIONAL {\n' + statements_op + '\n}' + SparqlBlocks.Sparql.STMNT_BRK;
+  };
+
+}) ();
