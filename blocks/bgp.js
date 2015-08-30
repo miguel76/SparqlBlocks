@@ -105,8 +105,7 @@ goog.require('SparqlBlocks.Blocks');
     init: function() {
       _initVerb(this);
       this.appendValueInput("VERB")
-          .setCheck(typeExt("Verb"))
-          // .appendField("is");
+          .setCheck(typeExt("Resource"))
           .appendField("◀━┫");
       this.appendValueInput("OBJECT")
           .setCheck(typeExt("GraphTermOrVar"))
