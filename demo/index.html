@@ -217,18 +217,15 @@ h1 {
           </block>
         </statement>
       </block>
-      <!-- <block type="sparql_var_binding"></block> -->
     </category>
     <category name="Patterns">
       <block type="sparql_typedsubject_propertylist"></block>
       <block type="sparql_anonsubject_propertylist"></block>
-      <!-- <block type="sparql_subject_propertylist"></block> -->
       <block type="sparql_isa"></block>
       <block type="sparql_verb_object"></block>
-      <block type="sparql_reverseVerb_object"></block>
-      <!-- <block type="subject_verb_objectlist"></block>
-      <block type="subject_verb_object"></block> -->
-      <!-- <block type="sparql_variable"></block> -->
+      <block type="sparql_reversePath_object"></block>
+      <block type="sparql_closurePath_object"></block>
+      <block type="sparql_reverseClosurePath_object"></block>
     </category>
     <category name="Options">
       <block type="sparql_union"></block>
@@ -283,19 +280,19 @@ h1 {
     <category name="Text">
       <block type="sparql_text"></block>
       <block type="sparql_text_join"></block>
-      <block type="sparql_text_length"></block>
-      <block type="sparql_text_isEmpty"></block>
-      <!-- <block type="sparql_text_indexOf">
+      <block type="sparql_text_length">
+      </block>
+      <block type="sparql_text_isEmpty">
+      </block>
+      <block type="sparql_text_charAt">
         <value name="VALUE">
           <block type="variables_get">
             <field name="VAR">text</field>
           </block>
         </value>
-      </block> -->
-      <block type="sparql_text_charAt">
-        <value name="VALUE">
-          <block type="variables_get">
-            <field name="VAR">text</field>
+        <value name="AT">
+          <block type="sparql_math_number">
+            <field name="NUM">1</field>
           </block>
         </value>
       </block>
@@ -305,11 +302,41 @@ h1 {
             <field name="VAR">text</field>
           </block>
         </value>
+        <value name="AT1">
+          <block type="sparql_math_number">
+            <field name="NUM">1</field>
+          </block>
+        </value>
+        <value name="AT2">
+          <block type="sparql_math_number">
+            <field name="NUM">10</field>
+          </block>
+        </value>
       </block>
-      <block type="sparql_text_changeCase"></block>
-      <block type="sparql_text_contains"></block>
-      <block type="sparql_text_lang"></block>
-      <!-- <block type="sparql_text_trim"></block> -->
+      <block type="sparql_text_changeCase">
+      </block>
+      <block type="sparql_text_contains">
+        <value name="FIND">
+          <block type="sparql_text"></block>
+        </value>
+        <value name="VALUE">
+          <block type="variables_get">
+            <field name="VAR">text</field>
+          </block>
+        </value>
+      </block>
+      <block type="sparql_text_lang">
+        <value name="LANG">
+          <block type="sparql_text">
+            <field name="TEXT">en</field>
+          </block>
+        </value>
+        <value name="VALUE">
+          <block type="variables_get">
+            <field name="VAR">text</field>
+          </block>
+        </value>
+      </block>
     </category>
     <category name="Resources">
       <block type="sparql_prefixed_iri"></block>
@@ -384,63 +411,63 @@ h1 {
     </category>
     <category name="Vocabulary">
       <category name="Classes">
-        <block type="sparql_select" id="43" x="37" y="38">
+        <block type="sparql_select">
           <field name="LIMIT">10</field>
           <statement name="WHERE">
-            <block type="sparql_typedsubject_propertylist" id="44">
+            <block type="sparql_typedsubject_propertylist">
               <value name="SUBJECT">
-                <block type="variables_get" id="45">
+                <block type="variables_get">
                   <field name="VAR">type</field>
                 </block>
               </value>
               <value name="TYPE">
-                <block type="sparql_prefixed_iri" id="46">
+                <block type="sparql_prefixed_iri">
                   <field name="PREFIX">owl</field>
                   <field name="LOCAL_NAME">Class</field>
                 </block>
               </value>
               <statement name="PROPERTY_LIST">
-                <block type="sparql_verb_object" id="47">
+                <block type="sparql_verb_object">
                   <value name="VERB">
-                    <block type="sparql_prefixed_iri" id="48">
+                    <block type="sparql_prefixed_iri">
                       <field name="PREFIX">rdfs</field>
                       <field name="LOCAL_NAME">label</field>
                     </block>
                   </value>
                   <value name="OBJECT">
-                    <block type="variables_get" id="49">
+                    <block type="variables_get">
                       <field name="VAR">label</field>
                     </block>
                   </value>
                 </block>
               </statement>
               <next>
-                <block type="sparql_filter" id="50">
+                <block type="sparql_filter">
                   <value name="CONDITION">
-                    <block type="sparql_text_contains" id="51">
+                    <block type="sparql_text_contains">
                       <value name="FIND">
-                        <block type="sparql_text" id="52">
+                        <block type="sparql_text">
                           <field name="TEXT"></field>
                         </block>
                       </value>
                       <value name="VALUE">
-                        <block type="variables_get" id="53">
+                        <block type="variables_get">
                           <field name="VAR">label</field>
                         </block>
                       </value>
                     </block>
                   </value>
                   <next>
-                    <block type="sparql_filter" id="62">
+                    <block type="sparql_filter">
                       <value name="CONDITION">
-                        <block type="sparql_text_lang" id="74">
+                        <block type="sparql_text_lang">
                           <value name="VALUE">
-                            <block type="variables_get" id="110">
+                            <block type="variables_get">
                               <field name="VAR">label</field>
                             </block>
                           </value>
                           <value name="LANG">
-                            <block type="sparql_text" id="86">
+                            <block type="sparql_text">
                               <field name="TEXT">en</field>
                             </block>
                           </value>
@@ -455,44 +482,44 @@ h1 {
         </block>
       </category>
       <category name="Out-Properties">
-        <block type="sparql_select" id="86" x="37" y="13">
+        <block type="sparql_select">
           <field name="LIMIT">10</field>
           <statement name="WHERE">
-            <block type="sparql_typedsubject_propertylist" id="87">
+            <block type="sparql_typedsubject_propertylist">
               <value name="SUBJECT">
-                <block type="variables_get" id="88">
+                <block type="variables_get">
                   <field name="VAR">property</field>
                 </block>
               </value>
               <value name="TYPE">
-                <block type="sparql_prefixed_iri" id="89">
+                <block type="sparql_prefixed_iri">
                   <field name="PREFIX">rdf</field>
                   <field name="LOCAL_NAME">Property</field>
                 </block>
               </value>
               <statement name="PROPERTY_LIST">
-                <block type="sparql_verb_object" id="90">
+                <block type="sparql_verb_object">
                   <value name="VERB">
-                    <block type="sparql_prefixed_iri" id="91">
+                    <block type="sparql_prefixed_iri">
                       <field name="PREFIX">rdfs</field>
                       <field name="LOCAL_NAME">label</field>
                     </block>
                   </value>
                   <value name="OBJECT">
-                    <block type="variables_get" id="92">
+                    <block type="variables_get">
                       <field name="VAR">label</field>
                     </block>
                   </value>
                   <next>
-                    <block type="sparql_verb_object" id="93">
+                    <block type="sparql_verb_object">
                       <value name="VERB">
-                        <block type="sparql_prefixed_iri" id="94">
+                        <block type="sparql_prefixed_iri">
                           <field name="PREFIX">rdfs</field>
                           <field name="LOCAL_NAME">domain</field>
                         </block>
                       </value>
                       <value name="OBJECT">
-                        <block type="variables_get" id="95">
+                        <block type="variables_get">
                           <field name="VAR">domain</field>
                         </block>
                       </value>
@@ -501,28 +528,28 @@ h1 {
                 </block>
               </statement>
               <next>
-                <block type="sparql_typedsubject_propertylist" id="96">
+                <block type="sparql_typedsubject_propertylist">
                   <value name="SUBJECT">
                     <block type="variables_get" id="97">
                       <field name="VAR">domain</field>
                     </block>
                   </value>
                   <value name="TYPE">
-                    <block type="sparql_prefixed_iri" id="98">
+                    <block type="sparql_prefixed_iri">
                       <field name="PREFIX">owl</field>
                       <field name="LOCAL_NAME">Class</field>
                     </block>
                   </value>
                   <statement name="PROPERTY_LIST">
-                    <block type="sparql_reverseVerb_object" id="99">
+                    <block type="sparql_reverseClosurePath_object">
                       <value name="VERB">
-                        <block type="sparql_prefixed_iri" id="100">
+                        <block type="sparql_prefixed_iri">
                           <field name="PREFIX">rdfs</field>
                           <field name="LOCAL_NAME">subClassOf</field>
                         </block>
                       </value>
                       <value name="OBJECT">
-                        <!-- <block type="sparql_prefixed_iri" id="101">
+                        <!-- <block type="sparql_prefixed_iri">
                           <field name="PREFIX">owl</field>
                           <field name="LOCAL_NAME">Thing</field>
                         </block> -->
@@ -530,32 +557,32 @@ h1 {
                     </block>
                   </statement>
                   <next>
-                    <block type="sparql_filter" id="102">
+                    <block type="sparql_filter">
                       <value name="CONDITION">
-                        <block type="sparql_text_contains" id="103">
+                        <block type="sparql_text_contains">
                           <value name="FIND">
-                            <block type="sparql_text" id="104">
+                            <block type="sparql_text">
                               <field name="TEXT"></field>
                             </block>
                           </value>
                           <value name="VALUE">
-                            <block type="variables_get" id="105">
+                            <block type="variables_get">
                               <field name="VAR">label</field>
                             </block>
                           </value>
                         </block>
                       </value>
                       <next>
-                        <block type="sparql_filter" id="47">
+                        <block type="sparql_filter">
                           <value name="CONDITION">
-                            <block type="sparql_text_lang" id="48">
+                            <block type="sparql_text_lang">
                               <value name="VALUE">
-                                <block type="variables_get" id="49">
+                                <block type="variables_get">
                                   <field name="VAR">label</field>
                                 </block>
                               </value>
                               <value name="LANG">
-                                <block type="sparql_text" id="50">
+                                <block type="sparql_text">
                                   <field name="TEXT">en</field>
                                 </block>
                               </value>
@@ -572,44 +599,44 @@ h1 {
         </block>
       </category>
       <category name="In-Properties">
-        <block type="sparql_select" id="86" x="37" y="13">
+        <block type="sparql_select">
           <field name="LIMIT">10</field>
           <statement name="WHERE">
-            <block type="sparql_typedsubject_propertylist" id="87">
+            <block type="sparql_typedsubject_propertylist">
               <value name="SUBJECT">
-                <block type="variables_get" id="88">
+                <block type="variables_get">
                   <field name="VAR">property</field>
                 </block>
               </value>
               <value name="TYPE">
-                <block type="sparql_prefixed_iri" id="89">
+                <block type="sparql_prefixed_iri">
                   <field name="PREFIX">rdf</field>
                   <field name="LOCAL_NAME">Property</field>
                 </block>
               </value>
               <statement name="PROPERTY_LIST">
-                <block type="sparql_verb_object" id="90">
+                <block type="sparql_verb_object">
                   <value name="VERB">
-                    <block type="sparql_prefixed_iri" id="91">
+                    <block type="sparql_prefixed_iri">
                       <field name="PREFIX">rdfs</field>
                       <field name="LOCAL_NAME">label</field>
                     </block>
                   </value>
                   <value name="OBJECT">
-                    <block type="variables_get" id="92">
+                    <block type="variables_get">
                       <field name="VAR">label</field>
                     </block>
                   </value>
                   <next>
-                    <block type="sparql_verb_object" id="93">
+                    <block type="sparql_verb_object">
                       <value name="VERB">
-                        <block type="sparql_prefixed_iri" id="94">
+                        <block type="sparql_prefixed_iri">
                           <field name="PREFIX">rdfs</field>
                           <field name="LOCAL_NAME">range</field>
                         </block>
                       </value>
                       <value name="OBJECT">
-                        <block type="variables_get" id="97">
+                        <block type="variables_get">
                           <field name="VAR">range</field>
                         </block>
                       </value>
@@ -618,22 +645,22 @@ h1 {
                 </block>
               </statement>
               <next>
-                <block type="sparql_typedsubject_propertylist" id="96">
+                <block type="sparql_typedsubject_propertylist">
                   <value name="SUBJECT">
-                    <block type="variables_get" id="97">
+                    <block type="variables_get">
                       <field name="VAR">range</field>
                     </block>
                   </value>
                   <value name="TYPE">
-                    <block type="sparql_prefixed_iri" id="98">
+                    <block type="sparql_prefixed_iri">
                       <field name="PREFIX">owl</field>
                       <field name="LOCAL_NAME">Class</field>
                     </block>
                   </value>
                   <statement name="PROPERTY_LIST">
-                    <block type="sparql_reverseVerb_object" id="99">
+                    <block type="sparql_reverseClosurePath_object">
                       <value name="VERB">
-                        <block type="sparql_prefixed_iri" id="100">
+                        <block type="sparql_prefixed_iri">
                           <field name="PREFIX">rdfs</field>
                           <field name="LOCAL_NAME">subClassOf</field>
                         </block>
@@ -643,32 +670,32 @@ h1 {
                     </block>
                   </statement>
                   <next>
-                    <block type="sparql_filter" id="102">
+                    <block type="sparql_filter">
                       <value name="CONDITION">
-                        <block type="sparql_text_contains" id="103">
+                        <block type="sparql_text_contains">
                           <value name="FIND">
-                            <block type="sparql_text" id="104">
+                            <block type="sparql_text">
                               <field name="TEXT"></field>
                             </block>
                           </value>
                           <value name="VALUE">
-                            <block type="variables_get" id="105">
+                            <block type="variables_get">
                               <field name="VAR">label</field>
                             </block>
                           </value>
                         </block>
                       </value>
                       <next>
-                        <block type="sparql_filter" id="47">
+                        <block type="sparql_filter">
                           <value name="CONDITION">
-                            <block type="sparql_text_lang" id="48">
+                            <block type="sparql_text_lang">
                               <value name="VALUE">
-                                <block type="variables_get" id="49">
+                                <block type="variables_get">
                                   <field name="VAR">label</field>
                                 </block>
                               </value>
                               <value name="LANG">
-                                <block type="sparql_text" id="50">
+                                <block type="sparql_text">
                                   <field name="TEXT">en</field>
                                 </block>
                               </value>
@@ -686,38 +713,6 @@ h1 {
       </category>
     </category>
   </xml>
-
-<!--
-  <p><a href="javascript:void(workspace.setVisible(true))">Show</a>
-   - <a href="javascript:void(workspace.setVisible(false))">Hide</a></p>
-
-  <script>
-    if (rtl) {
-      document.write('[ &larr; RTL. Switch to <A HREF="?ltr">LTR</A>. ]');
-    } else {
-      document.write('[ &rarr; LTR. Switch to <A HREF="?rtl">RTL</A>. ]');
-    }
-  </script>
-
-  <p>
-    <input type="button" value="Export to XML" onclick="toXml()">
-    &nbsp;
-    <input type="button" value="Import from XML" onclick="fromXml()">
-    <br>
-    <input type="button" value="To JavaScript" onclick="toCode('JavaScript')">
-    &nbsp;
-    <input type="button" value="To Python" onclick="toCode('Python')">
-    &nbsp;
-    <input type="button" value="To PHP" onclick="toCode('PHP')">
-    &nbsp;
-    <input type="button" value="To Dart" onclick="toCode('Dart')">
-    &nbsp;
-    <input type="button" value="To SPARQL" onclick="toSPARQL()">
-    <br>
-    <textarea id="importExport" style="width: 26%; height: 12em"></textarea>
-  </p>
-  <hr>
--->
 
   <!-- Realtime setup buttons. -->
 
