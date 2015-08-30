@@ -25,13 +25,6 @@ goog.require('SparqlBlocks.Sparql');
 
 ( function() {
 
-  var extendVerb_ = function(verb) {
-    if (verb == "rdfs:subClassOf" || verb == "<http://www.w3.org/2000/01/rdf-schema#subClassOf>") {
-      return verb + "*";
-    }
-    return verb;
-  }
-
   SparqlBlocks.Sparql['sparql_isa'] = function(block) {
     var value_type =
         SparqlBlocks.Sparql.valueToCode(
@@ -52,21 +45,41 @@ goog.require('SparqlBlocks.Sparql');
     var value_object = SparqlBlocks.Sparql.valueToCode(block, 'OBJECT', SparqlBlocks.Sparql.ORDER_ATOMIC);
     var code =
         value_verb ?
-          ( (value_object ? extendVerb_(value_verb) : value_verb) + ' ' +
+          ( value_verb + ' ' +
             (value_object ? value_object : '[]') +
             SparqlBlocks.Sparql.STMNT_BRK ) :
           '';
     return code;
   };
 
-  SparqlBlocks.Sparql['sparql_reverseVerb_object'] = function(block) {
+  SparqlBlocks.Sparql['sparql_reversePath_object'] = function(block) {
     var value_verb = SparqlBlocks.Sparql.valueToCode(block, 'VERB', SparqlBlocks.Sparql.ORDER_ATOMIC);
     var value_object = SparqlBlocks.Sparql.valueToCode(block, 'OBJECT', SparqlBlocks.Sparql.ORDER_ATOMIC);
     var code =
         value_verb ?
-          ( '^' + (value_object ? extendVerb_(value_verb) : value_verb) + ' ' +
+          ( '^' + value_verb + ' ' +
             (value_object ? value_object : '[]') +
             SparqlBlocks.Sparql.STMNT_BRK ) :
+          '';
+    return code;
+  };
+
+  SparqlBlocks.Sparql['sparql_closurePath_object'] = function(block) {
+    var value_verb = SparqlBlocks.Sparql.valueToCode(block, 'VERB', SparqlBlocks.Sparql.ORDER_ATOMIC);
+    var value_object = SparqlBlocks.Sparql.valueToCode(block, 'OBJECT', SparqlBlocks.Sparql.ORDER_ATOMIC);
+    var code =
+        (value_verb && value_object) ?
+          ( value_verb + '* ' + value_object + SparqlBlocks.Sparql.STMNT_BRK ) :
+          '';
+    return code;
+  };
+
+  SparqlBlocks.Sparql['sparql_reverseClosurePath_object'] = function(block) {
+    var value_verb = SparqlBlocks.Sparql.valueToCode(block, 'VERB', SparqlBlocks.Sparql.ORDER_ATOMIC);
+    var value_object = SparqlBlocks.Sparql.valueToCode(block, 'OBJECT', SparqlBlocks.Sparql.ORDER_ATOMIC);
+    var code =
+        (value_verb && value_object) ?
+          ( '^' + value_verb + '* ' + value_object + SparqlBlocks.Sparql.STMNT_BRK ) :
           '';
     return code;
   };

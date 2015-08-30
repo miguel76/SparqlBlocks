@@ -93,7 +93,6 @@ goog.require('SparqlBlocks.Blocks');
       this.appendValueInput("OBJECT")
           .setCheck(typeExt("GraphTermOrVar"))
           .appendField("┣━▶");
-          // .appendField("]➡");
       this.setInputsInline(true);
       this.setPreviousStatement(true, "PropertyList");
       this.setNextStatement(true, "PropertyList");
@@ -101,12 +100,44 @@ goog.require('SparqlBlocks.Blocks');
     }
   });
 
-  SparqlBlocks.Blocks.block('sparql_reverseVerb_object', {
+  SparqlBlocks.Blocks.block('sparql_reversePath_object', {
     init: function() {
       _initVerb(this);
       this.appendValueInput("VERB")
           .setCheck(typeExt("Resource"))
           .appendField("◀━┫");
+      this.appendValueInput("OBJECT")
+          .setCheck(typeExt("GraphTermOrVar"))
+          .appendField("┣━");
+      this.setInputsInline(true);
+      this.setPreviousStatement(true, "PropertyList");
+      this.setNextStatement(true, "PropertyList");
+      this.setTooltip('');
+    }
+  });
+
+  SparqlBlocks.Blocks.block('sparql_closurePath_object', {
+    init: function() {
+      _initVerb(this);
+      this.appendValueInput("VERB")
+          .setCheck(typeExt("Verb"))
+          .appendField("━┫");
+      this.appendValueInput("OBJECT")
+          .setCheck(typeExt("GraphTermOrVar"))
+          .appendField("┣ ✱ ━▶");
+      this.setInputsInline(true);
+      this.setPreviousStatement(true, "PropertyList");
+      this.setNextStatement(true, "PropertyList");
+      this.setTooltip('');
+    }
+  });
+
+  SparqlBlocks.Blocks.block('sparql_reverseClosurePath_object', {
+    init: function() {
+      _initVerb(this);
+      this.appendValueInput("VERB")
+          .setCheck(typeExt("Verb"))
+          .appendField("◀━ ✱ ┫");
       this.appendValueInput("OBJECT")
           .setCheck(typeExt("GraphTermOrVar"))
           .appendField("┣━");
@@ -130,23 +161,6 @@ goog.require('SparqlBlocks.Blocks');
     }
   });
 
-  /*
-  https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#adf4m7
-  SparqlBlocks.Blocks.block('property_list_path', {
-    init: function() {
-      this.setHelpUrl('http://www.example.com/');
-      this.setColour(260);
-      this.appendStatementInput("NAME")
-          .setCheck("object_list_path")
-          .appendField(new Blockly.FieldVariable("item"), "SUBJECT");
-      this.setInputsInline(true);
-      this.setPreviousStatement(true, "property_list");
-      this.setNextStatement(true, "property_list");
-      this.setTooltip('');
-    }
-  });
-  */
-
   // https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#otezbs
   SparqlBlocks.Blocks.block('sparql_subject_propertylist', {
     init: function() {
@@ -156,7 +170,6 @@ goog.require('SparqlBlocks.Blocks');
       this.appendStatementInput("PROPERTY_LIST")
           .setCheck("PropertyList")
           .appendField("  ⌊");
-          // .appendField("has");
       this.setInputsInline(true);
       this.setPreviousStatement(true, "TriplesBlock");
       this.setNextStatement(true, "TriplesBlock");
@@ -190,7 +203,7 @@ goog.require('SparqlBlocks.Blocks');
       _initSubject(this);
       this.appendStatementInput("PROPERTY_LIST")
           .setCheck("PropertyList")
-  //        .appendField("◯━");
+          // .appendField("⭕");
           .appendField("s.t.");
       this.setInputsInline(true);
       this.setOutput(true, "Resource");

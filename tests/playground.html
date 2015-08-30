@@ -262,13 +262,11 @@ h1 {
     <category name="Patterns">
       <block type="sparql_typedsubject_propertylist"></block>
       <block type="sparql_anonsubject_propertylist"></block>
-      <!-- <block type="sparql_subject_propertylist"></block> -->
       <block type="sparql_isa"></block>
       <block type="sparql_verb_object"></block>
-      <block type="sparql_reverseVerb_object"></block>
-      <!-- <block type="subject_verb_objectlist"></block>
-      <block type="subject_verb_object"></block> -->
-      <!-- <block type="sparql_variable"></block> -->
+      <block type="sparql_reversePath_object"></block>
+      <block type="sparql_closurePath_object"></block>
+      <block type="sparql_reverseClosurePath_object"></block>
     </category>
     <category name="Options">
       <block type="sparql_union"></block>
@@ -554,7 +552,7 @@ h1 {
                     </block>
                   </value>
                   <statement name="PROPERTY_LIST">
-                    <block type="sparql_reverseVerb_object" id="99">
+                    <block type="sparql_reverseClosurePath_object" id="99">
                       <value name="VERB">
                         <block type="sparql_prefixed_iri" id="100">
                           <field name="PREFIX">rdfs</field>
@@ -671,7 +669,7 @@ h1 {
                     </block>
                   </value>
                   <statement name="PROPERTY_LIST">
-                    <block type="sparql_reverseVerb_object" id="99">
+                    <block type="sparql_reverseClosurePath_object" id="99">
                       <value name="VERB">
                         <block type="sparql_prefixed_iri" id="100">
                           <field name="PREFIX">rdfs</field>
