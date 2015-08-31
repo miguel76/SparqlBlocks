@@ -23,6 +23,7 @@
 <script src="../core/exec.js"></script>
 <script src="../core/types.js"></script>
 <script src="../core/blocks.js"></script>
+<script src="../core/storage.js"></script>
 
 <script src="../generators/sparql/bgp.js"></script>
 <script src="../generators/sparql/main.js"></script>
@@ -91,6 +92,19 @@ function start() {
               collabElementId: 'collaborators'},
            scrollbars: true
           });
+
+  $('.blocklyToolboxDiv')[0].insertAdjacentHTML(
+    'afterbegin',
+    '<div class="main-button-container">'+
+      '<button class="main-button" onclick="SparqlBlocks.Storage.linkGist()">'+
+        'Save Blocks...'+
+    '</button></div>');
+
+  // An href with #key trigers an AJAX call to retrieve saved blocks.
+  if (window.location.hash.length > 1) {
+    SparqlBlocks.Storage.retrieveXml(window.location.hash.substring(1));
+  }
+
   if (Blockly.Realtime.isEnabled()) {
     enableRealtimeSpecificUi();
   }
@@ -220,6 +234,9 @@ h1 {
   /* Vocabulary */
 }
 
+.main-button-container {
+  padding: 5px;
+}
 
 </style>
 </head>
@@ -227,7 +244,8 @@ h1 {
 
   <div id="collaborators"></div>
 
-  <div id="blocklyDiv"></div>
+  <div id="blocklyDiv">
+  </div>
 
   <xml id="toolbox" style="display: none">
     <category name="Exec/Query">

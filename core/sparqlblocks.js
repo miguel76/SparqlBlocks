@@ -30,6 +30,7 @@ goog.require('SparqlBlocks.Output');
 goog.require('SparqlBlocks.Prefixes');
 goog.require('SparqlBlocks.SelfDuplication');
 goog.require('SparqlBlocks.Types');
+goog.require('SparqlBlocks.Storage');
 
 goog.require('SparqlBlocks.Blocks');
 goog.require('SparqlBlocks.Blocks.bgp');
