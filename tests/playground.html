@@ -81,26 +81,22 @@ function start() {
   ]);
 
   var toolbox = document.getElementById('toolbox');
-  workspace = Blockly.inject('blocklyDiv',
-          {rtl: rtl,
-           media: '../../blockly/media/',
-           toolbox: toolbox,
-           comments: true,
-           disable: true,
-           collapse: true,
-           grid:
-             {spacing: 25,
-              length: 3,
-              colour: '#ccc',
-              snap: true},
-           readOnly: false,
-           realtime: false,
-           realtimeOptions:
-             {clientId: 'YOUR CLIENT ID GOES HERE',
-              chatbox: {elementId: 'chatbox'},
-              collabElementId: 'collaborators'},
-           scrollbars: true
-          });
+  workspace = Blockly.inject('blocklyDiv', {
+    rtl: rtl,
+    media: '../../blockly/media/',
+    toolbox: toolbox,
+    comments: true,
+    disable: true,
+    collapse: true,
+    grid:
+      {spacing: 25,
+       length: 3,
+       colour: '#ccc',
+       snap: true},
+    readOnly: false,
+    realtime: false,
+    scrollbars: true
+  });
 
   $('.blocklyToolboxDiv')[0].insertAdjacentHTML(
     'afterbegin',
@@ -114,25 +110,6 @@ function start() {
     SparqlBlocks.Storage.retrieveXml(window.location.hash.substring(1));
   }
 
-  if (Blockly.Realtime.isEnabled()) {
-    enableRealtimeSpecificUi();
-  }
-  // outWorkspace = Blockly.inject('sparqlResultsArea',
-  //         {rtl: rtl,
-  //          media: '../media/',
-  //          //toolbox: toolbox,
-  //          comments: true,
-  //          disable: true,
-  //          collapse: true,
-  //          grid:
-  //            {spacing: 25,
-  //             length: 3,
-  //             colour: '#ccc',
-  //             snap: true},
-  //          readOnly: true,
-  //          realtime: false,
-  //          scrollbars: false
-  //         });
 }
 
 function toXml() {
