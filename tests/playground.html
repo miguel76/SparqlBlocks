@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>Blockly Playground</title>
+<!-- <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'> -->
 <script src="../lib/jquery-1.11.3.min.js"></script>
 <script src="../lib/jquery-migrate-1.2.1.min.js"></script>
 
@@ -71,6 +72,14 @@ function enableRealtimeSpecificUi() {
 }
 
 function start() {
+
+  Blockly.Css.CONTENT = Blockly.Css.CONTENT.concat([
+    '.blocklyText {',
+    '  font-family: "Helvetica", sans-serif;',
+    '}',
+    ''
+  ]);
+
   var toolbox = document.getElementById('toolbox');
   workspace = Blockly.inject('blocklyDiv',
           {rtl: rtl,
@@ -250,6 +259,7 @@ h1 {
   <xml id="toolbox" style="display: none">
     <category name="Exec/Query">
       <block type="sparql_execution_endpoint"></block>
+      <block type="sparql_execution"></block>
       <block type="sparql_select">
         <statement name="WHERE">
           <block type="sparql_typedsubject_propertylist">
