@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Blockly Playground</title>
+<!-- <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'> -->
+<script src="../lib/jquery-1.11.3.min.js"></script>
+<script src="../lib/jquery-migrate-1.2.1.min.js"></script>
+
+<!-- <script src="../../blockly/blockly_compressed.js"></script>
+<script src="../../blockly/blocks_compressed.js"></script>
+<script src="../sparqlblocks_compressed.js"></script> -->
+<!-- <script src="../sparqlblocks_blocks_compressed.js"></script>
+<script src="../sparql_compressed.js"></script> -->
+
+<script src="../lib/underscore-min.js"></script>
+
+<script src="../../blockly/blockly_uncompressed.js"></script>
+
+<script src="../generators/sparql.js"></script>
+<script src="../core/selfDuplicating.js"></script>
+<script src="../core/prefixes.js"></script>
+<script src="../core/output.js"></script>
+<script src="../core/exec.js"></script>
+<script src="../core/types.js"></script>
+<script src="../core/blocks.js"></script>
+<script src="../core/storage.js"></script>
+
+<script src="../generators/sparql/bgp.js"></script>
+<script src="../generators/sparql/main.js"></script>
+<script src="../generators/sparql/control.js"></script>
+<script src="../generators/sparql/text.js"></script>
+<script src="../generators/sparql/math.js"></script>
+<script src="../generators/sparql/logic.js"></script>
+
+<script src="../lib/Blob.js"></script>
+<script src="../lib/FileSaver.min.js"></script>
+
+<script src="../../blockly/msg/messages.js"></script>
+<!-- <script src="../blocks/logic.js"></script> -->
+<!-- <script src="../blocks/loops.js"></script> -->
+<!-- <script src="../blocks/math.js"></script> -->
+<!-- <script src="../blocks/text.js"></script> -->
+<!-- <script src="../blocks/lists.js"></script> -->
+<!-- <script src="../blocks/colour.js"></script> -->
+<!-- <script src="../../blockly/blocks/variables.js"></script> -->
+<!-- <script src="../blocks/procedures.js"></script> -->
+<!-- <script src="../blocks/mosio.js"></script> -->
+
+<script src="../blocks/variables.js"></script>
+<script src="../blocks/bgp.js"></script>
+<script src="../blocks/main.js"></script>
+<script src="../blocks/math.js"></script>
+<script src="../blocks/text.js"></script>
+<script src="../blocks/logic.js"></script>
+<script src="../blocks/control.js"></script>
+<script src="../blocks/tabular.js"></script>
+<script src="../blocks/exec.js"></script>
+
+<!-- Load the Google Drive SDK Realtime libraries. -->
+<!-- <script src="https://apis.google.com/js/api.js"></script> -->
+<script>
+'use strict';
+// Depending on the URL argument, render as LTR or RTL.
+var rtl = (document.location.search == '?rtl');
+var workspace = null;
+var outWorkspace = null;
+
+function enableRealtimeSpecificUi() {
+  var realtimeDiv = document.getElementById('realtime');
+  realtimeDiv.display = 'block';
+}
+
+function start() {
+
+  Blockly.Css.CONTENT = Blockly.Css.CONTENT.concat([
+    '.blocklyText {',
+    '  font-family: "Helvetica", sans-serif;',
+    '}',
+    ''
+  ]);
+
+  var toolbox = document.getElementById('toolbox');
+  workspace = Blockly.inject('blocklyDiv',
+          {rtl: rtl,
+           media: '../../blockly/media/',
+          //  toolbox: toolbox,
+           comments: true,
+           disable: true,
+           collapse: true,
+          //  grid:
+          //    {spacing: 25,
+          //     length: 3,
+          //     colour: '#ccc',
+          //     snap: true},
+           readOnly: true,
+           realtime: false,
+           scrollbars: false
+          });
+
+  // An href with #key trigers an AJAX call to retrieve saved blocks.
+  if (window.location.hash.length > 1) {
+    SparqlBlocks.Storage.retrieveXml(window.location.hash.substring(1));
+  }
+
+}
+
+</script>
+
+<style>
+html, body {
+  height: 100%;
+}
+body {
+  background-color: #fff;
+  font-family: sans-serif;
+  overflow: hidden;
+}
+h1 {
+  font-weight: normal;
+  font-size: 140%;
+}
+#blocklyDiv {
+  float: right;
+  height: 98%;
+  width: 100%;
+}
+#collaborators {
+  float: right;
+  width: 30px;
+  margin-left: 10px;
+}
+#collaborators > img {
+  margin-right: 5px;
+  height: 30px;
+  padding-bottom: 5px;
+  width: 30px;
+  border-radius: 3px;
+}
+#importExport {
+  font-family: monospace;
+}
+.blocklyMainBackground {
+    display: none;
+}
+
+</style>
+</head>
+<body onload="start()">
+
+  <div id="blocklyDiv">
+  </div>
+
+</body>
+</html>
