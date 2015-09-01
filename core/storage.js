@@ -78,7 +78,7 @@ SparqlBlocks.Storage = (function() {
   var linkGist = function(opt_workspace) {
     var workspace = opt_workspace || Blockly.getMainWorkspace();
     var xml = Blockly.Xml.workspaceToDom(workspace);
-    var data = Blockly.Xml.domToText(xml);
+    var data = Blockly.Xml.domToPrettyText(xml);
     makeRequest_({
       dataType: "json",
       method: "POST",
