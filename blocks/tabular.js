@@ -85,7 +85,7 @@ goog.require('SparqlBlocks.Blocks');
      */
     mutationToDom: function() {
       var container = document.createElement('mutation');
-      container.setAttribute('colCount', this.colCount_);
+      container.setAttribute('col-count', this.colCount_);
       return container;
     },
     /**
@@ -94,7 +94,7 @@ goog.require('SparqlBlocks.Blocks');
      * @this Blockly.Block
      */
     domToMutation: function(xmlElement) {
-      this.colCount_ = parseInt(xmlElement.getAttribute('colCount'), 10);
+      this.colCount_ = parseInt(xmlElement.getAttribute('col-count'), 10);
       for (var i = 1; i <= this.colCount_; i++) {
         this.appendValueInput('COL' + i)
             .setCheck('Column');
