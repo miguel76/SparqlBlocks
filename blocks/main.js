@@ -78,7 +78,7 @@ goog.require('SparqlBlocks.Blocks');
 
       this.appendDummyInput("AFTER_ORDER")
           .appendField("& limit to first")
-          .appendField(new Blockly.FieldTextInput("10"), "LIMIT")
+          .appendField(new Blockly.FieldTextInput("5"), "LIMIT")
           .appendField("rows");
 
       // this.setOutput(true, "Select");
