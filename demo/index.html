@@ -30,46 +30,48 @@ function enableRealtimeSpecificUi() {
 }
 
 function start() {
+
+  Blockly.Css.CONTENT = Blockly.Css.CONTENT.concat([
+    '.blocklyText {',
+    '  font-family: "Helvetica", sans-serif;',
+    '}',
+    '.blocklyTreeLabel {',
+    '  font-family: "Helvetica", sans-serif;',
+    '}',
+    ''
+  ]);
+
   var toolbox = document.getElementById('toolbox');
-  workspace = Blockly.inject('blocklyDiv',
-          {rtl: rtl,
-           media: '../blockly/media/',
-           toolbox: toolbox,
-           comments: true,
-           disable: true,
-           collapse: true,
-           grid:
-             {spacing: 25,
-              length: 3,
-              colour: '#ccc',
-              snap: true},
-           readOnly: false,
-           realtime: false,
-           realtimeOptions:
-             {clientId: 'YOUR CLIENT ID GOES HERE',
-              chatbox: {elementId: 'chatbox'},
-              collabElementId: 'collaborators'},
-           scrollbars: true
-          });
-  if (Blockly.Realtime.isEnabled()) {
-    enableRealtimeSpecificUi();
+  workspace = Blockly.inject('blocklyDiv', {
+    rtl: rtl,
+    media: '../../blockly/media/',
+    toolbox: toolbox,
+    comments: true,
+    disable: true,
+    collapse: true,
+    grid:
+      {spacing: 25,
+       length: 3,
+       colour: '#ccc',
+       snap: true},
+    readOnly: false,
+    realtime: false,
+    scrollbars: true
+  });
+
+
+  $('.blocklyToolboxDiv')[0].insertAdjacentHTML(
+      'afterbegin',
+      '<div class="main-button-container">'+
+        '<button class="main-button" onclick="SparqlBlocks.Storage.linkGist()">'+
+          'Save Blocks...'+
+      '</button></div>');
+
+  // An href with #key trigers an AJAX call to retrieve saved blocks.
+  if (window.location.hash.length > 1) {
+    SparqlBlocks.Storage.retrieveXml(window.location.hash.substring(1));
   }
-  // outWorkspace = Blockly.inject('sparqlResultsArea',
-  //         {rtl: rtl,
-  //          media: '../media/',
-  //          //toolbox: toolbox,
-  //          comments: true,
-  //          disable: true,
-  //          collapse: true,
-  //          grid:
-  //            {spacing: 25,
-  //             length: 3,
-  //             colour: '#ccc',
-  //             snap: true},
-  //          readOnly: true,
-  //          realtime: false,
-  //          scrollbars: false
-  //         });
+
 }
 
 function toXml() {
@@ -180,6 +182,12 @@ h1 {
 .blocklyToolboxDiv #\:d .blocklyTreeIcon {
   /* Vocabulary */
 }
+
+.main-button-container {
+  padding: 5px;
+  font-family: "Helvetica", sans-serif;
+}
+
 
 </style>
 </head>
@@ -409,10 +417,9 @@ h1 {
         </statement>
       </block>
     </category>
-    <category name="Vocabulary">
+    <category name="Vocabulary" expanded="true">
       <category name="Classes">
         <block type="sparql_select">
-          <field name="LIMIT">10</field>
           <statement name="WHERE">
             <block type="sparql_typedsubject_propertylist">
               <value name="SUBJECT">
@@ -483,7 +490,6 @@ h1 {
       </category>
       <category name="Out-Properties">
         <block type="sparql_select">
-          <field name="LIMIT">10</field>
           <statement name="WHERE">
             <block type="sparql_typedsubject_propertylist">
               <value name="SUBJECT">
@@ -600,7 +606,6 @@ h1 {
       </category>
       <category name="In-Properties">
         <block type="sparql_select">
-          <field name="LIMIT">10</field>
           <statement name="WHERE">
             <block type="sparql_typedsubject_propertylist">
               <value name="SUBJECT">
