@@ -28,7 +28,7 @@ goog.provide('SparqlBlocks');
 goog.require('SparqlBlocks.Exec');
 goog.require('SparqlBlocks.Output');
 goog.require('SparqlBlocks.Prefixes');
-goog.require('SparqlBlocks.SelfDuplication');
+goog.require('SparqlBlocks.Tooltip');
 goog.require('SparqlBlocks.Types');
 goog.require('SparqlBlocks.Storage');
 

@@ -21,7 +21,7 @@
 
 goog.provide('SparqlBlocks.Output');
 goog.require('SparqlBlocks.Prefixes');
-goog.require('SparqlBlocks.SelfDuplication');
+goog.require('SparqlBlocks.Tooltip');
 
 SparqlBlocks.Output = (function() {
 
@@ -153,7 +153,56 @@ SparqlBlocks.Output = (function() {
       valueBlock.setDeletable(false);
       valueBlock.setMovable(false);
       valueBlock.setEditable(false);
-      SparqlBlocks.SelfDuplication.bindMouseEvents(valueBlock);
+      var duplicateBlock = null;
+      valueBlock.tooltip = "tooltip";
+      valueBlock.tooltipHoverMs = 1;
+      valueBlock.showTooltip = function() {
+        console.log("I would like to dup me!");
+        var xmlBlock = Blockly.Xml.blockToDom_(valueBlock);
+        xmlBlock.removeAttribute("editable");
+        xmlBlock.removeAttribute("movable");
+        xmlBlock.removeAttribute("deletable");
+        duplicateBlock = Blockly.Xml.domToBlock(workspace, xmlBlock);
+        duplicateBlock.isInFlyout = true;
+        duplicateBlock.hideTooltip = function() {
+          console.log("Is there a dup to delete?");
+          if (duplicateBlock) {
+            console.log("Yes, delete me the dup!");
+            duplicateBlock.dispose();
+          }
+        };
+        Blockly.Tooltip.poisonedElement_ = Blockly.Tooltip.element_ = duplicateBlock;
+        var mousedownEvent = Blockly.bindEvent_(
+            duplicateBlock.getSvgRoot(),
+            'mousedown', null,
+            function(e) {
+              if (Blockly.isRightButton(e)) {
+                // Right-click.  Don't create a block, let the context menu show.
+                return;
+              }
+              if (duplicateBlock.disabled) {
+                // Beyond capacity.
+                return;
+              }
+              duplicateBlock.isInFlyout = false;
+              Blockly.unbindEvent_(mousedownEvent);
+              duplicateBlock.hideTooltip = null;
+              Blockly.Tooltip.hide();
+              duplicateBlock.onMouseDown_(e);
+              duplicateBlock = null;
+            }
+          );
+        var xy = valueBlock.getRelativeToSurfaceXY();
+        duplicateBlock.moveBy(xy.x, xy.y);
+        duplicateBlock.select();
+      };
+      valueBlock.hideTooltip = function() {
+        console.log("Is there something to delete?");
+        if (duplicateBlock) {
+          console.log("Yes, delete me!");
+          duplicateBlock.dispose();
+        }
+      };
       connection.connect(valueBlock.outputConnection);
       valueBlock.render();
     }
