@@ -75,7 +75,7 @@ goog.require('SparqlBlocks.Blocks');
       this.setPreviousStatement(true, "Table");
       this.setDeletable(false);
       this.setMovable(false);
-      this.setTooltip('');
+      this.setTooltip(SparqlBlocks.Msg.TABLE_TOOLTIP);
       this.colCount_ = 0;
     },
     /**

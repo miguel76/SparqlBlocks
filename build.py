@@ -358,22 +358,6 @@ class Gen_langfiles(threading.Thread):
         print("Error checking file creation times: " + e)
 
   def run(self):
-    # The files msg/json/{en,qqq,synonyms}.json depend on msg/messages.js.
-    if self._rebuild([os.path.join("msg", "messages.js")],
-                     [os.path.join("msg", "json", f) for f in
-                      ["en.json", "qqq.json", "synonyms.json"]]):
-      try:
-        subprocess.check_call([
-            "python",
-            os.path.join("i18n", "js_to_json.py"),
-            "--input_file", "msg/messages.js",
-            "--output_dir", "msg/json/",
-            "--quiet"])
-      except (subprocess.CalledProcessError, OSError) as e:
-        # Documentation for subprocess.check_call says that CalledProcessError
-        # will be raised on failure, but I found that OSError is also possible.
-        print("Error running i18n/js_to_json.py: ", e)
-        sys.exit(1)
 
     # Checking whether it is necessary to rebuild the js files would be a lot of
     # work since we would have to compare each <lang>.json file with each
@@ -422,9 +406,8 @@ if __name__ == "__main__":
 https://developers.google.com/blockly/hacking/closure""")
     sys.exit(1)
   search_paths = calcdeps.ExpandDirectories(
-      [ "core",
-        os.path.join(os.path.pardir, "closure-library"),
-        "generators" ])
+      [ "core", "generators", "blocks",
+        os.path.join(os.path.pardir, "closure-library") ])
 
   # Run both tasks in parallel threads.
   # Uncompressed is limited by processor speed.

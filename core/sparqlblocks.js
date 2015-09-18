@@ -31,6 +31,7 @@ goog.require('SparqlBlocks.Prefixes');
 goog.require('SparqlBlocks.Tooltip');
 goog.require('SparqlBlocks.Types');
 goog.require('SparqlBlocks.Storage');
+goog.require('SparqlBlocks.Msg');
 
 goog.require('SparqlBlocks.Blocks');
 goog.require('SparqlBlocks.Blocks.bgp');

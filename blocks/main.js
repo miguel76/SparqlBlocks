@@ -84,7 +84,7 @@ goog.require('SparqlBlocks.Blocks');
       // this.setOutput(true, "Select");
       this.setInputsInline(true);
       this.setPreviousStatement(true, "Select");
-      this.setTooltip('');
+      this.setTooltip(SparqlBlocks.Msg.SELECT_TOOLTIP);
     },
     saveQueryAsSparql: function() {
       var sparqlFragment = SparqlBlocks.Sparql.blockToCode(this);
@@ -233,7 +233,7 @@ goog.require('SparqlBlocks.Blocks');
           .appendField(new Blockly.FieldTextInput("localName"), "LOCAL_NAME");
       this.setInputsInline(true);
       this.setOutput(true, "Iri");
-      this.setTooltip('');
+      this.setTooltip(SparqlBlocks.Msg.PREFIXED_IRI_TOOLTIP);
     }
   });
 
@@ -248,7 +248,7 @@ goog.require('SparqlBlocks.Blocks');
           .appendField(">");
       this.setInputsInline(true);
       this.setOutput(true, "Iri");
-      this.setTooltip('');
+      this.setTooltip(SparqlBlocks.Msg.IRI_TOOLTIP);
     }
   });
 

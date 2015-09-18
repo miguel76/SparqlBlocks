@@ -44,4 +44,7 @@ goog.require('SparqlBlocks.Msg');
  * 'http://blockly-demo.appspot.com/static/apps/code/readonly.html?lang=en&xml=' + encodeURIComponent(Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(Blockly.mainWorkspace)).slice(5, -6))
  */
 
+ /// placeholder
  SparqlBlocks.Msg.PLACEHOLDER = 'Placeholder';
+ /// tooltip - bgp verb-object
+ SparqlBlocks.Msg.VERB_OBJECT_TOOLTIP = 'Match all outbound triples with predicate %1 and object %2';

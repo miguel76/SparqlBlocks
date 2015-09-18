@@ -42,7 +42,7 @@ goog.require('SparqlBlocks.Blocks');
           .appendField(new Blockly.FieldTextInput('0',
           Blockly.FieldTextInput.numberValidator), 'NUM');
       this.setOutput(true, 'LiteralNumber');
-      this.setTooltip(Blockly.Msg.MATH_NUMBER_TOOLTIP);
+      this.setTooltip(SparqlBlocks.Msg.MATH_NUMBER_TOOLTIP);
     }
   });
 

@@ -50,7 +50,7 @@ goog.require('SparqlBlocks.Blocks');
         this.appendStatementInput("RESULTS")
             .setCheck("Table")
             .appendField("↪");
-        this.setTooltip('');
+        this.setTooltip(SparqlBlocks.Msg.EXECUTION_TOOLTIP);
       },
       onchange: function() {
         SparqlBlocks.Exec.blockExec(this);
@@ -96,7 +96,7 @@ goog.require('SparqlBlocks.Blocks');
       this.appendDummyInput()
           .appendField("execution in progress...");
       this.setPreviousStatement(true, "Table");
-      this.setTooltip('');
+      this.setTooltip(SparqlBlocks.Msg.EXECUTION_IN_PROGRESS_TOOLTIP);
       this.setDeletable(false);
       this.setMovable(false);
       this.setEditable(false);

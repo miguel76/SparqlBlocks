@@ -42,7 +42,7 @@ goog.require('SparqlBlocks.Blocks');
       this.setInputsInline(true);
       this.setPreviousStatement(true, "TriplesBlock");
       this.setNextStatement(true, "TriplesBlock");
-      this.setTooltip('');
+      this.setTooltip(SparqlBlocks.Msg.FILTER_TOOLTIP);
     }
   });
 
@@ -60,7 +60,7 @@ goog.require('SparqlBlocks.Blocks');
       this.setInputsInline(true);
       this.setPreviousStatement(true, "TriplesBlock");
       this.setNextStatement(true, "TriplesBlock");
-      this.setTooltip('');
+      this.setTooltip(SparqlBlocks.Msg.UNION_TOOLTIP);
     }
   });
 
@@ -74,7 +74,7 @@ goog.require('SparqlBlocks.Blocks');
       this.setInputsInline(true);
       this.setPreviousStatement(true, "TriplesBlock");
       this.setNextStatement(true, "TriplesBlock");
-      this.setTooltip('');
+      this.setTooltip(SparqlBlocks.Msg.OPTIONAL_TOOLTIP);
     }
   });
 

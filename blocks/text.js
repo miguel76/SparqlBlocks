@@ -43,7 +43,7 @@ goog.require('SparqlBlocks.Blocks');
           .appendField(new Blockly.FieldTextInput(''), 'TEXT')
           .appendField(this.newQuote_(false));
       this.setOutput(true, 'LiteralString');
-      this.setTooltip(Blockly.Msg.TEXT_TEXT_TOOLTIP);
+      this.setTooltip(SparqlBlocks.Msg.TEXT_TOOLTIP);
     },
     /**
      * Create an image of an open or closed quote.
@@ -77,7 +77,7 @@ goog.require('SparqlBlocks.Blocks');
           .appendField("@")
           .appendField(new Blockly.FieldTextInput(''), 'LANG');
       this.setOutput(true, 'LiteralString');
-      this.setTooltip(Blockly.Msg.TEXT_TEXT_TOOLTIP);
+      this.setTooltip(SparqlBlocks.Msg.TEXT_WITH_LANG_TOOLTIP);
     },
     /**
      * Create an image of an open or closed quote.
@@ -113,7 +113,7 @@ goog.require('SparqlBlocks.Blocks');
           .appendField(":")
           .appendField(new Blockly.FieldTextInput("localName"), "DT_LOCAL_NAME");
       this.setOutput(true, 'LiteralString');
-      this.setTooltip(Blockly.Msg.TEXT_TEXT_TOOLTIP);
+      this.setTooltip(SparqlBlocks.Msg.TEXT_WITH_TYPE_PREF_TOOLTIP);
     },
     /**
      * Create an image of an open or closed quote.
@@ -149,7 +149,7 @@ goog.require('SparqlBlocks.Blocks');
           .appendField(new Blockly.FieldTextInput("iri"), "DT_IRI")
           .appendField(">");
       this.setOutput(true, 'LiteralString');
-      this.setTooltip(Blockly.Msg.TEXT_TEXT_TOOLTIP);
+      this.setTooltip(SparqlBlocks.Msg.TEXT_WITH_TYPE_IRI_TOOLTIP);
     },
     /**
      * Create an image of an open or closed quote.

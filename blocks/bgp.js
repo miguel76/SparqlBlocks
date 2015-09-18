@@ -96,7 +96,7 @@ goog.require('SparqlBlocks.Blocks');
       this.setInputsInline(true);
       this.setPreviousStatement(true, "PropertyList");
       this.setNextStatement(true, "PropertyList");
-      this.setTooltip('');
+      this.setTooltip(SparqlBlocks.Msg.VERB_OBJECT_TOOLTIP);
     }
   });
 
@@ -112,7 +112,7 @@ goog.require('SparqlBlocks.Blocks');
       this.setInputsInline(true);
       this.setPreviousStatement(true, "PropertyList");
       this.setNextStatement(true, "PropertyList");
-      this.setTooltip('');
+      this.setTooltip(SparqlBlocks.Msg.REVERSEPATH_OBJECT_TOOLTIP);
     }
   });
 
@@ -128,7 +128,7 @@ goog.require('SparqlBlocks.Blocks');
       this.setInputsInline(true);
       this.setPreviousStatement(true, "PropertyList");
       this.setNextStatement(true, "PropertyList");
-      this.setTooltip('');
+      this.setTooltip(SparqlBlocks.Msg.CLOSUREPATH_OBJECT_TOOLTIP);
     }
   });
 
@@ -144,7 +144,7 @@ goog.require('SparqlBlocks.Blocks');
       this.setInputsInline(true);
       this.setPreviousStatement(true, "PropertyList");
       this.setNextStatement(true, "PropertyList");
-      this.setTooltip('');
+      this.setTooltip(SparqlBlocks.Msg.REVERSECLOSUREPATH_OBJECT_TOOLTIP);
     }
   });
 
@@ -157,7 +157,7 @@ goog.require('SparqlBlocks.Blocks');
       this.setInputsInline(true);
       this.setPreviousStatement(true, "PropertyList");
       this.setNextStatement(true, "PropertyList");
-      this.setTooltip('');
+      this.setTooltip(SparqlBlocks.Msg.ISA_TOOLTIP);
     }
   });
 
@@ -193,7 +193,7 @@ goog.require('SparqlBlocks.Blocks');
       this.setInputsInline(true);
       this.setPreviousStatement(true, "TriplesBlock");
       this.setNextStatement(true, "TriplesBlock");
-      this.setTooltip('');
+      this.setTooltip(SparqlBlocks.Msg.TYPEDSUBJECT_PROPERTYLIST_TOOLTIP);
     }
   });
 
@@ -207,7 +207,7 @@ goog.require('SparqlBlocks.Blocks');
           .appendField("s.t.");
       this.setInputsInline(true);
       this.setOutput(true, "Resource");
-      this.setTooltip('');
+      this.setTooltip(SparqlBlocks.Msg.ANONSUBJECT_PROPERTYLIST_TOOLTIP);
     }
   });
 

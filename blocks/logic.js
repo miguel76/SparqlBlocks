@@ -178,7 +178,7 @@ goog.require('SparqlBlocks.Blocks');
       this.setOutput(true, 'LiteralBoolean');
       this.appendDummyInput()
           .appendField(new Blockly.FieldDropdown(BOOLEANS), 'BOOL');
-      this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
+      this.setTooltip(SparqlBlocks.Msg.LOGIC_BOOLEAN_TOOLTIP);
     }
   });
 
@@ -260,7 +260,7 @@ goog.require('SparqlBlocks.Blocks');
       this.appendStatementInput("OP")
           .setCheck("TriplesBlock")
           .appendField("exists");
-      this.setTooltip('');
+      this.setTooltip(SparqlBlocks.Msg.EXISTS_TOOLTIP);
     }
   });
 
@@ -276,7 +276,7 @@ goog.require('SparqlBlocks.Blocks');
       this.appendStatementInput("OP")
           .setCheck("TriplesBlock")
           .appendField("not exists");
-      this.setTooltip('');
+      this.setTooltip(SparqlBlocks.Msg.NOT_EXISTS_TOOLTIP);
     }
   });
 
