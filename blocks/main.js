@@ -193,18 +193,6 @@ goog.require('SparqlBlocks.Blocks');
     }
   });
 
-  // // https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#k5jv58
-  // SparqlBlocks.Blocks.block('sparql_variable', {
-  //   init: function() {
-  //     this.setHelpUrl('http://www.example.com/');
-  //     this.setColour(65);
-  //     this.appendDummyInput()
-  //         .appendField(new Blockly.FieldVariable("var"), "VARNAME");
-  //     this.setOutput(true, "var");
-  //     this.setTooltip('');
-  //   }
-  // });
-
   // https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#8nt67n
   SparqlBlocks.Blocks.block('sparql_var_binding', {
     init: function() {
