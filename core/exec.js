@@ -22,7 +22,6 @@
 
 goog.provide('SparqlBlocks.Exec');
 
-goog.require('SparqlBlocks.Output');
 goog.require('SparqlBlocks.Sparql');
 
 SparqlBlocks.Exec = ( function() {
@@ -81,17 +80,21 @@ SparqlBlocks.Exec = ( function() {
 
   var DESCR_LENGTH = 40;
 
-  var sparqlExecAndPublish_ = function(endpointUrl, query, workspace, connection, callback) {
+  var RESULT_EMPTY_QUERY = "";
+  var RESULT_IN_PROGRESS = "execution in progress...";
 
-    var progressBlock = Blockly.Block.obtain(workspace, 'sparql_execution_in_progress');
-    progressBlock.initSvg();
-    connect_(connection, progressBlock);
+  var setResult_ = function(resultsInput, resultField) {
+    resultsInput.removeField("RESULTS_CONTAINER");
+    resultsInput.appendField(resultField, "RESULTS_CONTAINER");
+  };
+
+  var sparqlExecAndPublish_ = function(endpointUrl, query, workspace, resultsInput, callback) {
+
+    setResult_(resultsInput, RESULT_IN_PROGRESS);
 
     return sparqlExec_(endpointUrl, query, function(err, data) {
-      var resultBlock = null;
+      var resultField = null;
       if (err) {
-        resultBlock = Blockly.Block.obtain(workspace, 'sparql_execution_error');
-        resultBlock.initSvg();
         var errorType = (err.textStatus) ? err.textStatus : "unknown problem";
         if (err.jqXHR.status) {
           errorType += " " + err.jqXHR.status;
@@ -99,7 +102,6 @@ SparqlBlocks.Exec = ( function() {
         if (err.jqXHR.statusText) {
           errorType += ": " + err.jqXHR.statusText;
         }
-        resultBlock.setFieldValue(errorType, 'ERRORTYPE');
         var errorDescr = err.jqXHR.responseText;
         if (errorDescr) {
           var errorDescrShort = null;
@@ -109,12 +111,16 @@ SparqlBlocks.Exec = ( function() {
             errorDescrShort = errorDescr;
           }
           resultBlock.setFieldValue(errorDescrShort, 'ERRORDESCR');
-          resultBlock.setTooltip(errorDescr);
+          resultField = new Blockly.FieldTextInput(errorDescrShort);
+          resultField.setEditable(false);
+          resultField.setTooltip(errorDescr);
+        } else {
+          resultField = "Connection Error!"
         }
       } else {
-        resultBlock = SparqlBlocks.Output.blocksFromSelectResults(workspace, data);
+        resultField = new SparqlBlocks.FieldTable(data);
       }
-      connect_(connection, resultBlock);
+      setResult_(resultsInput, resultField);
       callback(data);
     });
   }
@@ -122,8 +128,6 @@ SparqlBlocks.Exec = ( function() {
   var blockExec_ = function(block) {
     var resultsHolder = block.getInput('RESULTS');
     if (!resultsHolder) return;
-    var resultsConnection = resultsHolder.connection;
-    if (!resultsConnection) return;
     var endpointUri_txt = block.getFieldValue('ENDPOINT');
     var endpointUri = endpointUri_txt ? encodeURI(endpointUri_txt) : null;
     var queryStr = SparqlBlocks.Sparql.valueToCode(
@@ -141,7 +145,8 @@ SparqlBlocks.Exec = ( function() {
         block.resultsData = null;
         block.queryReq = SparqlBlocks.Exec.sparqlExecAndPublish(
             endpointUri, queryStr,
-            block.workspace, resultsConnection,
+            block.workspace,
+            resultsHolder,
             function(data) {
               block.queryReq = null;
               block.resultsData = data;
@@ -149,7 +154,7 @@ SparqlBlocks.Exec = ( function() {
       } else {
         console.log('Empty query');
         block.resultsData = null;
-        unconnect_(resultsConnection);
+        setResult_(resultsHolder, RESULT_EMPTY_QUERY);
         block.queryReq = null;
       }
 

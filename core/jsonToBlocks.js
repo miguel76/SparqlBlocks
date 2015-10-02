@@ -14,16 +14,15 @@
  */
 
 /**
- * @fileoverview SparqlBlocks queries output generation.
+ * @fileoverview SparqlBlocks - transformation from json result formats to blocks
  * @author miguel.ceriani@gmail.com (Miguel Ceriani)
  */
 'use strict';
 
-goog.provide('SparqlBlocks.Output');
+goog.provide('SparqlBlocks.JsonToBlocks');
 goog.require('SparqlBlocks.Prefixes');
-goog.require('SparqlBlocks.Tooltip');
 
-SparqlBlocks.Output = (function() {
+SparqlBlocks.JsonToBlocks = (function() {
 
   var xsd_map_ = {};
   var xsd_ = function(localName) {
@@ -133,7 +132,7 @@ SparqlBlocks.Output = (function() {
     return prefBlock;
   }
 
-  var blockFromValue_ = function(value, workspace, connection) {
+  var blockFromValue_ = function(value, workspace) {
     var valueBlock = null;
     if (value) {
       switch(value.type) {
@@ -149,6 +148,29 @@ SparqlBlocks.Output = (function() {
       }
       // containerBlock.getInput('VALUE').connection;
     }
+    return valueBlock;
+  };
+
+  var blockFromVar_ = function(varName, workspace) {
+    var varBlock = Blockly.Block.obtain(workspace, 'variables_get');
+    varBlock.initSvg();
+    varBlock.setFieldValue(varName, 'VAR');
+    return varBlock;
+  };
+
+  var selfDuplicatingBlockFromValue_ = function(value, workspace) {
+    var valueBlock = blockFromValue_(value, workspace);
+    setAsSelfDuplicating_(valueBlock, workspace);
+    return valueBlock;
+  };
+
+  var selfDuplicatingBlockFromVar_ = function(varName, workspace) {
+    var varBlock = blockFromVar_(varName, workspace);
+    setAsSelfDuplicating_(varBlock, workspace);
+    return varBlock;
+  };
+
+  var setAsSelfDuplicating_ = function(valueBlock, workspace) {
     if (valueBlock) {
       valueBlock.setDeletable(false);
       valueBlock.setMovable(false);
@@ -157,7 +179,6 @@ SparqlBlocks.Output = (function() {
       valueBlock.tooltip = "tooltip";
       valueBlock.tooltipHoverMs = 1;
       valueBlock.showTooltip = function() {
-        console.log("I would like to dup me!");
         var xmlBlock = Blockly.Xml.blockToDom_(valueBlock);
         xmlBlock.removeAttribute("editable");
         xmlBlock.removeAttribute("movable");
@@ -165,9 +186,7 @@ SparqlBlocks.Output = (function() {
         duplicateBlock = Blockly.Xml.domToBlock(workspace, xmlBlock);
         duplicateBlock.isInFlyout = true;
         duplicateBlock.hideTooltip = function() {
-          console.log("Is there a dup to delete?");
           if (duplicateBlock) {
-            console.log("Yes, delete me the dup!");
             duplicateBlock.dispose();
           }
         };
@@ -197,93 +216,18 @@ SparqlBlocks.Output = (function() {
         duplicateBlock.select();
       };
       valueBlock.hideTooltip = function() {
-        console.log("Is there something to delete?");
         if (duplicateBlock) {
-          console.log("Yes, delete me!");
           duplicateBlock.dispose();
         }
       };
-      connection.connect(valueBlock.outputConnection);
-      valueBlock.render();
     }
   };
 
-  var blocksFromHeaderVar_ = function(varName, workspace, connection) {
-    var colBlock = Blockly.Block.obtain(workspace, 'sparql_column');
-    colBlock.initSvg();
-    connection.connect(colBlock.outputConnection);
-    colBlock.render();
-    return colBlock;
-  }
-
-  var containerBlockFromValue_ = function(value, workspace, connection) {
-    var containerBlock = Blockly.Block.obtain(workspace, 'sparql_value_container');
-    containerBlock.initSvg();
-    connection.connect(containerBlock.previousConnection);
-    containerBlock.render();
-    var innerConnection = containerBlock.getInput('VALUE').connection;
-    blockFromValue_(value, workspace, innerConnection);
-    return containerBlock;
-  }
-
-  var colBlockFromVar_ = function(varName, values, workspace, connection) {
-    var colBlock = Blockly.Block.obtain(workspace, 'sparql_column');
-    colBlock.initSvg();
-    colBlock.setFieldValue(varName, 'COLNAME');
-    connection.connect(colBlock.outputConnection);
-    colBlock.render();
-    var currConnection = colBlock.getInput('VALUES').connection;
-    values.forEach( function(value) {
-      var contBlock = containerBlockFromValue_(value, workspace, currConnection);
-      currConnection = contBlock.nextConnection;
-    });
-    return colBlock;
-  }
-
-  var blocksFromSelectResults_ = function(workspace, data) {
-    console.log('data: ' + JSON.stringify(data));
-    var tableBlock = Blockly.Block.obtain(workspace, 'sparql_table');
-    tableBlock.initSvg();
-    var headerVars = data.head.vars;
-    var bindings = data.results.bindings;
-    var colNum = headerVars.length;
-    for (var colIndex = 0; colIndex < colNum; colIndex++) {
-      tableBlock
-          .appendValueInput('COL' + (colIndex + 1))
-          .setCheck('Column');
-      var colConnection = tableBlock.getInput('COL' + (colIndex + 1)).connection;
-      var varName = headerVars[colIndex];
-      var column = colBlockFromVar_(
-        varName,
-        bindings.map( function(binding) { return binding[varName]; } ),
-        workspace, colConnection );
-    }
-    tableBlock.colCount_ = colNum;
-    tableBlock.resultsData = data;
-    return tableBlock;
-  }
-
-  var fillTableFromSelectResults_ = function(table, data) {
-
-    // get the sparql variables from the 'head' of the data.
-    var headerVars = data.head.vars;
-
-    // using the vars, make some table headers and add them to the table;
-    var trHeaders = getTableHeaders(headerVars);
-    table.append(trHeaders);
-
-    // grab the actual results from the data.
-    var bindings = data.results.bindings;
-
-    // for each result, make a table row and add it to the table.
-    for(rowIdx in bindings){
-      table.append(getTableRow(headerVars, bindings[rowIdx]));
-    }
-
-  }
-
   return {
-    blocksFromSelectResults: blocksFromSelectResults_
+    blockFromValue: blockFromValue_,
+    blockFromVar: blockFromVar_,
+    selfDuplicatingBlockFromValue: selfDuplicatingBlockFromValue_,
+    selfDuplicatingBlockFromVar: selfDuplicatingBlockFromVar_
   }
 
 })();

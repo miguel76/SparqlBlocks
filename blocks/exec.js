@@ -47,13 +47,16 @@ goog.require('SparqlBlocks.Blocks');
         this.appendStatementInput("QUERY")
             .setCheck("Select")
             .appendField(" ⚙");
-        this.appendStatementInput("RESULTS")
-            .setCheck("Table")
-            .appendField("↪");
+        this.appendDummyInput("RESULTS")
+            .appendField("↪")
+            .appendField("", "RESULTS_CONTAINER");
+
         this.setTooltip(SparqlBlocks.Msg.EXECUTION_TOOLTIP);
       },
       onchange: function() {
-        SparqlBlocks.Exec.blockExec(this);
+        if (!options || !options.dontExecute) {
+          SparqlBlocks.Exec.blockExec(this);
+        }
       },
       customContextMenu: function(options) {
         if (this.sparqlQueryStr) {
@@ -86,8 +89,15 @@ goog.require('SparqlBlocks.Blocks');
     };
   }
 
-  SparqlBlocks.Blocks.block('sparql_execution', execBlock());
-  SparqlBlocks.Blocks.block('sparql_execution_endpoint', execBlock({endpointField: true}));
+  SparqlBlocks.Blocks.block(
+      'sparql_execution',
+      execBlock());
+  SparqlBlocks.Blocks.block(
+      'sparql_execution_endpoint',
+      execBlock({endpointField: true}));
+  SparqlBlocks.Blocks.block(
+      'sparql_execution_endpoint_fake',
+      execBlock({endpointField: true, dontExecute: true}));
 
   SparqlBlocks.Blocks.block('sparql_execution_in_progress', {
     init: function() {

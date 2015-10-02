@@ -26,12 +26,13 @@ goog.provide('SparqlBlocks');
 // SparqlBlocks core dependencies.
 // goog.require('Blockly');
 goog.require('SparqlBlocks.Exec');
-goog.require('SparqlBlocks.Output');
 goog.require('SparqlBlocks.Prefixes');
 goog.require('SparqlBlocks.Tooltip');
 goog.require('SparqlBlocks.Types');
 goog.require('SparqlBlocks.Storage');
 goog.require('SparqlBlocks.Msg');
+goog.require('SparqlBlocks.FieldTable');
+goog.require('SparqlBlocks.JsonToBlocks');
 
 goog.require('SparqlBlocks.Blocks');
 goog.require('SparqlBlocks.Blocks.bgp');
@@ -42,7 +43,6 @@ goog.require('SparqlBlocks.Blocks.main');
 goog.require('SparqlBlocks.Blocks.math');
 goog.require('SparqlBlocks.Blocks.tabular');
 goog.require('SparqlBlocks.Blocks.text');
-goog.require('SparqlBlocks.Blocks.tuple');
 goog.require('SparqlBlocks.Blocks.variables');
 
 goog.require('SparqlBlocks.Sparql.bgp');
