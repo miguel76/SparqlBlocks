@@ -69,6 +69,20 @@ goog.require('SparqlBlocks.Blocks');
               saveAs(outputBlob, "query.rq" );
             }
           });
+          SparqlBlocks.Blocks.insertOptionBeforeHelp(options, {
+            text: "Open Query in YASGUI",
+            enabled: true,
+            callback: function() {
+              var endpointUri_txt = thisBlock.getFieldValue('ENDPOINT');
+              var yasguiUrl =
+                  "http://yasgui.org/#query=" +
+                  encodeURIComponent(thisBlock.sparqlQueryStr) +
+                  (endpointUri_txt?
+                    "&endpoint=" + encodeURIComponent(endpointUri_txt):
+                    "");
+              window.open(yasguiUrl,'_blank');
+            }
+          });
         }
         if (this.resultsData) {
           var thisBlock = this;
