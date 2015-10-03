@@ -23,10 +23,10 @@
 goog.provide('SparqlBlocks.FieldTable');
 
 goog.require('SparqlBlocks.JsonToBlocks');
-goog.require('Blockly.Field');
-goog.require('Blockly.Tooltip');
-goog.require('goog.dom');
-goog.require('goog.math.Size');
+// goog.require('Blockly.Field');
+// goog.require('Blockly.Tooltip');
+// goog.require('goog.dom');
+// goog.require('goog.math.Size');
 
 
 /**
