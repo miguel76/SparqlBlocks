@@ -45,7 +45,7 @@ goog.require('SparqlBlocks.Blocks');
               .appendField(new Blockly.FieldTextInput(defaultEndpoint), "ENDPOINT");
         }
         this.appendStatementInput("QUERY")
-            .setCheck("Select")
+            .setCheck(typeExt("SelectQuery"))
             .appendField(" ⚙");
         this.appendDummyInput("RESULTS")
             .appendField("↪")

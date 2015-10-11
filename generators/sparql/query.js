@@ -19,34 +19,24 @@
  */
 'use strict';
 
-goog.provide('SparqlBlocks.Sparql.main');
+goog.provide('SparqlBlocks.Sparql.query');
 
 goog.require('SparqlBlocks.Sparql');
 
 ( function() {
 
-  var VIRTUOSO_PATCH = true;
-
-  var localNameEsc = function(localName) {
-    return localName.split('').map( function(c) {
-      return _.contains(
-        [ '_', '~', '.', '-', '!', '$' , '&', "'", '(', ')', '\\', '*', '+', ',', ';', '=', '/', '?', '#', '@', '%' ],
-        c) ? '\\' + c : c;
-    }).join('');
-  }
-
-  SparqlBlocks.Sparql['sparql_select'] = function(block) {
-    var statements_where =
-        SparqlBlocks.Sparql.stmJoin(
-            SparqlBlocks.Sparql.statementToCode(block, 'WHERE'),
-            '.\n');
+  SparqlBlocks.Sparql.sparqlQuery = function(block) {
+    if (!block) {
+      return '';
+    }
+    var statements_where = SparqlBlocks.Sparql.statementToGraphPattern(block, 'WHERE');
     var text_limit = block.getFieldValue('LIMIT');
     var code = 'SELECT DISTINCT * WHERE {\n' + statements_where + '\n}';
     var orderByCode = null;
     for (var i = 1; i <= block.orderFieldCount_; i++) {
       var text_order =
           SparqlBlocks.Sparql.valueToCode(
-              this, 'ORDER_FIELD' + i,
+              block, 'ORDER_FIELD' + i,
               SparqlBlocks.Sparql.ORDER_NONE);
       if (text_order) {
         var text_orderDir = block.getFieldValue('ORDER_DIRECTION' + i);
@@ -89,35 +79,16 @@ goog.require('SparqlBlocks.Sparql');
       code = prefixDeclaration + '\n' + code;
     }
 
-    return [code, SparqlBlocks.Sparql.ORDER_ATOMIC];
-  };
+    return code; // [code, SparqlBlocks.Sparql.ORDER_ATOMIC];
+  }
 
-  SparqlBlocks.Sparql['sparql_prefixed_iri'] = function(block) {
-    var text_prefix = block.getFieldValue('PREFIX');
-    var text_local_name = block.getFieldValue('LOCAL_NAME');
-    var code = null;
-    if (VIRTUOSO_PATCH) {
-      var extension = SparqlBlocks.Prefixes.lookForPrefix(text_prefix);
-      if (extension) {
-        code = '<' + extension + text_local_name + '>';
-      }
-    }
-    if (!code) {
-      code = text_prefix + ':' + localNameEsc(text_local_name);
-    }
-    return [code, SparqlBlocks.Sparql.ORDER_ATOMIC];
-  };
-
-  SparqlBlocks.Sparql['sparql_iri'] = function(block) {
-    var text_iri = block.getFieldValue('IRI');
-    var code = '<' + text_iri + '>';
-    return [code, SparqlBlocks.Sparql.ORDER_ATOMIC];
-  };
-
-  SparqlBlocks.Sparql['variables_get'] = function(block) {
-    var text_var = block.getFieldValue('VAR');
-    var code = '?' + text_var;
-    return [code, SparqlBlocks.Sparql.ORDER_ATOMIC];
+  SparqlBlocks.Sparql['sparql_select'] = function(block) {
+    var query = SparqlBlocks.Sparql.sparqlQuery(block);
+    return query ?
+          '{\n' +
+            SparqlBlocks.Sparql.prefixLines(query, SparqlBlocks.Sparql.INDENT) +
+            '\n}' + SparqlBlocks.Sparql.STMNT_BRK :
+          '';
   };
 
 }) ();

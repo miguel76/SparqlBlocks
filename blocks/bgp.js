@@ -171,8 +171,8 @@ goog.require('SparqlBlocks.Blocks');
           .setCheck("PropertyList")
           .appendField("  ⌊");
       this.setInputsInline(true);
-      this.setPreviousStatement(true, "TriplesBlock");
-      this.setNextStatement(true, "TriplesBlock");
+      this.setPreviousStatement(true, typeExt("TriplesBlock"));
+      this.setNextStatement(true, typeExt("GraphPattern"));
       this.setTooltip('');
     }
   });
@@ -191,8 +191,8 @@ goog.require('SparqlBlocks.Blocks');
   //        .appendField("  ⌊");
           .appendField("  &");
       this.setInputsInline(true);
-      this.setPreviousStatement(true, "TriplesBlock");
-      this.setNextStatement(true, "TriplesBlock");
+      this.setPreviousStatement(true, typeExt("TriplesBlock"));
+      this.setNextStatement(true, typeExt("GraphPattern"));
       this.setTooltip(SparqlBlocks.Msg.TYPEDSUBJECT_PROPERTYLIST_TOOLTIP);
     }
   });
@@ -228,8 +228,8 @@ goog.require('SparqlBlocks.Blocks');
           .appendField("↳");
   //        .appendField("               ↳");
       this.setInputsInline(true);
-      this.setPreviousStatement(true, "TriplesBlock");
-      this.setNextStatement(true, "TriplesBlock");
+      this.setPreviousStatement(true, typeExt("TriplesBlock"));
+      this.setNextStatement(true, typeExt("GraphPattern"));
       this.setTooltip('');
     }
   });
@@ -249,8 +249,8 @@ goog.require('SparqlBlocks.Blocks');
           .appendField("→");
           // .appendField("]→ ");
       this.setInputsInline(true);
-      this.setPreviousStatement(true, "TriplesBlock");
-      this.setNextStatement(true, "TriplesBlock");
+      this.setPreviousStatement(true, typeExt("TriplesBlock"));
+      this.setNextStatement(true, typeExt("GraphPattern"));
       this.setTooltip('');
     }
   });

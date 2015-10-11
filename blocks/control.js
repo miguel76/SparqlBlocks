@@ -40,8 +40,8 @@ goog.require('SparqlBlocks.Blocks');
           .setCheck(typeExt("BooleanExpr"))
           .appendField("provided that");
       this.setInputsInline(true);
-      this.setPreviousStatement(true, "TriplesBlock");
-      this.setNextStatement(true, "TriplesBlock");
+      this.setPreviousStatement(true, typeExt("GraphPattern"));
+      this.setNextStatement(true, typeExt("GraphPattern"));
       this.setTooltip(SparqlBlocks.Msg.FILTER_TOOLTIP);
     }
   });
@@ -52,14 +52,14 @@ goog.require('SparqlBlocks.Blocks');
       this.setHelpUrl('http://www.w3.org/TR/sparql11-query/#alternatives');
       this.setColour(260);
       this.appendStatementInput("OP1")
-          .setCheck("TriplesBlock");
+          .setCheck(typeExt("GraphPattern"));
           // .appendField("this");
       this.appendStatementInput("OP2")
-          .setCheck("TriplesBlock")
+          .setCheck(typeExt("GraphPattern"))
           .appendField("or");
       this.setInputsInline(true);
-      this.setPreviousStatement(true, "TriplesBlock");
-      this.setNextStatement(true, "TriplesBlock");
+      this.setPreviousStatement(true, typeExt("GraphPattern"));
+      this.setNextStatement(true, typeExt("GraphPattern"));
       this.setTooltip(SparqlBlocks.Msg.UNION_TOOLTIP);
     }
   });
@@ -69,11 +69,11 @@ goog.require('SparqlBlocks.Blocks');
       this.setHelpUrl('http://www.w3.org/TR/sparql11-query/#optionals');
       this.setColour(260);
       this.appendStatementInput("OP")
-          .setCheck("TriplesBlock")
+          .setCheck(typeExt("GraphPattern"))
           .appendField("optionally");
       this.setInputsInline(true);
-      this.setPreviousStatement(true, "TriplesBlock");
-      this.setNextStatement(true, "TriplesBlock");
+      this.setPreviousStatement(true, typeExt("GraphPattern"));
+      this.setNextStatement(true, typeExt("GraphPattern"));
       this.setTooltip(SparqlBlocks.Msg.OPTIONAL_TOOLTIP);
     }
   });

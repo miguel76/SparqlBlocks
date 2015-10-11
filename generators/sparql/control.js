@@ -37,14 +37,8 @@ goog.require('SparqlBlocks.Sparql');
   };
 
   SparqlBlocks.Sparql['sparql_union'] = function(block) {
-    var statements_op1 =
-        SparqlBlocks.Sparql.stmJoin(
-            SparqlBlocks.Sparql.statementToCode(block, 'OP1'),
-            '.\n');
-    var statements_op2 =
-        SparqlBlocks.Sparql.stmJoin(
-            SparqlBlocks.Sparql.statementToCode(block, 'OP2'),
-            '.\n');
+    var statements_op1 = SparqlBlocks.Sparql.statementToGraphPattern(block, 'OP1');
+    var statements_op2 = SparqlBlocks.Sparql.statementToGraphPattern(block, 'OP2');
     return (statements_op1 == '') ?
               ( (statements_op2 == '') ?
                     '' :
@@ -56,10 +50,7 @@ goog.require('SparqlBlocks.Sparql');
   };
 
   SparqlBlocks.Sparql['sparql_optional'] = function(block) {
-    var statements_op =
-        SparqlBlocks.Sparql.stmJoin(
-            SparqlBlocks.Sparql.statementToCode(block, 'OP'),
-            '.\n');
+    var statements_op = SparqlBlocks.Sparql.statementToGraphPattern(block, 'OP');
     return (statements_op == '') ?
               '' :
               'OPTIONAL {\n' + statements_op + '\n}' + SparqlBlocks.Sparql.STMNT_BRK;

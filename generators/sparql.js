@@ -48,6 +48,19 @@ SparqlBlocks.Sparql.stmJoin = function(statements, joinStr) {
   return stmntArray.join(joinStr);
 }
 
+SparqlBlocks.Sparql.statementToGraphPattern = function(block, inputName) {
+  // var stmntArray =
+  //     SparqlBlocks.Sparql.statementToCode(block, inputName)
+  //         .split(SparqlBlocks.Sparql.STMNT_BRK_RE);
+  // stmntArray.pop();
+  // return stmntArray.map(function() {
+  //
+  // }).join('.\n');
+  return SparqlBlocks.Sparql.stmJoin(
+          SparqlBlocks.Sparql.statementToCode(block, inputName),
+          '.\n');
+}
+
 /**
  * Order of operation ENUMs.
  * https://developer.mozilla.org/en/Sparql/Reference/Operators/Operator_Precedence

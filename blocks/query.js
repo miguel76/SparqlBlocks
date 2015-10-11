@@ -15,12 +15,12 @@
  */
 
 /**
- * @fileoverview Main blocks for SPARQL queries
+ * @fileoverview Query blocks for SPARQL queries
  * @author miguel.ceriani@gmail.com (Miguel Ceriani)
  */
 'use strict';
 
-goog.provide('SparqlBlocks.Blocks.main');
+goog.provide('SparqlBlocks.Blocks.query');
 
 // goog.require('Blockly.Blocks');
 goog.require('SparqlBlocks.Blocks');
@@ -64,7 +64,7 @@ goog.require('SparqlBlocks.Blocks');
           .appendField("select all the variables");
 
       this.appendStatementInput("WHERE")
-          .setCheck("TriplesBlock")
+          .setCheck(typeExt("GraphPattern"))
           .appendField("where");
 
       this.orderFieldCount_ = 1;
@@ -83,7 +83,7 @@ goog.require('SparqlBlocks.Blocks');
 
       // this.setOutput(true, "Select");
       this.setInputsInline(true);
-      this.setPreviousStatement(true, "Select");
+      this.setPreviousStatement(true, typeExt("SelectQuery"));
       this.setTooltip(SparqlBlocks.Msg.SELECT_TOOLTIP);
     },
     saveQueryAsSparql: function() {
@@ -104,6 +104,31 @@ goog.require('SparqlBlocks.Blocks');
       });
     },
     onchange: function() {
+      // If it is a subquery, add next statement connection
+      var prevTargetConnection = this.previousConnection.targetConnection;
+      if (prevTargetConnection) {
+        var check = prevTargetConnection.check_;
+        if (check && check.indexOf("GraphPattern") != -1) {
+          if (!this.nextConnection) {
+            this.setNextStatement(true, typeExt("GraphPattern"));
+          }
+        } else {
+          if (this.nextConnection) {
+            this.setNextStatement(false);
+          }
+        }
+      } else {
+        if (this.nextConnection) {
+          if (!this.nextConnection.targetConnection) {
+            this.setNextStatement(false);
+            this.setPreviousStatement(true, "SelectQuery");
+          } else {
+            this.setPreviousStatement(true, "GraphPattern");
+          }
+        }
+      }
+
+      // Dynamically add or remove order fields as needed
       var lastOrderInput = this.getInput('ORDER_FIELD' + this.orderFieldCount_);
       var lastOrderConnection = lastOrderInput && lastOrderInput.connection.targetConnection;
       if (lastOrderConnection) { // last order item is connected
@@ -207,36 +232,6 @@ goog.require('SparqlBlocks.Blocks');
       this.setPreviousStatement(true, "VarBindings");
       this.setNextStatement(true, "VarBindings");
       this.setTooltip('');
-    }
-  });
-
-  // https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#6ttvtd
-  SparqlBlocks.Blocks.block('sparql_prefixed_iri', {
-    init: function() {
-      this.setHelpUrl('http://www.w3.org/TR/sparql11-query/#prefNames');
-      this.setColour(20);
-      this.appendDummyInput()
-          .appendField(new Blockly.FieldTextInput("prefix"), "PREFIX")
-          .appendField(":")
-          .appendField(new Blockly.FieldTextInput("localName"), "LOCAL_NAME");
-      this.setInputsInline(true);
-      this.setOutput(true, "Iri");
-      this.setTooltip(SparqlBlocks.Msg.PREFIXED_IRI_TOOLTIP);
-    }
-  });
-
-  // https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#6ttvtd
-  SparqlBlocks.Blocks.block('sparql_iri', {
-    init: function() {
-      this.setHelpUrl('http://www.w3.org/TR/sparql11-query/#QSynIRI');
-      this.setColour(20);
-      this.appendDummyInput()
-          .appendField("<")
-          .appendField(new Blockly.FieldTextInput("iri"), "IRI")
-          .appendField(">");
-      this.setInputsInline(true);
-      this.setOutput(true, "Iri");
-      this.setTooltip(SparqlBlocks.Msg.IRI_TOOLTIP);
     }
   });
 

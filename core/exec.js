@@ -110,9 +110,8 @@ SparqlBlocks.Exec = ( function() {
           } else {
             errorDescrShort = errorDescr;
           }
-          resultBlock.setFieldValue(errorDescrShort, 'ERRORDESCR');
           resultField = new Blockly.FieldTextInput(errorDescrShort);
-          resultField.setEditable(false);
+          // resultField.setEditable(false);
           resultField.setTooltip(errorDescr);
         } else {
           resultField = "Connection Error!"
@@ -130,10 +129,12 @@ SparqlBlocks.Exec = ( function() {
     if (!resultsHolder) return;
     var endpointUri_txt = block.getFieldValue('ENDPOINT');
     var endpointUri = endpointUri_txt ? encodeURI(endpointUri_txt) : null;
-    var queryStr = SparqlBlocks.Sparql.valueToCode(
-      block,
-      'QUERY',
-      SparqlBlocks.Sparql.ORDER_NONE);
+    // var queryStr = SparqlBlocks.Sparql.valueToCode(
+    //   block,
+    //   'QUERY',
+    //   SparqlBlocks.Sparql.ORDER_NONE);
+    var queryBlock = block.getInputTargetBlock('QUERY');
+    var queryStr = SparqlBlocks.Sparql.sparqlQuery(queryBlock);
     if (endpointUri != block.endpointUri || queryStr != block.sparqlQueryStr) {
       block.endpointUri = endpointUri;
       block.sparqlQueryStr = queryStr;

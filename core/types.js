@@ -59,8 +59,13 @@ SparqlBlocks.Types = (function() {
   };
 
   //setType("Anything",[]);
-  setType("TriplesBlock", {});
+  setType("GraphPattern", {});
+  setType("TriplesBlock", { parents: ["GraphPattern"] });
+  // Inheritance commented waiting to solve ui problems
+  setType("SelectQuery", { /* parents: ["GraphPattern"] */ });
+  setType("Bind", { parents: ["GraphPattern"] });
   setType("PropertyList", {});
+
   setType("Expr", {});
   setType("GraphTermOrVar", { parents: ["Expr"] });
   setType("Verb", {});

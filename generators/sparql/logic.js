@@ -101,4 +101,18 @@ goog.require('SparqlBlocks.Sparql');
     return [code, SparqlBlocks.Sparql.ORDER_FUNCTION_CALL];
   };
 
+  SparqlBlocks.Sparql['sparql_exists'] = function(block) {
+    var statements_op = SparqlBlocks.Sparql.statementToGraphPattern(block, 'OP');
+    return [ ( (statements_op == '') ?
+                  'true' :
+                  'EXISTS {\n' + statements_op + '\n}'), SparqlBlocks.Sparql.ORDER_FUNCTION_CALL];
+  };
+
+  SparqlBlocks.Sparql['sparql_not_exists'] = function(block) {
+    var statements_op = SparqlBlocks.Sparql.statementToGraphPattern(block, 'OP');
+    return [ ( (statements_op == '') ?
+                  'true' :
+                  'NOT EXISTS {\n' + statements_op + '\n}'), SparqlBlocks.Sparql.ORDER_FUNCTION_CALL];
+  };
+
 }) ();
