@@ -451,8 +451,34 @@ goog.require('SparqlBlocks.Blocks');
       this.setHelpUrl("http://www.w3.org/TR/sparql11-query/#func-contains");
       this.setColour(SparqlBlocks.Blocks.text.HUE);
       this.setOutput(true, 'BooleanExpr');
-      this.appendValueInput('FIND')
+      // this.appendValueInput('FIND')
+      //     .setCheck(typeExt('StringExpr'));
+      // this.appendValueInput('VALUE')
+      //     .setCheck(typeExt('StringExpr'))
+      //     .appendField('is contained in');
+      this.appendValueInput('VALUE')
           .setCheck(typeExt('StringExpr'));
+          // .appendField('contains');
+      this.appendValueInput('FIND')
+          .setCheck(typeExt('StringExpr'))
+          .appendField('contains');
+      this.setInputsInline(true);
+      this.setTooltip('');
+    }
+  });
+
+  SparqlBlocks.Blocks.block('sparql_text_regex', {
+    /**
+     * Block for finding a regular expression in the text.
+     * @this Blockly.Block
+     */
+    init: function() {
+      this.setHelpUrl("http://www.w3.org/TR/sparql11-query/#func-regex");
+      this.setColour(SparqlBlocks.Blocks.text.HUE);
+      this.setOutput(true, 'BooleanExpr');
+      this.appendValueInput('FIND')
+          .setCheck(typeExt('StringExpr'))
+          .appendField('reg. exp.');
       this.appendValueInput('VALUE')
           .setCheck(typeExt('StringExpr'))
           .appendField('is contained in');
@@ -711,5 +737,29 @@ goog.require('SparqlBlocks.Blocks');
       this.setTooltip(Blockly.Msg.TEXT_TRIM_TOOLTIP);
     }
   });
+
+  SparqlBlocks.Blocks.block('sparql_hash', {
+    /**
+     * Block for changing capitalization.
+     * @this Blockly.Block
+     */
+    init: function() {
+      var TYPES =
+          [['MD5', 'MD5'],
+           ['SHA1', 'SHA1'],
+           ['SHA256', 'SHA256'],
+           ['SHA384', 'SHA384'],
+           ['SHA512', 'SHA512']];
+      this.setHelpUrl('http://www.w3.org/TR/sparql11-query/#func-hash');
+      this.setColour(SparqlBlocks.Blocks.text.HUE);
+      this.appendValueInput('TEXT')
+          .setCheck(typeExt('StringExprOrLiteral'))
+          .appendField(new Blockly.FieldDropdown(TYPES), 'TYPE')
+          .appendField('hash of');;
+      this.setOutput(true, 'StringExpr');
+      // this.setTooltip(SparqlBlocks.Msg.HASH_TOOLTIP);
+    }
+  });
+
 
 }) ();

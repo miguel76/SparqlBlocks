@@ -27,5 +27,6 @@
 	"MATH_NUMBER_TOOLTIP": "A numeric literal.",
 	"TABLE_TOOLTIP": "Table of query results. You can use the result values as blocks in queries!",
 	"LOGIC_BOOLEAN_TOOLTIP": "A boolean literal.",
-	"EXECUTION_IN_PROGRESS_TOOLTIP": "The server is taking a while. You can still build and launch queries in the meanwhile..."
+	"EXECUTION_IN_PROGRESS_TOOLTIP": "The server is taking a while. You can still build and launch queries in the meanwhile...",
+	"HASH_TOOLTIP": "Apply a hash function"
 }

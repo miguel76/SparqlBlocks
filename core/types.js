@@ -67,10 +67,11 @@ SparqlBlocks.Types = (function() {
   setType("PropertyList", {});
 
   setType("Expr", {});
+  setType("StringExprOrLiteral", { parents: ["Expr"] });
   setType("GraphTermOrVar", { parents: ["Expr"] });
   setType("Verb", {});
   setType("ResourceOrVar", { parents: ["GraphTermOrVar","Verb"] });
-  setType("StringExpr", { parents: ["Expr"], aliases: ["String"] });
+  setType("StringExpr", { parents: ["StringExprOrLiteral"], aliases: ["String"] });
   setType("NumberExpr", { parents: ["Expr"], aliases: ["Number"] });
   setType("BooleanExpr", { parents: ["Expr"], aliases: ["Boolean"] });
   setType("BnodeExpr", { parents: ["Expr"] });
@@ -81,7 +82,7 @@ SparqlBlocks.Types = (function() {
   setType("Resource", { parents: ["GraphTerm","ResourceOrVar" ] });
   setType("Bnode", { parents: ["Resource", "BnodeExpr" ] });
   setType("Iri", { parents: ["Resource", "IriExpr" ] });
-  setType("Literal", { parents: ["GraphTerm" ] });
+  setType("Literal", { parents: ["GraphTerm", "StringExprOrLiteral" ] });
   setType("LiteralString", { parents: ["Literal", "StringExpr" ] });
   setType("LiteralNumber", { parents: ["Literal", "NumberExpr" ] });
   setType("LiteralBoolean", { parents: ["Literal", "BooleanExpr" ] });

@@ -14,13 +14,12 @@
  */
 
 /**
- * @fileoverview SparqlBlocks queries output generation.
+ * @fileoverview Maintain a map of IRI prefixes loaded from JSON (prefix.cc)
  * @author miguel.ceriani@gmail.com (Miguel Ceriani)
  */
 'use strict';
 
 goog.provide('SparqlBlocks.Prefixes');
-// goog.require('goog.math.Coordinate');
 
 SparqlBlocks.Prefixes = (function() {
 

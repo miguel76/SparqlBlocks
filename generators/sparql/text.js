@@ -101,7 +101,18 @@ goog.require('SparqlBlocks.Sparql');
         SparqlBlocks.Sparql.ORDER_COMMA) || '\'\'';
     var argument1 = SparqlBlocks.Sparql.valueToCode(block, 'VALUE',
         SparqlBlocks.Sparql.ORDER_COMMA) || '\'\'';
-    var code = 'CONTAINS(' + argument1 + ', ' + argument0 + ')';
+    // var code = 'CONTAINS(' + argument1 + ', ' + argument0 + ')';
+    var code = 'REGEX(' + argument1 + ', ' + argument0 + ', "i")';
+    return [code, SparqlBlocks.Sparql.ORDER_FUNCTION_CALL];
+  };
+
+  SparqlBlocks.Sparql['sparql_text_regex'] = function(block) {
+    // Search the text for a substring.
+    var argument0 = SparqlBlocks.Sparql.valueToCode(block, 'FIND',
+        SparqlBlocks.Sparql.ORDER_COMMA) || '\'\'';
+    var argument1 = SparqlBlocks.Sparql.valueToCode(block, 'VALUE',
+        SparqlBlocks.Sparql.ORDER_COMMA) || '\'\'';
+    var code = 'REGEX(' + argument1 + ', ' + argument0 + ', "i")';
     return [code, SparqlBlocks.Sparql.ORDER_FUNCTION_CALL];
   };
 
@@ -245,5 +256,19 @@ goog.require('SparqlBlocks.Sparql');
   //       SparqlBlocks.Sparql.ORDER_MEMBER) || '\'\'';
   //   return [argument0 + operator, SparqlBlocks.Sparql.ORDER_FUNCTION_CALL];
   // };
+
+  SparqlBlocks.Sparql['sparql_hash'] = function(block) {
+    // Change capitalization.
+    var typeStr = block.getFieldValue('TYPE');
+    var functionName = typeStr; // At the moment the hash type is function name
+    var code;
+    if (functionName) {
+      var argument0 = SparqlBlocks.Sparql.valueToCode(block, 'TEXT',
+          SparqlBlocks.Sparql.ORDER_NONE) || '\'\'';
+      code = functionName + '(' + argument0 + ')';
+      return [code, SparqlBlocks.Sparql.ORDER_FUNCTION_CALL];
+    }
+    throw "Unknown hash function: " + typeStr;
+  };
 
 }) ();
