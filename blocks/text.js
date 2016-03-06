@@ -214,7 +214,7 @@ goog.require('SparqlBlocks.Blocks');
       containerBlock.initSvg();
       var connection = containerBlock.getInput('STACK').connection;
       for (var i = 0; i < this.itemCount_; i++) {
-        var itemBlock = Blockly.Block.obtain(workspace, 'sparql_text_create_join_item');
+        var itemBlock = workspace.newBlock('sparql_text_create_join_item');
         itemBlock.initSvg();
         connection.connect(itemBlock.previousConnection);
         connection = itemBlock.nextConnection;

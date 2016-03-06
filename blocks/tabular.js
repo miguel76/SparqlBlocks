@@ -107,11 +107,11 @@ goog.require('SparqlBlocks.Blocks');
      * @this Blockly.Block
      */
     decompose: function(workspace) {
-      var containerBlock = Blockly.Block.obtain(workspace, 'sparql_table_table');
+      var containerBlock = workspace.newBlock('sparql_table_table');
       containerBlock.initSvg();
       var connection = containerBlock.getInput('STACK').connection;
       for (var i = 1; i <= this.colCount_; i++) {
-        var colBlock = Blockly.Block.obtain(workspace, 'sparql_table_column');
+        var colBlock = workspace.newBlock('sparql_table_column');
         colBlock.initSvg();
         connection.connect(colBlock.previousConnection);
         connection = colBlock.nextConnection;

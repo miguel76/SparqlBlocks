@@ -26,7 +26,7 @@ goog.require('SparqlBlocks.JsonToBlocks');
 SparqlBlocks.Output = (function() {
 
   var blocksFromHeaderVar_ = function(varName, workspace, connection) {
-    var colBlock = Blockly.Block.obtain(workspace, 'sparql_column');
+    var colBlock = workspace.newBlock('sparql_column');
     colBlock.initSvg();
     connection.connect(colBlock.outputConnection);
     colBlock.render();
@@ -34,7 +34,7 @@ SparqlBlocks.Output = (function() {
   }
 
   var containerBlockFromValue_ = function(value, workspace, connection) {
-    var containerBlock = Blockly.Block.obtain(workspace, 'sparql_value_container');
+    var containerBlock = workspace.newBlock('sparql_value_container');
     containerBlock.initSvg();
     connection.connect(containerBlock.previousConnection);
     containerBlock.render();
@@ -47,7 +47,7 @@ SparqlBlocks.Output = (function() {
   }
 
   var colBlockFromVar_ = function(varName, values, workspace, connection) {
-    var colBlock = Blockly.Block.obtain(workspace, 'sparql_column');
+    var colBlock = workspace.newBlock('sparql_column');
     colBlock.initSvg();
     colBlock.setFieldValue(varName, 'COLNAME');
     connection.connect(colBlock.outputConnection);
@@ -62,7 +62,7 @@ SparqlBlocks.Output = (function() {
 
   var blocksFromSelectResults_ = function(workspace, data) {
     console.log('data: ' + JSON.stringify(data));
-    var tableBlock = Blockly.Block.obtain(workspace, 'sparql_table');
+    var tableBlock = workspace.newBlock('sparql_table');
     tableBlock.initSvg();
     var headerVars = data.head.vars;
     var bindings = data.results.bindings;

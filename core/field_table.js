@@ -32,16 +32,16 @@ goog.require('SparqlBlocks.JsonToBlocks');
 /**
  * Class for a tabular field.
  * @param {string} data The initial content of the field.
- * @param {Function=} opt_changeHandler An optional function that is called
+ * @param {Function=} opt_validator An optional function that is called
  *     to validate any constraints on what the user entered.  Takes the new
  *     text as an argument and returns either the accepted text, a replacement
  *     text, or null to abort the change.
  * @extends {SparqlBlocks.FieldTable}
  * @constructor
  */
-SparqlBlocks.FieldTable = function(data, opt_changeHandler) {
+SparqlBlocks.FieldTable = function(data, opt_validator) {
   SparqlBlocks.FieldTable.superClass_.constructor.call(this, '');
-  this.setChangeHandler(opt_changeHandler);
+  this.setValidator(opt_validator);
   // Set the initial state.
   // this.setValue(json);
   this.width_ = 0;
@@ -126,7 +126,8 @@ SparqlBlocks.FieldTable.prototype.init = function(block) {
 
   // Build the DOM.
   var offsetX = - 13;
-  var offsetY = - 15;
+  // var offsetY = - 15;
+  var offsetY = -4;
   this.rootElement_ = Blockly.createSvgElement(
       'g',
       { 'class': 'field_table' }, block.getSvgRoot()); //name, attrs, parent, opt_workspace

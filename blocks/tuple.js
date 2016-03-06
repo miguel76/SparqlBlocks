@@ -84,11 +84,11 @@ goog.provide('SparqlBlocks.Blocks.tuple');
      * @this Blockly.Block
      */
     decompose: function(workspace) {
-      var containerBlock = Blockly.Block.obtain(workspace, 'sparql_tuple_tuple');
+      var containerBlock = workspace.newBlock('sparql_tuple_tuple');
       containerBlock.initSvg();
       var connection = containerBlock.getInput('STACK').connection;
       for (var i = 1; i <= this.valCount_; i++) {
-        var valBlock = Blockly.Block.obtain(workspace, 'sparql_tuple_value');
+        var valBlock = workspace.newBlock('sparql_tuple_value');
         valBlock.initSvg();
         connection.connect(valBlock.previousConnection);
         connection = valBlock.nextConnection;

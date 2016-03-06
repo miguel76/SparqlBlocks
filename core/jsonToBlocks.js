@@ -53,25 +53,25 @@ SparqlBlocks.JsonToBlocks = (function() {
       case xsd_("nonNegativeInteger"): // Integer numbers ≥0
       case xsd_("negativeInteger"): // Integer numbers <0
       case xsd_("nonPositiveInteger"): // Integer numbers >0
-        typedBlock = Blockly.Block.obtain(workspace, 'sparql_math_number');
+        typedBlock = workspace.newBlock('sparql_math_number');
         typedBlock.initSvg();
         typedBlock.setFieldValue(value, 'NUM');
         break;
       case xsd_("boolean"):
-        typedBlock = Blockly.Block.obtain(workspace, 'sparql_logic_boolean');
+        typedBlock = workspace.newBlock('sparql_logic_boolean');
         typedBlock.initSvg();
         typedBlock.setFieldValue(value, 'BOOL');
         break;
       default:
         var luRes = SparqlBlocks.Prefixes.lookForIri(type);
         if (luRes) {
-          typedBlock = Blockly.Block.obtain(workspace, 'sparql_text_with_type_pref');
+          typedBlock = workspace.newBlock('sparql_text_with_type_pref');
           typedBlock.initSvg();
           typedBlock.setFieldValue(value, 'TEXT');
           typedBlock.setFieldValue(luRes.prefix, 'DT_PREFIX');
           typedBlock.setFieldValue(luRes.localPart, 'DT_LOCAL_NAME');
         } else {
-          typedBlock = Blockly.Block.obtain(workspace, 'sparql_text_with_type_iri');
+          typedBlock = workspace.newBlock('sparql_text_with_type_iri');
           typedBlock.initSvg();
           typedBlock.setFieldValue(value, 'TEXT');
           typedBlock.setFieldValue(type, 'DT_IRI');
@@ -85,11 +85,11 @@ SparqlBlocks.JsonToBlocks = (function() {
     var lang = value["xml:lang"];
     var datatype = value["datatype"];
     if (lang) {
-      strBlock = Blockly.Block.obtain(workspace, 'sparql_text_with_lang');
+      strBlock = workspace.newBlock('sparql_text_with_lang');
       strBlock.initSvg();
       strBlock.setFieldValue(lang, 'LANG');
     } else {
-      strBlock = Blockly.Block.obtain(workspace, 'sparql_text');
+      strBlock = workspace.newBlock('sparql_text');
       strBlock.initSvg();
     }
     strBlock.setFieldValue(value.value, 'TEXT');
@@ -110,13 +110,13 @@ SparqlBlocks.JsonToBlocks = (function() {
     var iri = value.value;
     var luRes = SparqlBlocks.Prefixes.lookForIri(iri);
     if (luRes != null) {
-      var prefBlock = Blockly.Block.obtain(workspace, 'sparql_prefixed_iri');
+      var prefBlock = workspace.newBlock('sparql_prefixed_iri');
       prefBlock.initSvg();
       prefBlock.setFieldValue(luRes.prefix, 'PREFIX');
       prefBlock.setFieldValue(luRes.localPart, 'LOCAL_NAME');
       return prefBlock;
     } else {
-      var uriBlock = Blockly.Block.obtain(workspace, 'sparql_iri');
+      var uriBlock = workspace.newBlock('sparql_iri');
       uriBlock.initSvg();
       uriBlock.setFieldValue(iri, 'IRI');
       return uriBlock;
@@ -125,7 +125,7 @@ SparqlBlocks.JsonToBlocks = (function() {
 
   var blockFromBnode_ = function(value, workspace) {
     var bnodeLabel = value.value;
-    var prefBlock = Blockly.Block.obtain(workspace, 'sparql_prefixed_iri');
+    var prefBlock = workspace.newBlock('sparql_prefixed_iri');
     prefBlock.initSvg();
     prefBlock.setFieldValue('_', 'PREFIX');
     prefBlock.setFieldValue(bnodeLabel, 'LOCAL_NAME');
@@ -152,7 +152,7 @@ SparqlBlocks.JsonToBlocks = (function() {
   };
 
   var blockFromVar_ = function(varName, workspace) {
-    var varBlock = Blockly.Block.obtain(workspace, 'variables_get');
+    var varBlock = workspace.newBlock('variables_get');
     varBlock.initSvg();
     varBlock.setFieldValue(varName, 'VAR');
     return varBlock;
