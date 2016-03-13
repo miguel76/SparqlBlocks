@@ -113,18 +113,14 @@ function start() {
       '</button>'+
     '</div>');
 
-  new Clipboard('#copy-button', {
-        text: function(trigger) {
-            return location.href;
-        }});
+  SparqlBlocks.Storage.setCopyOnThisButton('#copy-button');
 
-
-$('.blocklyWorkspace')[0].insertAdjacentHTML(
-  'afterbegin',
-  '<foreignObject x="150" y="30" width="400">'+
-    '<div class="flash-messages">'+
-    '</div>'+
-  '</foreignObject>');
+  $('.blocklyWorkspace')[0].insertAdjacentHTML(
+    'afterbegin',
+    '<foreignObject x="150" y="30" width="400">'+
+      '<div class="flash-messages">'+
+      '</div>'+
+    '</foreignObject>');
 
   SparqlBlocks.Storage.startup();
 

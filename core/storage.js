@@ -102,15 +102,13 @@ SparqlBlocks.Storage = (function() {
         } ];
         monitorChanges_(workspace);
         alert(
-            'Workspace Saved at ' + window.location.href +
-            '<button class="main-button btn" disabled title="Copy Link to Clipboard" id="temp-copy-button" type="button">'+
-              '<span class="mega-octicon octicon-clippy"></span>'+
-              // 'Copy Link'+
-            '</button>');
-        new Clipboard('#temp-copy-button', {
-              text: function(trigger) {
-                return window.location.href;
-              }});
+            'Workspace Saved. ' +
+            '<button class="main-button btn" title="Copy Link to Clipboard" id="temp-copy-button" type="button">'+
+              '<span class="octicon octicon-clippy"></span>'+
+              ' Copy Link to Share It'+
+            '</button>'
+          );
+        setCopyOnThisButton('#temp-copy-button');
         if (callback)
           callback(null, data.id);
       },
@@ -123,6 +121,19 @@ SparqlBlocks.Storage = (function() {
         if (callback)
           callback(errorThrown);
       }
+    });
+  };
+
+  var setCopyOnThisButton = function(selector) {
+    var cb = new Clipboard(selector, {
+          text: function(trigger) {
+            return window.location.href;
+          }});
+    cb.on('success', function(e) {
+      alert('Link Copied to Clipboard. Share it!!!');
+    });
+    cb.on('error', function(e) {
+      alert('Could Not Copy! Please Copy it Manually from Address Bar','error');
     });
   };
 
@@ -346,6 +357,7 @@ SparqlBlocks.Storage = (function() {
         flashMessage.parentElement.removeChild(flashMessage);
       }, timeToStay );
     }
+    return flashMessage;
     // window.alert(message);
   };
 
@@ -370,7 +382,8 @@ SparqlBlocks.Storage = (function() {
     linkGistAndAlert: linkGistAndAlert,
     retrieveXml: retrieveXml,
     alert: alert,
-    startup: startup
+    startup: startup,
+    setCopyOnThisButton: setCopyOnThisButton
   };
 
 }) ();
