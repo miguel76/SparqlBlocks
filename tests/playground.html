@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <title>Blockly Playground</title>
-<!-- <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'> -->
+<link href='../css/primer.css' rel='stylesheet' type='text/css'>
+<link href='../css/octicons.css' rel='stylesheet' type='text/css'>
 <script src="../lib/jquery-1.11.3.min.js"></script>
 <script src="../lib/jquery-migrate-1.2.1.min.js"></script>
 
@@ -34,6 +35,7 @@
 
 <script src="../lib/Blob.js"></script>
 <script src="../lib/FileSaver.min.js"></script>
+<script src="../lib/clipboard.min.js"></script>
 
 <script src="../../blockly/msg/messages.js"></script>
 <script src="../msg/js/en.js"></script>
@@ -57,80 +59,136 @@
 // Depending on the URL argument, render as LTR or RTL.
 var rtl = (document.location.search == '?rtl');
 var workspace = null;
-var outWorkspace = null;
-
-function enableRealtimeSpecificUi() {
-  var realtimeDiv = document.getElementById('realtime');
-  realtimeDiv.display = 'block';
-}
 
 function start() {
 
-  Blockly.Css.CONTENT = Blockly.Css.CONTENT.concat([
-    '.blocklyText {',
-    '  font-family: "Helvetica", sans-serif;',
-    '}',
-    '.blocklyTreeLabel {',
-    '  font-family: "Helvetica", sans-serif;',
-    '}',
-    ''
-  ]);
+  // Blockly.Css.CONTENT = Blockly.Css.CONTENT.concat([
+  //   '.blocklyText {',
+  //   '  font-family: "Helvetica", sans-serif;',
+  //   '}',
+  //   '.blocklyTreeLabel {',
+  //   '  font-family: "Helvetica", sans-serif;',
+  //   '}',
+  //   ''
+  // ]);
 
   var toolbox = document.getElementById('toolbox');
   workspace = Blockly.inject('blocklyDiv', {
-    rtl: rtl,
-    media: '../../blockly/media/',
-    toolbox: toolbox,
-    comments: true,
-    disable: true,
-    collapse: true,
-    grid:
-      {spacing: 25,
-       length: 3,
-       colour: '#ccc',
-       snap: true},
-    readOnly: false,
-    realtime: false,
-    scrollbars: true
-  });
+      comments: true,
+      disable: true,
+      collapse: true,
+      grid:
+        {spacing: 25,
+         length: 3,
+         colour: '#ccc',
+         snap: true},
+      maxBlocks: Infinity,
+      media: '../../blockly/media/',
+      readOnly: false,
+      rtl: rtl,
+      scrollbars: true,
+      toolbox: toolbox,
+      zoom:
+        {controls: true,
+         wheel: true,
+         startScale: 1.0,
+         maxScale: 4,
+         minScale: .25,
+         scaleSpeed: 1.1
+        },
+     });
+
 
   $('.blocklyToolboxDiv')[0].insertAdjacentHTML(
     'afterbegin',
-    '<div class="main-button-container">'+
-      '<button class="main-button" onclick="SparqlBlocks.Storage.linkGist()">'+
-        'Save Blocks...'+
-    '</button></div>');
+    // 'beforeend',
+    '<div class="main-button-container clearfix">'+
+      '<button class="main-button btn" disabled title="Save as Gist" type="button" id="save-button" onclick="SparqlBlocks.Storage.linkGist()">'+
+        '<span class="mega-octicon octicon-cloud-upload"></span>'+
+        // 'Save'+
+      '</button>'+
+      '<button class="main-button btn" disabled title="Copy Link to Clipboard" id="copy-button" type="button">'+
+        '<span class="mega-octicon octicon-clippy"></span>'+
+        // 'Copy Link'+
+      '</button>'+
+    '</div>');
 
-  // An href with #key trigers an AJAX call to retrieve saved blocks.
-  if (window.location.hash.length > 1) {
-    SparqlBlocks.Storage.retrieveXml(window.location.hash.substring(1));
+  new Clipboard('#copy-button', {
+        text: function(trigger) {
+            return location.href;
+        }});
+
+
+$('.blocklyWorkspace')[0].insertAdjacentHTML(
+  'afterbegin',
+  '<foreignObject x="150" y="30" width="400">'+
+    '<div class="flash-messages">'+
+    '</div>'+
+  '</foreignObject>');
+
+  SparqlBlocks.Storage.startup();
+
+  // Restore previously displayed text.
+  var text = sessionStorage.getItem('textarea');
+  if (text) {
+    document.getElementById('importExport').value = text;
   }
+  taChange();
+  // Restore event logging state.
+  var state = sessionStorage.getItem('logEvents');
+  logEvents(Boolean(state));
 
 }
 
 function toXml() {
-  // var output = document.getElementById('importExport');
+  var output = document.getElementById('importExport');
   var xml = Blockly.Xml.workspaceToDom(workspace);
-  console.log(Blockly.Xml.domToPrettyText(xml));
-  // output.value = Blockly.Xml.domToPrettyText(xml);
-  // output.focus();
-  // output.select();
+  output.value = Blockly.Xml.domToPrettyText(xml);
+  output.focus();
+  output.select();
+  taChange();
 }
 
 function fromXml() {
   var input = document.getElementById('importExport');
   var xml = Blockly.Xml.textToDom(input.value);
   Blockly.Xml.domToWorkspace(workspace, xml);
+  taChange();
 }
 
 function toCode(lang) {
   var output = document.getElementById('importExport');
   output.value = Blockly[lang].workspaceToCode(workspace);
+  taChange();
 }
 
-function toSPARQL() {
-  var output = document.getElementById('importExport');
-  output.value = SparqlBlocks.Sparql.workspaceToCode(workspace);
+// Disable the "Import from XML" button if the XML is invalid.
+// Preserve text between page reloads.
+function taChange() {
+  var textarea = document.getElementById('importExport');
+  sessionStorage.setItem('textarea', textarea.value)
+  var valid = true;
+  try {
+    Blockly.Xml.textToDom(textarea.value);
+  } catch (e) {
+    valid = false;
+  }
+  document.getElementById('import').disabled = !valid;
+}
+
+function logEvents(state) {
+  var checkbox = document.getElementById('logCheck');
+  checkbox.checked = state;
+  sessionStorage.setItem('logEvents', Number(state));
+  if (state) {
+    workspace.addChangeListener(logger);
+  } else {
+    workspace.removeChangeListener(logger);
+  }
+}
+
+function logger(e) {
+  console.log(e);
 }
 
 </script>
@@ -789,7 +847,7 @@ h1 {
   <p>
     <input type="button" value="Export to XML" onclick="toXml()">
     &nbsp;
-    <input type="button" value="Import from XML" onclick="fromXml()">
+    <input type="button" value="Import from XML" onclick="fromXml()" id="import">
     <br>
     <input type="button" value="To JavaScript" onclick="toCode('JavaScript')">
     &nbsp;
@@ -801,34 +859,14 @@ h1 {
     &nbsp;
     <input type="button" value="To SPARQL" onclick="toSPARQL()">
     <br>
-    <textarea id="importExport" style="width: 26%; height: 12em"></textarea>
+    <textarea id="importExport" style="width: 26%; height: 12em"
+      onchange="taChange();" onkeyup="taChange()"></textarea>
   </p>
-  <hr>
 
+  <p>
+    Log events: &nbsp;
+    <input type="checkbox" onclick="logEvents(this.checked)" id="logCheck">
+  </p>
 
-  <!-- Realtime setup buttons. -->
-
-  <div id="realtime" style="display: none">
-
-    <p>Test realtime collaboration by opening
-      <a target="_blank" href="#" onmouseover="this.href = window.location.href">
-        this link</a> in a separate browser window or tab and they will be
-      synchronized.  You can even share the link with a friend!.</p>
-
-    <br>
-    <br>
-
-    <!-- Undo and redo buttons. -->
-    <!-- TODO: Uncomment this when undo/redo are fixed. -->
-    <!--
-      <button id="undoButton" disabled>Undo</button>
-      <button id="redoButton" disabled>Redo</button>
-      <br />
-    -->
-
-    <!-- Text area that will be used for our collaborative chat box. -->
-    <textarea id="chatbox" style="width: 26%; height: 12em" disabled="true"></textarea>
-
-  </div>
 </body>
 </html>
