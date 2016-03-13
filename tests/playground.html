@@ -90,7 +90,7 @@ function start() {
       toolbox: toolbox,
       zoom:
         {controls: true,
-         wheel: true,
+         wheel: false,
          startScale: 1.0,
          maxScale: 4,
          minScale: .25,
@@ -293,7 +293,7 @@ h1 {
           <block type="sparql_typedsubject_propertylist">
             <value name="SUBJECT">
               <block type="variables_get">
-                <field name="VAR">s</field>
+                <field name="VAR">res</field>
               </block>
             </value>
             <value name="TYPE">
@@ -305,12 +305,12 @@ h1 {
               <block type="sparql_verb_object">
                 <value name="VERB">
                   <block type="variables_get">
-                    <field name="VAR">p</field>
+                    <field name="VAR">pred</field>
                   </block>
                 </value>
                 <value name="OBJECT">
                   <block type="variables_get">
-                    <field name="VAR">o</field>
+                    <field name="VAR">obj</field>
                   </block>
                 </value>
               </block>
@@ -320,13 +320,105 @@ h1 {
       </block>
     </category>
     <category name="Patterns">
-      <block type="sparql_typedsubject_propertylist"></block>
-      <block type="sparql_anonsubject_propertylist"></block>
-      <block type="sparql_isa"></block>
-      <block type="sparql_verb_object"></block>
-      <block type="sparql_reversePath_object"></block>
-      <block type="sparql_closurePath_object"></block>
-      <block type="sparql_reverseClosurePath_object"></block>
+      <block type="sparql_typedsubject_propertylist">
+        <value name="SUBJECT">
+          <block type="variables_get">
+            <field name="VAR">res</field>
+          </block>
+        </value>
+        <value name="TYPE">
+          <block type="variables_get">
+            <field name="VAR">type</field>
+          </block>
+        </value>
+        <statement name="PROPERTY_LIST">
+          <block type="sparql_verb_object">
+            <value name="VERB">
+              <block type="variables_get">
+                <field name="VAR">pred</field>
+              </block>
+            </value>
+            <value name="OBJECT">
+              <block type="variables_get">
+                <field name="VAR">obj</field>
+              </block>
+            </value>
+          </block>
+        </statement>
+      </block>
+      <block type="sparql_anonsubject_propertylist">
+        <statement name="PROPERTY_LIST">
+          <block type="sparql_verb_object">
+            <value name="VERB">
+              <block type="variables_get">
+                <field name="VAR">pred</field>
+              </block>
+            </value>
+            <value name="OBJECT">
+              <block type="variables_get">
+                <field name="VAR">obj</field>
+              </block>
+            </value>
+          </block>
+        </statement>
+      </block>
+      <block type="sparql_isa">
+        <value name="TYPE">
+          <block type="variables_get">
+            <field name="VAR">type</field>
+          </block>
+        </value>
+      </block>
+      <block type="sparql_verb_object">
+        <value name="VERB">
+          <block type="variables_get">
+            <field name="VAR">pred</field>
+          </block>
+        </value>
+        <value name="OBJECT">
+          <block type="variables_get">
+            <field name="VAR">obj</field>
+          </block>
+        </value>
+      </block>
+      <block type="sparql_reversePath_object">
+        <value name="VERB">
+          <block type="variables_get">
+            <field name="VAR">pred</field>
+          </block>
+        </value>
+        <value name="OBJECT">
+          <block type="variables_get">
+            <field name="VAR">subj</field>
+          </block>
+        </value>
+      </block>
+      <block type="sparql_closurePath_object">
+        <value name="VERB">
+          <shadow type="sparql_prefixed_iri">
+            <field name="PREFIX">rdfs</field>
+            <field name="LOCAL_NAME">subClassOf</field>
+          </shadow>
+        </value>
+        <value name="OBJECT">
+          <block type="variables_get">
+            <field name="VAR">to</field>
+          </block>
+        </value>
+      </block>
+      <block type="sparql_reverseClosurePath_object">
+        <value name="VERB">
+          <shadow type="sparql_prefixed_iri">
+            <field name="PREFIX">rdfs</field>
+            <field name="LOCAL_NAME">subClassOf</field>
+          </shadow>
+        </value>
+        <value name="OBJECT">
+          <block type="variables_get">
+            <field name="VAR">from</field>
+          </block>
+        </value>
+      </block>
     </category>
     <category name="Options">
       <block type="sparql_union"></block>
@@ -346,34 +438,79 @@ h1 {
     </category>
     <category name="Math">
       <block type="sparql_math_number"></block>
-      <block type="sparql_math_arithmetic"></block>
-      <block type="sparql_math_single"></block>
-      <!-- <block type="sparql_math_constant"></block> -->
-      <block type="sparql_math_number_property"></block>
-      <block type="sparql_math_round"></block>
-      <block type="sparql_math_modulo"></block>
-      <block type="sparql_math_constrain">
-        <value name="LOW">
-          <block type="sparql_math_number">
+      <block type="sparql_math_arithmetic">
+        <value name="A">
+          <shadow type="sparql_math_number">
             <field name="NUM">1</field>
-          </block>
+          </shadow>
+        </value>
+        <value name="B">
+          <shadow type="sparql_math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="sparql_math_single">
+        <value name="NUM">
+          <shadow type="sparql_math_number">
+            <field name="NUM">-3</field>
+          </shadow>
+        </value>
+      </block>
+      <!-- <block type="sparql_math_constant"></block> -->
+      <block type="sparql_math_number_property">
+        <value name="NUMBER_TO_CHECK">
+          <shadow type="sparql_math_number">
+            <field name="NUM">0</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="sparql_math_round">
+        <value name="NUM">
+          <shadow type="sparql_math_number">
+            <field name="NUM">3.1</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="sparql_math_modulo">
+        <value name="DIVIDEND">
+          <shadow type="sparql_math_number">
+            <field name="NUM">64</field>
+          </shadow>
+        </value>
+        <value name="DIVISOR">
+          <shadow type="sparql_math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="sparql_math_constrain">
+        <value name="VALUE">
+          <shadow type="sparql_math_number">
+            <field name="NUM">50</field>
+          </shadow>
+        </value>
+        <value name="LOW">
+          <shadow type="sparql_math_number">
+            <field name="NUM">1</field>
+          </shadow>
         </value>
         <value name="HIGH">
-          <block type="sparql_math_number">
+          <shadow type="sparql_math_number">
             <field name="NUM">100</field>
-          </block>
+          </shadow>
         </value>
       </block>
       <block type="sparql_math_random_int">
         <value name="FROM">
-          <block type="sparql_math_number">
+          <shadow type="sparql_math_number">
             <field name="NUM">1</field>
-          </block>
+          </shadow>
         </value>
         <value name="TO">
-          <block type="sparql_math_number">
+          <shadow type="sparql_math_number">
             <field name="NUM">100</field>
-          </block>
+          </shadow>
         </value>
       </block>
       <block type="sparql_math_random_float"></block>
@@ -382,8 +519,18 @@ h1 {
       <block type="sparql_text"></block>
       <block type="sparql_text_join"></block>
       <block type="sparql_text_length">
+        <value name="VALUE">
+          <shadow type="sparql_text">
+            <field name="TEXT">abc</field>
+          </shadow>
+        </value>
       </block>
       <block type="sparql_text_isEmpty">
+        <value name="VALUE">
+          <shadow type="sparql_text">
+            <field name="TEXT"></field>
+          </shadow>
+        </value>
       </block>
       <block type="sparql_text_charAt">
         <value name="VALUE">
@@ -392,9 +539,9 @@ h1 {
           </block>
         </value>
         <value name="AT">
-          <block type="sparql_math_number">
+          <shadow type="sparql_math_number">
             <field name="NUM">1</field>
-          </block>
+          </shadow>
         </value>
       </block>
       <block type="sparql_text_getSubstring">
@@ -403,22 +550,19 @@ h1 {
             <field name="VAR">text</field>
           </block>
         </value>
-        <value name="AT1">
-          <block type="sparql_math_number">
-            <field name="NUM">1</field>
-          </block>
-        </value>
-        <value name="AT2">
-          <block type="sparql_math_number">
-            <field name="NUM">10</field>
-          </block>
-        </value>
       </block>
       <block type="sparql_text_changeCase">
+        <value name="TEXT">
+          <shadow type="sparql_text">
+            <field name="TEXT">abc</field>
+          </shadow>
+        </value>
       </block>
       <block type="sparql_text_contains">
         <value name="FIND">
-          <block type="sparql_text"></block>
+          <shadow type="sparql_text">
+            <field name="TEXT">abc</field>
+          </shadow>
         </value>
         <value name="VALUE">
           <block type="variables_get">
@@ -438,9 +582,9 @@ h1 {
       </block> -->
       <block type="sparql_text_lang">
         <value name="LANG">
-          <block type="sparql_text">
+          <shadow type="sparql_text">
             <field name="TEXT">en</field>
-          </block>
+          </shadow>
         </value>
         <value name="VALUE">
           <block type="variables_get">
@@ -449,6 +593,11 @@ h1 {
         </value>
       </block>
       <block type="sparql_hash">
+        <value name="TEXT">
+          <shadow type="sparql_text">
+            <field name="TEXT">abc</field>
+          </shadow>
+        </value>
       </block>
     </category>
     <category name="Resources">
@@ -487,9 +636,9 @@ h1 {
                 <value name="CONDITION">
                   <block type="sparql_text_contains">
                     <value name="FIND">
-                      <block type="sparql_text">
-                        <field name="TEXT"></field>
-                      </block>
+                      <shadow type="sparql_text">
+                        <field name="TEXT">abc</field>
+                      </shadow>
                     </value>
                     <value name="VALUE">
                       <block type="variables_get">
@@ -508,9 +657,9 @@ h1 {
                           </block>
                         </value>
                         <value name="LANG">
-                          <block type="sparql_text">
+                          <shadow type="sparql_text">
                             <field name="TEXT">en</field>
-                          </block>
+                          </shadow>
                         </value>
                       </block>
                     </value>
@@ -558,9 +707,9 @@ h1 {
                   <value name="CONDITION">
                     <block type="sparql_text_contains">
                       <value name="FIND">
-                        <block type="sparql_text">
-                          <field name="TEXT"></field>
-                        </block>
+                        <shadow type="sparql_text">
+                          <field name="TEXT">abc</field>
+                        </shadow>
                       </value>
                       <value name="VALUE">
                         <block type="variables_get">
@@ -579,9 +728,9 @@ h1 {
                             </block>
                           </value>
                           <value name="LANG">
-                            <block type="sparql_text">
+                            <shadow type="sparql_text">
                               <field name="TEXT">en</field>
-                            </block>
+                            </shadow>
                           </value>
                         </block>
                       </value>
@@ -672,9 +821,9 @@ h1 {
                       <value name="CONDITION">
                         <block type="sparql_text_contains">
                           <value name="FIND">
-                            <block type="sparql_text">
-                              <field name="TEXT"></field>
-                            </block>
+                            <shadow type="sparql_text">
+                              <field name="TEXT">abc</field>
+                            </shadow>
                           </value>
                           <value name="VALUE">
                             <block type="variables_get">
@@ -693,9 +842,9 @@ h1 {
                                 </block>
                               </value>
                               <value name="LANG">
-                                <block type="sparql_text">
+                                <shadow type="sparql_text">
                                   <field name="TEXT">en</field>
-                                </block>
+                                </shadow>
                               </value>
                             </block>
                           </value>
@@ -784,9 +933,9 @@ h1 {
                       <value name="CONDITION">
                         <block type="sparql_text_contains">
                           <value name="FIND">
-                            <block type="sparql_text">
-                              <field name="TEXT"></field>
-                            </block>
+                            <shadow type="sparql_text">
+                              <field name="TEXT">abc</field>
+                            </shadow>
                           </value>
                           <value name="VALUE">
                             <block type="variables_get">
@@ -805,9 +954,9 @@ h1 {
                                 </block>
                               </value>
                               <value name="LANG">
-                                <block type="sparql_text">
+                                <shadow type="sparql_text">
                                   <field name="TEXT">en</field>
-                                </block>
+                                </shadow>
                               </value>
                             </block>
                           </value>
