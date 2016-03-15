@@ -106,7 +106,7 @@ SparqlBlocks.Storage = (function() {
             '<button class="main-button btn" title="Copy Link to Clipboard" id="temp-copy-button" type="button">'+
               '<span class="octicon octicon-clippy"></span>'+
               ' Copy Link to Share It'+
-            '</button>'
+            '</button>',"info"
           );
         setCopyOnThisButton('#temp-copy-button');
         if (callback)
@@ -129,8 +129,8 @@ SparqlBlocks.Storage = (function() {
           text: function(trigger) {
             return window.location.href;
           }});
-    cb.on('success', function(e) {
-      alert('Link Copied to Clipboard. Share it!!!');
+    cb.on('success', function(event) {
+      alert('Link Copied to Clipboard. Share it!!!', 'info', event);
     });
     cb.on('error', function(e) {
       alert('Could Not Copy! Please Copy it Manually from Address Bar','error');
@@ -214,6 +214,7 @@ SparqlBlocks.Storage = (function() {
           } else {
             loadXml_(data, workspace);
           }
+          alert("Workspace Loaded", "info");
           workspace.eventStack = [ {
             "workspaceId": workspace.id,
             "group": "",
@@ -274,20 +275,18 @@ SparqlBlocks.Storage = (function() {
       if (!workspace.eventStack) {
         workspace.eventStack = [];
       }
-      // if (workspace.eventStack) {
-        workspace.eventStack.push(_.extend(
-            {},
-            event,
-            { type: event.type },
-            event.xml
-                ? { xmlText: Blockly.Xml.domToPrettyText(event.xml) }
-                : {},
-            sendWorkspaceXML
-                ? { workspace:
-                          Blockly.Xml.domToText(
-                              Blockly.Xml.workspaceToDom(workspace)) }
-                : {} ));
-      // }
+      workspace.eventStack.push(_.extend(
+          {},
+          event,
+          { type: event.type },
+          event.xml
+              ? { xmlText: Blockly.Xml.domToPrettyText(event.xml) }
+              : {},
+          sendWorkspaceXML
+              ? { workspace:
+                        Blockly.Xml.domToText(
+                            Blockly.Xml.workspaceToDom(workspace)) }
+              : {} ));
       var xmlDom = Blockly.Xml.workspaceToDom(workspace);
       var xmlText = Blockly.Xml.domToText(xmlDom);
       if (startXmlText != xmlText) {
@@ -338,15 +337,17 @@ SparqlBlocks.Storage = (function() {
    * @param {string} message Text to alert.
    * @param {string} messageType type of the message (alert, warn, error).
    */
-  var alert = function(message, messageType) {
+  var alert = function(message, messageType, eventToExclude) {
     // var timeToStay = (!messageType || messageType == "alert") ? 2000 : 0;
-    var timeToStay = 0;
+    var closable = (messageType != "alert");
+    var timeToStay = 0; //(messageType == "info") ? 4000 : 0;
+    var messageClass = "flash-" + ((messageType == "info") ? "alert" : messageType);
     var oldFlashMessage = $('.flash-messages .flash')[0];
     if (oldFlashMessage) {
       oldFlashMessage.parentElement.removeChild(oldFlashMessage);
     }
     $('.flash-messages')[0].insertAdjacentHTML('afterbegin',
-      '<div class="flash'+ (messageType ? ' flash-'+messageType : '')  +'">'+
+      '<div class="flash '+ messageClass +'">'+
         '<span class="octicon octicon-x flash-close js-flash-close" '+
             'onclick="this.parentElement.parentElement.removeChild(this.parentElement)"></span>'+
         message+
@@ -354,11 +355,25 @@ SparqlBlocks.Storage = (function() {
     var flashMessage = $('.flash-messages .flash')[0];
     if (timeToStay > 0) {
       window.setTimeout( function() {
-        flashMessage.parentElement.removeChild(flashMessage);
+        if (flashMessage && flashMessage.parentElement) {
+          flashMessage.parentElement.removeChild(flashMessage);
+        }
       }, timeToStay );
     }
+    if (messageType != "alert") {
+      var clickListener = function(event) {
+        if (event == eventToExclude)
+          return;
+        if (flashMessage && flashMessage.parentElement) {
+          flashMessage.parentElement.removeChild(flashMessage);
+        }
+        window.removeEventListener('click', clickListener);
+      };
+      window.setTimeout( function() {
+        window.addEventListener('click', clickListener);
+      }, 0 );
+    }
     return flashMessage;
-    // window.alert(message);
   };
 
   /**

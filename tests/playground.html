@@ -5,10 +5,11 @@
 <title>Blockly Playground</title>
 <link href='../css/primer.css' rel='stylesheet' type='text/css'>
 <link href='../css/octicons.css' rel='stylesheet' type='text/css'>
+
 <script src="../lib/jquery-1.11.3.min.js"></script>
 <script src="../lib/jquery-migrate-1.2.1.min.js"></script>
-
 <script src="../lib/underscore-min.js"></script>
+<script src="../lib/md5.min.js"></script>
 
 <script src="../../blockly/blockly_uncompressed.js"></script>
 
@@ -51,6 +52,7 @@
 <script src="../blocks/tabular.js"></script>
 <script src="../blocks/exec.js"></script>
 <script src="../blocks/table.js"></script>
+<script src="../blocks/test.js"></script>
 
 <!-- Load the Google Drive SDK Realtime libraries. -->
 <!-- <script src="https://apis.google.com/js/api.js"></script> -->
@@ -117,7 +119,7 @@ function start() {
 
   $('.blocklyWorkspace')[0].insertAdjacentHTML(
     'afterbegin',
-    '<foreignObject x="150" y="30" width="400">'+
+    '<foreignObject x="130" y="6" width="400">'+
       '<div class="flash-messages">'+
       '</div>'+
     '</foreignObject>');
@@ -274,6 +276,18 @@ h1 {
   padding: 5px;
   font-family: "Helvetica", sans-serif;
 }
+
+/*.flash {
+  padding: 10px 16px;
+  font-size: 16px;
+  line-height: 1;
+  border: 3px solid #637F9C;
+  border-radius: 9px;
+}
+
+.flash-close {
+  margin: -9px -23px;
+}*/
 
 </style>
 </head>
@@ -972,7 +986,28 @@ h1 {
       </category>
     </category>
     <category name="Test">
-      <block type="sparql_smallTable"></block>
+      <block type="sparql_test">
+        <data>{
+          "id": "1",
+          "question": "1) The DBpedia Class for mountains is",
+          "answerMD5": "2bd86839cd03700675d6bcf3f34a8684"
+        }</data>
+      </block>
+      <block type="sparql_test">
+        <data>{
+          "id": "2",
+          "question": "2) The highest mountain is",
+          "answerMD5": "2bd86839cd03700675d6bcf3f34a8684"
+        }</data>
+      </block>
+      <block type="sparql_test">
+        <data>{
+          "id": "3",
+          "question": "3) The highest mountain after ... is",
+          "answerMD5": "2bd86839cd03700675d6bcf3f34a8684"
+        }</data>
+      </block>
+      <!-- <block type="sparql_smallTable"></block> -->
     </category>
   </xml>
 

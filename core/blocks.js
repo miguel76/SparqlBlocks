@@ -72,6 +72,17 @@ SparqlBlocks.Blocks = ( function() {
     }
   };
 
+  // fix a bug in Blockly
+  Blockly.BlockSvg.prototype.setEditable = function(editable) {
+    Blockly.BlockSvg.superClass_.setEditable.call(this, editable);
+    var icons = this.getIcons();
+    if (this.rendered) {
+      for (var i = 0; i < icons.length; i++) {
+        icons[i].updateEditable();
+      }
+    }
+  };
+
   return {
     block: block_,
     insertOptionBeforeHelp: insertOptionBeforeHelp_
