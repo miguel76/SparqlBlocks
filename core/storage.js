@@ -348,8 +348,8 @@ SparqlBlocks.Storage = (function() {
     }
     $('.flash-messages')[0].insertAdjacentHTML('afterbegin',
       '<div class="flash '+ messageClass +'">'+
-        '<span class="octicon octicon-x flash-close js-flash-close" '+
-            'onclick="this.parentElement.parentElement.removeChild(this.parentElement)"></span>'+
+        // '<span class="octicon octicon-x flash-close js-flash-close" '+
+        //     'onclick="this.parentElement.parentElement.removeChild(this.parentElement)"></span>'+
         message+
       '</div>');
     var flashMessage = $('.flash-messages .flash')[0];
@@ -362,8 +362,6 @@ SparqlBlocks.Storage = (function() {
     }
     if (messageType != "alert") {
       var clickListener = function(event) {
-        if (event == eventToExclude)
-          return;
         if (flashMessage && flashMessage.parentElement) {
           flashMessage.parentElement.removeChild(flashMessage);
         }

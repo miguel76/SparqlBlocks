@@ -82,7 +82,7 @@ goog.require('SparqlBlocks.Blocks');
                       this,
                       'ANSWER',
                       SparqlBlocks.Sparql.ORDER_NONE);
-      if (value && value != this.currentAnswer) {
+      if (value && value != "" && value != this.currentAnswer) {
         if (md5(value) === data.answerMD5) {
           SparqlBlocks.Storage.alert("⭐  Bingo! It is the right block!   ⭐", "info");
           if (!questionState[data.id]) {
@@ -99,6 +99,8 @@ goog.require('SparqlBlocks.Blocks');
           this.getInput("ANSWER").appendField("⭐");
           this.appendDummyInput().appendField("⭐");
         } else {
+          var answerBlock = this.getInputTargetBlock('ANSWER');
+          answerBlock.unplug();
           SparqlBlocks.Storage.alert("Sorry, wrong block. Try with another one...", "error");
         }
       }
