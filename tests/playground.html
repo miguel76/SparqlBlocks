@@ -103,16 +103,30 @@ function start() {
 
   $('.blocklyToolboxDiv')[0].insertAdjacentHTML(
     'afterbegin',
-    // 'beforeend',
+    // // 'beforeend',
+    // '<div class="main-button-container clearfix">'+
+    //   '<button class="main-button btn" disabled title="Save as Gist" type="button" id="save-button" onclick="SparqlBlocks.Storage.linkGist()">'+
+    //     '<span class="mega-octicon octicon-cloud-upload"></span>'+
+    //     // 'Save'+
+    //   '</button>'+
+    //   '<button class="main-button btn" disabled title="Copy Link to Clipboard" id="copy-button" type="button">'+
+    //     '<span class="mega-octicon octicon-clippy"></span>'+
+    //     // 'Copy Link'+
+    //   '</button>'+
+    // '</div>');
     '<div class="main-button-container clearfix">'+
-      '<button class="main-button btn" disabled title="Save as Gist" type="button" id="save-button" onclick="SparqlBlocks.Storage.linkGist()">'+
-        '<span class="mega-octicon octicon-cloud-upload"></span>'+
-        // 'Save'+
+      '<div class="main-button-container clearfix">'+
+      '<button class="main-button btn btn-block" disabled title="Save as Gist on GitHub" type="button" id="save-button" onclick="SparqlBlocks.Storage.linkGist()">'+
+        '<span class="octicon octicon-cloud-upload"></span>'+
+        ' Save as Gist'+
       '</button>'+
-      '<button class="main-button btn" disabled title="Copy Link to Clipboard" id="copy-button" type="button">'+
-        '<span class="mega-octicon octicon-clippy"></span>'+
-        // 'Copy Link'+
+      '</div>'+
+      '<div class="main-button-container clearfix">'+
+      '<button class="main-button btn btn-block" disabled title="Copy Link to Clipboard" id="copy-button" type="button">'+
+        '<span class="octicon octicon-clippy"></span>'+
+        ' Copy Link'+
       '</button>'+
+      '</div>'+
     '</div>');
 
   SparqlBlocks.Storage.setCopyOnThisButton('#copy-button');
@@ -224,6 +238,132 @@ h1 {
 #importExport {
   font-family: monospace;
 }
+
+.blocklyTreeRow {
+  background-position: 4px 3px;
+  background-repeat: no-repeat;
+}
+
+.blocklyTreeRow .blocklyTreeIconNone {
+  width: 22px;
+  /* background-color: #995ba5; */ /* Query */
+}
+
+.blocklyToolboxDiv .main-button-container {
+  margin: 2px;
+}
+
+/*.blocklyToolboxDiv .main-button {
+  margin: 1px;
+}*/
+
+.blocklyToolboxDiv #\:1 .blocklyTreeRow {
+  background-image: url('../img/menuIcons/png/gear.png'); /* Exec */
+}
+
+.blocklyToolboxDiv #\:1 .blocklyTreeSelected {
+  background-image: url('../img/menuIconsWhite/png/gear.png'); /* Exec */
+}
+
+.blocklyToolboxDiv #\:2 .blocklyTreeRow {
+  background-image: url('../img/menuIcons/png/link.png'); /* Patterns */
+}
+
+.blocklyToolboxDiv #\:2 .blocklyTreeSelected {
+  background-image: url('../img/menuIconsWhite/png/link.png'); /* Patterns */
+}
+
+.blocklyToolboxDiv #\:3 .blocklyTreeRow {
+  background-image: url('../img/menuIcons/png/tool-2.png'); /* Options */
+}
+
+.blocklyToolboxDiv #\:3 .blocklyTreeSelected {
+  background-image: url('../img/menuIconsWhite/png/tool-2.png'); /* Options */
+}
+
+.blocklyToolboxDiv #\:5 .blocklyTreeRow {
+  background-image: url('../img/menuIcons/png/tool-1.png'); /* Logic */
+}
+
+.blocklyToolboxDiv #\:5 .blocklyTreeSelected {
+  background-image: url('../img/menuIconsWhite/png/tool-1.png'); /* Logic */
+}
+
+.blocklyToolboxDiv #\:6 .blocklyTreeRow {
+  background-image: url('../img/menuIcons/png/business.png'); /* Math */
+}
+
+.blocklyToolboxDiv #\:6 .blocklyTreeSelected {
+  background-image: url('../img/menuIconsWhite/png/business.png'); /* Math */
+}
+
+.blocklyToolboxDiv #\:7 .blocklyTreeRow {
+  background-image: url('../img/menuIcons/png/signs.png'); /* Text */
+}
+
+.blocklyToolboxDiv #\:7 .blocklyTreeSelected {
+  background-image: url('../img/menuIconsWhite/png/signs.png'); /* Text */
+}
+
+.blocklyToolboxDiv #\:8 .blocklyTreeRow {
+  background-image: url('../img/menuIcons/png/business-1.png'); /* Resources */
+}
+
+.blocklyToolboxDiv #\:8 .blocklyTreeSelected {
+  background-image: url('../img/menuIconsWhite/png/business-1.png'); /* Resources */
+}
+
+.blocklyToolboxDiv #\:a .blocklyTreeRow {
+  background-image: url('../img/menuIcons/png/database.png'); /* Variables */
+}
+
+.blocklyToolboxDiv #\:a .blocklyTreeSelected {
+  background-image: url('../img/menuIconsWhite/png/database.png'); /* Variables */
+}
+
+.blocklyToolboxDiv #\:c .blocklyTreeRow {
+  background-image: url('../img/menuIcons/png/search.png'); /* Things */
+}
+
+.blocklyToolboxDiv #\:c .blocklyTreeSelected {
+  background-image: url('../img/menuIconsWhite/png/search.png'); /* Things */
+}
+
+.blocklyToolboxDiv #\:d .blocklyTreeRow {
+  background-image: url('../img/menuIcons/png/book.png'); /* Classes */
+}
+
+.blocklyToolboxDiv #\:d .blocklyTreeSelected {
+  background-image: url('../img/menuIconsWhite/png/book.png'); /* Classes */
+}
+
+.blocklyToolboxDiv #\:e .blocklyTreeRow {
+  background-image: url('../img/menuIcons/png/link-1.png'); /* Out-Properties */
+}
+
+.blocklyToolboxDiv #\:e .blocklyTreeSelected {
+  background-image: url('../img/menuIconsWhite/png/link-1.png'); /* Out-Properties */
+}
+
+.blocklyToolboxDiv #\:f .blocklyTreeRow {
+  background-image: url('../img/menuIcons/png/link-1.png'); /* In-Properties */
+}
+
+.blocklyToolboxDiv #\:f .blocklyTreeSelected {
+  background-image: url('../img/menuIconsWhite/png/link-1.png'); /* In-Properties */
+}
+
+.blocklyToolboxDiv #\:h .blocklyTreeRow {
+  background-image: url('../img/menuIcons/png/mark.png'); /* Tests */
+}
+
+.blocklyToolboxDiv #\:h .blocklyTreeSelected {
+  background-image: url('../img/menuIconsWhite/png/mark.png'); /* Tests */
+}
+
+</style>
+
+<!--<style>
 .blocklyTreeIcon {
   /*border-width: 2px;
   border-style: solid;*/
@@ -289,7 +429,8 @@ h1 {
   margin: -9px -23px;
 }*/
 
-</style>
+</style>-->
+
 </head>
 <body onload="start()">
 
@@ -299,7 +440,7 @@ h1 {
   </div>
 
   <xml id="toolbox" style="display: none">
-    <category name="Exec/Query">
+    <category name="Exec/Query" colour="330" icon="../img/menuIcons/png/gear.png">
       <block type="sparql_execution_endpoint"></block>
       <block type="sparql_execution"></block>
       <block type="sparql_select">
@@ -333,7 +474,7 @@ h1 {
         </statement>
       </block>
     </category>
-    <category name="Patterns">
+    <category name="Patterns" colour="120">
       <block type="sparql_typedsubject_propertylist">
         <value name="SUBJECT">
           <block type="variables_get">
@@ -434,12 +575,12 @@ h1 {
         </value>
       </block>
     </category>
-    <category name="Options">
+    <category name="Compose" colour="260">
       <block type="sparql_union"></block>
       <block type="sparql_optional"></block>
     </category>
     <sep></sep>
-    <category name="Logic">
+    <category name="Logic" colour="210">
       <block type="sparql_filter"></block>
       <block type="sparql_logic_compare"></block>
       <block type="sparql_logic_operation"></block>
@@ -450,7 +591,7 @@ h1 {
       <block type="sparql_exists"></block>
       <block type="sparql_not_exists"></block>
     </category>
-    <category name="Math">
+    <category name="Math" colour="230">
       <block type="sparql_math_number"></block>
       <block type="sparql_math_arithmetic">
         <value name="A">
@@ -529,7 +670,7 @@ h1 {
       </block>
       <block type="sparql_math_random_float"></block>
     </category>
-    <category name="Text">
+    <category name="Text" colour="160">
       <block type="sparql_text"></block>
       <block type="sparql_text_join"></block>
       <block type="sparql_text_length">
@@ -614,21 +755,28 @@ h1 {
         </value>
       </block>
     </category>
-    <category name="Resources">
+    <category name="Resources" colour="20">
       <block type="sparql_prefixed_iri"></block>
       <block type="sparql_iri"></block>
     </category>
     <sep></sep>
-    <category name="Variables" custom="VARIABLE"></category>
+    <category name="Variables" colour="330" custom="VARIABLE"></category>
     <sep></sep>
-    <category name="Things">
+    <category name="Things" colour="290">
       <block type="sparql_select">
         <statement name="WHERE">
           <block type="sparql_typedsubject_propertylist">
+            <data>{ "info": "Optionally set the type of the thing(s) you are looking for." }</data>
             <value name="SUBJECT">
               <block type="variables_get">
                 <field name="VAR">resource</field>
               </block>
+            </value>
+            <value name="TYPE">
+              <shadow type="sparql_prefixed_iri">
+                <field name="PREFIX">owl</field>
+                <field name="LOCAL_NAME">Thing</field>
+              </shadow>
             </value>
             <statement name="PROPERTY_LIST">
               <block type="sparql_verb_object">
@@ -651,6 +799,7 @@ h1 {
                   <block type="sparql_text_contains">
                     <value name="FIND">
                       <shadow type="sparql_text">
+                        <info>Type part of a name for the thing(s) you are looking for.</info>
                         <field name="TEXT">abc</field>
                       </shadow>
                     </value>
@@ -663,6 +812,7 @@ h1 {
                 </value>
                 <next>
                   <block type="sparql_filter">
+                    <info h="106" w="256">Optionally set the language for this search. Defaults to English.</info>
                     <value name="CONDITION">
                       <block type="sparql_text_lang">
                         <value name="VALUE">
@@ -685,8 +835,8 @@ h1 {
         </statement>
       </block>
     </category>
-    <category name="Vocabulary">
-      <category name="Classes">
+    <!-- <category name="Vocabulary"> -->
+      <category name="Classes" colour="290">
         <block type="sparql_select">
           <statement name="WHERE">
             <block type="sparql_typedsubject_propertylist">
@@ -722,6 +872,7 @@ h1 {
                     <block type="sparql_text_contains">
                       <value name="FIND">
                         <shadow type="sparql_text">
+                          <info>Type part of a name for the class(es) you are looking for.</info>
                           <field name="TEXT">abc</field>
                         </shadow>
                       </value>
@@ -743,6 +894,7 @@ h1 {
                           </value>
                           <value name="LANG">
                             <shadow type="sparql_text">
+                              <info h="56" w="204">Optionally set the language for this search. Defaults to English.</info>
                               <field name="TEXT">en</field>
                             </shadow>
                           </value>
@@ -756,7 +908,7 @@ h1 {
           </statement>
         </block>
       </category>
-      <category name="Out-Properties">
+      <category name="Out-Properties" colour="290">
         <block type="sparql_select">
           <statement name="WHERE">
             <block type="sparql_typedsubject_propertylist">
@@ -823,10 +975,11 @@ h1 {
                         </block>
                       </value>
                       <value name="OBJECT">
-                        <!-- <block type="sparql_prefixed_iri">
+                        <shadow type="sparql_prefixed_iri">
+                          <info>Optionally set the domain of the property(ies).</info>
                           <field name="PREFIX">owl</field>
                           <field name="LOCAL_NAME">Thing</field>
-                        </block> -->
+                        </shadow>
                       </value>
                     </block>
                   </statement>
@@ -836,6 +989,7 @@ h1 {
                         <block type="sparql_text_contains">
                           <value name="FIND">
                             <shadow type="sparql_text">
+                              <info>Type part of a name for the property(ies) you are looking for.</info>
                               <field name="TEXT">abc</field>
                             </shadow>
                           </value>
@@ -857,6 +1011,7 @@ h1 {
                               </value>
                               <value name="LANG">
                                 <shadow type="sparql_text">
+                                  <info h="56" w="204">Optionally set the language for this search. Defaults to English.</info>
                                   <field name="TEXT">en</field>
                                 </shadow>
                               </value>
@@ -872,7 +1027,7 @@ h1 {
           </statement>
         </block>
       </category>
-      <category name="In-Properties">
+      <category name="In-Properties" colour="290">
         <block type="sparql_select">
           <statement name="WHERE">
             <block type="sparql_typedsubject_propertylist">
@@ -939,6 +1094,11 @@ h1 {
                         </block>
                       </value>
                       <value name="OBJECT">
+                        <shadow type="sparql_prefixed_iri">
+                          <info>Optionally set the range of the property(ies).</info>
+                          <field name="PREFIX">owl</field>
+                          <field name="LOCAL_NAME">Thing</field>
+                        </shadow>
                       </value>
                     </block>
                   </statement>
@@ -948,6 +1108,7 @@ h1 {
                         <block type="sparql_text_contains">
                           <value name="FIND">
                             <shadow type="sparql_text">
+                              <info>Type part of a name for the property(ies) you are looking for.</info>
                               <field name="TEXT">abc</field>
                             </shadow>
                           </value>
@@ -969,6 +1130,7 @@ h1 {
                               </value>
                               <value name="LANG">
                                 <shadow type="sparql_text">
+                                  <info h="56" w="204">Optionally set the language for this search. Defaults to English.</info>
                                   <field name="TEXT">en</field>
                                 </shadow>
                               </value>
@@ -984,8 +1146,9 @@ h1 {
           </statement>
         </block>
       </category>
-    </category>
-    <category name="Test">
+    <!-- </category> -->
+    <sep></sep>
+    <category name="Test" colour="330">
       <block type="sparql_test">
         <data>{
           "id": "1",
@@ -996,14 +1159,28 @@ h1 {
       <block type="sparql_test">
         <data>{
           "id": "2",
-          "question": "2) The highest mountain is",
+          "question": "2) The highest mountain (on Earth) is",
           "answerMD5": "2bd86839cd03700675d6bcf3f34a8684"
         }</data>
       </block>
       <block type="sparql_test">
         <data>{
           "id": "3",
-          "question": "3) The highest mountain after ... is",
+          "question": "3) The highest mountain after the Annapurna is",
+          "answerMD5": "2bd86839cd03700675d6bcf3f34a8684"
+        }</data>
+      </block>
+      <block type="sparql_test">
+        <data>{
+          "id": "4",
+          "question": "4) The highest mountain in Australia is ",
+          "answerMD5": "6840803329d7fb45d168be3f602d0b35"
+        }</data>
+      </block>
+      <block type="sparql_test">
+        <data>{
+          "id": "5",
+          "question": "5) The second highest mountain (on Earth) is",
           "answerMD5": "2bd86839cd03700675d6bcf3f34a8684"
         }</data>
       </block>
