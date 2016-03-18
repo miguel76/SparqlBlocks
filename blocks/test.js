@@ -32,6 +32,15 @@ goog.require('SparqlBlocks.Blocks');
 
   var questionState = {};
 
+  var fixAsRightAnswer = function(questionBlock, answerBlock) {
+    questionBlock.isRightAnswer = true;
+    answerBlock.setEditable(false);
+    answerBlock.setMovable(false);
+    answerBlock.setTooltip('Looks like you have found the right answer!');
+    questionBlock.getInput("ANSWER").appendField("⭐");
+    questionBlock.appendDummyInput().appendField("⭐");
+  }
+
   SparqlBlocks.Blocks.block('sparql_test', {
     /**
      * Block for making a test
@@ -70,11 +79,7 @@ goog.require('SparqlBlocks.Blocks');
         var answerBlock = Blockly.Xml.domToBlock(this.workspace, xml.firstChild);
         answerConnection.connect(answerBlock.outputConnection);
         // newBlock.render();
-        answerBlock.setEditable(false);
-        answerBlock.setMovable(false);
-        this.isRightAnswer = true;
-        this.getInput("ANSWER").appendField("⭐");
-        this.appendDummyInput().appendField("⭐");
+        fixAsRightAnswer(this, answerBlock);
         return;
       }
 
@@ -93,11 +98,7 @@ goog.require('SparqlBlocks.Blocks');
           var answerBlock = this.getInputTargetBlock('ANSWER');
           xml.appendChild(Blockly.Xml.blockToDom(answerBlock));
           questionState[data.id].rightAnswerXML = Blockly.Xml.domToText(xml);
-          this.isRightAnswer = true;
-          answerBlock.setEditable(false);
-          answerBlock.setMovable(false);
-          this.getInput("ANSWER").appendField("⭐");
-          this.appendDummyInput().appendField("⭐");
+          fixAsRightAnswer(this, answerBlock);
         } else {
           var answerBlock = this.getInputTargetBlock('ANSWER');
           answerBlock.unplug();
