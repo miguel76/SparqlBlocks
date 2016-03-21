@@ -37,13 +37,14 @@ goog.require('SparqlBlocks.JsonToBlocks');
 goog.require('SparqlBlocks.Blocks');
 goog.require('SparqlBlocks.Blocks.bgp');
 goog.require('SparqlBlocks.Blocks.control');
+goog.require('SparqlBlocks.Blocks.query');
 goog.require('SparqlBlocks.Blocks.exec');
 goog.require('SparqlBlocks.Blocks.logic');
-goog.require('SparqlBlocks.Blocks.query');
 goog.require('SparqlBlocks.Blocks.resources');
 goog.require('SparqlBlocks.Blocks.math');
 goog.require('SparqlBlocks.Blocks.text');
 goog.require('SparqlBlocks.Blocks.variables');
+goog.require('SparqlBlocks.Blocks.table');
 
 goog.require('SparqlBlocks.Sparql.bgp');
 goog.require('SparqlBlocks.Sparql.control');

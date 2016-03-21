@@ -24,7 +24,7 @@ goog.provide('SparqlBlocks.Blocks.exec');
 
 // goog.require('Blockly.Blocks');
 goog.require('SparqlBlocks.Blocks');
-// goog.require('SparqlBlocks.Query');
+// goog.require('SparqlBlocks.Blocks.query');
 
 ( function() {
 

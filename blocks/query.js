@@ -257,6 +257,6 @@ goog.require('SparqlBlocks.Blocks');
     }
   });
 
-  SparqlBlocks.Blocks.query.orderFields = orderFields;
+  SparqlBlocks.Blocks.query = {orderFields: orderFields};
 
 }) ();
