@@ -56,4 +56,16 @@ goog.require('SparqlBlocks.Sparql');
               'OPTIONAL {\n' + statements_op + '\n}' + SparqlBlocks.Sparql.STMNT_BRK;
   };
 
+  SparqlBlocks.Sparql['sparql_graph'] = function(block) {
+    var statements_op = SparqlBlocks.Sparql.statementToGraphPattern(block, 'OP');
+    var value_graphName =
+        SparqlBlocks.Sparql.valueToCode(
+            block,
+            'GRAPHNAME',
+            SparqlBlocks.Sparql.ORDER_NONE);
+    return (!value_graphName || statements_op == '') ?
+              '' :
+              'GRAPH ' + value_graphName + ' {\n' + statements_op + '\n}' + SparqlBlocks.Sparql.STMNT_BRK;
+  };
+
 }) ();
