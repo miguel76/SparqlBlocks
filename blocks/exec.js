@@ -144,6 +144,8 @@ goog.require('SparqlBlocks.Blocks');
     };
   }
 
+  var DESCR_LENGTH = 40;
+
   var connect_ = function(connection, block) {
     var oldBlock = connection.targetBlock();
     if (oldBlock) {
