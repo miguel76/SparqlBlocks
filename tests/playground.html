@@ -100,7 +100,6 @@ function start() {
         },
      });
 
-
   $('.blocklyToolboxDiv')[0].insertAdjacentHTML(
     'afterbegin',
     // // 'beforeend',
@@ -338,26 +337,18 @@ h1 {
 }
 
 .blocklyToolboxDiv #\:e .blocklyTreeRow {
-  background-image: url('../img/menuIcons/png/link-1.png'); /* Out-Properties */
+  background-image: url('../img/menuIcons/png/link-1.png'); /* Properties */
 }
 
 .blocklyToolboxDiv #\:e .blocklyTreeSelected {
-  background-image: url('../img/menuIconsWhite/png/link-1.png'); /* Out-Properties */
+  background-image: url('../img/menuIconsWhite/png/link-1.png'); /* Properties */
 }
 
-.blocklyToolboxDiv #\:f .blocklyTreeRow {
-  background-image: url('../img/menuIcons/png/link-1.png'); /* In-Properties */
-}
-
-.blocklyToolboxDiv #\:f .blocklyTreeSelected {
-  background-image: url('../img/menuIconsWhite/png/link-1.png'); /* In-Properties */
-}
-
-.blocklyToolboxDiv #\:h .blocklyTreeRow {
+.blocklyToolboxDiv #\:g .blocklyTreeRow {
   background-image: url('../img/menuIcons/png/mark.png'); /* Tests */
 }
 
-.blocklyToolboxDiv #\:h .blocklyTreeSelected {
+.blocklyToolboxDiv #\:g .blocklyTreeSelected {
   background-image: url('../img/menuIconsWhite/png/mark.png'); /* Tests */
 }
 
@@ -581,6 +572,7 @@ h1 {
     <category name="Compose" colour="260">
       <block type="sparql_union"></block>
       <block type="sparql_optional"></block>
+      <block type="sparql_graph"></block>
     </category>
     <sep></sep>
     <category name="Logic" colour="210">
@@ -675,6 +667,9 @@ h1 {
     </category>
     <category name="Text" colour="160">
       <block type="sparql_text"></block>
+      <block type="sparql_text_with_lang">
+        <field name="LANG">en</field>
+      </block>
       <block type="sparql_text_join"></block>
       <block type="sparql_text_length">
         <value name="VALUE">
@@ -765,6 +760,254 @@ h1 {
     <sep></sep>
     <category name="Variables" colour="330" custom="VARIABLE"></category>
     <sep></sep>
+    <category name="Things" colour="120">
+      <block type="sparql_typedsubject_propertylist">
+        <value name="SUBJECT">
+          <block type="variables_get">
+            <field name="VAR">resource</field>
+          </block>
+        </value>
+        <value name="TYPE">
+          <shadow type="sparql_prefixed_iri">
+            <field name="PREFIX">owl</field>
+            <field name="LOCAL_NAME">Thing</field>
+          </shadow>
+        </value>
+        <statement name="PROPERTY_LIST">
+          <block type="sparql_verb_object">
+            <value name="VERB">
+              <block type="sparql_prefixed_iri">
+                <field name="PREFIX">rdfs</field>
+                <field name="LOCAL_NAME">label</field>
+              </block>
+            </value>
+            <value name="OBJECT">
+              <block type="variables_get">
+                <field name="VAR">label</field>
+              </block>
+            </value>
+          </block>
+        </statement>
+        <next>
+          <block type="sparql_filter">
+            <value name="CONDITION">
+              <block type="sparql_text_contains">
+                <value name="FIND">
+                  <shadow type="sparql_text_with_lang">
+                    <field name="TEXT">abc</field>
+                    <field name="LANG">en</field>
+                  </shadow>
+                </value>
+                <value name="VALUE">
+                  <block type="variables_get">
+                    <field name="VAR">label</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+          </block>
+        </next>
+      </block>
+    </category>
+    <!-- <category name="Vocabulary"> -->
+      <category name="Classes" colour="120">
+        <block type="sparql_typedsubject_propertylist">
+          <value name="SUBJECT">
+            <block type="variables_get">
+              <field name="VAR">type</field>
+            </block>
+          </value>
+          <value name="TYPE">
+            <block type="sparql_prefixed_iri">
+              <field name="PREFIX">owl</field>
+              <field name="LOCAL_NAME">Class</field>
+            </block>
+          </value>
+          <statement name="PROPERTY_LIST">
+            <block type="sparql_verb_object">
+              <value name="VERB">
+                <block type="sparql_prefixed_iri">
+                  <field name="PREFIX">rdfs</field>
+                  <field name="LOCAL_NAME">label</field>
+                </block>
+              </value>
+              <value name="OBJECT">
+                <block type="variables_get">
+                  <field name="VAR">label</field>
+                </block>
+              </value>
+            </block>
+          </statement>
+          <next>
+            <block type="sparql_filter">
+              <value name="CONDITION">
+                <block type="sparql_text_contains">
+                  <value name="FIND">
+                    <shadow type="sparql_text_with_lang">
+                      <field name="TEXT">abc</field>
+                      <field name="LANG">en</field>
+                    </shadow>
+                  </value>
+                  <value name="VALUE">
+                    <block type="variables_get">
+                      <field name="VAR">label</field>
+                    </block>
+                  </value>
+                </block>
+              </value>
+            </block>
+          </next>
+        </block>
+      </category>
+      <category name="Properties" colour="120">
+        <block type="sparql_typedsubject_propertylist">
+          <value name="SUBJECT">
+            <block type="variables_get">
+              <field name="VAR">property</field>
+            </block>
+          </value>
+          <value name="TYPE">
+            <block type="sparql_prefixed_iri">
+              <field name="PREFIX">rdf</field>
+              <field name="LOCAL_NAME">Property</field>
+            </block>
+          </value>
+          <statement name="PROPERTY_LIST">
+            <block type="sparql_verb_object">
+              <value name="VERB">
+                <block type="sparql_prefixed_iri">
+                  <field name="PREFIX">rdfs</field>
+                  <field name="LOCAL_NAME">label</field>
+                </block>
+              </value>
+              <value name="OBJECT">
+                <block type="variables_get">
+                  <field name="VAR">label</field>
+                </block>
+              </value>
+            </block>
+          </statement>
+          <next>
+            <block type="sparql_filter">
+              <value name="CONDITION">
+                <block type="sparql_text_contains">
+                  <value name="FIND">
+                    <shadow type="sparql_text_with_lang">
+                      <field name="TEXT">abc</field>
+                      <field name="LANG">en</field>
+                    </shadow>
+                  </value>
+                  <value name="VALUE">
+                    <block type="variables_get">
+                      <field name="VAR">label</field>
+                    </block>
+                  </value>
+                </block>
+              </value>
+            </block>
+          </next>
+        </block>
+        <block type="sparql_verb_object">
+          <value name="VERB">
+            <block type="sparql_prefixed_iri">
+              <field name="PREFIX">rdfs</field>
+              <field name="LOCAL_NAME">domain</field>
+            </block>
+          </value>
+          <value name="OBJECT">
+            <block type="sparql_anonsubject_propertylist">
+              <statement name="PROPERTY_LIST">
+                <block type="sparql_reverseClosurePath_object">
+                  <value name="VERB">
+                    <block type="sparql_prefixed_iri">
+                      <field name="PREFIX">rdfs</field>
+                      <field name="LOCAL_NAME">subClassOf</field>
+                    </block>
+                  </value>
+                  <value name="OBJECT">
+                    <shadow type="sparql_prefixed_iri">
+                      <field name="PREFIX">owl</field>
+                      <field name="LOCAL_NAME">Thing</field>
+                    </shadow>
+                  </value>
+                </block>
+              </statement>
+            </block>
+          </value>
+        </block>
+        <block type="sparql_verb_object">
+          <value name="VERB">
+            <block type="sparql_prefixed_iri">
+              <field name="PREFIX">rdfs</field>
+              <field name="LOCAL_NAME">range</field>
+            </block>
+          </value>
+          <value name="OBJECT">
+            <block type="sparql_anonsubject_propertylist">
+              <statement name="PROPERTY_LIST">
+                <block type="sparql_reverseClosurePath_object">
+                  <value name="VERB">
+                    <block type="sparql_prefixed_iri">
+                      <field name="PREFIX">rdfs</field>
+                      <field name="LOCAL_NAME">subClassOf</field>
+                    </block>
+                  </value>
+                  <value name="OBJECT">
+                    <shadow type="sparql_prefixed_iri">
+                      <field name="PREFIX">owl</field>
+                      <field name="LOCAL_NAME">Thing</field>
+                    </shadow>
+                  </value>
+                </block>
+              </statement>
+            </block>
+          </value>
+        </block>
+      </category>
+    <!-- </category> -->
+    <sep></sep>
+    <category name="Test" colour="330">
+      <block type="sparql_test">
+        <data>{
+          "id": "1",
+          "question": "1) The DBpedia Class for mountains is",
+          "answerMD5": "2bd86839cd03700675d6bcf3f34a8684"
+        }</data>
+      </block>
+      <block type="sparql_test">
+        <data>{
+          "id": "2",
+          "question": "2) The highest mountain (on Earth) is",
+          "answerMD5": "2bd86839cd03700675d6bcf3f34a8684"
+        }</data>
+      </block>
+      <block type="sparql_test">
+        <data>{
+          "id": "3",
+          "question": "3) The highest mountain after the Annapurna is",
+          "answerMD5": "2bd86839cd03700675d6bcf3f34a8684"
+        }</data>
+      </block>
+      <block type="sparql_test">
+        <data>{
+          "id": "4",
+          "question": "4) The highest mountain in Australia is ",
+          "answerMD5": "6840803329d7fb45d168be3f602d0b35"
+        }</data>
+      </block>
+      <block type="sparql_test">
+        <data>{
+          "id": "5",
+          "question": "5) The second highest mountain (on Earth) is",
+          "answerMD5": "2bd86839cd03700675d6bcf3f34a8684"
+        }</data>
+      </block>
+      <block type="sparql_builtin_thing"></block>
+      <block type="sparql_builtin_class"></block>
+    </category>
+  </xml>
+
+  <xml id="library" style="display: none">
     <category name="Things" colour="290">
       <block type="sparql_select">
         <statement name="WHERE">
@@ -838,7 +1081,6 @@ h1 {
         </statement>
       </block>
     </category>
-    <!-- <category name="Vocabulary"> -->
       <category name="Classes" colour="290">
         <block type="sparql_select">
           <statement name="WHERE">
@@ -1149,46 +1391,6 @@ h1 {
           </statement>
         </block>
       </category>
-    <!-- </category> -->
-    <sep></sep>
-    <category name="Test" colour="330">
-      <block type="sparql_test">
-        <data>{
-          "id": "1",
-          "question": "1) The DBpedia Class for mountains is",
-          "answerMD5": "2bd86839cd03700675d6bcf3f34a8684"
-        }</data>
-      </block>
-      <block type="sparql_test">
-        <data>{
-          "id": "2",
-          "question": "2) The highest mountain (on Earth) is",
-          "answerMD5": "2bd86839cd03700675d6bcf3f34a8684"
-        }</data>
-      </block>
-      <block type="sparql_test">
-        <data>{
-          "id": "3",
-          "question": "3) The highest mountain after the Annapurna is",
-          "answerMD5": "2bd86839cd03700675d6bcf3f34a8684"
-        }</data>
-      </block>
-      <block type="sparql_test">
-        <data>{
-          "id": "4",
-          "question": "4) The highest mountain in Australia is ",
-          "answerMD5": "6840803329d7fb45d168be3f602d0b35"
-        }</data>
-      </block>
-      <block type="sparql_test">
-        <data>{
-          "id": "5",
-          "question": "5) The second highest mountain (on Earth) is",
-          "answerMD5": "2bd86839cd03700675d6bcf3f34a8684"
-        }</data>
-      </block>
-      <!-- <block type="sparql_smallTable"></block> -->
-    </category>
   </xml>
 
   <h1>Blockly Playground</h1>
