@@ -38,7 +38,8 @@ goog.require('SparqlBlocks.Blocks');
       this.setColour(210);
       this.appendValueInput("CONDITION")
           .setCheck(typeExt("BooleanExpr"))
-          .appendField("provided that");
+          .appendField("filter");
+          // .appendField("provided that");
       this.setInputsInline(true);
       this.setPreviousStatement(true, typeExt("GraphPattern"));
       this.setNextStatement(true, typeExt("GraphPattern"));
@@ -56,7 +57,7 @@ goog.require('SparqlBlocks.Blocks');
           // .appendField("this");
       this.appendStatementInput("OP2")
           .setCheck(typeExt("GraphPattern"))
-          .appendField("or");
+          .appendField("union");
       this.setInputsInline(true);
       this.setPreviousStatement(true, typeExt("GraphPattern"));
       this.setNextStatement(true, typeExt("GraphPattern"));
@@ -70,11 +71,28 @@ goog.require('SparqlBlocks.Blocks');
       this.setColour(260);
       this.appendStatementInput("OP")
           .setCheck(typeExt("GraphPattern"))
-          .appendField("optionally");
+          .appendField("optional");
       this.setInputsInline(true);
       this.setPreviousStatement(true, typeExt("GraphPattern"));
       this.setNextStatement(true, typeExt("GraphPattern"));
       this.setTooltip(SparqlBlocks.Msg.OPTIONAL_TOOLTIP);
+    }
+  });
+
+  SparqlBlocks.Blocks.block('sparql_graph', {
+    init: function() {
+      this.setHelpUrl('http://www.w3.org/TR/sparql11-query/#optionals');
+      this.setColour(260);
+      this.appendValueInput("GRAPHNAME")
+          .setCheck(typeExt("GraphTermOrVar"))
+          .appendField("choose graph");
+      this.appendStatementInput("OP")
+          .setCheck(typeExt("GraphPattern"))
+          .appendField("");
+      this.setInputsInline(true);
+      this.setPreviousStatement(true, typeExt("GraphPattern"));
+      this.setNextStatement(true, typeExt("GraphPattern"));
+      this.setTooltip(SparqlBlocks.Msg.GRAPH_TOOLTIP);
     }
   });
 
