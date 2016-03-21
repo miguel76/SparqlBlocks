@@ -65,6 +65,7 @@ SparqlBlocks.Types = (function() {
   setType("SelectQuery", { /* parents: ["GraphPattern"] */ });
   setType("Bind", { parents: ["GraphPattern"] });
   setType("PropertyList", {});
+  setType("Table", { parents: ["GraphPattern"] });
 
   setType("Expr", {});
   setType("StringExprOrLiteral", { parents: ["Expr"] });

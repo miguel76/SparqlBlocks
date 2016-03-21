@@ -50,84 +50,23 @@ goog.require('SparqlBlocks.Blocks');
     }
   });
 
-  SparqlBlocks.Blocks.block('sparql_select', {
+  var orderFields = {
     init: function() {
-      this.setHelpUrl('http://www.w3.org/TR/sparql11-query/#select');
-      this.setColour(290);
-      // this.appendValueInput("VAR")
-      //     .setCheck(["var", "graph_term"]);
+        this.orderFieldCount_ = 1;
 
-      // this.appendStatementInput("SELECT")
-      //     .setCheck("VarBindings")
-      //     .appendField("SELECT");
-      this.appendDummyInput()
-          .appendField("select all the variables");
+        this.appendValueInput("ORDER_FIELD1")
+            .setCheck(typeExt("Expr"))
+            .appendField("order by", "ORDER_LABEL1")
+            .appendField(
+              new Blockly.FieldDropdown([["↓", "ASC"], ["↑", "DESC"]]),
+              "ORDER_DIRECTION1");
 
-      this.appendStatementInput("WHERE")
-          .setCheck(typeExt("GraphPattern"))
-          .appendField("where");
-
-      this.orderFieldCount_ = 1;
-
-      this.appendValueInput("ORDER_FIELD1")
-          .setCheck(typeExt("Expr"))
-          .appendField("order by", "ORDER_LABEL1")
-          .appendField(
-            new Blockly.FieldDropdown([["↓", "ASC"], ["↑", "DESC"]]),
-            "ORDER_DIRECTION1");
-
-      this.appendDummyInput("AFTER_ORDER")
-          .appendField("& limit to first")
-          .appendField(new Blockly.FieldTextInput("5"), "LIMIT")
-          .appendField("rows");
-
-      // this.setOutput(true, "Select");
-      this.setInputsInline(true);
-      this.setPreviousStatement(true, typeExt("SelectQuery"));
-      this.setTooltip(SparqlBlocks.Msg.SELECT_TOOLTIP);
-    },
-    saveQueryAsSparql: function() {
-      var sparqlFragment = SparqlBlocks.Sparql.blockToCode(this);
-      if (sparqlFragment) {
-        var outputBlob = new Blob([sparqlFragment], {type : 'application/sparql-query'});
-        saveAs(outputBlob, "query.rq" );
-      }
-    },
-    customContextMenu: function(options) {
-      var thisBlock = this;
-      SparqlBlocks.Blocks.insertOptionBeforeHelp(options, {
-        text: "Save Query as SPARQL",
-        enabled: true,
-        callback: function() {
-          thisBlock.saveQueryAsSparql();
-        }
-      });
+        this.appendDummyInput("AFTER_ORDER")
+            .appendField("& limit to first")
+            .appendField(new Blockly.FieldTextInput("5"), "LIMIT")
+            .appendField("rows");
     },
     onchange: function() {
-      // If it is a subquery, add next statement connection
-      var prevTargetConnection = this.previousConnection.targetConnection;
-      if (prevTargetConnection) {
-        var check = prevTargetConnection.check_;
-        if (check && check.indexOf("GraphPattern") != -1) {
-          if (!this.nextConnection) {
-            this.setNextStatement(true, typeExt("GraphPattern"));
-          }
-        } else {
-          if (this.nextConnection) {
-            this.setNextStatement(false);
-          }
-        }
-      } else {
-        if (this.nextConnection) {
-          if (!this.nextConnection.targetConnection) {
-            this.setNextStatement(false);
-            this.setPreviousStatement(true, "SelectQuery");
-          } else {
-            this.setPreviousStatement(true, "GraphPattern");
-          }
-        }
-      }
-
       // Dynamically add or remove order fields as needed
       var lastOrderInput = this.getInput('ORDER_FIELD' + this.orderFieldCount_);
       var lastOrderConnection = lastOrderInput && lastOrderInput.connection.targetConnection;
@@ -216,6 +155,89 @@ goog.require('SparqlBlocks.Blocks');
         this.moveInputBefore(inputName, "AFTER_ORDER");
       }
     }
+  }
+
+  SparqlBlocks.Blocks.block('sparql_select', {
+    init: function() {
+      this.setHelpUrl('http://www.w3.org/TR/sparql11-query/#select');
+      this.setColour(290);
+      // this.appendValueInput("VAR")
+      //     .setCheck(["var", "graph_term"]);
+
+      // this.appendStatementInput("SELECT")
+      //     .setCheck("VarBindings")
+      //     .appendField("SELECT");
+      this.appendDummyInput()
+          .appendField("select all the variables");
+
+      this.appendStatementInput("WHERE")
+          .setCheck(typeExt("GraphPattern"))
+          .appendField("where");
+
+      orderFields.init.call(this);
+
+      // this.setOutput(true, "Select");
+      this.setInputsInline(true);
+      this.setPreviousStatement(true, typeExt("SelectQuery"));
+      this.setTooltip(SparqlBlocks.Msg.SELECT_TOOLTIP);
+    },
+    saveQueryAsSparql: function() {
+      var sparqlFragment = SparqlBlocks.Sparql.blockToCode(this);
+      if (sparqlFragment) {
+        var outputBlob = new Blob([sparqlFragment], {type : 'application/sparql-query'});
+        saveAs(outputBlob, "query.rq" );
+      }
+    },
+    customContextMenu: function(options) {
+      var thisBlock = this;
+      SparqlBlocks.Blocks.insertOptionBeforeHelp(options, {
+        text: "Save Query as SPARQL",
+        enabled: true,
+        callback: function() {
+          thisBlock.saveQueryAsSparql();
+        }
+      });
+    },
+    onchange: function() {
+      // If it is a subquery, add next statement connection
+      var prevTargetConnection = this.previousConnection.targetConnection;
+      if (prevTargetConnection) {
+        var check = prevTargetConnection.check_;
+        if (check && check.indexOf("GraphPattern") != -1) {
+          if (!this.nextConnection) {
+            this.setNextStatement(true, typeExt("GraphPattern"));
+          }
+        } else {
+          if (this.nextConnection) {
+            this.setNextStatement(false);
+          }
+        }
+      } else {
+        if (this.nextConnection) {
+          if (!this.nextConnection.targetConnection) {
+            this.setNextStatement(false);
+            this.setPreviousStatement(true, "SelectQuery");
+          } else {
+            this.setPreviousStatement(true, "GraphPattern");
+          }
+        }
+      }
+
+      // Dynamically add or remove order fields as needed
+      orderFields.onchange.call(this);
+    },
+    /**
+     * Create XML to represent the number of order fields.
+     * @return {Element} XML storage element.
+     * @this Blockly.Block
+     */
+    mutationToDom: orderFields.mutationToDom,
+    /**
+     * Parse XML to restore the order fields.
+     * @param {!Element} xmlElement XML storage element.
+     * @this Blockly.Block
+     */
+    domToMutation: orderFields.domToMutation
   });
 
   // https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#8nt67n
@@ -234,5 +256,7 @@ goog.require('SparqlBlocks.Blocks');
       this.setTooltip('');
     }
   });
+
+  SparqlBlocks.Blocks.query.orderFields = orderFields;
 
 }) ();

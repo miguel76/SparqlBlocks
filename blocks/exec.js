@@ -24,6 +24,7 @@ goog.provide('SparqlBlocks.Blocks.exec');
 
 // goog.require('Blockly.Blocks');
 goog.require('SparqlBlocks.Blocks');
+// goog.require('SparqlBlocks.Query');
 
 ( function() {
 
@@ -38,26 +39,66 @@ goog.require('SparqlBlocks.Blocks');
     return {
       init: function() {
         this.setHelpUrl('http://www.w3.org/TR/2013/REC-sparql11-protocol-20130321/#query-operation');
-        this.setColour(330);
         if (options && options.endpointField) {
           this.appendDummyInput()
-              .appendField(new Blockly.FieldImage(dbFile, 16, 16, 'Endpoint'))
+          //     // .appendField(new Blockly.FieldImage(dbFile, 16, 16, 'Endpoint'))
+          //     .appendField("⚙")
+              .appendField("from")
               .appendField(new Blockly.FieldTextInput(defaultEndpoint), "ENDPOINT");
+                  // // .appendField(new Blockly.FieldImage(dbFile, 16, 16, 'Endpoint'))
+                  // .appendField("⚙")
+                  // .appendField(new Blockly.FieldTextInput(defaultEndpoint), "ENDPOINT");
         }
-        this.appendStatementInput("QUERY")
-            .setCheck(typeExt("SelectQuery"))
-            .appendField(" ⚙");
-        this.appendDummyInput("RESULTS")
-            .appendField("↪")
-            .appendField("", "RESULTS_CONTAINER");
+        if (options && options.baseQuery) {
+          this.setColour(290);
+          // this.appendDummyInput()
+          //     .appendField("select all the variables");
+          this.appendStatementInput("WHERE")
+              .setCheck(typeExt("GraphPattern"))
+              .appendField("select");
+          SparqlBlocks.Blocks.query.orderFields.init.call(this);
+          this.setInputsInline(true);
+          this.appendStatementInput("RESULTS")
+              .setCheck(typeExt("Table"))
+              .appendField("↪");
+              // .appendField("", "RESULTS_CONTAINER");
+        } else {
+          this.setColour(330);
+          this.appendStatementInput("QUERY")
+              .setCheck(typeExt("SelectQuery"))
+              .appendField(" ⚙");
+          this.appendDummyInput("RESULTS")
+              .appendField("↪")
+              .appendField("", "RESULTS_CONTAINER");
+        }
 
         this.setTooltip(SparqlBlocks.Msg.EXECUTION_TOOLTIP);
       },
       onchange: function() {
+        if (options && options.baseQuery) {
+          SparqlBlocks.Blocks.query.orderFields.onchange.call(this);
+        }
         if (!options || !options.dontExecute) {
-          SparqlBlocks.Exec.blockExec(this);
+          if (options && options.baseQuery) {
+            blockExec_(this, this);
+            // SparqlBlocks.Exec.blockExec(this, this);
+          } else {
+            SparqlBlocks.Exec.blockExec(this);
+          }
         }
       },
+      /**
+       * Create XML to represent the number of order fields.
+       * @return {Element} XML storage element.
+       * @this Blockly.Block
+       */
+      mutationToDom: SparqlBlocks.Blocks.query.orderFields.mutationToDom,
+      /**
+       * Parse XML to restore the order fields.
+       * @param {!Element} xmlElement XML storage element.
+       * @this Blockly.Block
+       */
+      domToMutation: SparqlBlocks.Blocks.query.orderFields.domToMutation,
       customContextMenu: function(options) {
         if (this.sparqlQueryStr) {
           var thisBlock = this;
@@ -103,15 +144,132 @@ goog.require('SparqlBlocks.Blocks');
     };
   }
 
+  var connect_ = function(connection, block) {
+    var oldBlock = connection.targetBlock();
+    if (oldBlock) {
+      oldBlock.dispose();
+    }
+    block.setDeletable(false);
+    block.setMovable(false);
+    connection.connect(block.previousConnection);
+    block.initSvg();
+    block.render();
+  }
+
+  var sparqlExecAndPublish_ = function(endpointUrl, query, workspace, connection, callback) {
+
+    var progressBlock = workspace.newBlock('sparql_execution_in_progress');
+    // progressBlock.initSvg();
+    connect_(connection, progressBlock);
+
+    return SparqlBlocks.Exec.sparqlExec(endpointUrl, query, function(err, data) {
+      var resultBlock = null;
+      if (err) {
+        resultBlock = workspace.newBlock('sparql_execution_error');
+        // var errorType = (err.textStatus) ? err.textStatus : "unknown problem";
+        // if (err.jqXHR.status) {
+        //   errorType += " " + err.jqXHR.status;
+        // }
+        // if (err.jqXHR.statusText) {
+        //   errorType += ": " + err.jqXHR.statusText;
+        // }
+        // resultBlock.setFieldValue(errorType, 'ERRORTYPE');
+        var errorDescr = err.errorThrown; //err.jqXHR.responseText;
+        if (errorDescr) {
+          var errorDescrShort = null;
+          if (errorDescr.length > DESCR_LENGTH) {
+            errorDescrShort = errorDescr.substr(0, DESCR_LENGTH - 3) + '...';
+          } else {
+            errorDescrShort = errorDescr;
+          }
+          resultBlock.setFieldValue(errorDescrShort, 'ERRORDESCR');
+          resultBlock.setTooltip(errorDescr);
+        } else {
+          resultBlock.setFieldValue("Unable to reach the Endpoint", 'ERRORDESCR');
+          resultBlock.setTooltip("There has been an error connecting to the SPARQL Endpoint. Check the Endpoint URI. If the URI is correct, check the browser log for details.");
+        }
+      } else {
+        resultBlock = SparqlBlocks.Blocks.table.loadTable(data);
+      }
+      connect_(connection, resultBlock);
+      callback(data);
+    });
+  }
+
+  var blockExecQuery_ = function(block, queryStr) {
+    var resInput = block.getInput('RESULTS');
+    if (!resInput) return;
+    var resConnection = resInput.connection;
+    if (!resConnection) return;
+    var endpointUri_txt = block.getFieldValue('ENDPOINT');
+    var endpointUri = endpointUri_txt ? encodeURI(endpointUri_txt) : null;
+    if (endpointUri != block.endpointUri || queryStr != block.sparqlQueryStr) {
+      block.endpointUri = endpointUri;
+      block.sparqlQueryStr = queryStr;
+      if (block.queryReq) {
+        block.queryReq.abort();
+      }
+      if (queryStr) {
+        console.log('Ready to execute query: ' + queryStr);
+        block.resultsData = null;
+        block.queryReq = sparqlExecAndPublish_(
+            endpointUri, queryStr,
+            block.workspace,
+            resConnection,
+            function(data) {
+              block.queryReq = null;
+              block.resultsData = data;
+            } );
+      } else {
+        console.log('Empty query');
+        block.resultsData = null;
+        var phBlock = block.workspace.newBlock('sparql_execution_placeholder');
+        // newBlock.initSvg();
+        connect_(resConnection, phBlock);
+        block.queryReq = null;
+      }
+
+    }
+
+  }
+
+  var blockExec_ = function(block, queryBlock) {
+    if (!queryBlock) {
+      queryBlock = block.getInputTargetBlock('QUERY');
+    }
+    var queryStr = SparqlBlocks.Sparql.sparqlQuery(queryBlock);
+    blockExecQuery_(block, queryStr);
+  }
+
   SparqlBlocks.Blocks.block(
       'sparql_execution',
       execBlock());
   SparqlBlocks.Blocks.block(
+      'sparql_execution_query',
+      execBlock({baseQuery: true}));
+  SparqlBlocks.Blocks.block(
       'sparql_execution_endpoint',
       execBlock({endpointField: true}));
   SparqlBlocks.Blocks.block(
+      'sparql_execution_endpoint_query',
+      execBlock({endpointField: true, baseQuery: true}));
+  SparqlBlocks.Blocks.block(
       'sparql_execution_endpoint_fake',
       execBlock({endpointField: true, dontExecute: true}));
+
+  SparqlBlocks.Blocks.block('sparql_execution_placeholder', {
+      init: function() {
+        this.setHelpUrl('http://www.w3.org/TR/2013/REC-sparql11-protocol-20130321/#query-operation');
+        this.setColour(330);
+        this.appendDummyInput()
+            .appendField(" < results will appear here > ");
+        this.setPreviousStatement(true, "Table");
+        this.setTooltip(SparqlBlocks.Msg.EXECUTION_PLACEHOLDER_TOOLTIP);
+        this.setDeletable(false);
+        this.setMovable(false);
+        this.setEditable(false);
+      }
+  });
 
   SparqlBlocks.Blocks.block('sparql_execution_in_progress', {
     init: function() {
@@ -132,12 +290,12 @@ goog.require('SparqlBlocks.Blocks');
       this.setHelpUrl('http://www.w3.org/TR/2013/REC-sparql11-protocol-20130321/#query-failure');
       this.setColour(330);
       this.appendDummyInput()
-          .appendField("Error executing query!");
+          .appendField(" * Error executing query! * ");
+      // this.appendDummyInput()
+      //     .appendField("Error Name")
+      //     .appendField(new Blockly.FieldTextInput("ERROR TYPE"), "ERRORTYPE");
       this.appendDummyInput()
-          .appendField("Error Name")
-          .appendField(new Blockly.FieldTextInput("ERROR TYPE"), "ERRORTYPE");
-      this.appendDummyInput()
-          .appendField("Description")
+          // .appendField("Description")
           .appendField(new Blockly.FieldTextInput("ERROR"), "ERRORDESCR");
       this.setPreviousStatement(true, "Table");
       this.setTooltip('');

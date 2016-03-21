@@ -30,6 +30,9 @@ goog.require('SparqlBlocks.Sparql');
       return '';
     }
     var statements_where = SparqlBlocks.Sparql.statementToGraphPattern(block, 'WHERE');
+    if (statements_where == '') {
+      return '';
+    }
     var text_limit = block.getFieldValue('LIMIT');
     var code = 'SELECT DISTINCT * WHERE {\n' + statements_where + '\n}';
     var orderByCode = null;

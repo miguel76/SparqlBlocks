@@ -440,9 +440,12 @@ h1 {
   </div>
 
   <xml id="toolbox" style="display: none">
-    <category name="Exec/Query" colour="330" icon="../img/menuIcons/png/gear.png">
-      <block type="sparql_execution_endpoint"></block>
-      <block type="sparql_execution"></block>
+    <category name="Query" colour="290" icon="../img/menuIcons/png/gear.png">
+      <block type="sparql_execution_endpoint_query"></block>
+      <block type="sparql_execution_query"></block>
+      <!-- <block type="sparql_execution_endpoint"></block>
+      <block type="sparql_execution"></block> -->
+      <block type="sparql_smallTable"></block>
       <block type="sparql_select">
         <statement name="WHERE">
           <block type="sparql_typedsubject_propertylist">

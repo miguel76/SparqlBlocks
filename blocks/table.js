@@ -37,11 +37,30 @@ goog.require('SparqlBlocks.Blocks');
      */
     init: function() {
       this.setColour(SparqlBlocks.Blocks.table.HUE);
-      this.appendDummyInput()
-          .appendField(new SparqlBlocks.FieldTable( {"head":{"link":[],"vars":["s","p","o"]},"results":{"distinct":false,"ordered":true,"bindings":[{"s":{"type":"uri","value":"http://www.openlinksw.com/virtrdf-data-formats#default-iid"},"p":{"type":"uri","value":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"},"o":{"type":"uri","value":"http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat"}},{"s":{"type":"uri","value":"http://www.openlinksw.com/virtrdf-data-formats#default-iid-nullable"},"p":{"type":"uri","value":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"},"o":{"type":"uri","value":"http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat"}},{"s":{"type":"uri","value":"http://www.openlinksw.com/virtrdf-data-formats#default-iid-nonblank"},"p":{"type":"uri","value":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"},"o":{"type":"uri","value":"http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat"}},{"s":{"type":"uri","value":"http://www.openlinksw.com/virtrdf-data-formats#default-iid-nonblank-nullable"},"p":{"type":"uri","value":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"},"o":{"type":"uri","value":"http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat"}},{"s":{"type":"uri","value":"http://www.openlinksw.com/virtrdf-data-formats#default"},"p":{"type":"uri","value":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"},"o":{"type":"uri","value":"http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat"}}]}}), 'TABLE');
+      this.tableInput = this.appendDummyInput("TABLEINPUT").appendField("","TABLE");
+      this.setPreviousStatement(true, typeExt('Table'));
       // this.setOutput(true, 'LiteralString');
       // this.setTooltip(SparqlBlocks.Msg.TEXT_TOOLTIP);
+    },
+    setData: function(data) {
+      this.setTable(new SparqlBlocks.FieldTable(data));
+    },
+    setTable: function(newTable) {
+      this.tableInput.removeField("TABLE");
+      this.tableInput.appendField(newTable, "TABLE");
     }
+
+
   });
+
+  // new SparqlBlocks.FieldTable( {"head":{"link":[],"vars":["s","p","o"]},"results":{"distinct":false,"ordered":true,"bindings":[{"s":{"type":"uri","value":"http://www.openlinksw.com/virtrdf-data-formats#default-iid"},"p":{"type":"uri","value":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"},"o":{"type":"uri","value":"http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat"}},{"s":{"type":"uri","value":"http://www.openlinksw.com/virtrdf-data-formats#default-iid-nullable"},"p":{"type":"uri","value":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"},"o":{"type":"uri","value":"http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat"}},{"s":{"type":"uri","value":"http://www.openlinksw.com/virtrdf-data-formats#default-iid-nonblank"},"p":{"type":"uri","value":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"},"o":{"type":"uri","value":"http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat"}},{"s":{"type":"uri","value":"http://www.openlinksw.com/virtrdf-data-formats#default-iid-nonblank-nullable"},"p":{"type":"uri","value":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"},"o":{"type":"uri","value":"http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat"}},{"s":{"type":"uri","value":"http://www.openlinksw.com/virtrdf-data-formats#default"},"p":{"type":"uri","value":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"},"o":{"type":"uri","value":"http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat"}}]}})
+
+  SparqlBlocks.Blocks.table.loadTable = function(data) {
+    var newBlock = workspace.newBlock('sparql_smallTable');
+    newBlock.setData(data);
+    newBlock.initSvg();
+    newBlock.render();
+    return newBlock;
+  }
 
 }) ();

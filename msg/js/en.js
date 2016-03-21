@@ -8,8 +8,9 @@ goog.require('SparqlBlocks.Msg');
 
 SparqlBlocks.Msg.ANONSUBJECT_PROPERTYLIST_TOOLTIP = "Match graphs from current node.";
 SparqlBlocks.Msg.CLOSUREPATH_OBJECT_TOOLTIP = "Match outbound paths of any length with specified predicate (resource) ad object (variable, resource, or literal).";
+SparqlBlocks.Msg.EXECUTION_PLACEHOLDER_TOOLTIP = "After you make a query, a table with the results will show up here.";
 SparqlBlocks.Msg.EXECUTION_IN_PROGRESS_TOOLTIP = "The server is taking a while. You can still build and launch queries in the meanwhile...";
-SparqlBlocks.Msg.EXECUTION_TOOLTIP = "Execute a query against a SPARQL endpoint. Results are shown as a table below the query";
+SparqlBlocks.Msg.EXECUTION_TOOLTIP = "Execute a query against a SPARQL endpoint. Results are shown as a table below the query.";
 SparqlBlocks.Msg.EXISTS_TOOLTIP = "Require that the sub-group is matched at least once.";
 SparqlBlocks.Msg.FILTER_TOOLTIP = "Require the specified expression to be true.";
 SparqlBlocks.Msg.IRI_TOOLTIP = "A resource, represented with full IRI.";

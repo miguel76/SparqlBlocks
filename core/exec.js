@@ -36,17 +36,16 @@ SparqlBlocks.Exec = ( function() {
         endpointUrl +
         "?query=" + encodeURIComponent(query);
     return $.ajax({
-      headers: {Accept: "application/sparql-results+json"},
-      dataType: "json",
-      method: "GET",
-      url: queryUrl,
-      success: function(data) {
+        headers: {Accept: "application/sparql-results+json"},
+        dataType: "json",
+        method: "GET",
+        url: queryUrl})
+      .done(function(data) {
         callback(null,data);
-      },
-      error: function(jqXHR, textStatus, errorThrown) {
+      })
+      .fail(function(jqXHR, textStatus, errorThrown) {
         callback({ jqXHR: jqXHR, textStatus: textStatus, errorThrown: errorThrown });
-      }
-    });
+      });
   }
 
   var sparqlExecAndAlert_ = function(endpointUrl, query) {
@@ -124,17 +123,11 @@ SparqlBlocks.Exec = ( function() {
     });
   }
 
-  var blockExec_ = function(block) {
+  var blockExecQuery_ = function(block, queryStr) {
     var resultsHolder = block.getInput('RESULTS');
     if (!resultsHolder) return;
     var endpointUri_txt = block.getFieldValue('ENDPOINT');
     var endpointUri = endpointUri_txt ? encodeURI(endpointUri_txt) : null;
-    // var queryStr = SparqlBlocks.Sparql.valueToCode(
-    //   block,
-    //   'QUERY',
-    //   SparqlBlocks.Sparql.ORDER_NONE);
-    var queryBlock = block.getInputTargetBlock('QUERY');
-    var queryStr = SparqlBlocks.Sparql.sparqlQuery(queryBlock);
     if (endpointUri != block.endpointUri || queryStr != block.sparqlQueryStr) {
       block.endpointUri = endpointUri;
       block.sparqlQueryStr = queryStr;
@@ -163,9 +156,22 @@ SparqlBlocks.Exec = ( function() {
 
   }
 
+  var blockExec_ = function(block, queryBlock) {
+    // var queryStr = SparqlBlocks.Sparql.valueToCode(
+    //   block,
+    //   'QUERY',
+    //   SparqlBlocks.Sparql.ORDER_NONE);
+    if (!queryBlock) {
+      queryBlock = block.getInputTargetBlock('QUERY');
+    }
+    var queryStr = SparqlBlocks.Sparql.sparqlQuery(queryBlock);
+    blockExecQuery_(block, queryStr);
+  }
+
   return {
     sparqlExecAndPublish: sparqlExecAndPublish_,
     sparqlExecAndAlert: sparqlExecAndAlert_,
+    sparqlExec: sparqlExec_,
     blockExec: blockExec_
   };
 
