@@ -55,7 +55,7 @@ goog.require('SparqlBlocks.Blocks');
           //     .appendField("select all the variables");
           this.appendStatementInput("WHERE")
               .setCheck(typeExt("GraphPattern"))
-              .appendField("select");
+              .appendField("where");
           SparqlBlocks.Blocks.query.orderFields.init.call(this);
           this.setInputsInline(true);
           this.appendStatementInput("RESULTS")
