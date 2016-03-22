@@ -78,15 +78,29 @@ SparqlBlocks.Storage = (function() {
     var workspace = opt_workspace || Blockly.getMainWorkspace();
     var xml = Blockly.Xml.workspaceToDom(workspace);
     var data = Blockly.Xml.domToPrettyText(xml);
+    var metaData = _.extend(
+      {
+        generator: "SparqlBlocks",
+        version: SparqlBlocks.version,
+        baseURI: location.href,
+        workspaceXmlFile: "workspace.xml"
+      },
+      workspace.eventStack ? {
+        eventHistoryFile: "eventHistory.json"
+      } : {});
     makeRequest_({
       dataType: "json",
       method: "POST",
       data: JSON.stringify({
         "files": _.extend({
+          "metaData.json": {
+            content: JSON.stringify(metaData)
+          },
           "workspace.xml": {
             "content": data
           }
-        }, workspace.eventStack ? {
+        },
+        workspace.eventStack ? {
           "eventHistory.json": { "content": JSON.stringify(workspace.eventStack) }
         } : {})
       }),

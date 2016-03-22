@@ -45,6 +45,7 @@ goog.require('SparqlBlocks.Blocks.math');
 goog.require('SparqlBlocks.Blocks.text');
 goog.require('SparqlBlocks.Blocks.variables');
 goog.require('SparqlBlocks.Blocks.table');
+goog.require('SparqlBlocks.Blocks.test');
 
 goog.require('SparqlBlocks.Sparql.bgp');
 goog.require('SparqlBlocks.Sparql.control');
@@ -54,3 +55,5 @@ goog.require('SparqlBlocks.Sparql.resources');
 goog.require('SparqlBlocks.Sparql.math');
 goog.require('SparqlBlocks.Sparql.text');
 goog.require('SparqlBlocks.Sparql.variables');
+
+SparqlBlocks.version = "0.2.0";
