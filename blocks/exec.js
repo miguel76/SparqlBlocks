@@ -75,13 +75,30 @@ goog.require('SparqlBlocks.Blocks');
         this.setTooltip(SparqlBlocks.Msg.EXECUTION_TOOLTIP);
       },
       onchange: function() {
+        if (!this.resultsInput) {
+
+          var resBlockConn = this.getInput("RESULTS").connection;
+
+          var oldBlockId = null;
+          var oldBlock = resBlockConn.targetBlock();
+          if (oldBlock) {
+            oldBlockId = oldBlock.id;
+            oldBlock.dispose();
+          }
+
+          var resultsBlock = this.workspace.newBlock("sparql_execution_placeholder", oldBlockId);
+          resultsBlock.initSvg();
+          resultsBlock.render();
+          this.getInput("RESULTS").connection.connect(resultsBlock.previousConnection);
+          this.resultsInput = resultsBlock.getInput("RESULTS");
+        }
         if (options && options.baseQuery) {
           SparqlBlocks.Blocks.query.orderFields.onchange.call(this);
         }
         if (!options || !options.dontExecute) {
           if (options && options.baseQuery) {
-            blockExec_(this, this);
-            // SparqlBlocks.Exec.blockExec(this, this);
+            // blockExec_(this, this);
+            SparqlBlocks.Exec.blockExec(this, this, this.resultsInput);
           } else {
             SparqlBlocks.Exec.blockExec(this);
           }
@@ -146,28 +163,51 @@ goog.require('SparqlBlocks.Blocks');
 
   var DESCR_LENGTH = 40;
 
-  var connect_ = function(connection, block) {
+  // var connect_ = function(connection, block) {
+  //   var oldBlock = connection.targetBlock();
+  //   if (oldBlock) {
+  //     oldBlock.dispose();
+  //   }
+  //   block.setDeletable(false);
+  //   block.setMovable(false);
+  //   connection.connect(block.previousConnection);
+  //   block.initSvg();
+  //   block.render();
+  // }
+  //
+  // var resId_ = function(block) {
+  //   return "" + block.id + "-result";
+  // }
+  //
+  // var newBlock_ = function(name, block) {
+  //   return block.workspace.newBlock(name, resId_(block));
+  // }
+
+  var setNewBlock_ = function(name, baseBlock, connection) {
+    var oldBlockId = null;
     var oldBlock = connection.targetBlock();
     if (oldBlock) {
+      oldBlockId = oldBlock.id;
       oldBlock.dispose();
     }
-    block.setDeletable(false);
-    block.setMovable(false);
-    connection.connect(block.previousConnection);
-    block.initSvg();
-    block.render();
+    var newBlock = baseBlock.workspace.newBlock(name, oldBlockId);
+    newBlock.setDeletable(false);
+    newBlock.setMovable(false);
+    connection.connect(newBlock.previousConnection);
+    newBlock.initSvg();
+    newBlock.render();
+    return newBlock;
   }
 
-  var sparqlExecAndPublish_ = function(endpointUrl, query, workspace, connection, callback) {
-
-    var progressBlock = workspace.newBlock('sparql_execution_in_progress');
+  var sparqlExecAndPublish_ = function(endpointUrl, query, block, connection, callback) {
+    var progressBlock = setNewBlock_('sparql_execution_in_progress', block, connection);
     // progressBlock.initSvg();
-    connect_(connection, progressBlock);
+    // connect_(connection, progressBlock);
 
     return SparqlBlocks.Exec.sparqlExec(endpointUrl, query, function(err, data) {
       var resultBlock = null;
       if (err) {
-        resultBlock = workspace.newBlock('sparql_execution_error');
+        resultBlock = setNewBlock_('sparql_execution_error', block, connection);
         // var errorType = (err.textStatus) ? err.textStatus : "unknown problem";
         // if (err.jqXHR.status) {
         //   errorType += " " + err.jqXHR.status;
@@ -191,9 +231,10 @@ goog.require('SparqlBlocks.Blocks');
           resultBlock.setTooltip("There has been an error connecting to the SPARQL Endpoint. Check the Endpoint URI. If the URI is correct, check the browser log for details.");
         }
       } else {
-        resultBlock = SparqlBlocks.Blocks.table.loadTable(data);
+        resultBlock = setNewBlock_('sparql_smallTable', block, connection);
+        resultBlock.setData(data);
       }
-      connect_(connection, resultBlock);
+      // connect_(connection, resultBlock);
       callback(data);
     });
   }
@@ -216,7 +257,7 @@ goog.require('SparqlBlocks.Blocks');
         block.resultsData = null;
         block.queryReq = sparqlExecAndPublish_(
             endpointUri, queryStr,
-            block.workspace,
+            block,
             resConnection,
             function(data) {
               block.queryReq = null;
@@ -225,9 +266,9 @@ goog.require('SparqlBlocks.Blocks');
       } else {
         console.log('Empty query');
         block.resultsData = null;
-        var phBlock = block.workspace.newBlock('sparql_execution_placeholder');
+        var phBlock = setNewBlock_('sparql_execution_placeholder', block, resConnection);
         // newBlock.initSvg();
-        connect_(resConnection, phBlock);
+        // connect_(resConnection, phBlock);
         block.queryReq = null;
       }
 
@@ -263,8 +304,8 @@ goog.require('SparqlBlocks.Blocks');
       init: function() {
         this.setHelpUrl('http://www.w3.org/TR/2013/REC-sparql11-protocol-20130321/#query-operation');
         this.setColour(330);
-        this.appendDummyInput()
-            .appendField(" < results will appear here > ");
+        this.appendDummyInput("RESULTS")
+            .appendField(SparqlBlocks.Msg.EXECUTION_PLACEHOLDER, "RESULTS_CONTAINER");
         this.setPreviousStatement(true, "Table");
         this.setTooltip(SparqlBlocks.Msg.EXECUTION_PLACEHOLDER_TOOLTIP);
         this.setDeletable(false);

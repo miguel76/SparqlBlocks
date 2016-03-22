@@ -79,8 +79,8 @@ SparqlBlocks.Exec = ( function() {
 
   var DESCR_LENGTH = 40;
 
-  var RESULT_EMPTY_QUERY = "";
-  var RESULT_IN_PROGRESS = "execution in progress...";
+  // var RESULT_EMPTY_QUERY = "";
+  // var RESULT_IN_PROGRESS = "execution in progress...";
 
   var setResult_ = function(resultsInput, resultField) {
     resultsInput.removeField("RESULTS_CONTAINER");
@@ -89,18 +89,18 @@ SparqlBlocks.Exec = ( function() {
 
   var sparqlExecAndPublish_ = function(endpointUrl, query, workspace, resultsInput, callback) {
 
-    setResult_(resultsInput, RESULT_IN_PROGRESS);
+    setResult_(resultsInput, SparqlBlocks.Msg.EXECUTION_IN_PROGRESS);
 
     return sparqlExec_(endpointUrl, query, function(err, data) {
       var resultField = null;
       if (err) {
-        var errorType = (err.textStatus) ? err.textStatus : "unknown problem";
-        if (err.jqXHR.status) {
-          errorType += " " + err.jqXHR.status;
-        }
-        if (err.jqXHR.statusText) {
-          errorType += ": " + err.jqXHR.statusText;
-        }
+        // var errorType = (err.textStatus) ? err.textStatus : "unknown problem";
+        // if (err.jqXHR.status) {
+        //   errorType += " " + err.jqXHR.status;
+        // }
+        // if (err.jqXHR.statusText) {
+        //   errorType += ": " + err.jqXHR.statusText;
+        // }
         var errorDescr = err.jqXHR.responseText;
         if (errorDescr) {
           var errorDescrShort = null;
@@ -113,7 +113,7 @@ SparqlBlocks.Exec = ( function() {
           // resultField.setEditable(false);
           resultField.setTooltip(errorDescr);
         } else {
-          resultField = "Connection Error!"
+          resultField = SparqlBlocks.Msg.EXECUTION_CONNECTION_ERROR;
         }
       } else {
         resultField = new SparqlBlocks.FieldTable(data);
@@ -123,8 +123,10 @@ SparqlBlocks.Exec = ( function() {
     });
   }
 
-  var blockExecQuery_ = function(block, queryStr) {
-    var resultsHolder = block.getInput('RESULTS');
+  var blockExecQuery_ = function(block, queryStr, resultsHolder) {
+    if (!resultsHolder) {
+      resultsHolder = block.getInput('RESULTS');
+    }
     if (!resultsHolder) return;
     var endpointUri_txt = block.getFieldValue('ENDPOINT');
     var endpointUri = endpointUri_txt ? encodeURI(endpointUri_txt) : null;
@@ -148,7 +150,7 @@ SparqlBlocks.Exec = ( function() {
       } else {
         console.log('Empty query');
         block.resultsData = null;
-        setResult_(resultsHolder, RESULT_EMPTY_QUERY);
+        setResult_(resultsHolder, SparqlBlocks.Msg.EXECUTION_PLACEHOLDER);
         block.queryReq = null;
       }
 
@@ -156,7 +158,7 @@ SparqlBlocks.Exec = ( function() {
 
   }
 
-  var blockExec_ = function(block, queryBlock) {
+  var blockExec_ = function(block, queryBlock, resultsHolder) {
     // var queryStr = SparqlBlocks.Sparql.valueToCode(
     //   block,
     //   'QUERY',
@@ -165,7 +167,7 @@ SparqlBlocks.Exec = ( function() {
       queryBlock = block.getInputTargetBlock('QUERY');
     }
     var queryStr = SparqlBlocks.Sparql.sparqlQuery(queryBlock);
-    blockExecQuery_(block, queryStr);
+    blockExecQuery_(block, queryStr, resultsHolder);
   }
 
   return {
