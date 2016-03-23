@@ -34,9 +34,9 @@ goog.require('SparqlBlocks.Blocks');
       this.setHelpUrl('http://www.w3.org/TR/sparql11-query/#prefNames');
       this.setColour(20);
       this.appendDummyInput()
-          .appendField(new Blockly.FieldTextInput("prefix"), "PREFIX")
+          .appendField(new Blockly.FieldTextInput(""), "PREFIX")
           .appendField(":")
-          .appendField(new Blockly.FieldTextInput("localName"), "LOCAL_NAME");
+          .appendField(new Blockly.FieldTextInput(""), "LOCAL_NAME");
       this.setInputsInline(true);
       this.setOutput(true, "Iri");
       this.setTooltip(SparqlBlocks.Msg.PREFIXED_IRI_TOOLTIP);
@@ -49,7 +49,7 @@ goog.require('SparqlBlocks.Blocks');
       this.setColour(20);
       this.appendDummyInput()
           .appendField("<")
-          .appendField(new Blockly.FieldTextInput("iri"), "IRI")
+          .appendField(new Blockly.FieldTextInput(""), "IRI")
           .appendField(">");
       this.setInputsInline(true);
       this.setOutput(true, "Iri");
