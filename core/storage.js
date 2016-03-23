@@ -307,7 +307,7 @@ SparqlBlocks.Storage = (function() {
         window.location.hash = '';
         $('#copy-button').prop('disabled', true);
         $('#save-button').prop('disabled', false);
-        workspace.removeChangeListener(bindData);
+        setTimeout( function() { workspace.removeChangeListener(bindData); });
       }
     }
     var bindData = workspace.addChangeListener(change);
