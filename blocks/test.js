@@ -30,15 +30,28 @@ goog.require('SparqlBlocks.Blocks');
 
   SparqlBlocks.Blocks.test.HUE = 330;
 
-  var questionState = {};
+  var questionState = null;
+
+  var initQuestionState = function() {
+    if (!questionState) {
+      questionState = {};
+    }
+  }
+
+  SparqlBlocks.Blocks.test.getState = function() {
+    return questionState;
+  };
 
   var fixAsRightAnswer = function(questionBlock, answerBlock) {
-    questionBlock.isRightAnswer = true;
     answerBlock.setEditable(false);
-    answerBlock.setMovable(false);
-    answerBlock.setTooltip('Looks like you have found the right answer!');
-    questionBlock.getInput("ANSWER").appendField("⭐");
-    questionBlock.appendDummyInput().appendField("⭐");
+    // answerBlock.setMovable(false);
+    if (!questionBlock.isRightAnswer) {
+      answerBlock.setTooltip('Looks like you have found the right answer!');
+      questionBlock.setTooltip('Looks like you have found the right answer!');
+      questionBlock.getInput("ANSWER").appendField("⭐");
+      questionBlock.appendDummyInput().appendField("⭐");
+      questionBlock.isRightAnswer = true;
+    }
   }
 
   SparqlBlocks.Blocks.block('sparql_test', {
@@ -47,16 +60,19 @@ goog.require('SparqlBlocks.Blocks');
      * @this Blockly.Block
      */
     init: function() {
+      initQuestionState();
       this.setColour(SparqlBlocks.Blocks.test.HUE);
       this.setTooltip('1) Look for the right block and 2) Drop it in here');
+      this.appendValueInput('ANSWER');
       this.setEditable(false);
       this.setInputsInline(true);
       this.currentAnswer = null;
       this.isRightAnswer = false;
+      this.questionSetup = false;
     },
 
     onchange: function() {
-      if (this.isRightAnswer) {
+      if (this.isRightAnswer && this.getInputTargetBlock('ANSWER')) {
         return;
       }
       var data = JSON.parse(this.data);
@@ -64,8 +80,9 @@ goog.require('SparqlBlocks.Blocks');
         return;
       }
 
-      if (!this.getInput('ANSWER') && data.question) {
-        this.appendValueInput('ANSWER').appendField(data.question);
+      if (!this.questionSetup && data.question) {
+        this.getInput('ANSWER').appendField(data.question);
+        this.questionSetup = true;
       }
 
       if (data.id && questionState[data.id] && questionState[data.id].rightAnswer) {
