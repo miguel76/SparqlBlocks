@@ -48,7 +48,6 @@ SparqlBlocks.Guide = (function() {
     var fireEventsIfNotDragging = function() {
       if (!Blockly.dragMode_) {
         while (eventQueue_.length) {
-          // console.log("firing event");
           fireChangeListener_(eventQueue_.shift());
         }
       }
@@ -57,15 +56,11 @@ SparqlBlocks.Guide = (function() {
     workspace.addChangeListener( function(lastEvent) {
       if (lastEvent.type != Blockly.Events.MOVE
           || lastEvent.newParentId || lastEvent.oldParentId) {
-            // Simplify eventQueue_
-            // console.log("adding event to queue");
             var toAdd = true;
             var eventsBetweenCreateAndDelete = [];
             for (var pastEventId = eventQueue_.length - 1; pastEventId >= 0; pastEventId--) {
-              // console.log("cehcking an old event...");
               var pastEvent = eventQueue_[pastEventId];
-              if (pastEvent.blockId = lastEvent.blockId) {
-                // console.log("already seen...");
+              if (pastEvent.blockId == lastEvent.blockId) {
                 if (lastEvent.type == Blockly.Events.MOVE) {
                     if (pastEvent.type == Blockly.Events.MOVE &&
                         lastEvent.oldParentId == pastEvent.newParentId &&
@@ -107,13 +102,6 @@ SparqlBlocks.Guide = (function() {
       }
       setTimeout(fireEventsIfNotDragging,100);
     });
-    // Blockly.bindEvent_(
-    //   workspace.getParentSvg(),
-    //   'mouseup',
-    //   this,
-    //   function() {
-    //     setTimeout(fireEventsIfNotDragging);
-    //   });
 
     return {
       addChangeListener: addChangeListener_,
@@ -122,29 +110,26 @@ SparqlBlocks.Guide = (function() {
 
   }
 
+  var nonModalDefaultStyle = {
+    "top": "inherit",
+    "left": "inherit",
+    "bottom": "inherit",
+    'width': 'inherit',
+    "right": "inherit"
+  };
+  var modalDefaultStyle = {
+    'width': '75%',
+    "bottom": "inherit",
+    'left': '15%',
+    'top': '5%'
+  };
+
+
   var track_ = function(workspace, options) {
 
     options =
         _.extend(
-            {
-              stateList: [
-                {
-                  dialog: "Welcome to ...",
-                  modal: true
-                },
-                {
-                  dialog: "Add a graph pattern ...",
-                  stepWhen: function(event, data) {
-                    return event.type == Blockly.Events.CREATE &&
-                            event.block.type == "sparql_typedsubject_propertylist";
-                  }
-                },
-                {
-                  dialog: "Thank you ...",
-                  modal: true
-                }
-              ]
-            },
+            { startStateId: 0 },
             options );
 
     var eventManager = filteredEventManager_(workspace);
@@ -156,7 +141,7 @@ SparqlBlocks.Guide = (function() {
     }
 
     var data = {};
-    var stateId = -1;
+    var stateId = options.startStateId - 1;
 
     var enterNewState = function() {
       stateId++;
@@ -164,14 +149,39 @@ SparqlBlocks.Guide = (function() {
       if (!currState) {
         return;
       }
-      if (currState.modal) {
-        console.log("Modal: " + currState.dialog);
-        alert(currState.dialog);
-        setTimeout(enterNewState);
-        return;
-      } else {
-        console.log("Not Modal: " + currState.dialog);
+
+      var dialogDiv = document.getElementById(currState.dialog);
+
+      var toReplaceArray = dialogDiv.getElementsByClassName("blockly-readOnly");
+      var j = 0;
+      for (var i = 0; i < toReplaceArray.length; i++) {
+        var toReplace = toReplaceArray[i];
+        var content = toReplace.innerHTML;
+        var zoom = toReplace.getAttribute("blockly-zoom");
+        toReplace.innerHTML = "";
+        var localWorkspace = Blockly.inject(
+          toReplace,
+          _.extend(
+            {'readOnly': true},
+            zoom ?
+              { zoom:
+                  { controls: false,
+                    wheel: false,
+                    startScale: zoom }
+              } : {} ));
+
+        Blockly.Xml.domToWorkspace(localWorkspace, Blockly.Xml.textToDom("<xml>" + content + "</xml>"));
       }
+
+      BlocklyDialogs.showDialog(
+        dialogDiv, currState.useFocus ? data.focus : null, false, currState.modal,
+        _.extend(
+          {},
+          currState.modal ? modalDefaultStyle : nonModalDefaultStyle,
+          currState.style ? currState.style : {}
+        ),
+        function() { setTimeout(enterNewState); });
+
       if (currState.stepWhen) {
         var listener = eventManager.addChangeListener(function(event) {
           if (currState.stepWhen(
@@ -180,11 +190,13 @@ SparqlBlocks.Guide = (function() {
                     workspace: workspace,
                     block: Blockly.Block.getById(event.blockId)
                   },
-                  event ),
+                  event,
+                  event.newParentId ? { newParent: Blockly.Block.getById(event.newParentId) } : {},
+                  event.oldParentId ? { oldParent: Blockly.Block.getById(event.oldParentId) } : {}),
                 data)) {
               setTimeout( function() {
                 eventManager.removeChangeListener(listener);
-                enterNewState();
+                BlocklyDialogs.hideDialog();
               });
           }
         });
@@ -192,6 +204,11 @@ SparqlBlocks.Guide = (function() {
     }
 
     enterNewState();
+    return {
+      getStateId: function() {
+        return stateId;
+      }
+    };
 
   }
 
