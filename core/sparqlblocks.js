@@ -25,6 +25,8 @@ goog.provide('SparqlBlocks');
 
 // SparqlBlocks core dependencies.
 // goog.require('Blockly');
+goog.require('BlocklyDialogs');
+
 goog.require('SparqlBlocks.Exec');
 goog.require('SparqlBlocks.Prefixes');
 goog.require('SparqlBlocks.Tooltip');
@@ -33,6 +35,7 @@ goog.require('SparqlBlocks.Storage');
 goog.require('SparqlBlocks.Msg');
 goog.require('SparqlBlocks.FieldTable');
 goog.require('SparqlBlocks.JsonToBlocks');
+goog.require('SparqlBlocks.Guide');
 
 goog.require('SparqlBlocks.Blocks');
 goog.require('SparqlBlocks.Blocks.bgp');

@@ -25,7 +25,7 @@
 
 goog.provide('BlocklyDialogs');
 
-goog.require('Blockly');
+// goog.require('Blockly');
 goog.require('goog.style');
 
 /**
