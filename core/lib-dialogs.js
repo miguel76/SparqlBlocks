@@ -26,7 +26,7 @@
 goog.provide('BlocklyDialogs');
 
 // goog.require('Blockly');
-goog.require('goog.style');
+// goog.require('goog.style');
 
 /**
  * Is the dialog currently onscreen?
