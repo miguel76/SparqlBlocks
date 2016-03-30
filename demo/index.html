@@ -331,11 +331,6 @@ h1 {
       </block>
       <sep gap="8"></sep>
       <block type="sparql_reversePath_object">
-        <value name="VERB">
-          <block type="variables_get">
-            <field name="VAR">pred</field>
-          </block>
-        </value>
         <value name="OBJECT">
           <block type="variables_get">
             <field name="VAR">subj</field>
@@ -596,7 +591,6 @@ h1 {
       <block type="sparql_prefixed_iri"></block>
       <sep gap="8"></sep>
       <block type="sparql_iri"></block>
-
       <sep gap="32"></sep>
       <block type="sparql_prefixed_iri">
         <field name="PREFIX">rdfs</field>
@@ -612,7 +606,6 @@ h1 {
         <field name="PREFIX">rdf</field>
         <field name="LOCAL_NAME">value</field>
       </block>
-
       <sep gap="32"></sep>
       <block type="sparql_prefixed_iri">
         <field name="PREFIX">dcterms</field>
@@ -633,7 +626,6 @@ h1 {
         <field name="PREFIX">dcterms</field>
         <field name="LOCAL_NAME">publisher</field>
       </block>
-
       <sep gap="32"></sep>
       <block type="sparql_prefixed_iri">
         <field name="PREFIX">foaf</field>
@@ -659,7 +651,6 @@ h1 {
         <field name="PREFIX">foaf</field>
         <field name="LOCAL_NAME">knows</field>
       </block>
-
     </category>
     <sep></sep>
     <category name="Variables" colour="330" custom="VARIABLE"></category>
@@ -668,7 +659,7 @@ h1 {
       <block type="sparql_typedsubject_propertylist">
         <value name="SUBJECT">
           <block type="variables_get">
-            <field name="VAR">resource</field>
+            <field name="VAR">res</field>
           </block>
         </value>
         <value name="TYPE">
@@ -788,6 +779,36 @@ h1 {
                 <field name="VAR">label</field>
               </block>
             </value>
+            <next>
+              <block type="sparql_verb_object">
+                <value name="VERB">
+                  <block type="sparql_prefixed_iri">
+                    <field name="PREFIX">rdfs</field>
+                    <field name="LOCAL_NAME">domain</field>
+                  </block>
+                </value>
+                <value name="OBJECT">
+                  <block type="variables_get">
+                    <field name="VAR">domain</field>
+                  </block>
+                </value>
+                <next>
+                  <block type="sparql_verb_object">
+                    <value name="VERB">
+                      <block type="sparql_prefixed_iri">
+                        <field name="PREFIX">rdfs</field>
+                        <field name="LOCAL_NAME">range</field>
+                      </block>
+                    </value>
+                    <value name="OBJECT">
+                      <block type="variables_get">
+                        <field name="VAR">range</field>
+                      </block>
+                    </value>
+                  </block>
+                </next>
+              </block>
+            </next>
           </block>
         </statement>
         <next>
@@ -810,59 +831,77 @@ h1 {
           </block>
         </next>
       </block>
-      <block type="sparql_verb_object">
-        <value name="VERB">
+      <sep gap="32"></sep>
+      <block type="sparql_typedsubject_propertylist">
+        <value name="SUBJECT">
+          <block type="variables_get">
+            <field name="VAR">domain</field>
+          </block>
+        </value>
+        <value name="TYPE">
           <block type="sparql_prefixed_iri">
-            <field name="PREFIX">rdfs</field>
-            <field name="LOCAL_NAME">domain</field>
+            <field name="PREFIX">owl</field>
+            <field name="LOCAL_NAME">Class</field>
           </block>
         </value>
-        <value name="OBJECT">
-          <block type="sparql_anonsubject_propertylist">
-            <statement name="PROPERTY_LIST">
-              <block type="sparql_reverseClosurePath_object">
-                <value name="VERB">
-                  <block type="sparql_prefixed_iri">
-                    <field name="PREFIX">rdfs</field>
-                    <field name="LOCAL_NAME">subClassOf</field>
-                  </block>
-                </value>
-                <value name="OBJECT">
-                  <shadow type="sparql_prefixed_iri">
-                    <field name="PREFIX">owl</field>
-                    <field name="LOCAL_NAME">Thing</field>
-                  </shadow>
-                </value>
+        <statement name="PROPERTY_LIST">
+          <block type="sparql_reverseClosurePath_object">
+            <value name="VERB">
+              <block type="sparql_prefixed_iri">
+                <field name="PREFIX">rdfs</field>
+                <field name="LOCAL_NAME">subClassOf</field>
               </block>
-            </statement>
+            </value>
+            <value name="OBJECT">
+              <shadow type="sparql_prefixed_iri">
+                <field name="PREFIX">owl</field>
+                <field name="LOCAL_NAME">Thing</field>
+              </shadow>
+            </value>
           </block>
-        </value>
+        </statement>
       </block>
-      <block type="sparql_verb_object">
-        <value name="VERB">
-          <block type="sparql_prefixed_iri">
-            <field name="PREFIX">rdfs</field>
-            <field name="LOCAL_NAME">range</field>
+      <sep gap="8"></sep>
+      <block type="sparql_typedsubject_propertylist">
+        <value name="SUBJECT">
+          <block type="variables_get">
+            <field name="VAR">range</field>
           </block>
         </value>
-        <value name="OBJECT">
-          <block type="sparql_anonsubject_propertylist">
-            <statement name="PROPERTY_LIST">
-              <block type="sparql_reverseClosurePath_object">
-                <value name="VERB">
-                  <block type="sparql_prefixed_iri">
-                    <field name="PREFIX">rdfs</field>
-                    <field name="LOCAL_NAME">subClassOf</field>
-                  </block>
-                </value>
-                <value name="OBJECT">
-                  <shadow type="sparql_prefixed_iri">
-                    <field name="PREFIX">owl</field>
-                    <field name="LOCAL_NAME">Thing</field>
-                  </shadow>
-                </value>
+        <value name="TYPE">
+          <block type="sparql_prefixed_iri">
+            <field name="PREFIX">owl</field>
+            <field name="LOCAL_NAME">Class</field>
+          </block>
+        </value>
+        <statement name="PROPERTY_LIST">
+          <block type="sparql_reverseClosurePath_object">
+            <value name="VERB">
+              <block type="sparql_prefixed_iri">
+                <field name="PREFIX">rdfs</field>
+                <field name="LOCAL_NAME">subClassOf</field>
               </block>
-            </statement>
+            </value>
+            <value name="OBJECT">
+              <shadow type="sparql_prefixed_iri">
+                <field name="PREFIX">owl</field>
+                <field name="LOCAL_NAME">Thing</field>
+              </shadow>
+            </value>
+          </block>
+        </statement>
+      </block>
+      <sep gap="8"></sep>
+      <block type="sparql_typedsubject_propertylist">
+        <value name="SUBJECT">
+          <block type="variables_get">
+            <field name="VAR">range</field>
+          </block>
+        </value>
+        <value name="TYPE">
+          <block type="sparql_prefixed_iri">
+            <field name="PREFIX">rdfs</field>
+            <field name="LOCAL_NAME">Datatype</field>
           </block>
         </value>
       </block>
