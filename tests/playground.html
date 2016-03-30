@@ -152,7 +152,7 @@ function start() {
   SparqlBlocks.trackingGuide = SparqlBlocks.Guide.track(
     workspace,
     {
-      startStateId: 20,
+      // startStateId: 20,
       stateList: [
         {
           dialog: "dialogWelcome", //"Welcome to ...",
@@ -219,6 +219,10 @@ function start() {
             "bottom": "25px", "left": "15px"
           },
           useFocus: true
+        },
+        {
+          dialog: "dialogDelete",
+          modal: true
         },
         {
           dialog: "dialogDeleteVar",
@@ -1410,13 +1414,10 @@ h1 {
 
   <div id="dialogs" class="dialogHiddenContent">
     <div id="dialogWelcome" class="dialogHiddenContent">
-      <!-- <table><tr><td>
-        <img src="../img/help/help.png">
-      </td><td>&nbsp;</td><td> -->
         <div class="dialogTitle">Welcome to SparqlBlocks</div>
         <div class="dialogContent">
           <p>
-            The aim of SparqlBlocks is to let you visually build queries against <em>Linked Data</em> sources.
+            The aim of SparqlBlocks is to let you visually build queries against <span class="dialog-def">Linked Data</span> sources.
           </p>
           <p>
             <!-- The name SparqlBlocks comes from <a href="https://www.w3.org/TR/sparql11-query/" target="_blank">SPARQL</a>, the stantard (textual) query language -->
@@ -1427,8 +1428,6 @@ h1 {
             you do not need to know SPARQL syntax
             to use SparqlBlocks.
           </p>
-        <!-- </div>
-        <div class="dialogContent"> -->
           <p>
             This tutorial will help you get started.
             Each step explains a new concept and lets you experience it in action.
@@ -1441,69 +1440,43 @@ h1 {
       <!-- </td></tr></table> -->
     </div>
     <div id="dialogAddQuery" style="width: 400px" class="dialogHiddenContent">
-      <!-- <table><tr><td>
-        <img src="../img/help/help_left.png">
-      </td><td> -->
         <div class="dialogTitle">Workspace and Blocks</div>
         <div class="dialogContent">
           <p>
-            The main area of the app is the <em>Workspace</em>.
+            The main area of the app is the <span class="dialog-def">workspace</span>.
             Here you can drag and connect together the blocks that will form queries.
           </p>
           <p>
-            On the left there is the <em>Toolbox</em>, where you can pick the blocks to use.
-            They are grouped in categories (<em>Query</em>, <em>Patterns</em>,...).
-            <!-- Compose,...). -->
-            <!-- Feel free to explore the content of the categories. -->
+            On the left there is the <span class="dialog-def">toolbox</span>, where you can pick the blocks to use.
+            They are grouped in <span class="dialog-def">categories</span> (<span class="dialog-command">Query</span>, <span class="dialog-command">Patterns</span>,...).
           </p>
         </div>
         <div class="dialogToDo">
-          <!-- Click on the Query category and drag the block take a Query block
-          (it is the only one in this category) -->
-          <!-- <div class="blockly-readOnly" blockly-zoom="0.4" style="height: 50px; width: 116px; float:right; display:block; margin: 3px;"> -->
           <div class="blockly-readOnly" blockly-zoom="0.5" style="height: 62px; width: 146px; float:right; display:block; margin: 3px;">
             <block x="0" y="0" type="sparql_execution_endpoint_query"></block>
           </div>
-          click on the <em>Query</em> category and drag the block
+          click on the <span class="dialog-command">Query</span> category and drag the query block
           to the Workspace.
           <!-- To bring it to the workspace, you can either just click on it
           or drag it already to a specific position in the workspace. -->
         </div>
-      <!-- </td><td>
-        <img src="../img/help/help.png">
-      </td></tr></table> -->
     </div>
     <div id="dialogAddGraphPattern" style="width: 400px" class="dialogHiddenContent">
-      <!--
-      <table><tr><td>
-        <img src="../img/help/help_left.png">
-      </td><td>-->
         <div class="dialogTitle">Queries and Patterns</div>
         <div class="dialogContent">
           <p>
-            A <em>Query</em> block executes queries against a
+            A <span class="dialog-def">query</span> block executes queries against a
             <a href="https://www.w3.org/TR/sparql11-protocol/" target="_blank">Linked Data source</a>
             (the default source is <a href="http://dbpedia.org/" target="_blank">DBpedia</a>).
-            <!-- By default the <em>Query</em> block uses DBpedia
-            By default the <em>Query</em> block uses DBpedia,
-            a dataset of structured information automatically extracted from WikiPedia. -->
           </p>
-          <!-- <p>
-            <div class="dialogAdvanced">
-              The <em>from</em> field contains the URL of the SPARQL endpoint.
-            </div>
-          </p> -->
           <p>
             Linked Data sources are graphs (networks) of concepts.
-            A query is built with <em>Patterns</em> to be matched against the input graphs.
+            A query is built with <span class="dialog-def">patterns</span> to be matched against the input graphs.
             <!-- Those patterns are graphs in which some nodes (concepts) are unknown. -->
             <!-- that is replaced by a Variable. -->
           </p>
         </div>
         <div class="dialogToDo">
-          <!-- Click on the Query category and drag the block take a Query block
-          (it is the only one in this category) -->
-          <!-- <div class="blockly-readOnly" blockly-zoom="0.4" style="height: 38px; width: 118px; float:right; display:block; margin: 3px;"> -->
           <div class="blockly-readOnly" blockly-zoom="0.5" style="height: 46px; width: 146px; float:right; display:block; margin: 3px;">
             <block x="0" y="0" type="sparql_typedsubject_propertylist">
               <value name="SUBJECT">
@@ -1532,8 +1505,9 @@ h1 {
               </statement>
             </block>
           </div>
-          pick the top block in the <em>Patterns</em> category
-          and drag it inside the Query block.
+          from the <span class="dialog-command">Patterns</span> category,
+          pick the first pattern block
+          and drag it inside the query block.
           <!-- To bring it to the workspace, you can either just click on it
           or drag it already to a specific position in the workspace. -->
         </div>
@@ -1542,7 +1516,7 @@ h1 {
       <div class="dialogTitle">Results</div>
       <div class="dialogContent">
         <p>
-          The query is remotely executed and the table of results is shown below.
+          The query is remotely executed and the <span class="dialog-def">table of results</span> is shown below.
         <!-- </p>
         <p> -->
           There is a result row for each way the pattern is matched against the input graph
@@ -1586,8 +1560,8 @@ h1 {
           <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 50px; vertical-align: middle;">
             <block x="8" y="0" type="variables_get"><field name="VAR">obj</field></block>
           </span>
-          are <em>Variables</em>.
-          Each matching of the pattern <em>binds</em> each variable to the corresponding value in the input graph.
+          are <span class="dialog-def">variables</span>.
+          Each matching of the pattern <span class="dialog-def">binds</span> each variable to the corresponding value in the input graph.
           This value is shown under the corresponding column in the table of results.
         </p>
       </div>
@@ -1599,7 +1573,7 @@ h1 {
       <div class="dialogTitle">Navigate and Zoom the Workplace</div>
       <div class="dialogContent">
         <p>
-          To organize the Workspace you can:
+          To organize the workspace you can:
           <ol>
             <li>move blocks around by dragging them</li>
             <li>navigate the workspace
@@ -1620,16 +1594,42 @@ h1 {
       <div class="dialogContent">
         <p>
           You may change the pattern according to your needs.
-          For example, remove the variable <em>type</em> from it.
+          For example, remove the <span class="dialog-def">type</span> from it.
         </p>
       </div>
       <div class="dialogToDo">
         drag the variable block
         <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 56px; vertical-align: middle;">
           <block x="8" y="0" type="variables_get"><field name="VAR">type</field></block>
-        </span>,
-        to the trash bin <span class="icon_trash"></span>
-        or right-click on the variable block and select <em>Delete Block</em>.
+        </span>
+        to the trash bin <span class="icon_trash"></span>.
+        <!-- or right-click on the variable block and select <span class="dialog-command">Delete Block</span>. -->
+      </div>
+    </div>
+    <div id="dialogDelete" class="dialogHiddenContent">
+      <div class="dialogTitle">Delete Blocks</div>
+      <div class="dialogContent">
+        <p></p>
+        There are three ways to delete blocks:
+        <ol>
+          <li>
+            right-click on the variable block and select <span class="dialog-command">Delete Block</span>;
+          </li>
+          <li>
+            drag the block to the trash bin <span class="icon_trash"></span>;
+          </li>
+          <li>
+            drag the block to the left, over the toolbox.
+          </li>
+        </ol>
+        <p>
+          Please beware that blocks and group of blocks are deleted without prompt
+          if the user accidentally drops them on the areas described (2. and 3.).</p>
+        <p>
+          In a not-too-far-in-the-future release we will provide an undo mechanism.</p>
+      </div>
+      <div class="farSide" style="padding: 1ex 3ex 0">
+        <button class="secondary" onclick="BlocklyDialogs.hideDialog(true)">OK</button>
       </div>
     </div>
     <div id="dialogAddResource" style="width: 400px" class="dialogHiddenContent">
@@ -1647,18 +1647,18 @@ h1 {
         </p>
         <p>
           <!-- In the pattern -->
-          You may replace variables with
-          <!-- Variables may be replaced by -->
+          <!-- You may replace variables with -->
+          Variables may be replaced by
           <!-- To set parts of a pattern -->
           <!-- values -->
-          <em>Resources</em>
+          <span class="dialog-def">resources</span> (concepts)
           <!-- —like -->
-          (<span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 116px; vertical-align: middle;">
+          <!-- (<span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 116px; vertical-align: middle;">
             <block x="8" y="0" type="sparql_prefixed_iri">
               <field name="PREFIX">dbpedia</field>
               <field name="LOCAL_NAME">Rome</field>
             </block>
-          </span>)
+          </span>) -->
           <!-- <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 96px; vertical-align: middle;">
             <block x="8" y="0" type="sparql_prefixed_iri">
               <field name="PREFIX">foaf</field>
@@ -1666,9 +1666,10 @@ h1 {
             </block>
           </span>) -->
           <!-- — -->
-          and <em>Literals</em>
+          and <span class="dialog-def">literals</span>
           <!-- —like -->
-          (<span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 77px; vertical-align: middle;">
+          (strings, numbers,...),
+          <!-- (<span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 77px; vertical-align: middle;">
             <block x="8" y="0" type="sparql_text">
               <field name="TEXT">fish</field>
             </block>
@@ -1677,10 +1678,7 @@ h1 {
             <block x="8" y="0" type="sparql_math_number">
               <field name="NUM">42</field>
             </block>
-          </span>),
-          <!-- (<em>Resources</em>
-          or
-          <em>Literals</em>) -->
+          </span>), -->
           <!-- in place of variables, -->
           <!-- may replace variables in the pattern, -->
           to represent the fixed parts
@@ -1688,7 +1686,7 @@ h1 {
         </p>
       </div>
       <div class="dialogToDo">
-        from the <em>Resources</em> category in the toolbox,
+        from the <span class="dialog-command">Resources</span> category,
         drag the
         <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 96px; vertical-align: middle;">
           <block x="8" y="0" type="sparql_prefixed_iri">
@@ -1723,7 +1721,7 @@ h1 {
               <field name="LOCAL_NAME">knows</field>
             </block>
           </span>,
-          are called <em>Properties</em>.
+          are called <span class="dialog-def">properties</span>.
         </p>
         <p>
           Variables are just placeholders,
@@ -1735,7 +1733,7 @@ h1 {
         <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 50px; vertical-align: middle;">
           <block x="8" y="0" type="variables_get"><field name="VAR">obj</field></block>
         </span>
-        and rename the variable as
+        and <span class="dialog-command">Rename variable...</span> as
         <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 64px; vertical-align: middle;">
           <block x="8" y="0" type="variables_get"><field name="VAR">friend</field></block>
         </span>.
@@ -1772,7 +1770,8 @@ h1 {
                 </value>
               </block>
             </div>
-            pick the fourth block in the Patterns category
+            from the <span class="dialog-command">Patterns</span> category,
+            pick the fourth block
             and drag it inside the existing pattern; </li>
           <li>
             replace the variable
@@ -1787,11 +1786,11 @@ h1 {
               </block>
             </span>; </li>
           <li>
-            rename the variable
+            click on
             <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 50px; vertical-align: middle;">
               <block x="8" y="0" type="variables_get"><field name="VAR">obj</field></block>
             </span>
-            as
+            and <span class="dialog-command">Rename variable...</span> as
             <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 64px; vertical-align: middle;">
               <block x="8" y="0" type="variables_get"><field name="VAR">name</field></block>
             </span>.</li>
@@ -1806,7 +1805,7 @@ h1 {
       <div class="dialogContent">
         <p>
           The values in the table of results are also blocks,
-          Resources
+          resources
           <!-- —like -->
           <!-- (<span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 154px; vertical-align: middle;">
             <block x="8" y="0" type="sparql_prefixed_iri">
@@ -1821,7 +1820,7 @@ h1 {
             </block>
           </span>) -->
           <!-- — -->
-          and Literals.
+          and literals.
           <!-- —like -->
           <!-- (<span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 175px; vertical-align: middle;">
             <block x="8" y="0" type="sparql_text">
@@ -1845,7 +1844,10 @@ h1 {
         </span>,
         <!-- of the table of results, -->
         drag one of the results to the pattern above,
-        to replace the corresponding variable.
+        to replace the variable
+        <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 50px; vertical-align: middle;">
+          <block x="8" y="0" type="variables_get"><field name="VAR">res</field></block>
+        </span>.
         <!-- <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 50px; vertical-align: middle;">
           <block x="8" y="0" type="variables_get"><field name="VAR">res</field></block>
         </span>. -->
@@ -1860,7 +1862,7 @@ h1 {
         <p>
           The query pattern
           <!-- in a simple query like this -->
-          <!-- is called a <em>Basic Graph Pattern</em> and -->
+          <!-- is called a <span class="dialog-def">Basic Graph Pattern</span> and -->
           is composed of a set of star-like patterns.
           <!-- each one centered on a common subject, that can be a Resource or a Variable. -->
           <!-- By using common Variables they can be used to represent any pattern in the graph. -->
@@ -1898,9 +1900,10 @@ h1 {
                 </statement>
               </block>
             </div>
-            drag the top block in the Patterns category
+            from the <span class="dialog-command">Patterns</span> category,
+            drag again the first block,
             <!-- and drag it -->
-            before or after the existing pattern;
+            after the existing pattern;
             <!-- inside the existing query (before or after the existing pattern); -->
           </li>
           <li>
@@ -1971,7 +1974,7 @@ h1 {
             <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 64px; vertical-align: middle;">
               <block x="8" y="0" type="variables_get"><field name="VAR">name</field></block>
             </span>
-            and choose to use a new variable
+            and choose to use a <span class="dialog-command">New variable...</span>
             <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 95px; vertical-align: middle;">
               <block x="8" y="0" type="variables_get"><field name="VAR">friendName</field></block>
             </span>.</li>
@@ -1990,15 +1993,19 @@ h1 {
         <ol>
           <li>
             drag
-            to the <em>order by</em> field
             <!-- of the query block -->
              a copy of the variable
             <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 95px; vertical-align: middle;">
               <block x="8" y="0" type="variables_get"><field name="VAR">friendName</field></block>
             </span>
-            (either from the <em>Variables</em> category in Toolbox,
+            (either from the <span class="dialog-command">Variables</span> category,
             from the column header in the results,
-            or as duplicate of the block in the pattern);
+            or as duplicate of the block in the pattern)
+            to the
+            <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 26px; width: 108px; vertical-align: middle;">
+              <block x="0" y="-52" type="sparql_execution_endpoint_query"></block>
+            </span>
+            field;
           </li>
           <li>
             change the order direction from ↓ (asc.) to ↑ (desc.);
@@ -2012,12 +2019,16 @@ h1 {
         <p>
           <!-- You see the first 5 rows of the results. -->
           You can increase or reduce the maximum number of rows you see by changing the value of
-          the <em>limit to X rows</em> field.</p>
+          the <span class="dialog-def">limit</span> field.</p>
       </div>
       <div class="dialogToDo">
         <ol>
           <li>
-            set the value of the field <em>limit to X rows</em> to 3.
+            set the value of the field
+            <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 19px; width: 110px; vertical-align: middle;">
+              <block x="-147" y="-56" type="sparql_execution_endpoint_query"></block>
+            </span>
+            to 3.
             </li>
         </ol>
       </div>
@@ -2035,7 +2046,7 @@ h1 {
             <div class="blockly-readOnly" blockly-zoom="0.5" style="height: 21px; width: 40px; float:right; display:block; margin: 3px;">
               <block x="0" y="0" type="sparql_filter"></block>
             </div>
-            from the <em>Logic</em> category of the Toolbox,
+            from the <span class="dialog-command">Logic</span> category,
             drag a filter block to the query (before, among, or after the existing patterns);
           </li>
           <li>
@@ -2053,7 +2064,7 @@ h1 {
                 </value>
               </block>
             </div>
-            from the <em>Text</em> category,
+            from the <span class="dialog-command">Text</span> category,
             drag a contains block inside the filter;
           </li>
           <li>
@@ -2080,17 +2091,16 @@ h1 {
           Resources have types, that are other resources.
           This resources
           <!-- that may be -->
-          used as types are called <em>Classes</em>.</p>
+          used as types are called <span class="dialog-def">classes</span>.</p>
         <p>
           <!-- As it is often critical to know the classes used in a dataset, -->
           There is a pre-built pattern to look for them.</p>
-          <!-- For that reason, in the Toolbox you can find a pre-built pattern to look for classes.</p> -->
       </div>
       <div class="dialogToDo">
         <ol>
           <li>
             <!-- Delete everything the query block and all that you want from the Workspace; -->
-            delete from the Workspace all that you do not need;
+            delete everything from the workspace;
           </li>
           <li>
             drag a new query block;
@@ -2145,8 +2155,8 @@ h1 {
                 </next>
               </block>
             </div> -->
-            from the <em>Classes</em> category of the Toolbox,
-            drag the block into the query;
+            from the <span class="dialog-command">Classes</span> category,
+            drag the class block into the query;
           </li>
           <li>
             change the text “abc” to “lake”;
@@ -2154,10 +2164,11 @@ h1 {
           <li>
             pick from the results the class found for lakes
             <!-- from the results, drag the class found for lakes -->
-            (the resource under column
+            (under column
             <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 56px; vertical-align: middle;">
               <block x="8" y="0" type="variables_get"><field name="VAR">type</field></block>
-            </span>).
+            </span>)
+            and drag it to the workspace.
             <!-- to the workspace. -->
           </li>
         </ol>
@@ -2174,6 +2185,25 @@ h1 {
       <div class="dialogToDo">
         <ol>
           <li>
+            right-click on resource
+            <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 88px; vertical-align: middle;">
+              <block x="8" y="0" type="sparql_prefixed_iri">
+                <field name="PREFIX">dbo</field>
+                <field name="LOCAL_NAME">Lake</field>
+              </block>
+            </span>
+            and <span class="dialog-command">Duplicate</span> it;
+          </li>
+          <li>
+            delete everything except the two copies of
+            <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 88px; vertical-align: middle;">
+              <block x="8" y="0" type="sparql_prefixed_iri">
+                <field name="PREFIX">dbo</field>
+                <field name="LOCAL_NAME">Lake</field>
+              </block>
+            </span>
+          </li>
+          <!-- <li>
             you may delete the existing blocks or not, just keep the resource
             <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 88px; vertical-align: middle;">
               <block x="8" y="0" type="sparql_prefixed_iri">
@@ -2181,8 +2211,8 @@ h1 {
                 <field name="LOCAL_NAME">Lake</field>
               </block>
             </span>
-            around;
-          </li>
+            and <span class="dialog-command">Duplicate</span> it;
+          </li> -->
           <li>
             drag a new query block;
           </li>
@@ -2236,8 +2266,8 @@ h1 {
                 </next>
               </block>
             </div> -->
-            from the <em>Things</em> category of the Toolbox,
-            drag the block into the query;
+            from the <span class="dialog-command">Things</span> category,
+            drag the thing block into the query;
           </li>
           <li>
             replace
@@ -2261,10 +2291,11 @@ h1 {
           <li>
             pick from the results the resource found for Lake Titicaca
             <!-- from the results, drag the resource found for Lake Titicaca -->
-            (the resource under column
+            (under column
             <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 50px; vertical-align: middle;">
               <block x="8" y="0" type="variables_get"><field name="VAR">res</field></block>
-            </span>).
+            </span>)
+            and drag it to the workspace.
             <!-- to the workspace. -->
           </li>
         </ol>
@@ -2274,36 +2305,34 @@ h1 {
       <div class="dialogTitle">Look for Properties</div>
       <div class="dialogContent">
         <p>
-          <!-- Finally, in the Toolbox you can find -->
           <!-- Finally, there is -->
           There is
           also a pre-built pattern to look for properties.
           You can optionally indicate
           <!-- what type of resources should be linked by the property. -->
           the class of resources from which these links come from
-          —the <em>Domain</em>— and/or
+          —the <span class="dialog-def">domain</span>— and/or
           the class towards which they go to
-          —the <em>Range</em>.</p>
+          —the <span class="dialog-def">range</span>.</p>
       </div>
       <div class="dialogToDo">
         <ol>
           <li>
-            as before, keep the resource
+            delete everything except
             <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 88px; vertical-align: middle;">
               <block x="8" y="0" type="sparql_prefixed_iri">
                 <field name="PREFIX">dbo</field>
                 <field name="LOCAL_NAME">Lake</field>
               </block>
-            </span>,
-            around;
+            </span>;
           </li>
           <!-- <li>
             using another query and the block in Classes,
             find also the class for rivers (look for “river”);
           </li> -->
-          <!-- <li>
+          <li>
             drag a new query block;
-          </li> -->
+          </li>
           <li>
             <!-- <div class="blockly-readOnly" blockly-zoom="0.5" style="height: 70px; width: 190px; float:right; display:block; margin: 3px;">
               <block x="0" y="0" type="sparql_typedsubject_propertylist">
@@ -2354,8 +2383,8 @@ h1 {
                 </next>
               </block>
             </div> -->
-            from the <em>Properties</em> category of the Toolbox,
-            drag the top block into a new query block;
+            from the <span class="dialog-command">Properties</span> category,
+            drag the first block into the query block;
           </li>
           <li>
             <!-- <div class="blockly-readOnly" blockly-zoom="0.5" style="height: 46px; width: 179px; float:right; display:block; margin: 3px;">
@@ -2388,10 +2417,10 @@ h1 {
                 </value>
               </block>
             </div> -->
-            from the same category of the Toolbox,
+            again from the <span class="dialog-command">Properties</span> category,
             drag the second block (domain branch)
             <!-- and the third one (first range branch) -->
-            into the main pattern;
+            after the previous one;
           </li>
           <li>
             <!-- in the domain branch, -->
@@ -2424,11 +2453,12 @@ h1 {
              <!-- (inflow); -->
           </li>
           <li>
-            pick from the results the resource found.
-            <!-- (under column
+            pick from the results the resource found
+            (under column
             <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 77px; vertical-align: middle;">
               <block x="8" y="0" type="variables_get"><field name="VAR">property</field></block>
-            </span>). -->
+            </span>)
+            and drag it to the workspace.
             <!-- to the workspace. -->
           </li>
         </ol>
@@ -2496,7 +2526,7 @@ h1 {
           Some pointers to other useful stuff:
           <ul>
             <li>
-              the <span class="dialog-command">Pattern</span> category of the Toolbox contains
+              the <span class="dialog-command">Pattern</span> category contains
               more blocks to build patterns;
             </li>
             <li>
@@ -2505,7 +2535,7 @@ h1 {
               queries;
             </li>
             <li>
-              categories
+              the categories
               <span class="dialog-command">Logic</span>,
               <span class="dialog-command">Math</span>, and
               <span class="dialog-command">Text</span>
@@ -2568,7 +2598,7 @@ h1 {
               }</data>
             </block>
           </div>
-          In the category <em>Test</em> there is a set of blocks that are statements
+          In the category <span class="dialog-command">Test</span> there is a set of blocks that are statements
           with a missing part. Try to solve them through Linked Data queries!
         </p>
         <!-- <p> -->

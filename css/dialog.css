@@ -241,5 +241,9 @@ button:hover:not(:disabled) {
 }
 
 .dialog-command {
-  font-style: italic;
+  text-decoration: underline;
+}
+
+.dialog-def {
+  font-weight: bold;
 }
