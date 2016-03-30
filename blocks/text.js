@@ -610,7 +610,7 @@ goog.require('SparqlBlocks.Blocks');
       this.setHelpUrl(Blockly.Msg.TEXT_GET_SUBSTRING_HELPURL);
       this.setColour(SparqlBlocks.Blocks.text.HUE);
       this.appendValueInput('STRING')
-          .setCheck('String')
+          .setCheck(typeExt('StringExpr'))
           .appendField(Blockly.Msg.TEXT_GET_SUBSTRING_INPUT_IN_TEXT);
       this.appendDummyInput('AT1');
       this.appendDummyInput('AT2');
