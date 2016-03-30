@@ -78,6 +78,7 @@ SparqlBlocks.Storage = (function() {
     var workspace = opt_workspace || Blockly.getMainWorkspace();
     var xml = Blockly.Xml.workspaceToDom(workspace);
     var data = Blockly.Xml.domToPrettyText(xml);
+    var testState = SparqlBlocks.Blocks.test && SparqlBlocks.Blocks.test.getState();
     var metaData = _.extend(
       {
         generator: "SparqlBlocks",
@@ -87,7 +88,16 @@ SparqlBlocks.Storage = (function() {
       },
       workspace.eventStack ? {
         eventHistoryFile: "eventHistory.json"
-      } : {});
+      } : {},
+      testState ? {
+        testStateFile: "testState.json"
+      } : {},
+      SparqlBlocks.trackingGuide ? {
+        guideActive: true,
+        guideStep: SparqlBlocks.trackingGuide.getStateId()
+      } : {
+        guideActive: false
+      });
     makeRequest_({
       dataType: "json",
       method: "POST",
@@ -102,6 +112,9 @@ SparqlBlocks.Storage = (function() {
         },
         workspace.eventStack ? {
           "eventHistory.json": { "content": JSON.stringify(workspace.eventStack) }
+        } : {},
+        testState ? {
+          "testState.json": { "content": JSON.stringify(testState) }
         } : {})
       }),
       url: "https://api.github.com/gists",
