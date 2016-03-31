@@ -1118,6 +1118,16 @@ h1 {
         <field name="PREFIX">foaf</field>
         <field name="LOCAL_NAME">knows</field>
       </block>
+      <sep gap="32"></sep>
+      <block type="sparql_prefixed_iri">
+        <field name="PREFIX">geo</field>
+        <field name="LOCAL_NAME">lat</field>
+      </block>
+      <sep gap="8"></sep>
+      <block type="sparql_prefixed_iri">
+        <field name="PREFIX">geo</field>
+        <field name="LOCAL_NAME">long</field>
+      </block>
     </category>
     <sep></sep>
     <category name="Variables" colour="330" custom="VARIABLE"></category>
@@ -1378,36 +1388,36 @@ h1 {
       <block type="sparql_test">
         <data>{
           "id": "1",
-          "question": "1) The DBpedia Class for mountains is",
+          "question": "A) DBpedia class for mountains:",
           "answerMD5": "2bd86839cd03700675d6bcf3f34a8684"
         }</data>
       </block>
       <block type="sparql_test">
         <data>{
           "id": "2",
-          "question": "2) The highest mountain (on Earth) is",
-          "answerMD5": "2bd86839cd03700675d6bcf3f34a8684"
+          "question": "B) DBpedia property for elevation of mountains:",
+          "answerMD5": "2f9c48a704a5537b6c31fded840b8900"
         }</data>
       </block>
       <block type="sparql_test">
         <data>{
           "id": "3",
-          "question": "3) The highest mountain after the Annapurna is",
-          "answerMD5": "2bd86839cd03700675d6bcf3f34a8684"
+          "question": "C) 3rd highest mountain:",
+          "answerMD5": "0ec28cc250117935cf9a2cdb8ccc31ba"
         }</data>
       </block>
       <block type="sparql_test">
         <data>{
           "id": "4",
-          "question": "4) The highest mountain in Australia is ",
-          "answerMD5": "6840803329d7fb45d168be3f602d0b35"
+          "question": "D) Lowest mountain above 8,000 m:",
+          "answerMD5": "28b96c850d9186e0781fecb5e854ea2b"
         }</data>
       </block>
       <block type="sparql_test">
         <data>{
           "id": "5",
-          "question": "5) The second highest mountain (on Earth) is",
-          "answerMD5": "2bd86839cd03700675d6bcf3f34a8684"
+          "question": "E) Highest mountain located in South Africa:",
+          "answerMD5": "d8ce147e66b502422ce3e950df2c2202"
         }</data>
       </block>
     </category>
