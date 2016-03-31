@@ -221,6 +221,10 @@ function start() {
           useFocus: true
         },
         {
+          dialog: "dialogKeyboard",
+          modal: true
+        },
+        {
           dialog: "dialogDelete",
           modal: true
         },
@@ -1584,6 +1588,73 @@ h1 {
         <button class="secondary" onclick="BlocklyDialogs.hideDialog(true)">OK</button>
       </div>
     </div>
+    <div id="dialogKeyboard" class="dialogHiddenContent">
+      <div class="dialogTitle">Keyboard Commands</div>
+      <div class="dialogContent">
+        <p></p>
+        You can use the following common keyboard commands:
+        <ul>
+          <li>
+            <kbd>Del</kbd> or <kbd>←</kbd>
+            to <span class="dialog-def">delete</span> the selected block;
+          </li>
+          <li>
+            <kbd>Ctrl</kbd> + <kbd>C</kbd>
+            to <span class="dialog-def">copy</span> the selected block;
+          </li>
+          <li>
+            <kbd>Ctrl</kbd> + <kbd>X</kbd>
+            to <span class="dialog-def">cut</span> the selected block;
+          </li>
+          <li>
+            <kbd>Ctrl</kbd> + <kbd>V</kbd>
+            to <span class="dialog-def">paste</span> the block that have been copied/cut;
+          </li>
+          <li>
+            <kbd>Ctrl</kbd> + <kbd>Z</kbd>
+            to <span class="dialog-def">undo</span> last operation;
+          </li>
+          <li>
+            <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Z</kbd>
+            to <span class="dialog-def">redo</span> an operation that was undone.
+          </li>
+        </ul>
+        <p>
+          <kbd>Alt</kbd> or <kbd>⌘</kbd> can be used in place of <kbd>Ctrl</kbd>.<p>
+      </div>
+      <div class="farSide" style="padding: 1ex 3ex 0">
+        <button class="secondary" onclick="BlocklyDialogs.hideDialog(true)">OK</button>
+      </div>
+    </div>
+    <div id="dialogDelete" class="dialogHiddenContent">
+      <div class="dialogTitle">Delete Blocks</div>
+      <div class="dialogContent">
+        <p></p>
+        There are in total four ways to delete blocks:
+        <ol>
+          <li>
+            select the block and type <kbd>Del</kbd> or <kbd>←</kbd>;
+          </li>
+          <li>
+            right-click on the variable block and choose <span class="dialog-command">Delete Block</span>;
+          </li>
+          <li>
+            drag the block to the trash bin <span class="icon_trash"></span>;
+          </li>
+          <li>
+            drag the block to the left, over the toolbox.
+          </li>
+        </ol>
+        <!-- <p>
+          Please beware that blocks and group of blocks are deleted without prompt
+          if the user accidentally drops them on the areas described (2. and 3.).</p>
+        <p>
+          In a not-too-far-in-the-future release we will provide an undo mechanism.</p> -->
+      </div>
+      <div class="farSide" style="padding: 1ex 3ex 0">
+        <button class="secondary" onclick="BlocklyDialogs.hideDialog(true)">OK</button>
+      </div>
+    </div>
     <div id="dialogDeleteVar" style="width: 400px" class="dialogHiddenContent">
       <div class="dialogTitle">Change the Pattern</div>
       <div class="dialogContent">
@@ -1599,32 +1670,6 @@ h1 {
         </span>
         to the trash bin <span class="icon_trash"></span>.
         <!-- or right-click on the variable block and select <span class="dialog-command">Delete Block</span>. -->
-      </div>
-    </div>
-    <div id="dialogDelete" class="dialogHiddenContent">
-      <div class="dialogTitle">Delete Blocks</div>
-      <div class="dialogContent">
-        <p></p>
-        There are three ways to delete blocks:
-        <ol>
-          <li>
-            right-click on the variable block and select <span class="dialog-command">Delete Block</span>;
-          </li>
-          <li>
-            drag the block to the trash bin <span class="icon_trash"></span>;
-          </li>
-          <li>
-            drag the block to the left, over the toolbox.
-          </li>
-        </ol>
-        <p>
-          Please beware that blocks and group of blocks are deleted without prompt
-          if the user accidentally drops them on the areas described (2. and 3.).</p>
-        <p>
-          In a not-too-far-in-the-future release we will provide an undo mechanism.</p>
-      </div>
-      <div class="farSide" style="padding: 1ex 3ex 0">
-        <button class="secondary" onclick="BlocklyDialogs.hideDialog(true)">OK</button>
       </div>
     </div>
     <div id="dialogAddResource" style="width: 400px" class="dialogHiddenContent">
