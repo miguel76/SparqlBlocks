@@ -102,8 +102,7 @@ function start() {
         },
      });
 
-  $('.blocklyToolboxDiv')[0].insertAdjacentHTML(
-    'afterbegin',
+  $('.blocklyToolboxDiv').prepend(
     '<div class="main-button-container clearfix">'+
       '<div class="main-button-container clearfix">'+
       '<button class="main-button btn btn-block" disabled title="Save as Gist on GitHub" type="button" id="save-button" onclick="SparqlBlocks.Storage.linkGist()">'+
@@ -121,8 +120,7 @@ function start() {
 
   SparqlBlocks.Storage.setCopyOnThisButton('#copy-button');
 
-  $('.blocklyWorkspace')[0].insertAdjacentHTML(
-    'afterbegin',
+  $('.blocklyWorkspace').prepend(
     '<foreignObject x="130" y="6" width="400">'+
       '<div class="flash-messages">'+
       '</div>'+
@@ -152,7 +150,7 @@ function start() {
   SparqlBlocks.trackingGuide = SparqlBlocks.Guide.track(
     workspace,
     {
-      startStateId: 23,
+      // startStateId: 23,
       stateList: [
         {
           dialog: "dialogWelcome", //"Welcome to ...",

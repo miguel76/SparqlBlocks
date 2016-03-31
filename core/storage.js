@@ -373,7 +373,7 @@ SparqlBlocks.Storage = (function() {
     if (oldFlashMessage) {
       oldFlashMessage.parentElement.removeChild(oldFlashMessage);
     }
-    $('.flash-messages')[0].insertAdjacentHTML('afterbegin',
+    $('.flash-messages').prepend(
       '<div class="flash '+ messageClass +'">'+
         // '<span class="octicon octicon-x flash-close js-flash-close" '+
         //     'onclick="this.parentElement.parentElement.removeChild(this.parentElement)"></span>'+
