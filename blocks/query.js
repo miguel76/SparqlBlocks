@@ -50,6 +50,9 @@ goog.require('SparqlBlocks.Blocks');
     }
   });
 
+  var defaultLimit = 5;
+  var maxLimit = 50;
+
   var orderFields = {
     init: function() {
         this.orderFieldCount_ = 1;
@@ -63,10 +66,20 @@ goog.require('SparqlBlocks.Blocks');
 
         this.appendDummyInput("AFTER_ORDER")
             .appendField("& limit to first")
-            .appendField(new Blockly.FieldTextInput("5"), "LIMIT")
+            .appendField(
+              new Blockly.FieldTextInput(
+                "" + defaultLimit,
+                Blockly.FieldTextInput.nonnegativeIntegerValidator),
+              "LIMIT")
             .appendField("rows");
     },
     onchange: function() {
+      // Check and correct limit field if over max 
+      var limit = this.getFieldValue('LIMIT');
+      if (limit > maxLimit) {
+        this.setFieldValue('' + maxLimit, 'LIMIT');
+      }
+
       // Dynamically add or remove order fields as needed
       var lastOrderInput = this.getInput('ORDER_FIELD' + this.orderFieldCount_);
       var lastOrderConnection = lastOrderInput && lastOrderInput.connection.targetConnection;

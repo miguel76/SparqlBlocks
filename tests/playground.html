@@ -152,7 +152,7 @@ function start() {
   SparqlBlocks.trackingGuide = SparqlBlocks.Guide.track(
     workspace,
     {
-      // startStateId: 20,
+      startStateId: 23,
       stateList: [
         {
           dialog: "dialogWelcome", //"Welcome to ...",
@@ -722,8 +722,14 @@ h1 {
 
   <xml id="toolbox" style="display: none">
     <category name="Query" colour="290">
-      <block type="sparql_execution_endpoint_query"></block>
-      <!-- <block type="sparql_execution_query"></block> -->
+      <block type="sparql_execution_endpoint_query">
+        <field name="ENDPOINT">http://dbpedia.org/sparql</field>
+        <field name="LIMIT">5</field>
+      </block>
+      <block type="sparql_execution_endpoint_query">
+        <field name="ENDPOINT">https://query.wikidata.org/bigdata/namespace/wdq/sparql</field>
+        <field name="LIMIT">5</field>
+      </block>
     </category>
     <category name="Patterns" colour="120">
       <block type="sparql_typedsubject_propertylist">

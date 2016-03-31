@@ -34,7 +34,6 @@ goog.require('SparqlBlocks.Blocks');
   // "<a href="https://commons.wikimedia.org/wiki/File:Octicons-database.svg#/media/File:Octicons-database.svg">Octicons-database</a>" by GitHub - <a rel="nofollow" class="external free" href="https://github.com/github/octicons">https://github.com/github/octicons</a>. Licensed under <a href="http://opensource.org/licenses/mit-license.php" title="MIT license">MIT</a> via <a href="//commons.wikimedia.org/wiki/">Wikimedia Commons</a>.
 
   var dbFile = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAH8SURBVHjaYvz//z8DJQAggFiQOXv37mUHGugHxJH//v3TANKqQAxk/rsCpO8A6blAvDcgIOAvTA9AADHCXADUrAVkLxcVFdWTkJBg4ObmZuDi4mIAyX/8+JHh8+fPDI8ePWJ4/fr1EaBYRHBw8FOQPoAAAisA4V27du1/+PAhyLr/uMDv37//nz9//v/KlSsXwvQBBBATzClAjra4uDhBP0tLSzMALfGE8QECCB4GQEGwiS9fvmTg4OBgYGdnZ2BlZQWLffv2jeHdu3cMT58+ZVBWVgarhQGAAMIwgIWFheH9+/cMP378APP//PnD8OnTJ4afP3+C5UBiyAYABBALkhfAmJmZGewCkGIQBvobbAgssEGa//6FRwIDQABhuACkGKaJkZERrBgmxsTEhOECgADCMACmAYRBrgHxQZpBGMSHqYEBgADCMACmGKQIZgDMBTBvgtgwABBAKAaAMMx2mIHILoOp+/XrF9wAgACCpwOQAlBUAVMiOAqRASgsJCUlGYyNjRmePXuG4gKAAEJ2QcLx48dXaWpqcsvLy4MNAWkE2Q7SDErKV65cYbhw4cILoAv9YPoAAogROTcuWbJEEWhQDRAHA0OcH5QXQN4BuQyYLkAaFwNd2lNZWfkKpgcggBhxZedZs2bxAjWoAPE/oJNvFBcX/8SmDiDAAO2Un30ZkCt9AAAAAElFTkSuQmCC";
-  var defaultEndpoint = "http://live.dbpedia.org/sparql";
   var execBlock = function(options) {
     return {
       init: function() {
@@ -44,10 +43,10 @@ goog.require('SparqlBlocks.Blocks');
           //     // .appendField(new Blockly.FieldImage(dbFile, 16, 16, 'Endpoint'))
           //     .appendField("⚙")
               .appendField("from")
-              .appendField(new Blockly.FieldTextInput(defaultEndpoint), "ENDPOINT");
+              .appendField(new Blockly.FieldTextInput(""), "ENDPOINT");
                   // // .appendField(new Blockly.FieldImage(dbFile, 16, 16, 'Endpoint'))
                   // .appendField("⚙")
-                  // .appendField(new Blockly.FieldTextInput(defaultEndpoint), "ENDPOINT");
+                  // .appendField(new Blockly.FieldTextInput(""), "ENDPOINT");
         }
         if (options && options.baseQuery) {
           this.setColour(290);
@@ -95,7 +94,8 @@ goog.require('SparqlBlocks.Blocks');
         if (options && options.baseQuery) {
           SparqlBlocks.Blocks.query.orderFields.onchange.call(this);
         }
-        if (!options || !options.dontExecute) {
+        if ((!options || !options.dontExecute) &&
+            Blockly.FieldTextInput.nonnegativeIntegerValidator(this.getFieldValue("LIMIT")) !== null) {
           if (options && options.baseQuery) {
             // blockExec_(this, this);
             SparqlBlocks.Exec.blockExec(this, this, this.resultsInput);

@@ -26,12 +26,7 @@ goog.require('SparqlBlocks.Sparql');
 
 SparqlBlocks.Exec = ( function() {
 
-  var defaultEndpointUrl_ = 'http://live.dbpedia.org/sparql';
-
   var sparqlExec_ = function(endpointUrl, query, callback) {
-    if (!endpointUrl) {
-      endpointUrl = defaultEndpointUrl_;
-    }
     var queryUrl =
         endpointUrl +
         "?query=" + encodeURIComponent(query);
@@ -94,13 +89,6 @@ SparqlBlocks.Exec = ( function() {
     return sparqlExec_(endpointUrl, query, function(err, data) {
       var resultField = null;
       if (err) {
-        // var errorType = (err.textStatus) ? err.textStatus : "unknown problem";
-        // if (err.jqXHR.status) {
-        //   errorType += " " + err.jqXHR.status;
-        // }
-        // if (err.jqXHR.statusText) {
-        //   errorType += ": " + err.jqXHR.statusText;
-        // }
         var errorDescr = err.jqXHR.responseText;
         if (errorDescr) {
           var errorDescrShort = null;
@@ -136,7 +124,7 @@ SparqlBlocks.Exec = ( function() {
       if (block.queryReq) {
         block.queryReq.abort();
       }
-      if (queryStr) {
+      if (queryStr && endpointUri) {
         console.log('Ready to execute query: ' + queryStr);
         block.resultsData = null;
         block.queryReq = SparqlBlocks.Exec.sparqlExecAndPublish(
@@ -148,7 +136,6 @@ SparqlBlocks.Exec = ( function() {
               block.resultsData = data;
             } );
       } else {
-        console.log('Empty query');
         block.resultsData = null;
         setResult_(resultsHolder, SparqlBlocks.Msg.EXECUTION_PLACEHOLDER);
         block.queryReq = null;
@@ -159,10 +146,6 @@ SparqlBlocks.Exec = ( function() {
   }
 
   var blockExec_ = function(block, queryBlock, resultsHolder) {
-    // var queryStr = SparqlBlocks.Sparql.valueToCode(
-    //   block,
-    //   'QUERY',
-    //   SparqlBlocks.Sparql.ORDER_NONE);
     if (!queryBlock) {
       queryBlock = block.getInputTargetBlock('QUERY');
     }

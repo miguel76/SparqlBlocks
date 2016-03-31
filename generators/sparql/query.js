@@ -25,6 +25,8 @@ goog.require('SparqlBlocks.Sparql');
 
 ( function() {
 
+  var maxLimit = 50;
+
   SparqlBlocks.Sparql.sparqlQuery = function(block) {
     if (!block) {
       return '';
@@ -33,7 +35,10 @@ goog.require('SparqlBlocks.Sparql');
     if (statements_where == '') {
       return '';
     }
-    var text_limit = block.getFieldValue('LIMIT');
+    var limit = Blockly.FieldTextInput.nonnegativeIntegerValidator(block.getFieldValue("LIMIT"));
+    if (limit === null) {
+      limit = 0;
+    }
     var code = 'SELECT DISTINCT * WHERE {\n' + statements_where + '\n}';
     var orderByCode = null;
     for (var i = 1; i <= block.orderFieldCount_; i++) {
@@ -57,9 +62,7 @@ goog.require('SparqlBlocks.Sparql');
     if (orderByCode) {
       code += '\n' + orderByCode;
     }
-    if (text_limit) {
-      code += '\nLIMIT ' + text_limit;
-    }
+    code += '\nLIMIT ' + limit;
 
     var prefixMatches = code.match(/[^(|!/\^,;\x20|\x09|\x0D|\x0A]+[\x20|\x09|\x0D|\x0A]*:/g);
     var prefixStrings = null;
