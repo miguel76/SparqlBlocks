@@ -247,6 +247,14 @@ h1 {
   background-image: url('../img/menuIconsWhite/png/link-1.png'); /* Properties */
 }
 
+.blocklyToolboxDiv #\:g .blocklyTreeRow {
+  background-image: url('../img/menuIcons/png/mark.png'); /* Tests */
+}
+
+.blocklyToolboxDiv #\:g .blocklyTreeSelected {
+  background-image: url('../img/menuIconsWhite/png/mark.png'); /* Tests */
+}
+
 /*.main-button-container {
   padding: 5px;
   font-family: "Helvetica", sans-serif;
@@ -263,10 +271,6 @@ h1 {
     <category name="Query" colour="290">
       <block type="sparql_execution_endpoint_query">
         <field name="ENDPOINT">http://dbpedia.org/sparql</field>
-        <field name="LIMIT">5</field>
-      </block>
-      <block type="sparql_execution_endpoint_query">
-        <field name="ENDPOINT">https://query.wikidata.org/bigdata/namespace/wdq/sparql</field>
         <field name="LIMIT">5</field>
       </block>
     </category>
@@ -920,6 +924,44 @@ h1 {
             <field name="LOCAL_NAME">Datatype</field>
           </block>
         </value>
+      </block>
+    </category>
+    <sep></sep>
+    <category name="Test" colour="330">
+      <block type="sparql_test">
+        <data>{
+          "id": "1",
+          "question": "A) DBpedia class for mountains:",
+          "answerMD5": "2bd86839cd03700675d6bcf3f34a8684"
+        }</data>
+      </block>
+      <block type="sparql_test">
+        <data>{
+          "id": "2",
+          "question": "B) DBpedia property for elevation of mountains:",
+          "answerMD5": "2f9c48a704a5537b6c31fded840b8900"
+        }</data>
+      </block>
+      <block type="sparql_test">
+        <data>{
+          "id": "3",
+          "question": "C) 3rd highest mountain:",
+          "answerMD5": "0ec28cc250117935cf9a2cdb8ccc31ba"
+        }</data>
+      </block>
+      <block type="sparql_test">
+        <data>{
+          "id": "4",
+          "question": "D) Lowest mountain above 8,000 m:",
+          "answerMD5": "28b96c850d9186e0781fecb5e854ea2b"
+        }</data>
+      </block>
+      <block type="sparql_test">
+        <data>{
+          "id": "5",
+          "question": "E) Highest mountain located in South Africa:",
+          "answerMD5": "d8ce147e66b502422ce3e950df2c2202"
+        }</data>
       </block>
     </category>
   </xml>

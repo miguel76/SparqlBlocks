@@ -97,7 +97,6 @@ function start() {
   SparqlBlocks.trackingGuide = SparqlBlocks.Guide.track(
     workspace,
     {
-      // startStateId: 20,
       stateList: [
         {
           dialog: "dialogWelcome", //"Welcome to ...",
@@ -164,6 +163,10 @@ function start() {
             "bottom": "25px", "left": "15px"
           },
           useFocus: true
+        },
+        {
+          dialog: "dialogKeyboard",
+          modal: true
         },
         {
           dialog: "dialogDelete",
@@ -614,8 +617,10 @@ h1 {
 
   <xml id="toolbox" style="display: none">
     <category name="Query" colour="290">
-      <block type="sparql_execution_endpoint_query"></block>
-      <!-- <block type="sparql_execution_query"></block> -->
+      <block type="sparql_execution_endpoint_query">
+        <field name="ENDPOINT">http://dbpedia.org/sparql</field>
+        <field name="LIMIT">5</field>
+      </block>
     </category>
     <category name="Patterns" colour="120">
       <block type="sparql_typedsubject_propertylist">
@@ -1004,6 +1009,16 @@ h1 {
         <field name="PREFIX">foaf</field>
         <field name="LOCAL_NAME">knows</field>
       </block>
+      <sep gap="32"></sep>
+      <block type="sparql_prefixed_iri">
+        <field name="PREFIX">geo</field>
+        <field name="LOCAL_NAME">lat</field>
+      </block>
+      <sep gap="8"></sep>
+      <block type="sparql_prefixed_iri">
+        <field name="PREFIX">geo</field>
+        <field name="LOCAL_NAME">long</field>
+      </block>
     </category>
     <sep></sep>
     <category name="Variables" colour="330" custom="VARIABLE"></category>
@@ -1264,36 +1279,36 @@ h1 {
       <block type="sparql_test">
         <data>{
           "id": "1",
-          "question": "1) The DBpedia Class for mountains is",
+          "question": "A) DBpedia class for mountains:",
           "answerMD5": "2bd86839cd03700675d6bcf3f34a8684"
         }</data>
       </block>
       <block type="sparql_test">
         <data>{
           "id": "2",
-          "question": "2) The highest mountain (on Earth) is",
-          "answerMD5": "2bd86839cd03700675d6bcf3f34a8684"
+          "question": "B) DBpedia property for elevation of mountains:",
+          "answerMD5": "2f9c48a704a5537b6c31fded840b8900"
         }</data>
       </block>
       <block type="sparql_test">
         <data>{
           "id": "3",
-          "question": "3) The highest mountain after the Annapurna is",
-          "answerMD5": "2bd86839cd03700675d6bcf3f34a8684"
+          "question": "C) 3rd highest mountain:",
+          "answerMD5": "0ec28cc250117935cf9a2cdb8ccc31ba"
         }</data>
       </block>
       <block type="sparql_test">
         <data>{
           "id": "4",
-          "question": "4) The highest mountain in Australia is ",
-          "answerMD5": "6840803329d7fb45d168be3f602d0b35"
+          "question": "D) Lowest mountain above 8,000 m:",
+          "answerMD5": "28b96c850d9186e0781fecb5e854ea2b"
         }</data>
       </block>
       <block type="sparql_test">
         <data>{
           "id": "5",
-          "question": "5) The second highest mountain (on Earth) is",
-          "answerMD5": "2bd86839cd03700675d6bcf3f34a8684"
+          "question": "E) Highest mountain located in South Africa:",
+          "answerMD5": "d8ce147e66b502422ce3e950df2c2202"
         }</data>
       </block>
     </category>
@@ -1480,6 +1495,73 @@ h1 {
         <button class="secondary" onclick="BlocklyDialogs.hideDialog(true)">OK</button>
       </div>
     </div>
+    <div id="dialogKeyboard" class="dialogHiddenContent">
+      <div class="dialogTitle">Keyboard Commands</div>
+      <div class="dialogContent">
+        <p></p>
+        You can use the following common keyboard commands:
+        <ul>
+          <li>
+            <kbd>Del</kbd> or <kbd>←</kbd>
+            to <span class="dialog-def">delete</span> the selected block;
+          </li>
+          <li>
+            <kbd>Ctrl</kbd> + <kbd>C</kbd>
+            to <span class="dialog-def">copy</span> the selected block;
+          </li>
+          <li>
+            <kbd>Ctrl</kbd> + <kbd>X</kbd>
+            to <span class="dialog-def">cut</span> the selected block;
+          </li>
+          <li>
+            <kbd>Ctrl</kbd> + <kbd>V</kbd>
+            to <span class="dialog-def">paste</span> the block that have been copied/cut;
+          </li>
+          <li>
+            <kbd>Ctrl</kbd> + <kbd>Z</kbd>
+            to <span class="dialog-def">undo</span> last operation;
+          </li>
+          <li>
+            <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Z</kbd>
+            to <span class="dialog-def">redo</span> an operation that was undone.
+          </li>
+        </ul>
+        <p>
+          <kbd>Alt</kbd> or <kbd>⌘</kbd> can be used in place of <kbd>Ctrl</kbd>.<p>
+      </div>
+      <div class="farSide" style="padding: 1ex 3ex 0">
+        <button class="secondary" onclick="BlocklyDialogs.hideDialog(true)">OK</button>
+      </div>
+    </div>
+    <div id="dialogDelete" class="dialogHiddenContent">
+      <div class="dialogTitle">Delete Blocks</div>
+      <div class="dialogContent">
+        <p></p>
+        There are in total four ways to delete blocks:
+        <ol>
+          <li>
+            select the block and type <kbd>Del</kbd> or <kbd>←</kbd>;
+          </li>
+          <li>
+            right-click on the variable block and choose <span class="dialog-command">Delete Block</span>;
+          </li>
+          <li>
+            drag the block to the trash bin <span class="icon_trash"></span>;
+          </li>
+          <li>
+            drag the block to the left, over the toolbox.
+          </li>
+        </ol>
+        <!-- <p>
+          Please beware that blocks and group of blocks are deleted without prompt
+          if the user accidentally drops them on the areas described (2. and 3.).</p>
+        <p>
+          In a not-too-far-in-the-future release we will provide an undo mechanism.</p> -->
+      </div>
+      <div class="farSide" style="padding: 1ex 3ex 0">
+        <button class="secondary" onclick="BlocklyDialogs.hideDialog(true)">OK</button>
+      </div>
+    </div>
     <div id="dialogDeleteVar" style="width: 400px" class="dialogHiddenContent">
       <div class="dialogTitle">Change the Pattern</div>
       <div class="dialogContent">
@@ -1495,32 +1577,6 @@ h1 {
         </span>
         to the trash bin <span class="icon_trash"></span>.
         <!-- or right-click on the variable block and select <span class="dialog-command">Delete Block</span>. -->
-      </div>
-    </div>
-    <div id="dialogDelete" class="dialogHiddenContent">
-      <div class="dialogTitle">Delete Blocks</div>
-      <div class="dialogContent">
-        <p></p>
-        There are three ways to delete blocks:
-        <ol>
-          <li>
-            right-click on the variable block and select <span class="dialog-command">Delete Block</span>;
-          </li>
-          <li>
-            drag the block to the trash bin <span class="icon_trash"></span>;
-          </li>
-          <li>
-            drag the block to the left, over the toolbox.
-          </li>
-        </ol>
-        <p>
-          Please beware that blocks and group of blocks are deleted without prompt
-          if the user accidentally drops them on the areas described (2. and 3.).</p>
-        <p>
-          In a not-too-far-in-the-future release we will provide an undo mechanism.</p>
-      </div>
-      <div class="farSide" style="padding: 1ex 3ex 0">
-        <button class="secondary" onclick="BlocklyDialogs.hideDialog(true)">OK</button>
       </div>
     </div>
     <div id="dialogAddResource" style="width: 400px" class="dialogHiddenContent">
