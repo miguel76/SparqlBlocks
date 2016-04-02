@@ -150,37 +150,45 @@ SparqlBlocks.Guide = (function() {
         return;
       }
 
-      var dialogDiv = document.getElementById(currState.dialog);
 
-      var toReplaceArray = dialogDiv.getElementsByClassName("blockly-readOnly");
-      var j = 0;
-      for (var i = 0; i < toReplaceArray.length; i++) {
-        var toReplace = toReplaceArray[i];
-        var content = toReplace.innerHTML;
-        var zoom = toReplace.getAttribute("blockly-zoom");
-        toReplace.innerHTML = "";
-        var localWorkspace = Blockly.inject(
-          toReplace,
-          _.extend(
-            {'readOnly': true},
-            zoom ?
-              { zoom:
-                  { controls: false,
-                    wheel: false,
-                    startScale: zoom }
-              } : {} ));
+      var dialogDiv = currState.dialog ? document.getElementById(currState.dialog) : null;
 
-        Blockly.Xml.domToWorkspace(localWorkspace, Blockly.Xml.textToDom("<xml>" + content + "</xml>"));
+      if (dialogDiv) {
+        var toReplaceArray = dialogDiv.getElementsByClassName("blockly-readOnly");
+        var j = 0;
+        for (var i = 0; i < toReplaceArray.length; i++) {
+          var toReplace = toReplaceArray[i];
+          var content = toReplace.innerHTML;
+          var zoom = toReplace.getAttribute("blockly-zoom");
+          toReplace.innerHTML = "";
+          var localWorkspace = Blockly.inject(
+            toReplace,
+            _.extend(
+              {'readOnly': true},
+              zoom ?
+                { zoom:
+                    { controls: false,
+                      wheel: false,
+                      startScale: zoom }
+                } : {} ));
+          Blockly.Xml.domToWorkspace(localWorkspace, Blockly.Xml.textToDom("<xml>" + content + "</xml>"));
+        }
       }
 
-      BlocklyDialogs.showDialog(
-        dialogDiv, currState.useFocus ? data.focus : null, false, currState.modal,
-        _.extend(
-          {},
-          currState.modal ? modalDefaultStyle : nonModalDefaultStyle,
-          currState.style ? currState.style : {}
-        ),
-        function() { setTimeout(enterNewState); });
+      if (currState.do) {
+        currState.do(data);
+      }
+
+      if (dialogDiv) {
+        BlocklyDialogs.showDialog(
+          dialogDiv, currState.useFocus ? data.focus : null, false, currState.modal,
+          _.extend(
+            {},
+            currState.modal ? modalDefaultStyle : nonModalDefaultStyle,
+            currState.style ? currState.style : {}
+          ),
+          function() { setTimeout(enterNewState); });
+      };
 
       if (currState.stepWhen) {
         var listener = eventManager.addChangeListener(function(event) {
@@ -210,10 +218,84 @@ SparqlBlocks.Guide = (function() {
       }
     };
 
+  };
+
+  var checkBlock = function(block, checkStructure) {
+    console.log('Checking Block of Type ' + block.type + ' against Structure of Type ' + checkStructure.type + ':');
+    console.log(block);
+    console.log(JSON.stringify(checkStructure));
+    if (checkStructure.type) {
+      if (_.isArray(checkStructure.type)) {
+        if (_.indexOf(checkStructure.type, block.type) === -1)
+          return false;
+      } else if (checkStructure.type !== block.type) {
+        return false;
+      }
+    }
+    var inputs = _.keys(checkStructure);
+    for (var i = 0; i < inputs.length; i++) {
+      var input = inputs[i];
+      if (input === "type") { // type already considered
+        continue;
+      }
+      var contentCheck = checkStructure[input];
+      if (_.isArray(contentCheck)) { // check for a list statement blocks
+        var containedBlock = block.getInputTargetBlock(input);
+        contentCheck = contentCheck.slice(); // create a copy so that can be modified
+        for (;containedBlock; containedBlock = containedBlock.getNextBlock()) {
+          var contentCheckFound = false;
+          for (var contentCheckIndex = 0; contentCheckIndex < contentCheck.length; contentCheckIndex++) {
+            var containedContentCheck = contentCheck[contentCheckIndex];
+            if (checkBlock(containedBlock, containedContentCheck)) {
+              // contentCheckFound = contentCheckIndex;
+              contentCheckFound = true;
+              contentCheck.splice(contentCheckIndex, 1);
+              break;
+            }
+          }
+          if (!contentCheckFound) { // if there is an unmatched item in the content
+            return false;
+          }
+        }
+        if (contentCheck.length > 0) { // if there were unmatched items in check structure
+          return false;
+        }
+      } else if (_.isObject(contentCheck)) { // check for a simple input block
+        var containedBlock = block.getInputTargetBlock(input);
+        if (!containedBlock || !checkBlock(containedBlock, contentCheck)) {
+          return false;
+        }
+      } else if (_.isNull(contentCheck)) { // check for an empty simple input
+        if (block.getInputTargetBlock(input)) {
+          return false;
+        }
+      } else { // check for an input field
+        var inputValue = block.getFieldValue(input);
+        if (contentCheck !== inputValue) {
+          return false;
+        }
+      }
+
+    }
+    return true; // if everything went right
   }
 
+  var checkWorkspace = function(workspace, checkStructure) {
+    var topBlocks = workspace.getTopBlocks();
+    for (var i = 0; i < topBlocks.length; i++) {
+      var topBlock = topBlocks[i];
+      console.log('Checking TopBlock ' + i + ':');
+      console.log(topBlock);
+      if (checkBlock(topBlock, checkStructure)) {
+        return topBlock;
+      }
+    }
+    return null;
+  };
+
   return {
-    track: track_
+    track: track_,
+    check: checkWorkspace
   }
 
 })();

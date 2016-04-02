@@ -242,8 +242,13 @@ button:hover:not(:disabled) {
 
 .dialog-command {
   text-decoration: underline;
+  font-family: sans-serif, "Flaticon";
 }
 
 .dialog-def {
   font-weight: bold;
+}
+
+#dialog .btn {
+  cursor: default;
 }
