@@ -78,7 +78,23 @@ function start() {
   //   ''
   // ]);
 
-  var toolbox = document.getElementById('toolboxDemo');
+  var sURLVariables = decodeURIComponent(window.location.search.substring(1)).split('&');
+  var sParameters = {};
+
+  for (var i = 0; i < sURLVariables.length; i++) {
+      var sParameterParts = sURLVariables[i].split('=');
+      sParameters[sParameterParts[0]] =
+          sParameterParts[1] === undefined ? true : sParameterParts[1];
+  }
+
+  var mode = _.isString(sParameters["mode"]) ? sParameters["mode"] : "demo";
+
+  var toolbox =
+      mode === "test" ?
+        document.getElementById('toolboxTest') :
+        ( mode === "eval" ?
+            document.getElementById('toolboxGuide') :
+            document.getElementById('toolboxDemo') );
   workspace = Blockly.inject('blocklyDiv', {
       comments: true,
       disable: true,
@@ -130,405 +146,347 @@ function start() {
 
   SparqlBlocks.Storage.startup();
 
-  var check = function(data) {
-    var block = SparqlBlocks.Guide.check(workspace, data.check);
-    if (block) {
-      data.focus = block.getSvgRoot();
-      return true;
-    } else {
-      return false;
-    }
-  }
+  if (mode === "eval") {
 
-  SparqlBlocks.trackingGuide = SparqlBlocks.Guide.track(
-    workspace,
-    {
-      startStateId: 21,
-      stateList: [
-        {
-          do: function(data) {
-            workspace.updateToolbox(document.getElementById('toolboxGuide'));
-          },
-          dialog: "dialogWelcome", //"Welcome to ...",
-          modal: true
+    var check = function(data) {
+      var block = SparqlBlocks.Guide.check(workspace, data.check);
+      if (block) {
+        data.focus = block.getSvgRoot();
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    var guideStateList = [
+      {
+        dialog: "dialogWelcome", //"Welcome to ...",
+        modal: true
+      },
+      {
+        dialog: "dialogAddQuery", //"Add a query ...",
+        style: {
+          "top": "10px", "right": "25px"
         },
-        {
-          dialog: "dialogAddQuery", //"Add a query ...",
-          style: {
-            "top": "10px", "right": "25px"
-          },
-          do: function(data) {
-            data.check = {
-              type: "sparql_execution_endpoint_query",
-              ENDPOINT: "http://live.dbpedia.org/sparql",
-              WHERE: []
-            };
-          },
-          stepWhen: function(event, data) {
-            return check(data);
-          }
+        do: function(data) {
+          data.check = {
+            type: "sparql_execution_endpoint_query",
+            ENDPOINT: "http://live.dbpedia.org/sparql",
+            WHERE: []
+          };
         },
-        {
-          dialog: "dialogAddGraphPattern", //"Add a graph pattern ...",
-          useFocus: true,
-          style: {
-            "top": "10px", "right": "25px"
-          },
-          do: function(data) {
-            data.check.WHERE = [
-              { type: "sparql_typedsubject_propertylist",
-                SUBJECT: { type: "variables_get", VAR: "res" },
-                TYPE: { type: "variables_get", VAR: "type" },
-                PROPERTY_LIST: [
-                  { type: "sparql_verb_object",
-                    VERB: { type: "variables_get", VAR: "pred" },
-                    OBJECT: { type: "variables_get", VAR: "obj" } }
-                ]
-              }
-            ];
-          },
-          stepWhen: function(event, data) {
-            return check(data);
-          }
+        stepWhen: function(event, data) {
+          return check(data);
+        }
+      },
+      {
+        dialog: "dialogAddGraphPattern", //"Add a graph pattern ...",
+        useFocus: true,
+        style: {
+          "top": "10px", "right": "25px"
         },
-        {
-          dialog: "dialogResults",
-          style: {
-            "top": "10px", "right": "25px"
-          },
-          useFocus: true
+        do: function(data) {
+          data.check.WHERE = [
+            { type: "sparql_typedsubject_propertylist",
+              SUBJECT: { type: "variables_get", VAR: "res" },
+              TYPE: { type: "variables_get", VAR: "type" },
+              PROPERTY_LIST: [
+                { type: "sparql_verb_object",
+                  VERB: { type: "variables_get", VAR: "pred" },
+                  OBJECT: { type: "variables_get", VAR: "obj" } }
+              ]
+            }
+          ];
         },
-        {
-          dialog: "dialogVariables",
-          style: {
-            "top": "10px", "right": "25px"
-          },
-          useFocus: true
+        stepWhen: function(event, data) {
+          return check(data);
+        }
+      },
+      {
+        dialog: "dialogResults",
+        style: {
+          "top": "10px", "right": "25px"
         },
-        {
-          dialog: "dialogNavigate",
-          style: {
-            "bottom": "25px", "left": "15px"
-          },
-          useFocus: true
+        useFocus: true
+      },
+      {
+        dialog: "dialogVariables",
+        style: {
+          "top": "10px", "right": "25px"
         },
-        {
-          dialog: "dialogKeyboard",
-          modal: true
+        useFocus: true
+      },
+      {
+        dialog: "dialogNavigate",
+        style: {
+          "bottom": "25px", "left": "15px"
         },
-        {
-          dialog: "dialogDelete",
-          modal: true
+        useFocus: true
+      },
+      {
+        dialog: "dialogKeyboard",
+        modal: true
+      },
+      {
+        dialog: "dialogDelete",
+        modal: true
+      },
+      {
+        dialog: "dialogDeleteVar",
+        style: {
+          "bottom": "25px", "left": "15px"
         },
-        {
-          dialog: "dialogDeleteVar",
-          style: {
-            "bottom": "25px", "left": "15px"
-          },
-          useFocus: true,
-          do: function(data) {
-            data.check.WHERE[0].TYPE = null;
-          },
-          stepWhen: function(event, data) {
-            return (event.type == Blockly.Events.DELETE && check(data));
-          }
+        useFocus: true,
+        do: function(data) {
+          data.check.WHERE[0].TYPE = null;
         },
-        {
-          dialog: "dialogAddResource",
-          useFocus: true,
-          style: {
-            "top": "10px", "right": "25px"
-          },
-          do: function(data) {
-            data.check.WHERE[0].PROPERTY_LIST[0].VERB = {
+        stepWhen: function(event, data) {
+          return (event.type == Blockly.Events.DELETE && check(data));
+        }
+      },
+      {
+        dialog: "dialogAddResource",
+        useFocus: true,
+        style: {
+          "top": "10px", "right": "25px"
+        },
+        do: function(data) {
+          data.check.WHERE[0].PROPERTY_LIST[0].VERB = {
+            type: "sparql_prefixed_iri",
+            PREFIX: "foaf",
+            LOCAL_NAME: "knows"
+          };
+        },
+        stepWhen: function(event, data) {
+          return check(data);
+        }
+      },
+      {
+        dialog: "dialogChangeVarName",
+        useFocus: true,
+        style: {
+          "top": "10px", "right": "25px"
+        },
+        do: function(data) {
+          data.check.WHERE[0].PROPERTY_LIST[0].OBJECT.VAR = "friend";
+        },
+        stepWhen: function(event, data) {
+          return check(data);
+        }
+      },
+      {
+        dialog: "dialogAddBranch",
+        useFocus: true,
+        style: {
+          "top": "10px", "right": "25px"
+        },
+        do: function(data) {
+          data.check.WHERE[0].PROPERTY_LIST.push({
+            type: "sparql_verb_object",
+            VERB: {
               type: "sparql_prefixed_iri",
               PREFIX: "foaf",
-              LOCAL_NAME: "knows"
-            };
-          },
-          stepWhen: function(event, data) {
-            return check(data);
+              LOCAL_NAME: "name"
+            },
+            OBJECT: {
+              type: "variables_get",
+              VAR: "name"
+            }
+          });
+        },
+        stepWhen: function(event, data) {
+          return check(data);
+        }
+      },
+      {
+        dialog: "dialogFixFromResults",
+        useFocus: true,
+        style: {
+          "top": "10px", "right": "25px"
+        },
+        do: function(data) {
+          data.check.WHERE[0].SUBJECT = {
+            type: ["sparql_prefixed_iri", "sparql_iri"]
           }
         },
-        {
-          dialog: "dialogChangeVarName",
-          useFocus: true,
-          style: {
-            "top": "10px", "right": "25px"
-          },
-          do: function(data) {
-            data.check.WHERE[0].PROPERTY_LIST[0].OBJECT.VAR = "friend";
-          },
-          stepWhen: function(event, data) {
-            return check(data);
-          }
+        stepWhen: function(event, data) {
+          return check(data);
+        }
+      },
+      {
+        dialog: "dialogAddPattern",
+        useFocus: true,
+        style: {
+          "top": "10px", "right": "25px"
         },
-        {
-          dialog: "dialogAddBranch",
-          useFocus: true,
-          style: {
-            "top": "10px", "right": "25px"
-          },
-          do: function(data) {
-            data.check.WHERE[0].PROPERTY_LIST.push({
-              type: "sparql_verb_object",
+        do: function(data) {
+          data.check.WHERE.push({
+            type: "sparql_typedsubject_propertylist",
+            SUBJECT: { type: "variables_get", VAR: "friend" },
+            TYPE: {
+              type: "sparql_prefixed_iri",
+              PREFIX: "foaf",
+              LOCAL_NAME: "Person"
+            }
+          });
+        },
+        stepWhen: function(event, data) {
+          return check(data);
+        }
+      },
+      {
+        dialog: "dialogAddPattern2",
+        useFocus: true,
+        style: {
+          "top": "10px", "right": "25px"
+        },
+        do: function(data) {
+          data.check.WHERE[1].PROPERTY_LIST = [
+            { type: "sparql_verb_object",
               VERB: {
                 type: "sparql_prefixed_iri",
                 PREFIX: "foaf",
                 LOCAL_NAME: "name"
               },
-              OBJECT: {
-                type: "variables_get",
-                VAR: "name"
-              }
-            });
-          },
-          stepWhen: function(event, data) {
-            return check(data);
-          }
-        },
-        {
-          dialog: "dialogFixFromResults",
-          useFocus: true,
-          style: {
-            "top": "10px", "right": "25px"
-          },
-          do: function(data) {
-            data.check.WHERE[0].SUBJECT = {
-              type: ["sparql_prefixed_iri", "sparql_iri"]
+              OBJECT: { type: "variables_get", VAR: "friendName" }
             }
-          },
-          stepWhen: function(event, data) {
-            return check(data);
-          }
+          ];
         },
-        {
-          dialog: "dialogAddPattern",
-          useFocus: true,
-          style: {
-            "top": "10px", "right": "25px"
-          },
-          do: function(data) {
-            data.check.WHERE.push({
-              type: "sparql_typedsubject_propertylist",
-              SUBJECT: { type: "variables_get", VAR: "friend" },
-              TYPE: {
-                type: "sparql_prefixed_iri",
-                PREFIX: "foaf",
-                LOCAL_NAME: "Person"
-              }
-            });
-          },
-          stepWhen: function(event, data) {
-            return check(data);
-          }
-        },
-        {
-          dialog: "dialogAddPattern2",
-          useFocus: true,
-          style: {
-            "top": "10px", "right": "25px"
-          },
-          do: function(data) {
-            data.check.WHERE[1].PROPERTY_LIST = [
-              { type: "sparql_verb_object",
-                VERB: {
-                  type: "sparql_prefixed_iri",
-                  PREFIX: "foaf",
-                  LOCAL_NAME: "name"
-                },
-                OBJECT: { type: "variables_get", VAR: "friendName" }
-              }
-            ];
-          },
-          stepWhen: function(event, data) {
-            return check(data);
-          }
-        },
-        {
-          dialog: "dialogAddOrderBy",
-          useFocus: true,
-          style: {
-            "top": "10px", "right": "25px"
-          },
-          do: function(data) {
-            data.check.ORDER_FIELD1 = {
-              type: "variables_get",
-              VAR: "friendName"
-            };
-            data.check.ORDER_DIRECTION1 = "DESC";
-          },
-          stepWhen: function(event, data) {
-            return check(data);
-          }
-        },
-        {
-          dialog: "dialogChangeLimit",
-          useFocus: true,
-          style: {
-            "top": "10px", "right": "25px"
-          },
-          do: function(data) {
-            data.check.LIMIT = "3";
-          },
-          stepWhen: function(event, data) {
-            return check(data);
-          }
-        },
-        {
-          dialog: "dialogFilter",
-          useFocus: true,
-          style: {
-            "top": "10px", "right": "25px"
-          },
-          do: function(data) {
-            data.check.WHERE.push({
-              type: "sparql_filter",
-              CONDITION: {
-                type: "sparql_text_contains",
-                VALUE: { type: "variables_get", VAR: "friendName" },
-                FIND: { type: "sparql_text", TEXT: "tim" }
-              }
-            });
-          },
-          stepWhen: function(event, data) {
-            return check(data);
-          }
-        },
-        {
-          dialog: "dialogFindClass",
-          useFocus: true,
-          style: {
-            "top": "10px", "right": "25px"
-          },
-          do: function(data) {
-            data.check = {};
-          },
-          stepWhen: function(event, data) {
-            if (event.type == Blockly.Events.CREATE &&
-                event.block.type == "sparql_prefixed_iri" &&
-                  event.block.getFieldValue("PREFIX") == "dbo" &&
-                  event.block.getFieldValue("LOCAL_NAME") == "Lake") {
-                    data.focus = event.block.getSvgRoot();
-                    return true;
-            }
-          }
-        },
-        {
-          dialog: "dialogFindThing",
-          useFocus: true,
-          style: {
-            "top": "10px", "right": "25px"
-          },
-          stepWhen: function(event, data) {
-            if (event.type == Blockly.Events.CREATE &&
-                event.block.type == "sparql_prefixed_iri" &&
-                  event.block.getFieldValue("PREFIX") == "dbpedia" &&
-                  event.block.getFieldValue("LOCAL_NAME") == "Lake_Titicaca") {
-                    // data.focus = event.block.getSvgRoot();
-                    return true;
-            }
-          }
-        },
-        {
-          dialog: "dialogFindProperty",
-          useFocus: true,
-          style: {
-            "top": "10px", "right": "25px"
-          },
-          stepWhen: function(event, data) {
-            if (event.type == Blockly.Events.CREATE &&
-                event.block.type == "sparql_prefixed_iri" &&
-                  event.block.getFieldValue("PREFIX") == "dbo" &&
-                  event.block.getFieldValue("LOCAL_NAME") == "locatedInArea") {
-                    // data.focus = event.block.getSvgRoot();
-                    return true;
-            }
-          }
-        },
-        {
-          dialog: "dialogSave",
-          style: {
-            "top": "10px", "right": "25px"
-          }
-        },
-        {
-          do: function(data) {
-            workspace.updateToolbox(document.getElementById('toolboxTest'));
-            workspace.clear();
-          },
-          dialog: "dialogFinish", //"Thank you ...",
-          modal: true
-        },
-        {
-          dialog: "dialogTest",
-          modal: true
+        stepWhen: function(event, data) {
+          return check(data);
         }
-      ]
-    }
-  );
+      },
+      {
+        dialog: "dialogAddOrderBy",
+        useFocus: true,
+        style: {
+          "top": "10px", "right": "25px"
+        },
+        do: function(data) {
+          data.check.ORDER_FIELD1 = {
+            type: "variables_get",
+            VAR: "friendName"
+          };
+          data.check.ORDER_DIRECTION1 = "DESC";
+        },
+        stepWhen: function(event, data) {
+          return check(data);
+        }
+      },
+      {
+        dialog: "dialogChangeLimit",
+        useFocus: true,
+        style: {
+          "top": "10px", "right": "25px"
+        },
+        do: function(data) {
+          data.check.LIMIT = "3";
+        },
+        stepWhen: function(event, data) {
+          return check(data);
+        }
+      },
+      {
+        dialog: "dialogFilter",
+        useFocus: true,
+        style: {
+          "top": "10px", "right": "25px"
+        },
+        do: function(data) {
+          data.check.WHERE.push({
+            type: "sparql_filter",
+            CONDITION: {
+              type: "sparql_text_contains",
+              VALUE: { type: "variables_get", VAR: "friendName" },
+              FIND: { type: "sparql_text", TEXT: "tim" }
+            }
+          });
+        },
+        stepWhen: function(event, data) {
+          return check(data);
+        }
+      },
+      {
+        dialog: "dialogFindClass",
+        useFocus: true,
+        style: {
+          "top": "10px", "right": "25px"
+        },
+        do: function(data) {
+          data.check = {};
+        },
+        stepWhen: function(event, data) {
+          if (event.type == Blockly.Events.CREATE &&
+              event.block.type == "sparql_prefixed_iri" &&
+                event.block.getFieldValue("PREFIX") == "dbo" &&
+                event.block.getFieldValue("LOCAL_NAME") == "Lake") {
+                  data.focus = event.block.getSvgRoot();
+                  return true;
+          }
+        }
+      },
+      {
+        dialog: "dialogFindThing",
+        useFocus: true,
+        style: {
+          "top": "10px", "right": "25px"
+        },
+        stepWhen: function(event, data) {
+          if (event.type == Blockly.Events.CREATE &&
+              event.block.type == "sparql_prefixed_iri" &&
+                event.block.getFieldValue("PREFIX") == "dbpedia" &&
+                event.block.getFieldValue("LOCAL_NAME") == "Lake_Titicaca") {
+                  // data.focus = event.block.getSvgRoot();
+                  return true;
+          }
+        }
+      },
+      {
+        dialog: "dialogFindProperty",
+        useFocus: true,
+        style: {
+          "top": "10px", "right": "25px"
+        },
+        stepWhen: function(event, data) {
+          if (event.type == Blockly.Events.CREATE &&
+              event.block.type == "sparql_prefixed_iri" &&
+                event.block.getFieldValue("PREFIX") == "dbo" &&
+                event.block.getFieldValue("LOCAL_NAME") == "locatedInArea") {
+                  // data.focus = event.block.getSvgRoot();
+                  return true;
+          }
+        }
+      },
+      {
+        dialog: "dialogSave",
+        style: {
+          "top": "10px", "right": "25px"
+        }
+      },
+      {
+        do: function(data) {
+          workspace.updateToolbox(document.getElementById('toolboxTest'));
+          workspace.clear();
+        },
+        dialog: "dialogFinish", //"Thank you ...",
+        modal: true
+      },
+      {
+        dialog: "dialogTest",
+        modal: true
+      }
+    ];
 
-  // Restore previously displayed text.
-  // var text = sessionStorage.getItem('textarea');
-  // if (text) {
-  //   document.getElementById('importExport').value = text;
-  // }
-  // taChange();
-  // Restore event logging state.
-  // var state = sessionStorage.getItem('logEvents');
-  // logEvents(Boolean(state));
+    SparqlBlocks.trackingGuide = SparqlBlocks.Guide.track(
+      workspace,
+      _.extend({ stateList: guideStateList },
+        $.isNumeric(sParameters["startGuideFrom"]) ?
+            { startStateId: Math.round(0 + sParameters["startGuideFrom"]) } : {}
+      )
+    );
 
-}
-
-function toXml() {
-  var output = document.getElementById('importExport');
-  var xml = Blockly.Xml.workspaceToDom(workspace);
-  output.value = Blockly.Xml.domToPrettyText(xml);
-  output.focus();
-  output.select();
-  taChange();
-}
-
-function fromXml() {
-  var input = document.getElementById('importExport');
-  var xml = Blockly.Xml.textToDom(input.value);
-  Blockly.Xml.domToWorkspace(workspace, xml);
-  taChange();
-}
-
-function toCode(lang) {
-  var output = document.getElementById('importExport');
-  output.value = Blockly[lang].workspaceToCode(workspace);
-  taChange();
-}
-
-// Disable the "Import from XML" button if the XML is invalid.
-// Preserve text between page reloads.
-function taChange() {
-  var textarea = document.getElementById('importExport');
-  sessionStorage.setItem('textarea', textarea.value)
-  var valid = true;
-  try {
-    Blockly.Xml.textToDom(textarea.value);
-  } catch (e) {
-    valid = false;
   }
-  document.getElementById('import').disabled = !valid;
-}
 
-function logEvents(state) {
-  var checkbox = document.getElementById('logCheck');
-  checkbox.checked = state;
-  sessionStorage.setItem('logEvents', Number(state));
-  if (state) {
-    workspace.addChangeListener(logger);
-  } else {
-    workspace.removeChangeListener(logger);
-  }
-}
-
-function logger(e) {
-  console.log(e);
 }
 
 </script>
@@ -1206,87 +1164,6 @@ function logger(e) {
             <field name="LOCAL_NAME">Datatype</field>
           </block>
         </value>
-      </block>
-    </category>
-    <sep></sep>
-    <category name="&#xf108; Test" colour="330">
-      <block type="sparql_test">
-        <data>{
-          "id": "1",
-          "question": "a) Class for mountains:",
-          "answerMD5": "2bd86839cd03700675d6bcf3f34a8684"
-        }</data>
-      </block>
-      <sep gap="8"></sep>
-      <block type="sparql_test">
-        <data>{
-          "id": "2",
-          "question": "a) Property for elevation of mountains:",
-          "answerMD5": "2f9c48a704a5537b6c31fded840b8900"
-        }</data>
-      </block>
-      <sep gap="8"></sep>
-      <block type="sparql_test">
-        <data>{
-          "id": "3",
-          "question": "A) 3rd highest mountain:",
-          "answerMD5": "0ec28cc250117935cf9a2cdb8ccc31ba"
-        }</data>
-      </block>
-      <sep gap="32"></sep>
-      <block type="sparql_test">
-        <data>{
-          "id": "4",
-          "question": "B) Lowest mountain above 8,000 m:",
-          "answerMD5": "28b96c850d9186e0781fecb5e854ea2b"
-        }</data>
-      </block>
-      <sep gap="32"></sep>
-      <!-- <block type="sparql_test">
-        <data>{
-          "id": "5",
-          "question": "E) Highest mountain located in South Africa:",
-          "answerMD5": "d8ce147e66b502422ce3e950df2c2202"
-        }</data>
-      </block> -->
-      <block type="sparql_test">
-        <data>{
-          "id": "5",
-          "question": "c) Class for countries:",
-          "answerMD5": "9f5ea8213289919f8fa8bedd19f3eb96"
-        }</data>
-      </block>
-      <sep gap="8"></sep>
-      <block type="sparql_test">
-        <data>{
-          "id": "6",
-          "question": "c) Property for 'located in' (mountain->country):",
-          "answerMD5": "c0b2865f7555c5d0963e39fdc149458a"
-        }</data>
-      </block>
-      <sep gap="8"></sep>
-      <block type="sparql_test">
-        <data>{
-          "id": "7",
-          "question": "c) Resource for China:",
-          "answerMD5": "9be7bcb10ccd7c92e55a9c09b91bf30d"
-        }</data>
-      </block>
-      <sep gap="8"></sep>
-      <block type="sparql_test">
-        <data>{
-          "id": "8",
-          "question": "c) Resource for Nepal:",
-          "answerMD5": "bd2b07bfff06dbad927da2e2dd1a5a33"
-        }</data>
-      </block>
-      <sep gap="8"></sep>
-      <block type="sparql_test">
-        <data>{
-          "id": "9",
-          "question": "C) 3rd highest mountain between China and Nepal:",
-          "answerMD5": "b2e13235a2e1ee782e78e78589828c03"
-        }</data>
       </block>
     </category>
   </xml>
@@ -3879,43 +3756,6 @@ function logger(e) {
       </div>
     </div>
   </div>
-
-  <!-- <h1>Blockly Playground</h1>
-
-  <p><a href="javascript:void(workspace.setVisible(true))">Show</a>
-   - <a href="javascript:void(workspace.setVisible(false))">Hide</a></p>
-
-  <script>
-    if (rtl) {
-      document.write('[ &larr; RTL. Switch to <A HREF="?ltr">LTR</A>. ]');
-    } else {
-      document.write('[ &rarr; LTR. Switch to <A HREF="?rtl">RTL</A>. ]');
-    }
-  </script>
-
-  <p>
-    <input type="button" value="Export to XML" onclick="toXml()">
-    &nbsp;
-    <input type="button" value="Import from XML" onclick="fromXml()" id="import">
-    <br>
-    <input type="button" value="To JavaScript" onclick="toCode('JavaScript')">
-    &nbsp;
-    <input type="button" value="To Python" onclick="toCode('Python')">
-    &nbsp;
-    <input type="button" value="To PHP" onclick="toCode('PHP')">
-    &nbsp;
-    <input type="button" value="To Dart" onclick="toCode('Dart')">
-    &nbsp;
-    <input type="button" value="To SPARQL" onclick="toSPARQL()">
-    <br>
-    <textarea id="importExport" style="width: 26%; height: 12em"
-      onchange="taChange();" onkeyup="taChange()"></textarea>
-  </p>
-
-  <p>
-    Log events: &nbsp;
-    <input type="checkbox" onclick="logEvents(this.checked)" id="logCheck">
-  </p> -->
 
 </body>
 </html>
