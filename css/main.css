@@ -43,3 +43,9 @@ h1 {
 .blocklyTreeRow .blocklyTreeLabel {
   font-family: sans-serif, "Flaticon";
 }
+
+#flash-messages {
+  position: absolute;
+  left: 140px;
+  top: 10px;
+}

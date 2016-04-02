@@ -138,12 +138,6 @@ function start() {
 
   SparqlBlocks.Storage.setCopyOnThisButton('#copy-button');
 
-  $('.blocklyWorkspace').prepend(
-    '<foreignObject x="130" y="6" width="400">'+
-      '<div class="flash-messages">'+
-      '</div>'+
-    '</foreignObject>');
-
   SparqlBlocks.Storage.startup();
 
   if (mode === "eval") {
@@ -2488,6 +2482,8 @@ function start() {
   <div id="dialogShadow" class="dialogAnimate"></div>
   <div id="dialogBorder"></div>
   <div id="dialog"></div>
+
+  <div id="flash-messages" class="flash-messages"></div>
 
   <div id="dialogs" class="dialogHiddenContent">
     <div id="dialogWelcome" class="dialogHiddenContent">
