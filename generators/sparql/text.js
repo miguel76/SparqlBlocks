@@ -103,8 +103,8 @@ goog.require('SparqlBlocks.Sparql');
         SparqlBlocks.Sparql.ORDER_COMMA) || '\'\'';
     // var code = 'CONTAINS(' + argument1 + ', ' + argument0 + ')';
     var code = 'REGEX(' + argument1 + ', STR(' + argument0 + '), \'i\') ' +
-                'AND (COALESCE(LANG(' + argument0 + '),\'\') = \'\' ' +
-                      'OR LANGMATCHES(LANG(' + argument1 + '), LANG(' + argument0 + ')))';
+                '&& (COALESCE(LANG(' + argument0 + '),\'\') = \'\' ' +
+                      '|| LANGMATCHES(LANG(' + argument1 + '), LANG(' + argument0 + ')))';
     return [code, SparqlBlocks.Sparql.ORDER_FUNCTION_CALL];
   };
 
