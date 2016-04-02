@@ -75,20 +75,13 @@ goog.require('SparqlBlocks.Blocks');
       },
       onchange: function() {
         if (!this.resultsInput) {
-
-          var resBlockConn = this.getInput("RESULTS").connection;
-
-          var oldBlockId = null;
-          var oldBlock = resBlockConn.targetBlock();
-          if (oldBlock) {
-            oldBlockId = oldBlock.id;
-            oldBlock.dispose();
+          var resultsBlock = this.getInputTargetBlock("RESULTS");
+          if (!resultsBlock) {
+            resultsBlock = this.workspace.newBlock("sparql_execution_placeholder");
+            resultsBlock.initSvg();
+            resultsBlock.render();
+            this.getInput("RESULTS").connection.connect(resultsBlock.previousConnection);
           }
-
-          var resultsBlock = this.workspace.newBlock("sparql_execution_placeholder", oldBlockId);
-          resultsBlock.initSvg();
-          resultsBlock.render();
-          this.getInput("RESULTS").connection.connect(resultsBlock.previousConnection);
           this.resultsInput = resultsBlock.getInput("RESULTS");
         }
         if (options && options.baseQuery) {
