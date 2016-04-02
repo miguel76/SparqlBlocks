@@ -77,12 +77,12 @@ goog.require('SparqlBlocks.Blocks');
         if (!this.resultsInput) {
           var resultsBlock = this.getInputTargetBlock("RESULTS");
           if (!resultsBlock) {
-            resultsBlock = this.workspace.newBlock("sparql_execution_placeholder");
-            resultsBlock.initSvg();
-            resultsBlock.render();
-            this.getInput("RESULTS").connection.connect(resultsBlock.previousConnection);
+            return;
           }
           this.resultsInput = resultsBlock.getInput("RESULTS");
+          if (!this.resultsInput) {
+            return;
+          }
         }
         if (options && options.baseQuery) {
           SparqlBlocks.Blocks.query.orderFields.onchange.call(this);

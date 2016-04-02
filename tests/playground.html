@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Blockly Playground</title>
+<title>SparqlBlocks Demo</title>
 <link href='../css/primer.css' rel='stylesheet' type='text/css'>
 <link href='../css/octicons.css' rel='stylesheet' type='text/css'>
 <link href='../css/dialog.css' rel='stylesheet' type='text/css'>
@@ -62,10 +62,6 @@
 
 <script>
 'use strict';
-// Depending on the URL argument, render as LTR or RTL.
-var rtl = (document.location.search == '?rtl');
-var workspace = null;
-
 function start() {
 
   // Blockly.Css.CONTENT = Blockly.Css.CONTENT.concat([
@@ -87,6 +83,9 @@ function start() {
           sParameterParts[1] === undefined ? true : sParameterParts[1];
   }
 
+  // Depending on the URL argument, render as LTR or RTL.
+  var rtl = sParameters["rtl"];
+
   var mode = _.isString(sParameters["mode"]) ? sParameters["mode"] : "demo";
 
   var toolbox =
@@ -95,7 +94,8 @@ function start() {
         ( mode === "eval" ?
             document.getElementById('toolboxGuide') :
             document.getElementById('toolboxDemo') );
-  workspace = Blockly.inject('blocklyDiv', {
+
+  var workspace = Blockly.inject('blocklyDiv', {
       comments: true,
       disable: true,
       collapse: true,
@@ -494,8 +494,6 @@ function start() {
 </head>
 <body onload="start()">
 
-  <div id="collaborators"></div>
-
   <div id="blocklyDiv">
   </div>
 
@@ -504,14 +502,23 @@ function start() {
       <block type="sparql_execution_endpoint_query">
         <field name="ENDPOINT">http://dbpedia.org/sparql</field>
         <field name="LIMIT">5</field>
+        <statement name="RESULTS">
+          <block type="sparql_execution_placeholder"></block>
+        </statement>
       </block>
       <block type="sparql_execution_endpoint_query">
         <field name="ENDPOINT">http://live.dbpedia.org/sparql</field>
         <field name="LIMIT">5</field>
+        <statement name="RESULTS">
+          <block type="sparql_execution_placeholder"></block>
+        </statement>
       </block>
       <block type="sparql_execution_endpoint_query">
         <field name="ENDPOINT">https://query.wikidata.org/bigdata/namespace/wdq/sparql</field>
         <field name="LIMIT">5</field>
+        <statement name="RESULTS">
+          <block type="sparql_execution_placeholder"></block>
+        </statement>
       </block>
     </category>
     <category name="&#xf104; Patterns" colour="120">
@@ -1173,6 +1180,9 @@ function start() {
       <block type="sparql_execution_endpoint_query">
         <field name="ENDPOINT">http://dbpedia.org/sparql</field>
         <field name="LIMIT">5</field>
+        <statement name="RESULTS">
+          <block type="sparql_execution_placeholder"></block>
+        </statement>
       </block>
     </category>
     <category name="&#xf104; Patterns" colour="120">
@@ -1915,6 +1925,9 @@ function start() {
       <block type="sparql_execution_endpoint_query">
         <field name="ENDPOINT">http://live.dbpedia.org/sparql</field>
         <field name="LIMIT">5</field>
+        <statement name="RESULTS">
+          <block type="sparql_execution_placeholder"></block>
+        </statement>
       </block>
     </category>
     <category name="&#xf104; Patterns" colour="120">
