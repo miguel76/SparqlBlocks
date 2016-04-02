@@ -143,7 +143,7 @@ function start() {
   SparqlBlocks.trackingGuide = SparqlBlocks.Guide.track(
     workspace,
     {
-      startStateId: 21,
+      startStateId: 20,
       stateList: [
         {
           do: function(data) {
@@ -312,7 +312,11 @@ function start() {
             data.check.WHERE.push({
               type: "sparql_typedsubject_propertylist",
               SUBJECT: { type: "variables_get", VAR: "friend" },
-              TYPE: null
+              TYPE: {
+                type: "sparql_prefixed_iri",
+                PREFIX: "foaf",
+                LOCAL_NAME: "Person"
+              }
             });
           },
           stepWhen: function(event, data) {
@@ -1209,14 +1213,14 @@ function logger(e) {
       <block type="sparql_test">
         <data>{
           "id": "1",
-          "question": "*) DBpedia class for mountains:",
+          "question": "a) Class for mountains:",
           "answerMD5": "2bd86839cd03700675d6bcf3f34a8684"
         }</data>
       </block>
       <block type="sparql_test">
         <data>{
           "id": "2",
-          "question": "*) DBpedia property for elevation of mountains:",
+          "question": "a) Property for elevation of mountains:",
           "answerMD5": "2f9c48a704a5537b6c31fded840b8900"
         }</data>
       </block>
@@ -1244,28 +1248,28 @@ function logger(e) {
       <block type="sparql_test">
         <data>{
           "id": "5",
-          "question": "*) DBpedia class for countries:",
+          "question": "c) Class for countries:",
           "answerMD5": "9f5ea8213289919f8fa8bedd19f3eb96"
         }</data>
       </block>
       <block type="sparql_test">
         <data>{
           "id": "6",
-          "question": "*) DBpedia prop. 'located in' (mountain->country):",
+          "question": "c) Property for 'located in' (mountain->country):",
           "answerMD5": "c0b2865f7555c5d0963e39fdc149458a"
         }</data>
       </block>
       <block type="sparql_test">
         <data>{
           "id": "7",
-          "question": "*) DBpedia resource for China:",
+          "question": "c) Resource for China:",
           "answerMD5": "9be7bcb10ccd7c92e55a9c09b91bf30d"
         }</data>
       </block>
       <block type="sparql_test">
         <data>{
           "id": "8",
-          "question": "*) DBpedia resource for Nepal:",
+          "question": "c) Resource for Nepal:",
           "answerMD5": "bd2b07bfff06dbad927da2e2dd1a5a33"
         }</data>
       </block>
@@ -1943,14 +1947,14 @@ function logger(e) {
       <block type="sparql_test">
         <data>{
           "id": "1",
-          "question": "*) DBpedia class for mountains:",
+          "question": "a) Class for mountains:",
           "answerMD5": "2bd86839cd03700675d6bcf3f34a8684"
         }</data>
       </block>
       <block type="sparql_test">
         <data>{
           "id": "2",
-          "question": "*) DBpedia property for elevation of mountains:",
+          "question": "a) Property for elevation of mountains:",
           "answerMD5": "2f9c48a704a5537b6c31fded840b8900"
         }</data>
       </block>
@@ -1978,28 +1982,28 @@ function logger(e) {
       <block type="sparql_test">
         <data>{
           "id": "5",
-          "question": "*) DBpedia class for countries:",
+          "question": "c) Class for countries:",
           "answerMD5": "9f5ea8213289919f8fa8bedd19f3eb96"
         }</data>
       </block>
       <block type="sparql_test">
         <data>{
           "id": "6",
-          "question": "*) DBpedia prop. 'located in' (mountain->country):",
+          "question": "c) Property for 'located in' (mountain->country):",
           "answerMD5": "c0b2865f7555c5d0963e39fdc149458a"
         }</data>
       </block>
       <block type="sparql_test">
         <data>{
           "id": "7",
-          "question": "*) DBpedia resource for China:",
+          "question": "c) Resource for China:",
           "answerMD5": "9be7bcb10ccd7c92e55a9c09b91bf30d"
         }</data>
       </block>
       <block type="sparql_test">
         <data>{
           "id": "8",
-          "question": "*) DBpedia resource for Nepal:",
+          "question": "c) Resource for Nepal:",
           "answerMD5": "bd2b07bfff06dbad927da2e2dd1a5a33"
         }</data>
       </block>
@@ -3077,7 +3081,7 @@ function logger(e) {
           is composed of a set of star-like patterns.
           <!-- each one centered on a common subject, that can be a Resource or a Variable. -->
           <!-- By using common Variables they can be used to represent any pattern in the graph. -->
-          Add another star-like pattern to get data about the friends of this person.
+          Add another star-like pattern to get data about the people that are friends of this person.
         </p>
       </div>
       <div class="dialogToDo">
@@ -3127,10 +3131,20 @@ function logger(e) {
               <block x="8" y="0" type="variables_get"><field name="VAR">friend</field></block>
             </span> instead; </li>
           <li>
-            delete variable
+            from the <span class="dialog-command">&#xf107; Resources</span> category,
+            drag the
+            <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 100px; vertical-align: middle;">
+              <block x="8" y="0" type="sparql_prefixed_iri">
+                <field name="PREFIX">foaf</field>
+                <field name="LOCAL_NAME">Person</field>
+              </block>
+            </span>
+            resource block to the new pattern,
+            <!-- as the predicate ( -->
+            replacing
             <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 56px; vertical-align: middle;">
               <block x="8" y="0" type="variables_get"><field name="VAR">type</field></block>
-            </span>;</li>
+            </span>.</li>
         </ol>
       </div>
     </div>
@@ -3509,6 +3523,13 @@ function logger(e) {
         <ol>
           <li>
             delete everything except
+            <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 156px; vertical-align: middle;">
+              <block x="8" y="0" type="sparql_prefixed_iri">
+                <field name="PREFIX">dbpedia</field>
+                <field name="LOCAL_NAME">Lake_Titicaca</field>
+              </block>
+            </span>
+            and
             <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 88px; vertical-align: middle;">
               <block x="8" y="0" type="sparql_prefixed_iri">
                 <field name="PREFIX">dbo</field>
