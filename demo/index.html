@@ -429,8 +429,16 @@ function start() {
         modal: true
       },
       {
+        do: function() {
+          $(".flash-messages").css("display", "none");
+        },
         dialog: "dialogTest",
         modal: true
+      },
+      {
+        do: function() {
+          $(".flash-messages").css("display", "");
+        }
       }
     ];
 
@@ -442,6 +450,21 @@ function start() {
       )
     );
 
+  } else if (mode === "test") {
+    var testAlertDiv = document.getElementById("dialogTest");
+    if (!testAlertDiv)
+      return;
+    $(".flash-messages").css("display", "none");
+    SparqlBlocks.Guide.replaceInLineBlockly(testAlertDiv);
+    BlocklyDialogs.showDialog(
+      testAlertDiv, false, false, true,
+      { width: '75%',
+        bottom: "inherit",
+        left: '15%',
+        top: '5%'
+      }, function() {
+        $(".flash-messages").css("display", "");
+      });
   }
 
 }
