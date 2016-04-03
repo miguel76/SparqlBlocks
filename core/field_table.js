@@ -50,6 +50,10 @@ SparqlBlocks.FieldTable = function(data, opt_validator) {
   this.data_ = data;
   this.flyout_ = new Blockly.Flyout({});
   this.flyout_.autoClose = false;
+  var thisFieldTable = this;
+  this.flyout_.createBlockFunc_ = function(block) {
+    return SparqlBlocks.FieldTable.prototype.createBlockFunc_.call(thisFieldTable, block);
+  }
 };
 goog.inherits(SparqlBlocks.FieldTable, Blockly.Field);
 
@@ -69,6 +73,14 @@ SparqlBlocks.FieldTable.prototype.setEventBindingsForBlock_ = function(block) {
   this.flyout_.workspace_.getCanvas().insertBefore(rect, root);
   block.flyoutRect_ = rect;
 
+  // var flyout = this.flyout_;
+  // var setWorkspaceScaleAndRun = function(fun) {
+  //   return function(e) {
+  //     flyout.workspace_.scale = flyout.targetWorkspace_.scale;
+  //     fun.call(this, e);
+  //   }
+  // }
+
   var lstnrs = this.flyout_.listeners_;
   lstnrs.push(Blockly.bindEvent_(
       root, 'mousedown', null,
@@ -78,7 +90,7 @@ SparqlBlocks.FieldTable.prototype.setEventBindingsForBlock_ = function(block) {
   lstnrs.push(Blockly.bindEvent_(root, 'mouseout', block,
       block.removeSelect));
   lstnrs.push(Blockly.bindEvent_(rect, 'mousedown', null,
-      this.flyout_.createBlockFunc_(block)));
+      this.createBlockFunc_(block)));
   lstnrs.push(Blockly.bindEvent_(rect, 'mouseover', block,
       block.addSelect));
   lstnrs.push(Blockly.bindEvent_(rect, 'mouseout', block,
@@ -125,9 +137,6 @@ SparqlBlocks.FieldTable.prototype.init = function(block) {
   this.sourceBlock_ = block;
 
   // Build the DOM.
-  var offsetX = - 13;
-  // var offsetY = - 15;
-  var offsetY = -4;
   this.rootElement_ = Blockly.createSvgElement(
       'g',
       { 'class': 'field_table' }, block.getSvgRoot()); //name, attrs, parent, opt_workspace
@@ -136,7 +145,9 @@ SparqlBlocks.FieldTable.prototype.init = function(block) {
   }
 
   var flyoutRoot = this.flyout_.createDom();
-  flyoutRoot.setAttribute('transform', 'translate(' + offsetX + ',' + offsetY + ')');
+  flyoutRoot.setAttribute(
+      'transform',
+      'translate(' + SparqlBlocks.FieldTable.translateX_ + ',' + SparqlBlocks.FieldTable.translateY_ + ')');
   this.rootElement_.appendChild(flyoutRoot);
 
   this.flyout_.targetWorkspace_ = block.workspace;
@@ -191,6 +202,9 @@ SparqlBlocks.FieldTable.prototype.getSize = function() {
   }
   return this.size_;
 };
+
+SparqlBlocks.FieldTable.translateX_ = -13;
+SparqlBlocks.FieldTable.translateY_ = -4; Blockly.BlockSvg.INLINE_PADDING_Y;
 
 SparqlBlocks.FieldTable.prototype.marginX_ = 0;
 SparqlBlocks.FieldTable.prototype.marginY_ = 6; //Blockly.BlockSvg.INLINE_PADDING_Y;
@@ -296,4 +310,57 @@ SparqlBlocks.FieldTable.prototype.getSvgRoot = function() {
  */
 SparqlBlocks.FieldTable.prototype.setTooltip = function(newTip) {
   this.rootElement_.tooltip = newTip;
+};
+
+/**
+ * Create a copy of this block on the workspace.
+ * @param {!Blockly.Block} originBlock The flyout block to copy.
+ * @return {!Function} Function to call when block is clicked.
+ * @private
+ */
+SparqlBlocks.FieldTable.prototype.createBlockFunc_ = function(originBlock) {
+  var sourceBlock = this.sourceBlock_;
+  var svgRoot = this.getSvgRoot();
+  var flyout = this.flyout_;
+  var workspace = this.flyout_.targetWorkspace_;
+  return function(e) {
+    if (Blockly.isRightButton(e)) {
+      // Right-click.  Don't create a block, let the context menu show.
+      return;
+    }
+    if (originBlock.disabled) {
+      // Beyond capacity.
+      return;
+    }
+    Blockly.Events.disable();
+    // Create the new block by cloning the block in the flyout (via XML).
+    var xml = Blockly.Xml.blockToDom(originBlock);
+    var block = Blockly.Xml.domToBlock(workspace, xml);
+    // Place it in the same spot as the flyout copy.
+    var svgRootOld = originBlock.getSvgRoot();
+    if (!svgRootOld) {
+      throw 'originBlock is not rendered.';
+    }
+
+    var sourceXY = sourceBlock.getRelativeToSurfaceXY();
+    var fieldRelativeXY = Blockly.getRelativeXY_(svgRoot);
+    var originBlockXY = originBlock.getRelativeToSurfaceXY();
+    block.moveBy(
+        originBlockXY.x + sourceXY.x + fieldRelativeXY.x + SparqlBlocks.FieldTable.translateX_,
+        originBlockXY.y + sourceXY.y + fieldRelativeXY.y + SparqlBlocks.FieldTable.translateY_);
+    Blockly.Events.enable();
+    if (Blockly.Events.isEnabled()) {
+      Blockly.Events.setGroup(true);
+      Blockly.Events.fire(new Blockly.Events.Create(block));
+    }
+    if (flyout.autoClose) {
+      flyout.hide();
+    } else {
+      flyout.filterForCapacity_();
+    }
+    // Start a dragging operation on the new block.
+    block.onMouseDown_(e);
+    Blockly.dragMode_ = Blockly.DRAG_FREE;
+    block.setDragging_(true);
+  };
 };
