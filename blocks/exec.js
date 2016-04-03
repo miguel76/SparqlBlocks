@@ -74,10 +74,16 @@ goog.require('SparqlBlocks.Blocks');
         this.setTooltip(SparqlBlocks.Msg.EXECUTION_TOOLTIP);
       },
       onchange: function() {
+        if (Blockly.dragMode_) {
+          return;
+        }
         if (!this.resultsInput) {
           var resultsBlock = this.getInputTargetBlock("RESULTS");
           if (!resultsBlock) {
-            return;
+            resultsBlock = this.workspace.newBlock("sparql_execution_placeholder");
+            this.getInput("RESULTS").connection.connect(resultsBlock.previousConnection);
+            resultsBlock.initSvg();
+            resultsBlock.render();
           }
           this.resultsInput = resultsBlock.getInput("RESULTS");
           if (!this.resultsInput) {
@@ -292,6 +298,9 @@ goog.require('SparqlBlocks.Blocks');
   SparqlBlocks.Blocks.block(
       'sparql_execution_endpoint_fake',
       execBlock({endpointField: true, dontExecute: true}));
+  SparqlBlocks.Blocks.block(
+      'sparql_execution_endpoint_query_fake',
+      execBlock({endpointField: true, baseQuery: true, dontExecute: true}));
 
   SparqlBlocks.Blocks.block('sparql_execution_placeholder', {
       init: function() {
