@@ -124,6 +124,27 @@ SparqlBlocks.Guide = (function() {
     'top': '5%'
   };
 
+  var replaceInLineBlockly_ = function(div) {
+    var toReplaceArray = div.getElementsByClassName("blockly-readOnly");
+    var j = 0;
+    for (var i = 0; i < toReplaceArray.length; i++) {
+      var toReplace = toReplaceArray[i];
+      var content = toReplace.innerHTML;
+      var zoom = toReplace.getAttribute("blockly-zoom");
+      toReplace.innerHTML = "";
+      var localWorkspace = Blockly.inject(
+        toReplace,
+        _.extend(
+          {'readOnly': true},
+          zoom ?
+            { zoom:
+                { controls: false,
+                  wheel: false,
+                  startScale: zoom }
+            } : {} ));
+      Blockly.Xml.domToWorkspace(localWorkspace, Blockly.Xml.textToDom("<xml>" + content + "</xml>"));
+    }
+  }
 
   var track_ = function(workspace, options) {
 
@@ -154,25 +175,7 @@ SparqlBlocks.Guide = (function() {
       var dialogDiv = currState.dialog ? document.getElementById(currState.dialog) : null;
 
       if (dialogDiv) {
-        var toReplaceArray = dialogDiv.getElementsByClassName("blockly-readOnly");
-        var j = 0;
-        for (var i = 0; i < toReplaceArray.length; i++) {
-          var toReplace = toReplaceArray[i];
-          var content = toReplace.innerHTML;
-          var zoom = toReplace.getAttribute("blockly-zoom");
-          toReplace.innerHTML = "";
-          var localWorkspace = Blockly.inject(
-            toReplace,
-            _.extend(
-              {'readOnly': true},
-              zoom ?
-                { zoom:
-                    { controls: false,
-                      wheel: false,
-                      startScale: zoom }
-                } : {} ));
-          Blockly.Xml.domToWorkspace(localWorkspace, Blockly.Xml.textToDom("<xml>" + content + "</xml>"));
-        }
+        replaceInLineBlockly_(dialogDiv);
       }
 
       if (currState.do) {
@@ -295,7 +298,8 @@ SparqlBlocks.Guide = (function() {
 
   return {
     track: track_,
-    check: checkWorkspace
+    check: checkWorkspace,
+    replaceInLineBlockly: replaceInLineBlockly_
   }
 
 })();
