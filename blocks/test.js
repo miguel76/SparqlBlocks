@@ -72,6 +72,10 @@ goog.require('SparqlBlocks.Blocks');
     },
 
     onchange: function() {
+      if (Blockly.dragMode_) {
+        return;
+      }
+
       if (this.isRightAnswer && this.getInputTargetBlock('ANSWER')) {
         return;
       }
