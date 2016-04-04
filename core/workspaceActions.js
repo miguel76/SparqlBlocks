@@ -24,13 +24,22 @@ goog.provide('SparqlBlocks.WorkspaceActions');
 
 SparqlBlocks.WorkspaceActions = ( function() {
 
+  var actionQueue = [];
+
   var execute_ = function(action, thisArg) {
-    var functId = window.setInterval(function() {
-      if (!Blockly.dragMode_) {
-        action.call(thisArg);
-        window.clearInterval(functId);
-      }
-    }, 0);
+    actionQueue.push( { action: action, thisArg: thisArg } );
+    if (actionQueue.length === 1) {
+      var functId = window.setInterval(function() {
+        if (!Blockly.dragMode_) {
+          for (var i = 0; i < actionQueue.length; i++) {
+            var actionItem = actionQueue[i];
+            actionItem.action.call(actionItem.thisArg);
+          }
+          actionQueue = [];
+          window.clearInterval(functId);
+        }
+      }, 0);
+    }
   }
 
   return {
