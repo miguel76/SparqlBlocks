@@ -84,7 +84,7 @@ goog.require('SparqlBlocks.Blocks');
       this.setHelpUrl('http://www.w3.org/TR/sparql11-query/#optionals');
       this.setColour(260);
       this.appendValueInput("GRAPHNAME")
-          .setCheck(typeExt("GraphTermOrVar"))
+          .setCheck(typeExt("ResourceOrVar"))
           .appendField("choose graph");
       this.appendStatementInput("OP")
           .setCheck(typeExt("GraphPattern"))

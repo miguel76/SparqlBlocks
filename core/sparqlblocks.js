@@ -36,6 +36,7 @@ goog.require('SparqlBlocks.Msg');
 goog.require('SparqlBlocks.FieldTable');
 goog.require('SparqlBlocks.JsonToBlocks');
 goog.require('SparqlBlocks.Guide');
+goog.require('SparqlBlocks.Track');
 
 goog.require('SparqlBlocks.Blocks');
 goog.require('SparqlBlocks.Blocks.bgp');

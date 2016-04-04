@@ -33,42 +33,72 @@ goog.require('SparqlBlocks.Blocks');
 
   // "<a href="https://commons.wikimedia.org/wiki/File:Octicons-database.svg#/media/File:Octicons-database.svg">Octicons-database</a>" by GitHub - <a rel="nofollow" class="external free" href="https://github.com/github/octicons">https://github.com/github/octicons</a>. Licensed under <a href="http://opensource.org/licenses/mit-license.php" title="MIT license">MIT</a> via <a href="//commons.wikimedia.org/wiki/">Wikimedia Commons</a>.
 
-  var dbFile = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAH8SURBVHjaYvz//z8DJQAggFiQOXv37mUHGugHxJH//v3TANKqQAxk/rsCpO8A6blAvDcgIOAvTA9AADHCXADUrAVkLxcVFdWTkJBg4ObmZuDi4mIAyX/8+JHh8+fPDI8ePWJ4/fr1EaBYRHBw8FOQPoAAAisA4V27du1/+PAhyLr/uMDv37//nz9//v/KlSsXwvQBBBATzClAjra4uDhBP0tLSzMALfGE8QECCB4GQEGwiS9fvmTg4OBgYGdnZ2BlZQWLffv2jeHdu3cMT58+ZVBWVgarhQGAAMIwgIWFheH9+/cMP378APP//PnD8OnTJ4afP3+C5UBiyAYABBALkhfAmJmZGewCkGIQBvobbAgssEGa//6FRwIDQABhuACkGKaJkZERrBgmxsTEhOECgADCMACmAYRBrgHxQZpBGMSHqYEBgADCMACmGKQIZgDMBTBvgtgwABBAKAaAMMx2mIHILoOp+/XrF9wAgACCpwOQAlBUAVMiOAqRASgsJCUlGYyNjRmePXuG4gKAAEJ2QcLx48dXaWpqcsvLy4MNAWkE2Q7SDErKV65cYbhw4cILoAv9YPoAAogROTcuWbJEEWhQDRAHA0OcH5QXQN4BuQyYLkAaFwNd2lNZWfkKpgcggBhxZedZs2bxAjWoAPE/oJNvFBcX/8SmDiDAAO2Un30ZkCt9AAAAAElFTkSuQmCC";
+  var defaultLimit = 5;
+
   var execBlock = function(options) {
+    options = _.extend({}, options);
     return {
       init: function() {
         this.setHelpUrl('http://www.w3.org/TR/2013/REC-sparql11-protocol-20130321/#query-operation');
-        if (options && options.endpointField) {
+        if (options.title) {
           this.appendDummyInput()
-          //     // .appendField(new Blockly.FieldImage(dbFile, 16, 16, 'Endpoint'))
-          //     .appendField("⚙")
+              .appendField(options.title);
+        }
+        if (options.endpointField) {
+          this.appendDummyInput()
               .appendField("from")
               .appendField(new Blockly.FieldTextInput(""), "ENDPOINT");
-                  // // .appendField(new Blockly.FieldImage(dbFile, 16, 16, 'Endpoint'))
-                  // .appendField("⚙")
-                  // .appendField(new Blockly.FieldTextInput(""), "ENDPOINT");
         }
-        if (options && options.baseQuery) {
+        if (options.parameters && _.isArray(options.parameters)) {
+          for (var i = 0; i < options.parameters.length; i++) {
+            var parameter = options.parameters[i];
+            if (parameter.name) {
+              var input = this.appendValueInput(parameter.name);
+              input.setAlign(Blockly.ALIGN_RIGHT); // or not?
+              if (parameter.type) {
+                 input.setCheck(typeExt(parameter.type));
+              }
+              if (parameter.label) {
+                 input.appendField(parameter.label);
+              }
+            }
+          }
+        }
+        if (options.builtinQuery) {
           this.setColour(290);
-          // this.appendDummyInput()
-          //     .appendField("select all the variables");
-          this.appendStatementInput("WHERE")
-              .setCheck(typeExt("GraphPattern"))
-              .appendField("where");
-          SparqlBlocks.Blocks.query.orderFields.init.call(this);
-          this.setInputsInline(true);
-          this.appendStatementInput("RESULTS")
-              .setCheck(typeExt("Table"))
-              .appendField("↪");
-              // .appendField("", "RESULTS_CONTAINER");
+          if (!options.selfLimiting) {
+            this.appendDummyInput()
+                .appendField("limit to first")
+                .appendField(
+                  new Blockly.FieldTextInput(
+                    "" + defaultLimit,
+                    Blockly.FieldTextInput.nonnegativeIntegerValidator),
+                  "LIMIT")
+                .appendField("rows");
+          }
         } else {
-          this.setColour(330);
-          this.appendStatementInput("QUERY")
-              .setCheck(typeExt("SelectQuery"))
-              .appendField(" ⚙");
+          if (options.baseQuery) {
+            this.setColour(290);
+            this.appendStatementInput("WHERE")
+                .setCheck(typeExt("GraphPattern"))
+                .appendField("where");
+            SparqlBlocks.Blocks.query.orderFields.init.call(this);
+            this.setInputsInline(true);
+          } else {
+            this.setColour(330);
+            this.appendStatementInput("QUERY")
+                .setCheck(typeExt("SelectQuery"))
+                .appendField(" ⚙");
+          }
+        }
+        if (options.directResultsField) {
           this.appendDummyInput("RESULTS")
               .appendField("↪")
               .appendField("", "RESULTS_CONTAINER");
+        } else {
+          this.appendStatementInput("RESULTS")
+              .setCheck(typeExt("Table"))
+              .appendField("↪");
         }
 
         this.setTooltip(SparqlBlocks.Msg.EXECUTION_TOOLTIP);
@@ -77,7 +107,7 @@ goog.require('SparqlBlocks.Blocks');
         if (Blockly.dragMode_) {
           return;
         }
-        if (!this.resultsInput) {
+        if (!options.directResultsField && !this.resultsInput) {
           var resultsBlock = this.getInputTargetBlock("RESULTS");
           if (!resultsBlock) {
             resultsBlock = this.workspace.newBlock("sparql_execution_placeholder");
@@ -90,16 +120,41 @@ goog.require('SparqlBlocks.Blocks');
             return;
           }
         }
-        if (options && options.baseQuery) {
+        if (options.baseQuery) {
           SparqlBlocks.Blocks.query.orderFields.onchange.call(this);
         }
-        if ((!options || !options.dontExecute) &&
-            Blockly.FieldTextInput.nonnegativeIntegerValidator(this.getFieldValue("LIMIT")) !== null) {
-          if (options && options.baseQuery) {
-            // blockExec_(this, this);
-            SparqlBlocks.Exec.blockExec(this, this, this.resultsInput);
-          } else {
+        if  ( !options.dontExecute &&
+              !this.isInFlyout &&
+              ( options.selfLimiting ||
+                Blockly.FieldTextInput.nonnegativeIntegerValidator(this.getFieldValue("LIMIT")) !== null)) {
+          if (options.directResultsField) {
             SparqlBlocks.Exec.blockExec(this);
+          } else {
+            if (options.builtinQuery && _.isFunction(options.builtinQuery)) {
+              var parametersDict = {};
+              if (options.parameters && _.isArray(options.parameters)) {
+                for (var i = 0; i < options.parameters.length; i++) {
+                  var parameter = options.parameters[i];
+                  parametersDict[parameter.name] =
+                      parameter.name ?
+                        SparqlBlocks.Sparql.valueToCode(
+                            this, parameter.name,
+                            SparqlBlocks.Sparql.ORDER_NONE) :
+                        null;
+                }
+              }
+              var limit_text = this.getFieldValue("LIMIT");
+              var limit = limit_text & Blockly.FieldTextInput.nonnegativeIntegerValidator(limit_text);
+              if (limit || options.selfLimiting) {
+                var limitStr = limit ? '\nLIMIT ' + limit : '';
+                var sparql = options.builtinQuery(parametersDict) + limitStr;
+                  if (sparql) {
+                    SparqlBlocks.Exec.blockExecQuery(this, sparql, this.resultsInput);
+                  }
+                }
+            } else {
+              SparqlBlocks.Exec.blockExec(this, this, this.resultsInput);
+            }
           }
         }
       },
@@ -301,6 +356,102 @@ goog.require('SparqlBlocks.Blocks');
   SparqlBlocks.Blocks.block(
       'sparql_execution_endpoint_query_fake',
       execBlock({endpointField: true, baseQuery: true, dontExecute: true}));
+
+  SparqlBlocks.Blocks.block(
+      'sparql_builtin_classes',
+      execBlock({
+        endpointField: true,
+        title: "search Classes",
+        parameters: [
+          { name: "GRAPH", type: "Resource", label: "in graph" },
+          { name: "FIND", type: "StringExpr", label: "named" }],
+        builtinQuery: function(params) {
+          if (!params.FIND) { // if not FIND then empty query
+            return "";
+          }
+          return  "SELECT DISTINCT * WHERE {\n" +
+                  (params.GRAPH ?
+                  "  GRAPH " + params.GRAPH + " {\n" : "") +
+                  "    ?class\n" +
+                  "      a <http://www.w3.org/2002/07/owl#Class>;\n" +
+                  "      <http://www.w3.org/2000/01/rdf-schema#label> ?label.\n" +
+                  "    FILTER(" +
+                        "REGEX(?label, STR(" + params.FIND + "), 'i') " +
+                        "&& (COALESCE(LANG(" + params.FIND + "),'') = ''" +
+                            "|| LANGMATCHES(LANG(?label), LANG(" + params.FIND + ")))).\n" +
+                  (params.GRAPH ?
+                  "  }\n" : "") +
+                  "}\n" +
+                  "ORDER BY (STRLEN(?label)), STRLEN(COALESCE(LANG(?label),''))";
+        }
+      }));
+
+  SparqlBlocks.Blocks.block(
+      'sparql_builtin_resources',
+      execBlock({
+        endpointField: true,
+        title: "search Resources",
+        parameters: [
+          { name: "GRAPH", type: "Resource", label: "in graph" },
+          { name: "TYPE", type: "Resource", label: "with type" },
+          { name: "FIND", type: "StringExpr", label: "named" }],
+        builtinQuery: function(params) {
+          if (!params.FIND) { // if not FIND then empty query
+            return "";
+          }
+          return  "SELECT DISTINCT * WHERE {\n" +
+                  (params.GRAPH ?
+                  "  GRAPH " + params.GRAPH + " {\n" : "") +
+                  "    ?resource\n" +
+                  (params.TYPE ?
+                  "      a " + params.TYPE + ";\n" : "")+
+                  "      <http://www.w3.org/2000/01/rdf-schema#label> ?label.\n" +
+                  "    FILTER(" +
+                        "REGEX(?label, STR(" + params.FIND + "), 'i') " +
+                        "&& (COALESCE(LANG(" + params.FIND + "),'') = ''" +
+                            "|| LANGMATCHES(LANG(?label), LANG(" + params.FIND + ")))).\n" +
+                  (params.GRAPH ?
+                  "  }\n" : "") +
+                  "}\n" +
+                  "ORDER BY (STRLEN(?label)), STRLEN(COALESCE(LANG(?label),''))";
+        }
+      }));
+
+      SparqlBlocks.Blocks.block(
+          'sparql_builtin_properties',
+          execBlock({
+            endpointField: true,
+            title: "search Properties",
+            parameters: [
+              { name: "GRAPH", type: "Resource", label: "in graph" },
+              { name: "FROM", type: "Resource", label: "from class" },
+              { name: "TO", type: "Resource", label: "to class" },
+              { name: "FIND", type: "StringExpr", label: "named" }],
+            builtinQuery: function(params) {
+              if (!params.FIND) { // if not FIND then empty query
+                return "";
+              }
+              return  "SELECT DISTINCT * WHERE {\n" +
+                      (params.GRAPH ?
+                      "  GRAPH " + params.GRAPH + " {\n" : "") +
+                      "    ?property\n" +
+                      "      <http://www.w3.org/2000/01/rdf-schema#label> ?label;\n" +
+                      "      <http://www.w3.org/2000/01/rdf-schema#domain> ?domain;\n" +
+                      "      <http://www.w3.org/2000/01/rdf-schema#range> ?range.\n" +
+                      (params.FROM ?
+                      "    " + params.FROM + " <http://www.w3.org/2000/01/rdf-schema#subClassOf>* ?domain.\n" : "")+
+                      (params.TO ?
+                      "    " + params.TO + " <http://www.w3.org/2000/01/rdf-schema#subClassOf>* ?range.\n" : "")+
+                      "    FILTER(" +
+                            "REGEX(?label, STR(" + params.FIND + "), 'i') " +
+                            "&& (COALESCE(LANG(" + params.FIND + "),'') = ''" +
+                                "|| LANGMATCHES(LANG(?label), LANG(" + params.FIND + ")))).\n" +
+                      (params.GRAPH ?
+                      "  }\n" : "") +
+                      "}\n" +
+                      "ORDER BY (STRLEN(?label)), STRLEN(COALESCE(LANG(?label),''))";
+            }
+          }));
 
   SparqlBlocks.Blocks.block('sparql_execution_placeholder', {
       init: function() {

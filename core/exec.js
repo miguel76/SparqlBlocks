@@ -157,7 +157,8 @@ SparqlBlocks.Exec = ( function() {
     sparqlExecAndPublish: sparqlExecAndPublish_,
     sparqlExecAndAlert: sparqlExecAndAlert_,
     sparqlExec: sparqlExec_,
-    blockExec: blockExec_
+    blockExec: blockExec_,
+    blockExecQuery: blockExecQuery_
   };
 
 }) ();
