@@ -33,7 +33,8 @@
 <script src="../core/guide.js"></script>
 <script src="../core/lib-dialogs.js"></script>
 <script src="../core/track.js"></script>
-<script src="../core/WorkspaceActions.js"></script>
+<script src="../core/workspaceActions.js"></script>
+<script src="../core/shadowMorph.js"></script>
 
 <script src="../generators/sparql/bgp.js"></script>
 <script src="../generators/sparql/query.js"></script>
@@ -143,6 +144,7 @@ function start() {
   SparqlBlocks.Storage.startup(workspace);
 
   SparqlBlocks.Track.track(workspace);
+  SparqlBlocks.ShadowMorph.track(workspace);
 
   if (mode === "eval") {
 

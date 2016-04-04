@@ -38,6 +38,7 @@ goog.require('SparqlBlocks.JsonToBlocks');
 goog.require('SparqlBlocks.Guide');
 goog.require('SparqlBlocks.Track');
 goog.require('SparqlBlocks.WorkspaceActions');
+goog.require('SparqlBlocks.ShadowMorph');
 
 goog.require('SparqlBlocks.Blocks');
 goog.require('SparqlBlocks.Blocks.bgp');
