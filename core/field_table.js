@@ -73,14 +73,6 @@ SparqlBlocks.FieldTable.prototype.setEventBindingsForBlock_ = function(block) {
   this.flyout_.workspace_.getCanvas().insertBefore(rect, root);
   block.flyoutRect_ = rect;
 
-  // var flyout = this.flyout_;
-  // var setWorkspaceScaleAndRun = function(fun) {
-  //   return function(e) {
-  //     flyout.workspace_.scale = flyout.targetWorkspace_.scale;
-  //     fun.call(this, e);
-  //   }
-  // }
-
   var lstnrs = this.flyout_.listeners_;
   lstnrs.push(Blockly.bindEvent_(
       root, 'mousedown', null,
@@ -204,7 +196,7 @@ SparqlBlocks.FieldTable.prototype.getSize = function() {
 };
 
 SparqlBlocks.FieldTable.translateX_ = -13;
-SparqlBlocks.FieldTable.translateY_ = -4; Blockly.BlockSvg.INLINE_PADDING_Y;
+SparqlBlocks.FieldTable.translateY_ = -4; //Blockly.BlockSvg.INLINE_PADDING_Y;
 
 SparqlBlocks.FieldTable.prototype.marginX_ = 0;
 SparqlBlocks.FieldTable.prototype.marginY_ = 6; //Blockly.BlockSvg.INLINE_PADDING_Y;
