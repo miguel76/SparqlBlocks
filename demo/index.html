@@ -27,16 +27,6 @@
 'use strict';
 function start() {
 
-  // Blockly.Css.CONTENT = Blockly.Css.CONTENT.concat([
-  //   '.blocklyText {',
-  //   '  font-family: "Helvetica", sans-serif;',
-  //   '}',
-  //   '.blocklyTreeLabel {',
-  //   '  font-family: "Helvetica", sans-serif;',
-  //   '}',
-  //   ''
-  // ]);
-
   var sURLVariables = decodeURIComponent(window.location.search.substring(1)).split('&');
   var sParameters = {};
 
@@ -104,6 +94,7 @@ function start() {
   SparqlBlocks.Storage.startup(workspace);
 
   SparqlBlocks.Track.track(workspace);
+  SparqlBlocks.ShadowMorph.track(workspace);
 
   if (mode === "eval") {
 
@@ -475,7 +466,8 @@ function start() {
 </head>
 <body onload="start()">
 
-  <div id="blocklyDiv"></div>
+  <div id="blocklyDiv">
+  </div>
 
   <xml id="toolboxDemo" style="display: none">
     <category name="&#xf106; Query" colour="290">
@@ -1412,80 +1404,73 @@ function start() {
     <sep></sep>
     <category name="&#xf108; Test" colour="330">
       <block type="sparql_test">
+        <field name="QUESTION">a) Class for mountains:</field>
         <data>{
           "id": "1",
-          "question": "a) Class for mountains:",
           "answerMD5": "2bd86839cd03700675d6bcf3f34a8684"
         }</data>
       </block>
       <sep gap="8"></sep>
       <block type="sparql_test">
+        <field name="QUESTION">a) Property for elevation of mountains:</field>
         <data>{
           "id": "2",
-          "question": "a) Property for elevation of mountains:",
           "answerMD5": "2f9c48a704a5537b6c31fded840b8900"
         }</data>
       </block>
       <sep gap="8"></sep>
       <block type="sparql_test">
+        <field name="QUESTION">A) 3rd highest mountain:</field>
         <data>{
           "id": "3",
-          "question": "A) 3rd highest mountain:",
           "answerMD5": "0ec28cc250117935cf9a2cdb8ccc31ba"
         }</data>
       </block>
       <sep gap="32"></sep>
       <block type="sparql_test">
+        <field name="QUESTION">B) Lowest mountain above 8,000 m:</field>
         <data>{
           "id": "4",
-          "question": "B) Lowest mountain above 8,000 m:",
           "answerMD5": "28b96c850d9186e0781fecb5e854ea2b"
         }</data>
       </block>
       <sep gap="32"></sep>
-      <!-- <block type="sparql_test">
-        <data>{
-          "id": "5",
-          "question": "E) Highest mountain located in South Africa:",
-          "answerMD5": "d8ce147e66b502422ce3e950df2c2202"
-        }</data>
-      </block> -->
       <block type="sparql_test">
+        <field name="QUESTION">c) Class for countries:</field>
         <data>{
           "id": "5",
-          "question": "c) Class for countries:",
           "answerMD5": "9f5ea8213289919f8fa8bedd19f3eb96"
         }</data>
       </block>
       <sep gap="8"></sep>
       <block type="sparql_test">
+        <field name="QUESTION">c) Property for 'located in' (mountain->country):</field>
         <data>{
           "id": "6",
-          "question": "c) Property for 'located in' (mountain->country):",
           "answerMD5": "c0b2865f7555c5d0963e39fdc149458a"
         }</data>
       </block>
       <sep gap="8"></sep>
       <block type="sparql_test">
+        <field name="QUESTION">c) Resource for China:</field>
         <data>{
           "id": "7",
-          "question": "c) Resource for China:",
           "answerMD5": "9be7bcb10ccd7c92e55a9c09b91bf30d"
         }</data>
       </block>
       <sep gap="8"></sep>
       <block type="sparql_test">
+        <field name="QUESTION">c) Resource for Nepal:</field>
         <data>{
           "id": "8",
-          "question": "c) Resource for Nepal:",
           "answerMD5": "bd2b07bfff06dbad927da2e2dd1a5a33"
         }</data>
       </block>
       <sep gap="8"></sep>
       <block type="sparql_test">
+        <field name="QUESTION">C) 3rd highest mountain between China and Nepal:</field>
         <data>{
           "id": "9",
-          "question": "C) 3rd highest mountain between China and Nepal:",
           "answerMD5": "b2e13235a2e1ee782e78e78589828c03"
         }</data>
       </block>
@@ -1691,16 +1676,6 @@ function start() {
           </block>
         </value>
       </block>
-      <!-- <block type="sparql_text_regex">
-        <value name="FIND">
-          <block type="sparql_text"></block>
-        </value>
-        <value name="VALUE">
-          <block type="variables_get">
-            <field name="VAR">text</field>
-          </block>
-        </value>
-      </block> -->
       <sep gap="32"></sep>
       <block type="sparql_text_lang">
         <value name="LANG">
