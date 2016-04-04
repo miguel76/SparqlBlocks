@@ -84,6 +84,7 @@ SparqlBlocks.Storage = (function() {
         generator: "SparqlBlocks",
         version: SparqlBlocks.version,
         baseURI: location.href,
+        timestamp: $.now(),
         workspaceXmlFile: "workspace.xml"
       },
       workspace.eventStack ? {
@@ -122,6 +123,7 @@ SparqlBlocks.Storage = (function() {
         window.location.hash = "gist:" + data.id;
         workspace.eventStack = [ {
           "workspaceId": workspace.id,
+          "timestamp": $.now(),
           "group": "",
           "xml": {},
           "type": "snapshot",
@@ -244,6 +246,7 @@ SparqlBlocks.Storage = (function() {
           alert("Workspace Loaded", "info");
           workspace.eventStack = [ {
             "workspaceId": workspace.id,
+            "timestamp": $.now(),
             "group": "",
             "xml": {},
             "type": "snapshot",
@@ -290,7 +293,7 @@ SparqlBlocks.Storage = (function() {
    * @param {!Blockly.WorkspaceSvg} workspace Workspace.
    * @private
    */
-  var monitorChanges_ = function(workspace, eventStack) {
+  var monitorChanges_ = function(workspace) {
     var sendWorkspaceXML = true;
     if (window.location.hash != "") {
       $('#copy-button').prop('disabled', false)
@@ -299,21 +302,6 @@ SparqlBlocks.Storage = (function() {
     var startXmlDom = Blockly.Xml.workspaceToDom(workspace);
     var startXmlText = Blockly.Xml.domToText(startXmlDom);
     function change(event) {
-      if (!workspace.eventStack) {
-        workspace.eventStack = [];
-      }
-      workspace.eventStack.push(_.extend(
-          {},
-          event,
-          { type: event.type },
-          event.xml
-              ? { xmlText: Blockly.Xml.domToPrettyText(event.xml) }
-              : {},
-          sendWorkspaceXML
-              ? { workspace:
-                        Blockly.Xml.domToText(
-                            Blockly.Xml.workspaceToDom(workspace)) }
-              : {} ));
       var xmlDom = Blockly.Xml.workspaceToDom(workspace);
       var xmlText = Blockly.Xml.domToText(xmlDom);
       if (startXmlText != xmlText) {
@@ -354,7 +342,6 @@ SparqlBlocks.Storage = (function() {
     if (window.location.hash.length > 1) {
       SparqlBlocks.Storage.retrieveXml(window.location.hash.substring(1), workspace);
     } else {
-      // workspace.eventStack = [];
       monitorChanges_(workspace);
     }
   };
