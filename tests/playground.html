@@ -33,6 +33,7 @@
 <script src="../core/guide.js"></script>
 <script src="../core/lib-dialogs.js"></script>
 <script src="../core/track.js"></script>
+<script src="../core/WorkspaceActions.js"></script>
 
 <script src="../generators/sparql/bgp.js"></script>
 <script src="../generators/sparql/query.js"></script>
@@ -1452,6 +1453,7 @@ function start() {
     <sep></sep>
     <category name="&#xf108; Test" colour="330">
       <block type="sparql_test">
+        <field name="QUESTION">a) Class for mountains:</field>
         <data>{
           "id": "1",
           "question": "a) Class for mountains:",
@@ -1460,6 +1462,7 @@ function start() {
       </block>
       <sep gap="8"></sep>
       <block type="sparql_test">
+        <field name="QUESTION">a) Property for elevation of mountains:</field>
         <data>{
           "id": "2",
           "question": "a) Property for elevation of mountains:",
@@ -1468,6 +1471,7 @@ function start() {
       </block>
       <sep gap="8"></sep>
       <block type="sparql_test">
+        <field name="QUESTION">A) 3rd highest mountain:</field>
         <data>{
           "id": "3",
           "question": "A) 3rd highest mountain:",
@@ -1476,6 +1480,7 @@ function start() {
       </block>
       <sep gap="32"></sep>
       <block type="sparql_test">
+        <field name="QUESTION">B) Lowest mountain above 8,000 m:</field>
         <data>{
           "id": "4",
           "question": "B) Lowest mountain above 8,000 m:",
@@ -1491,6 +1496,7 @@ function start() {
         }</data>
       </block> -->
       <block type="sparql_test">
+        <field name="QUESTION">c) Class for countries:</field>
         <data>{
           "id": "5",
           "question": "c) Class for countries:",
@@ -1499,6 +1505,7 @@ function start() {
       </block>
       <sep gap="8"></sep>
       <block type="sparql_test">
+        <field name="QUESTION">c) Property for 'located in' (mountain->country):</field>
         <data>{
           "id": "6",
           "question": "c) Property for 'located in' (mountain->country):",
@@ -1507,6 +1514,7 @@ function start() {
       </block>
       <sep gap="8"></sep>
       <block type="sparql_test">
+        <field name="QUESTION">c) Resource for China:</field>
         <data>{
           "id": "7",
           "question": "c) Resource for China:",
@@ -1515,6 +1523,7 @@ function start() {
       </block>
       <sep gap="8"></sep>
       <block type="sparql_test">
+        <field name="QUESTION">c) Resource for Nepal:</field>
         <data>{
           "id": "8",
           "question": "c) Resource for Nepal:",
@@ -1523,6 +1532,7 @@ function start() {
       </block>
       <sep gap="8"></sep>
       <block type="sparql_test">
+        <field name="QUESTION">C) 3rd highest mountain between China and Nepal:</field>
         <data>{
           "id": "9",
           "question": "C) 3rd highest mountain between China and Nepal:",

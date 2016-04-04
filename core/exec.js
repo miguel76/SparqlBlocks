@@ -74,12 +74,11 @@ SparqlBlocks.Exec = ( function() {
 
   var DESCR_LENGTH = 40;
 
-  // var RESULT_EMPTY_QUERY = "";
-  // var RESULT_IN_PROGRESS = "execution in progress...";
-
   var setResult_ = function(resultsInput, resultField) {
-    resultsInput.removeField("RESULTS_CONTAINER");
-    resultsInput.appendField(resultField, "RESULTS_CONTAINER");
+    SparqlBlocks.WorkspaceActions.execute(function() {
+      resultsInput.removeField("RESULTS_CONTAINER");
+      resultsInput.appendField(resultField, "RESULTS_CONTAINER");
+    });
   };
 
   var sparqlExecAndPublish_ = function(endpointUrl, query, workspace, resultsInput, callback) {

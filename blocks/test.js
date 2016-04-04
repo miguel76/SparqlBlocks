@@ -63,12 +63,14 @@ goog.require('SparqlBlocks.Blocks');
       initQuestionState();
       this.setColour(SparqlBlocks.Blocks.test.HUE);
       this.setTooltip('1) Look for the right block and 2) Drop it in here');
-      this.appendValueInput('ANSWER');
+      var questionField = new Blockly.FieldLabel("");
+      questionField.EDITABLE = true; // trick to enable serialization
+      this.appendValueInput('ANSWER')
+          .appendField(questionField, "QUESTION");
       this.setEditable(false);
       this.setInputsInline(true);
       this.currentAnswer = null;
       this.isRightAnswer = false;
-      this.questionSetup = false;
     },
 
     onchange: function() {
@@ -84,23 +86,20 @@ goog.require('SparqlBlocks.Blocks');
         return;
       }
 
-      if (!this.questionSetup && data.question) {
-        this.getInput('ANSWER').appendField(data.question);
-        this.questionSetup = true;
-      }
-
       if (data.id && questionState[data.id] && questionState[data.id].rightAnswer) {
         this.currentAnswer = questionState[data.id].rightAnswer;
-        var answerConnection = this.getInput('ANSWER').connection;
-        var targetBlock = answerConnection.targetBlock();
-        if (targetBlock) {
-          targetBlock.dispose();
-        }
-        var xml = Blockly.Xml.textToDom(questionState[data.id].rightAnswerXML);
-        var answerBlock = Blockly.Xml.domToBlock(this.workspace, xml.firstChild);
-        answerConnection.connect(answerBlock.outputConnection);
-        // newBlock.render();
-        fixAsRightAnswer(this, answerBlock);
+        SparqlBlocks.WorkspaceActions.execute(function() {
+          var answerConnection = this.getInput('ANSWER').connection;
+          var targetBlock = answerConnection.targetBlock();
+          if (targetBlock) {
+            targetBlock.dispose();
+          }
+          var xml = Blockly.Xml.textToDom(questionState[data.id].rightAnswerXML);
+          var answerBlock = Blockly.Xml.domToBlock(this.workspace, xml.firstChild);
+          answerConnection.connect(answerBlock.outputConnection);
+          // newBlock.render();
+          fixAsRightAnswer(this, answerBlock);
+        }, this);
         return;
       }
 
