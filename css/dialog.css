@@ -165,7 +165,6 @@ button:hover:not(:disabled) {
   display: inline-block;
   vertical-align: middle;
   background: url(../blockly/media/sprites.png);
-  /*background-position: -32px -92px;*/
   background-position: -16px -46px;
   background-size: 48px;
   width: 16px;
@@ -176,7 +175,6 @@ button:hover:not(:disabled) {
   display: inline-block;
   vertical-align: middle;
   background: url(../blockly/media/sprites.png);
-  /*background-position: -64px -92px;*/
   background-position: -32px -46px;
   background-size: 48px;
   width: 16px;
@@ -187,7 +185,6 @@ button:hover:not(:disabled) {
   display: inline-block;
   vertical-align: middle;
   background: url(../blockly/media/sprites.png);
-  /*background-position: 0px -92px;*/
   background-position: 0px -46px;
   background-size: 48px;
   width: 16px;
@@ -198,7 +195,6 @@ button:hover:not(:disabled) {
   display: inline-block;
   vertical-align: middle;
   background: url(../blockly/media/sprites.png);
-  /*background-position: 0px -92px;*/
   background-position: 0px -8px;
   background-size: 24px;
   width: 12px; /*47*/
