@@ -164,7 +164,7 @@ button:hover:not(:disabled) {
 .icon_zoomIn {
   display: inline-block;
   vertical-align: middle;
-  background: url(../../blockly/media/sprites.png);
+  background: url(../blockly/media/sprites.png);
   /*background-position: -32px -92px;*/
   background-position: -16px -46px;
   background-size: 48px;
@@ -175,7 +175,7 @@ button:hover:not(:disabled) {
 .icon_zoomOut {
   display: inline-block;
   vertical-align: middle;
-  background: url(../../blockly/media/sprites.png);
+  background: url(../blockly/media/sprites.png);
   /*background-position: -64px -92px;*/
   background-position: -32px -46px;
   background-size: 48px;
@@ -186,7 +186,7 @@ button:hover:not(:disabled) {
 .icon_zoomReset {
   display: inline-block;
   vertical-align: middle;
-  background: url(../../blockly/media/sprites.png);
+  background: url(../blockly/media/sprites.png);
   /*background-position: 0px -92px;*/
   background-position: 0px -46px;
   background-size: 48px;
@@ -197,7 +197,7 @@ button:hover:not(:disabled) {
 .icon_trash {
   display: inline-block;
   vertical-align: middle;
-  background: url(../../blockly/media/sprites.png);
+  background: url(../blockly/media/sprites.png);
   /*background-position: 0px -92px;*/
   background-position: 0px -8px;
   background-size: 24px;
