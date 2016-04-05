@@ -24,13 +24,59 @@ goog.provide('SparqlBlocks.ShadowMorph');
 
 SparqlBlocks.ShadowMorph = ( function() {
 
-  var materializeToTop = function(block) {
+  var materializeToTop = function(block, event) {
     var parentBlock = block.getParent();
     if (parentBlock) {
       materializeToTop(parentBlock);
     }
     if (block.isShadow()) {
+
+      var shadowId = Blockly.genUid();
+      var shadowDom = Blockly.Xml.blockToDomWithXY(block);
+      shadowDom.setAttribute("id", shadowId);
+      if (event && event.type === Blockly.Events.CHANGE && event.element === "field") {
+        for (var child = shadowDom.firstChild; child; child = child.nextSibling) {
+          if (child.nodeType === Node.ELEMENT_NODE &&
+              child.nodeName === "FIELD" &&
+              child.getAttribute("name") === event.name) {
+                child.textContent = event.oldValue;
+                break;
+          }
+        }
+      }
+
+      block.workspace.undoStack_.pop();
+      Blockly.Events.setGroup(true);
+
+      var moveShadowEvent = new Blockly.Events.Move(block);
+      moveShadowEvent.blockId = shadowId;
+      moveShadowEvent.newParentId = null;
+      moveShadowEvent.newInputName = null;
+      moveShadowEvent.newCoordinate = block.getRelativeToSurfaceXY();
+      Blockly.Events.fire(moveShadowEvent);
+
+      block.parentBlock_ = null;
+      var deleteShadowEvent = new Blockly.Events.Delete(block);
+      block.parentBlock_ = parentBlock;
+      deleteShadowEvent.blockId = shadowId;
+      deleteShadowEvent.oldXml = shadowDom;
+
+      Blockly.Events.fire(deleteShadowEvent);
+
       block.setShadow(false);
+
+      // record event as creation of a new block and connection to parent block
+      var createEvent = new Blockly.Events.Create(block);
+      Blockly.Events.fire(createEvent);
+
+      var moveEvent = new Blockly.Events.Move(block);
+      moveEvent.oldParentId = null;
+      moveEvent.oldInputName = null;
+      moveEvent.oldCoordinate = block.getRelativeToSurfaceXY();
+      moveEvent.recordNew();
+      Blockly.Events.fire(moveEvent);
+
+      Blockly.Events.setGroup(false);
     }
   }
 
@@ -39,7 +85,7 @@ SparqlBlocks.ShadowMorph = ( function() {
       var block = Blockly.Block.getById(event.blockId);
       switch (event.type) {
         case Blockly.Events.CHANGE:
-          materializeToTop(block);
+          materializeToTop(block, event);
           break;
         default:
       }
