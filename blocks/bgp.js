@@ -104,7 +104,7 @@ goog.require('SparqlBlocks.Blocks');
     init: function() {
       _initVerb(this);
       this.appendValueInput("VERB")
-          .setCheck(typeExt("Resource"))
+          .setCheck(typeExt("Iri"))
           .appendField("◀━┫");
       this.appendValueInput("OBJECT")
           .setCheck(typeExt("GraphTermOrVar"))
@@ -120,7 +120,7 @@ goog.require('SparqlBlocks.Blocks');
     init: function() {
       _initVerb(this);
       this.appendValueInput("VERB")
-          .setCheck(typeExt("Resource"))
+          .setCheck(typeExt("Iri"))
           .appendField("━┫");
       this.appendValueInput("OBJECT")
           .setCheck(typeExt("GraphTermOrVar"))
@@ -136,7 +136,7 @@ goog.require('SparqlBlocks.Blocks');
     init: function() {
       _initVerb(this);
       this.appendValueInput("VERB")
-          .setCheck(typeExt("Resource"))
+          .setCheck(typeExt("Iri"))
           .appendField("◀━ ✱ ┫");
       this.appendValueInput("OBJECT")
           .setCheck(typeExt("GraphTermOrVar"))
@@ -206,7 +206,7 @@ goog.require('SparqlBlocks.Blocks');
           // .appendField("⭕");
           .appendField("s.t.");
       this.setInputsInline(true);
-      this.setOutput(true, "Resource");
+      this.setOutput(true, "Bnode");
       this.setTooltip(SparqlBlocks.Msg.ANONSUBJECT_PROPERTYLIST_TOOLTIP);
     }
   });
