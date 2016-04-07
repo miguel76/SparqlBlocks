@@ -111,6 +111,8 @@ function start() {
          minScale: .25,
          scaleSpeed: 1.1
         },
+      // Enable shadow blocks morphing to regular ones on change
+      shadowMorph: true,
      });
 
   $('.blocklyToolboxDiv').prepend(
@@ -134,7 +136,6 @@ function start() {
   SparqlBlocks.Storage.startup(workspace);
 
   SparqlBlocks.Track.track(workspace);
-  SparqlBlocks.ShadowMorph.track(workspace);
 
   if (mode === "eval") {
 

@@ -24,76 +24,109 @@ goog.provide('SparqlBlocks.ShadowMorph');
 
 SparqlBlocks.ShadowMorph = ( function() {
 
-  var materializeToTop = function(block, event) {
-    var parentBlock = block.getParent();
-    if (parentBlock) {
-      materializeToTop(parentBlock);
+  /**
+   * Set whether this block is a shadow block or not.
+   * @param {boolean} shadow True if a shadow.
+   */
+  Blockly.Block.prototype.setShadow = function(shadow) {
+    if (this.isShadow_ != shadow) {
+      Blockly.Events.fire(new Blockly.Events.Change(
+        this, 'shadow', null, this.isShadow_, shadow));
+      this.isShadow_ = shadow;
     }
-    if (block.isShadow()) {
-
-      var shadowId = Blockly.genUid();
-      var shadowDom = Blockly.Xml.blockToDomWithXY(block);
-      shadowDom.setAttribute("id", shadowId);
-      if (event && event.type === Blockly.Events.CHANGE && event.element === "field") {
-        for (var child = shadowDom.firstChild; child; child = child.nextSibling) {
-          if (child.nodeType === Node.ELEMENT_NODE &&
-              child.nodeName === "FIELD" &&
-              child.getAttribute("name") === event.name) {
-                child.textContent = event.oldValue;
-                break;
-          }
-        }
-      }
-
-      block.workspace.undoStack_.pop();
-      Blockly.Events.setGroup(true);
-
-      var moveShadowEvent = new Blockly.Events.Move(block);
-      moveShadowEvent.blockId = shadowId;
-      moveShadowEvent.newParentId = null;
-      moveShadowEvent.newInputName = null;
-      moveShadowEvent.newCoordinate = block.getRelativeToSurfaceXY();
-      Blockly.Events.fire(moveShadowEvent);
-
-      block.parentBlock_ = null;
-      var deleteShadowEvent = new Blockly.Events.Delete(block);
-      block.parentBlock_ = parentBlock;
-      deleteShadowEvent.blockId = shadowId;
-      deleteShadowEvent.oldXml = shadowDom;
-
-      Blockly.Events.fire(deleteShadowEvent);
-
-      block.setShadow(false);
-
-      // record event as creation of a new block and connection to parent block
-      var createEvent = new Blockly.Events.Create(block);
-      Blockly.Events.fire(createEvent);
-
-      var moveEvent = new Blockly.Events.Move(block);
-      moveEvent.oldParentId = null;
-      moveEvent.oldInputName = null;
-      moveEvent.oldCoordinate = block.getRelativeToSurfaceXY();
-      moveEvent.recordNew();
-      Blockly.Events.fire(moveEvent);
-
-      Blockly.Events.setGroup(false);
-    }
-  }
-
-  var track_ = function(workspace) {
-    workspace.addChangeListener( function(event) {
-      var block = Blockly.Block.getById(event.blockId);
-      switch (event.type) {
-        case Blockly.Events.CHANGE:
-          materializeToTop(block, event);
-          break;
-        default:
-      }
-    });
-  }
-
-  return {
-    track: track_
   };
+
+  /**
+   * Run a change event.
+   * @param {boolean} forward True if run forward, false if run backward (undo).
+   */
+  Blockly.Events.Change.prototype.run = function(forward) {
+    var block = Blockly.Block.getById(this.blockId);
+    if (!block) {
+      console.warn("Can't change non-existant block: " + this.blockId);
+      return;
+    }
+    if (block.mutator) {
+      // Close the mutator (if open) since we don't want to update it.
+      block.mutator.setVisible(false);
+    }
+    var value = forward ? this.newValue : this.oldValue;
+    switch (this.element) {
+      case 'field':
+        var field = block.getField(this.name);
+        if (field) {
+          field.setValue(value);
+        } else {
+          console.warn("Can't set non-existant field: " + this.name);
+        }
+        break;
+      case 'comment':
+        block.setCommentText(value || null);
+        break;
+      case 'collapsed':
+        block.setCollapsed(value);
+        break;
+      case 'disabled':
+        block.setDisabled(value);
+        break;
+      case 'inline':
+        block.setInputsInline(value);
+        break;
+      case 'mutation':
+        var oldMutation = '';
+        if (block.mutationToDom) {
+          var oldMutationDom = block.mutationToDom();
+          oldMutation = oldMutationDom && Blockly.Xml.domToText(oldMutationDom);
+        }
+        if (block.domToMutation) {
+          value = value || '<mutation></mutation>';
+          var dom = Blockly.Xml.textToDom('<xml>' + value + '</xml>');
+          block.domToMutation(dom.firstChild);
+        }
+        Blockly.Events.fire(new Blockly.Events.Change(
+            block, 'mutation', null, oldMutation, value));
+        break;
+      case 'shadow':
+        block.setShadow(value);
+        break;
+      default:
+        console.warn('Unknown change type: ' + this.element);
+    }
+  };
+
+  /**
+   * Create a custom event and fire it.
+   * @param {!Blockly.Events.Abstract} event Custom data for event.
+   */
+  Blockly.Events.fire = function(event) {
+    var block = Blockly.Block.getById(event.blockId);
+
+    // If the shadowMorph option is enabled, check if a shadow block is being
+    // changed. In that case, the block must be morphed to a regular one.
+    if (Blockly.Workspace.getById(event.workspaceId).options.shadowMorphEnabled &&
+        event.type === Blockly.Events.CHANGE && event.element !== 'shadow' &&
+        block.isShadow()) {
+
+      // The call to .setShadow(false) will fire the corresponding event, so
+      // Blockly.Events.setGroup is used to join that event to the same event
+      // group as the current event.
+      var currGroupBackup = Blockly.Events.getGroup();
+      Blockly.Events.setGroup(event.group || true);
+      block.setShadow(false);
+      event.group = Blockly.Events.getGroup();
+      Blockly.Events.setGroup(currGroupBackup);
+    }
+
+    if (!Blockly.Events.isEnabled()) {
+      return;
+    }
+    if (!Blockly.Events.FIRE_QUEUE_.length) {
+      // First event added; schedule a firing of the event queue.
+      setTimeout(Blockly.Events.fireNow_, 0);
+    }
+    Blockly.Events.FIRE_QUEUE_.push(event);
+  };
+
+  return {};
 
 }) ();
