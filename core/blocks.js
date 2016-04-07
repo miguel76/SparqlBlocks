@@ -72,44 +72,6 @@ SparqlBlocks.Blocks = ( function() {
     }
   };
 
-  // fix a bug in Blockly: using this.getIcons() instead of undefined this.icons_
-  Blockly.BlockSvg.prototype.setEditable = function(editable) {
-    Blockly.BlockSvg.superClass_.setEditable.call(this, editable);
-    var icons = this.getIcons();
-    if (this.rendered) {
-      for (var i = 0; i < icons.length; i++) {
-        icons[i].updateEditable();
-      }
-    }
-  };
-
-  // fix a bug in Blockly
-  Blockly.BlockSvg.disconnectUiStep_ = function(group, magnitude, start) {
-    var DURATION = 200;  // Milliseconds.
-    var WIGGLES = 3;  // Half oscillations.
-
-    var ms = (new Date()) - start;
-    var percent = ms / DURATION;
-
-    if (percent > 1) {
-      group.skew_ = '';
-    } else {
-      var skew = Math.round(Math.sin(percent * Math.PI * WIGGLES) *
-                    (1 - percent) * magnitude);
-      group.skew_ = 'skewX(' + skew + ')';
-      var closure = function() {
-        Blockly.BlockSvg.disconnectUiStep_(group, magnitude, start);
-      };
-      Blockly.BlockSvg.disconnectUiStop_.group = group;
-      Blockly.BlockSvg.disconnectUiStop_.pid = setTimeout(closure, 10);
-    }
-    // group.translate_ may be undefined because setDraggin is yet to be called
-    group.setAttribute(
-        'transform',
-        (group.translate_ ? group.translate_ : "") + group.skew_);
-  };
-
-
   return {
     block: block_,
     insertOptionBeforeHelp: insertOptionBeforeHelp_
