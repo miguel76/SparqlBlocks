@@ -228,7 +228,7 @@ SparqlBlocks.Storage = (function() {
    * @param {string} key Key to XML, obtained from href.
    * @param {Blockly.WorkspaceSvg=} opt_workspace Workspace.
    */
-  var retrieveXml = function(key, opt_workspace) {
+  var retrieveXml = function(key, opt_workspace, callback) {
     alert("Loading Saved Workspace...")
     var workspace = opt_workspace || Blockly.getMainWorkspace();
     urlFromKey_(key, function(url) {
@@ -253,6 +253,7 @@ SparqlBlocks.Storage = (function() {
             "value": key
           } ];
           monitorChanges_(workspace);
+          callback();
         },
         error: function(jqXHR, textStatus, errorThrown) {
           var errorDescr = jqXHR.responseText;
@@ -262,6 +263,7 @@ SparqlBlocks.Storage = (function() {
           alert("Error Loading Workspace: " + errorDescr, 'error');
           window.location.hash = "";
           monitorChanges_(workspace);
+          callback();
         }
       });
     });
@@ -301,7 +303,7 @@ SparqlBlocks.Storage = (function() {
     $('#save-button').prop('disabled', true);
     var startXmlDom = Blockly.Xml.workspaceToDom(workspace);
     var startXmlText = Blockly.Xml.domToText(startXmlDom);
-    function change(event) {
+    var bindData = workspace.addChangeListener( function (event) {
       var xmlDom = Blockly.Xml.workspaceToDom(workspace);
       var xmlText = Blockly.Xml.domToText(xmlDom);
       if (startXmlText != xmlText) {
@@ -310,8 +312,7 @@ SparqlBlocks.Storage = (function() {
         $('#save-button').prop('disabled', false);
         setTimeout( function() { workspace.removeChangeListener(bindData); });
       }
-    }
-    var bindData = workspace.addChangeListener(change);
+    });
   };
 
   /**
@@ -336,13 +337,15 @@ SparqlBlocks.Storage = (function() {
    * Do intial stuff.
    * @param {Blockly.WorkspaceSvg=} opt_workspace Workspace.
    */
-  var startup = function(opt_workspace) {
+  var startup = function(opt_workspace, callback) {
     var workspace = opt_workspace || Blockly.getMainWorkspace();
     // An href with #key trigers an AJAX call to retrieve saved blocks.
     if (window.location.hash.length > 1) {
-      SparqlBlocks.Storage.retrieveXml(window.location.hash.substring(1), workspace);
+      SparqlBlocks.Storage.retrieveXml(
+          window.location.hash.substring(1), workspace, callback);
     } else {
       monitorChanges_(workspace);
+      callback();
     }
   };
 

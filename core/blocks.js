@@ -72,6 +72,83 @@ SparqlBlocks.Blocks = ( function() {
     }
   };
 
+  /**
+   * Zoom the blocks to fit in the workspace if possible.
+   */
+  Blockly.WorkspaceSvg.prototype.zoomToFit = function() {
+    var workspaceBBox = this.svgBackground_.getBBox();
+    var blocksBBox = this.svgBlockCanvas_.getBBox();
+    var workspaceWidth = workspaceBBox.width - (this.toolbox_ ? this.toolbox_.width : 0) -
+        Blockly.Scrollbar.scrollbarThickness;
+    var workspaceHeight = workspaceBBox.height -
+        Blockly.Scrollbar.scrollbarThickness;
+    var blocksWidth = blocksBBox.width;
+    var blocksHeight = blocksBBox.height;
+    if (blocksWidth == 0) {
+      return;  // Prevents zooming to infinity.
+    }
+    var ratioX = workspaceWidth / blocksWidth;
+    var ratioY = workspaceHeight / blocksHeight;
+    var ratio = Math.min(ratioX, ratioY);
+    var speed = this.options.zoomOptions.scaleSpeed;
+    var numZooms = Math.floor(Math.log(ratio) / Math.log(speed));
+    var newScale = Math.pow(speed, numZooms);
+    if (newScale > this.options.zoomOptions.maxScale) {
+      newScale = this.options.zoomOptions.maxScale;
+    } else if (newScale < this.options.zoomOptions.minScale) {
+      newScale = this.options.zoomOptions.minScale;
+    }
+    this.scale = newScale;
+    this.updateGridPattern_();
+    if (this.scrollbar) {
+      this.scrollbar.resize();
+    }
+    Blockly.hideChaff(false);
+    if (this.flyout_) {
+      // No toolbox, resize flyout.
+      this.flyout_.reflow();
+    }
+    // Center the workspace.
+    var metrics = this.getMetrics();
+    if (this.scrollbar) {
+      this.scrollbar.set(
+          (metrics.contentWidth - metrics.viewWidth) / 2,
+          (metrics.contentHeight - metrics.viewHeight) / 2);
+    } else {
+      this.translate(0, 0);
+    }
+  };
+
+  /**
+ * Reset zooming and dragging.
+ * @param {!Event} e Mouse down event.
+ */
+Blockly.WorkspaceSvg.prototype.zoomReset = function(e) {
+  this.scale = 1;
+  this.updateGridPattern_();
+  Blockly.hideChaff(false);
+  if (this.flyout_) {
+    // No toolbox, resize flyout.
+    this.flyout_.reflow();
+  }
+  // Zoom level has changed, update the scrollbars.
+  if (this.scrollbar) {
+    this.scrollbar.resize();
+  }
+  // Center the workspace.
+  var metrics = this.getMetrics();
+  if (this.scrollbar) {
+    this.scrollbar.set((metrics.contentWidth - metrics.viewWidth) / 2,
+        (metrics.contentHeight - metrics.viewHeight) / 2);
+  } else {
+    this.translate(0, 0);
+  }
+  // This event has been handled.  Don't start a workspace drag.
+  e.stopPropagation();
+};
+
+
+
   return {
     block: block_,
     insertOptionBeforeHelp: insertOptionBeforeHelp_
