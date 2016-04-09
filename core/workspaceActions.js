@@ -31,11 +31,10 @@ SparqlBlocks.WorkspaceActions = ( function() {
     if (actionQueue.length === 1) {
       var functId = window.setInterval(function() {
         if (!Blockly.dragMode_) {
-          for (var i = 0; i < actionQueue.length; i++) {
-            var actionItem = actionQueue[i];
+          while (actionQueue.length > 0) {
+            var actionItem = actionQueue.shift();
             actionItem.action.call(actionItem.thisArg);
           }
-          actionQueue = [];
           window.clearInterval(functId);
         }
       }, 0);
