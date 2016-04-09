@@ -119,14 +119,14 @@ SparqlBlocks.FieldTable.prototype.setEventBindings_ = function(colNames, headBlo
  * Install this text on a block.
  * @param {!Blockly.Block} block The block containing this text.
  */
-SparqlBlocks.FieldTable.prototype.init = function(block) {
-  if (this.sourceBlock_) {
+SparqlBlocks.FieldTable.prototype.init = function() {
+  if (this.rootElement_) {
     // Text has already been initialized once.
     return;
   }
   // SparqlBlocks.FieldTable.superClass_.init.call(this, block);
 
-  this.sourceBlock_ = block;
+  var block = this.sourceBlock_;
 
   // Build the DOM.
   this.rootElement_ = Blockly.createSvgElement(
