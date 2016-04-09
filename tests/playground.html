@@ -76,6 +76,19 @@ function start() {
           sParameterParts[1] === undefined ? true : sParameterParts[1];
   }
 
+  function rebuildSearch() {
+    window.location.search =
+        _.reduce(
+            _.mapObject(sParameters,
+                        function(value, key) { return "" + key + "=" + value; }),
+            function(search, param) { return search + "&" + param; } );
+  }
+
+  function setMode(newMode) {
+    sParameters["mode"] = newMode;
+    rebuildSearch();
+  }
+
   // Depending on the URL argument, render as LTR or RTL.
   var rtl = sParameters["rtl"];
 
@@ -484,14 +497,7 @@ function start() {
         },
         {
           do: function() {
-            $(".flash-messages").css("display", "none");
-          },
-          dialog: "dialogTest",
-          modal: true
-        },
-        {
-          do: function() {
-            $(".flash-messages").css("display", "");
+            setMode("test");
           }
         }
       ];
