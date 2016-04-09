@@ -41,7 +41,8 @@ SparqlBlocks.ShadowMorph = ( function() {
    * @param {boolean} forward True if run forward, false if run backward (undo).
    */
   Blockly.Events.Change.prototype.run = function(forward) {
-    var block = Blockly.Block.getById(this.blockId);
+    var workspace = Blockly.Workspace.getById(this.workspaceId);
+    var block = workspace.getBlockById(this.blockId);
     if (!block) {
       console.warn("Can't change non-existant block: " + this.blockId);
       return;
@@ -99,11 +100,12 @@ SparqlBlocks.ShadowMorph = ( function() {
    * @param {!Blockly.Events.Abstract} event Custom data for event.
    */
   Blockly.Events.fire = function(event) {
-    var block = Blockly.Block.getById(event.blockId);
+    var workspace = Blockly.Workspace.getById(event.workspaceId);
+    var block = workspace.getBlockById(event.blockId);
 
     // If the shadowMorph option is enabled, check if a shadow block is being
     // changed. In that case, the block must be morphed to a regular one.
-    if (Blockly.Workspace.getById(event.workspaceId).options.shadowMorphEnabled &&
+    if (workspace.options.shadowMorphEnabled &&
         event.type === Blockly.Events.CHANGE && event.element !== 'shadow' &&
         block.isShadow()) {
 

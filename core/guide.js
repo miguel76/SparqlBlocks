@@ -142,7 +142,7 @@ SparqlBlocks.Guide = (function() {
                   wheel: false,
                   startScale: zoom }
             } : {} ));
-      Blockly.Xml.domToWorkspace(localWorkspace, Blockly.Xml.textToDom("<xml>" + content + "</xml>"));
+      Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom("<xml>" + content + "</xml>"), localWorkspace);
     }
   }
 
@@ -199,11 +199,11 @@ SparqlBlocks.Guide = (function() {
                 _.extend(
                   {
                     workspace: workspace,
-                    block: Blockly.Block.getById(event.blockId)
+                    block: workspace.getBlockById(event.blockId)
                   },
                   event,
-                  event.newParentId ? { newParent: Blockly.Block.getById(event.newParentId) } : {},
-                  event.oldParentId ? { oldParent: Blockly.Block.getById(event.oldParentId) } : {}),
+                  event.newParentId ? { newParent: workspace.getBlockById(event.newParentId) } : {},
+                  event.oldParentId ? { oldParent: workspace.getBlockById(event.oldParentId) } : {}),
                 data)) {
               setTimeout( function() {
                 eventManager.removeChangeListener(listener);

@@ -44,7 +44,6 @@ goog.require('SparqlBlocks.Blocks');
 
   var fixAsRightAnswer = function(questionBlock, answerBlock) {
     answerBlock.setEditable(false);
-    // answerBlock.setMovable(false);
     if (!questionBlock.isRightAnswer) {
       answerBlock.setTooltip('Looks like you have found the right answer!');
       questionBlock.setTooltip('Looks like you have found the right answer!');
@@ -67,7 +66,6 @@ goog.require('SparqlBlocks.Blocks');
       questionField.EDITABLE = true; // trick to enable serialization
       this.appendValueInput('ANSWER')
           .appendField(questionField, "QUESTION");
-      this.setEditable(false);
       this.setInputsInline(true);
       this.currentAnswer = null;
       this.isRightAnswer = false;
@@ -95,9 +93,8 @@ goog.require('SparqlBlocks.Blocks');
             targetBlock.dispose();
           }
           var xml = Blockly.Xml.textToDom(questionState[data.id].rightAnswerXML);
-          var answerBlock = Blockly.Xml.domToBlock(this.workspace, xml.firstChild);
+          var answerBlock = Blockly.Xml.domToBlock(xml.firstChild, this.workspace);
           answerConnection.connect(answerBlock.outputConnection);
-          // newBlock.render();
           fixAsRightAnswer(this, answerBlock);
         }, this);
         return;

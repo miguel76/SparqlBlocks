@@ -327,7 +327,7 @@ SparqlBlocks.FieldTable.prototype.createBlockFunc_ = function(originBlock) {
     Blockly.Events.disable();
     // Create the new block by cloning the block in the flyout (via XML).
     var xml = Blockly.Xml.blockToDom(originBlock);
-    var block = Blockly.Xml.domToBlock(workspace, xml);
+    var block = Blockly.Xml.domToBlock(xml, workspace);
     // Place it in the same spot as the flyout copy.
     var svgRootOld = originBlock.getSvgRoot();
     if (!svgRootOld) {

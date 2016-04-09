@@ -183,7 +183,7 @@ SparqlBlocks.JsonToBlocks = (function() {
         xmlBlock.removeAttribute("editable");
         xmlBlock.removeAttribute("movable");
         xmlBlock.removeAttribute("deletable");
-        duplicateBlock = Blockly.Xml.domToBlock(workspace, xmlBlock);
+        duplicateBlock = Blockly.Xml.domToBlock(xmlBlock, workspace);
         duplicateBlock.isInFlyout = true;
         duplicateBlock.hideTooltip = function() {
           if (duplicateBlock) {

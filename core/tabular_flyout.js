@@ -47,7 +47,7 @@ SparqlBlocks.TabularFlyout.prototype.createBlocks_ = function(xmlTable) {
     for (var j = 0, xml; xml = xmlTable[i][j]; i++) {
       if (xml.tagName && xml.tagName.toUpperCase() == 'BLOCK') {
         var block = Blockly.Xml.domToBlock(
-            /** @type {!Blockly.Workspace} */ (this.workspace_), xml);
+            xml, /** @type {!Blockly.Workspace} */ (this.workspace_));
         blockRow.push(block);
         // gaps.push(margin * 3);
       }
