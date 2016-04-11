@@ -25,6 +25,42 @@ goog.provide('SparqlBlocks.ShadowMorph');
 SparqlBlocks.ShadowMorph = ( function() {
 
   /**
+   * By default there is no difference between the human-readable text and
+   * the language-neutral values.  Subclasses (such as dropdown) may define this.
+   * @param {string} newText New text.
+   */
+  Blockly.Field.prototype.setValue = function(newText) {
+    if (newText === null) {
+      // No change if null.
+      return;
+    }
+    var oldText = this.getValue();
+    if (oldText == newText) {
+      return;
+    }
+    var noGroup = false;
+    if (this.sourceBlock_ && Blockly.Events.isEnabled()) {
+      noGroup = !Blockly.Events.getGroup();
+      if (noGroup) {
+        Blockly.Events.setGroup(true);
+      }
+    }
+    if (true /*workspace.options.shadowMorphEnabled*/ &&
+        this.sourceBlock_ &&
+        Blockly.Events.recordUndo) {
+      this.sourceBlock_.setShadow(false);
+    }
+    if (this.sourceBlock_ && Blockly.Events.isEnabled()) {
+      Blockly.Events.fire(new Blockly.Events.Change(
+          this.sourceBlock_, 'field', this.name, oldText, newText));
+    }
+    this.setText(newText);
+    if (noGroup) {
+      Blockly.Events.setGroup(false);
+    }
+  };
+
+  /**
    * Set whether this block is a shadow block or not.
    * @param {boolean} shadow True if a shadow.
    */
@@ -52,6 +88,7 @@ SparqlBlocks.ShadowMorph = ( function() {
       block.mutator.setVisible(false);
     }
     var value = forward ? this.newValue : this.oldValue;
+
     switch (this.element) {
       case 'field':
         var field = block.getField(this.name);
@@ -93,40 +130,6 @@ SparqlBlocks.ShadowMorph = ( function() {
       default:
         console.warn('Unknown change type: ' + this.element);
     }
-  };
-
-  /**
-   * Create a custom event and fire it.
-   * @param {!Blockly.Events.Abstract} event Custom data for event.
-   */
-  Blockly.Events.fire = function(event) {
-    var workspace = Blockly.Workspace.getById(event.workspaceId);
-    var block = workspace.getBlockById(event.blockId);
-
-    // If the shadowMorph option is enabled, check if a shadow block is being
-    // changed. In that case, the block must be morphed to a regular one.
-    if (workspace.options.shadowMorphEnabled &&
-        event.type === Blockly.Events.CHANGE && event.element !== 'shadow' &&
-        block.isShadow()) {
-
-      // The call to .setShadow(false) will fire the corresponding event, so
-      // Blockly.Events.setGroup is used to join that event to the same event
-      // group as the current event.
-      var currGroupBackup = Blockly.Events.getGroup();
-      Blockly.Events.setGroup(event.group || true);
-      block.setShadow(false);
-      event.group = Blockly.Events.getGroup();
-      Blockly.Events.setGroup(currGroupBackup);
-    }
-
-    if (!Blockly.Events.isEnabled()) {
-      return;
-    }
-    if (!Blockly.Events.FIRE_QUEUE_.length) {
-      // First event added; schedule a firing of the event queue.
-      setTimeout(Blockly.Events.fireNow_, 0);
-    }
-    Blockly.Events.FIRE_QUEUE_.push(event);
   };
 
   return {};
