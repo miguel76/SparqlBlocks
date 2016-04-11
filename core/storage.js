@@ -286,6 +286,7 @@ SparqlBlocks.Storage = (function() {
     if (httpRequest_) {
       // AJAX call is in-flight.
       httpRequest_.abort();
+      httpRequest_ = null;
     }
     httpRequest_ = $.ajax(ajaxOptions);
   };
