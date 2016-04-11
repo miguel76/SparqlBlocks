@@ -31,7 +31,7 @@ SparqlBlocks.Track = (function() {
     options =
         _.extend(
             { sendEventXML: true,
-              sendWorkspaceXML: true,
+              sendWorkspaceXML: false,
               sendMoveAroundEvents: true,
               sendUIEvents: true },
             options );
