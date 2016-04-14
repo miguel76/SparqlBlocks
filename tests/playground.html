@@ -110,9 +110,6 @@ function start() {
 
     SparqlBlocks.Storage.startup(workspace, function() {
       workspace.zoomToFit();
-      // var canvas = $('#blocklyDiv > svg > g > g.blocklyBlockCanvas');
-      // canvas.getBBox();
-      // SVGRect {x: 63, y: 63, width: 1672.7701416015625, height: 990}
     });
 
   } else {
@@ -528,6 +525,19 @@ function start() {
     }
 
   }
+
+  var selCat = sParameters["selCat"];
+  if (_.isString(selCat) &&
+      workspace && workspace.toolbox_ && workspace.toolbox_.tree_) {
+    var nodeNum = parseInt(selCat, 10);
+    if (!_.isNaN(nodeNum)) {
+      var node = Blockly.mainWorkspace.toolbox_.tree_.getChildAt(nodeNum);
+      if (node) {
+        workspace.toolbox_.tree_.setSelectedItem(node);
+      }
+    }
+  }
+
 }
 
 </script>
