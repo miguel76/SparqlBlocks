@@ -26,11 +26,12 @@ goog.require('SparqlBlocks.Sparql');
 
 SparqlBlocks.Exec = ( function() {
 
-  var corsProxy = "https://cors-anywhere.herokuapp.com/";
+  // var corsProxy = "https://cors-anywhere.herokuapp.com/";
 
   var sparqlExec_ = function(endpointUrl, query, callback) {
     var queryUrl =
-        corsProxy + endpointUrl +
+        // corsProxy +
+        endpointUrl +
         "?query=" + encodeURIComponent(query);
     return $.ajax({
         headers: {Accept: "application/sparql-results+json"},
