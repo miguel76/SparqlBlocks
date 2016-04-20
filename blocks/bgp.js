@@ -91,7 +91,7 @@ goog.require('SparqlBlocks.Blocks');
           .setCheck(typeExt("Verb"))
           .appendField("━┫");
       this.appendValueInput("OBJECT")
-          .setCheck(typeExt("GraphTermOrVar"))
+          .setCheck(typeExt("Object"))
           .appendField("┣━▶");
       this.setInputsInline(true);
       this.setPreviousStatement(true, "PropertyList");
@@ -107,7 +107,7 @@ goog.require('SparqlBlocks.Blocks');
           .setCheck(typeExt("Iri"))
           .appendField("◀━┫");
       this.appendValueInput("OBJECT")
-          .setCheck(typeExt("GraphTermOrVar"))
+          .setCheck(typeExt("ObjectNotLiteral"))
           .appendField("┣━");
       this.setInputsInline(true);
       this.setPreviousStatement(true, "PropertyList");
@@ -123,7 +123,7 @@ goog.require('SparqlBlocks.Blocks');
           .setCheck(typeExt("Iri"))
           .appendField("━┫");
       this.appendValueInput("OBJECT")
-          .setCheck(typeExt("GraphTermOrVar"))
+          .setCheck(typeExt("Object"))
           .appendField("┣ ✱ ━▶");
       this.setInputsInline(true);
       this.setPreviousStatement(true, "PropertyList");
@@ -139,7 +139,7 @@ goog.require('SparqlBlocks.Blocks');
           .setCheck(typeExt("Iri"))
           .appendField("◀━ ✱ ┫");
       this.appendValueInput("OBJECT")
-          .setCheck(typeExt("GraphTermOrVar"))
+          .setCheck(typeExt("ObjectNotLiteral"))
           .appendField("┣━");
       this.setInputsInline(true);
       this.setPreviousStatement(true, "PropertyList");
@@ -152,7 +152,7 @@ goog.require('SparqlBlocks.Blocks');
     init: function() {
       _initVerb(this);
       this.appendValueInput("TYPE")
-          .setCheck(typeExt("ResourceOrVar"))
+          .setCheck(typeExt("ObjectNotLiteral"))
           .appendField("is a");
       this.setInputsInline(true);
       this.setPreviousStatement(true, "PropertyList");
@@ -184,7 +184,7 @@ goog.require('SparqlBlocks.Blocks');
       this.appendValueInput("SUBJECT")
           .setCheck(typeExt("ResourceOrVar"));
       this.appendValueInput("TYPE")
-          .setCheck(typeExt("ResourceOrVar"))
+          .setCheck(typeExt("ObjectNotLiteral"))
           .appendField("is a");
       this.appendStatementInput("PROPERTY_LIST")
           .setCheck("PropertyList")
@@ -206,7 +206,7 @@ goog.require('SparqlBlocks.Blocks');
           // .appendField("⭕");
           .appendField("s.t.");
       this.setInputsInline(true);
-      this.setOutput(true, "Bnode");
+      this.setOutput(true, typeExt("RootedPropertyList"));
       this.setTooltip(SparqlBlocks.Msg.ANONSUBJECT_PROPERTYLIST_TOOLTIP);
     }
   });

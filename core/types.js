@@ -69,9 +69,12 @@ SparqlBlocks.Types = (function() {
 
   setType("Expr", {});
   setType("StringExprOrLiteral", { parents: ["Expr"] });
-  setType("GraphTermOrVar", { parents: ["Expr"] });
+  setType("Object", {});
+  setType("GraphTermOrVar", { parents: ["Object", "Expr"] });
   setType("Verb", {});
-  setType("ResourceOrVar", { parents: ["GraphTermOrVar"] });
+  setType("ObjectNotLiteral", { parents: ["Object"] });
+  setType("RootedPropertyList", { parents: ["ObjectNotLiteral"] });
+  setType("ResourceOrVar", { parents: ["ObjectNotLiteral", "GraphTermOrVar"] });
   setType("StringExpr", { parents: ["StringExprOrLiteral"], aliases: ["String"] });
   setType("NumberExpr", { parents: ["Expr"], aliases: ["Number"] });
   setType("BooleanExpr", { parents: ["Expr"], aliases: ["Boolean"] });
