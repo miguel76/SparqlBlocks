@@ -23,5 +23,6 @@
     "clipboard": "^1.5.10",
     "primer-css": "^3.0.1",
     "google-blockly": "*"
-  }
+  },
+  "version": "0.3.0"
 }
