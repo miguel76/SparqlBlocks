@@ -23,7 +23,7 @@
 var _ = require('underscore'),
     Types = require('../core/types.js'),
     Blocks = require('../core/blocks.js'),
-    Msg = require('../msg/en.json');
+    Msg = require('../core/msg.js');
 
 var typeExt = Types.getExtension;
 

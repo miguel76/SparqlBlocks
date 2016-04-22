@@ -23,7 +23,7 @@ var Blockly = require('Blockly'),
     Types = require('../core/types.js'),
     Blocks = require('../core/blocks.js'),
     FieldTable = require('../core/field_table.js'),
-    Msg = require('../msg/en.json');
+    Msg = require('../core/msg.js');
 
   var typeExt = Types.getExtension;
 

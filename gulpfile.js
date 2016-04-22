@@ -4,8 +4,9 @@ var gulp = require('gulp'), 
     bower = require('gulp-bower');
 
 var config = {
-  sassPath: './src/css',
-  bowerDir: './bower_components' 
+  sassPath: './resources/scss',
+  bowerDir: './bower_components' ,
+  flaticonDir: './resources/flaticon' ,
 };
 
 gulp.task('bower', function() { 
@@ -19,25 +20,31 @@ gulp.task('bower', function() { 
 //         .pipe(gulp.dest('./public/fonts')); 
 // });
 
-gulp.task('octicons', function() { 
-    return gulp.src(config.bowerDir + '/primer/fonts/**.*') 
-        .pipe(gulp.dest('./public/fonts')); 
+// gulp.task('octicons', function() { 
+//     return gulp.src(config.bowerDir + '/primer/fonts/**.*') 
+//         .pipe(gulp.dest('./public/fonts')); 
+// });
+
+gulp.task('flaticon', function() { 
+    return gulp.src(flaticonDir + '/**.*') 
+              .pipe(gulp.dest('./dist/fonts')); 
 });
 
+gulp.task('icons', ['flaticon']);
+
 gulp.task('css', function() { 
-    return gulp.src(config.sassPath + '/style.scss')
-         .pipe(sass({
-             style: 'compressed',
-             loadPath: [
-                 config.sassPath //,
+  return gulp.src(config.sassPath + '/style.scss')
+              .pipe(sass({
+                 style: 'compressed',
+                 loadPath: [
+                   config.sassPath ,
+                  config.bowerDir
 //                 config.bowerDir + '/bootstrap-sass-official/assets/stylesheets',
 //                 config.bowerDir + '/fontawesome/scss',
-             ]
-         }) 
-            .on("error", notify.onError(function (error) {
-                 return "Error: " + error.message;
-             }))) 
-         .pipe(gulp.dest('./public/css')); 
+                 ]
+              }) .on("error", notify.onError(function (error) {
+                return "Error: " + error.message;
+              }))) .pipe(gulp.dest('./dist/css')); 
 });
 
 // Rerun the task when a file changes
