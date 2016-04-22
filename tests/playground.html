@@ -499,7 +499,7 @@ function start() {
         }
       ];
 
-      SparqlBlocks.trackingGuide = SparqlBlocks.Guide.track(
+      workspace.trackingGuide = SparqlBlocks.Guide.track(
         workspace,
         _.extend({ stateList: guideStateList },
           $.isNumeric(sParameters["startGuideFrom"]) ?

@@ -3,3 +3,4 @@
 *.komodoproject
 *_compressed.js
 *_uncompressed.js
+bower_components
