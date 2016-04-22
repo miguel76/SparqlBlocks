@@ -1,5 +1,15 @@
+/*!
+ * Styles for SparqlBlocks
+ * http://sparqlblocks.org
+ *
+ * Released under MIT license.
+ * Miguel Ceriani <miguel.ceriani@gmail.com> (miguel76.github.io)
+ */
+
+$octicons-font-path: "./fonts";
+
 @import "primer-css/scss/primer";
-/* don't if I need to explicity import octicons */
+@import "octicons/octicons/octicons";
 @import "dialog";
 @import "flaticon";
 

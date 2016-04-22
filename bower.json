@@ -22,7 +22,8 @@
     "save-as": "*",
     "clipboard": "^1.5.10",
     "primer-css": "^3.0.1",
-    "google-blockly": "*"
+    "google-blockly": "*",
+    "octicons": "^3.5.0"
   },
   "version": "0.3.0"
 }

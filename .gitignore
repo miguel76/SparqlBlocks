@@ -5,3 +5,4 @@
 *_uncompressed.js
 bower_components
 node_modules
+.sass-cache
