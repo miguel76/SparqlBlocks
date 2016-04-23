@@ -23,7 +23,7 @@
 var SparqlGen = require('../generators/sparql.js'),
     Blockly = require('Blockly'),
     WorkspaceActions = require('WorkspaceActions.js'),
-    msg = require('../msg/en.js'),
+    msg = require('./msg.js'),
     FieldTable = require('field_table.js'),
     $ = require('jquery');
 

@@ -25,39 +25,29 @@ var Blockly = require('Blockly'),
     FieldTable = require('../core/field_table.js'),
     Msg = require('../core/msg.js');
 
-  var typeExt = Types.getExtension;
+var typeExt = Types.getExtension;
 
-  Blocks.table.HUE = 330;
+var HUE = 330;
 
-  Blocks.block('sparql_smallTable', {
-    /**
-     * Block for text value.
-     * @this Blockly.Block
-     */
-    init: function() {
-      this.setColour(Blocks.table.HUE);
-      this.tableInput = this.appendDummyInput("TABLEINPUT").appendField("","TABLE");
-      this.setPreviousStatement(true, typeExt('Table'));
-      // this.setOutput(true, 'LiteralString');
-      // this.setTooltip(Msg.TEXT_TOOLTIP);
-    },
-    setData: function(data) {
-      this.setTable(new FieldTable(data));
-    },
-    setTable: function(newTable) {
-      this.tableInput.removeField("TABLE");
-      this.tableInput.appendField(newTable, "TABLE");
-    }
-
-
-  });
-
-  Blocks.table.loadTable = function(data) {
-    var newBlock = workspace.newBlock('sparql_smallTable');
-    newBlock.setData(data);
-    newBlock.initSvg();
-    newBlock.render();
-    return newBlock;
+Blocks.block('sparql_smallTable', {
+  /**
+   * Block for text value.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.setColour(HUE);
+    this.tableInput = this.appendDummyInput("TABLEINPUT").appendField("","TABLE");
+    this.setPreviousStatement(true, typeExt('Table'));
+    // this.setOutput(true, 'LiteralString');
+    // this.setTooltip(Msg.TEXT_TOOLTIP);
+  },
+  setData: function(data) {
+    this.setTable(new FieldTable(data));
+  },
+  setTable: function(newTable) {
+    this.tableInput.removeField("TABLE");
+    this.tableInput.appendField(newTable, "TABLE");
   }
 
-}) ();
+
+});

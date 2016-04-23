@@ -56,6 +56,5 @@ exports = {
   Storage: Storage,
   Guide: Guide,
   Track: Track,
-  WorkspaceActions: WorkspaceActions,
-  version = "0.2.0"
+  WorkspaceActions: WorkspaceActions
 };
