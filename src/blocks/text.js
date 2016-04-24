@@ -27,7 +27,7 @@ var _ = require('underscore'),
 
 var typeExt = Types.getExtension;
 
-Blocks.text.HUE = 160;
+var HUE = 160;
 
 Blocks.block('sparql_text', {
   /**
@@ -36,7 +36,7 @@ Blocks.block('sparql_text', {
    */
   init: function() {
     this.setHelpUrl(Blockly.Msg.TEXT_TEXT_HELPURL);
-    this.setColour(Blocks.text.HUE);
+    this.setColour(HUE);
     this.appendDummyInput()
         .appendField(this.newQuote_(true))
         .appendField(new Blockly.FieldTextInput(''), 'TEXT')
@@ -68,7 +68,7 @@ Blocks.block('sparql_text_with_lang', {
    */
   init: function() {
     this.setHelpUrl(Blockly.Msg.TEXT_TEXT_HELPURL);
-    this.setColour(Blocks.text.HUE);
+    this.setColour(HUE);
     this.appendDummyInput()
         .appendField(this.newQuote_(true))
         .appendField(new Blockly.FieldTextInput(''), 'TEXT')
@@ -102,7 +102,7 @@ Blocks.block('sparql_text_with_type_pref', {
    */
   init: function() {
     this.setHelpUrl(Blockly.Msg.TEXT_TEXT_HELPURL);
-    this.setColour(Blocks.text.HUE);
+    this.setColour(HUE);
     this.appendDummyInput()
         .appendField(this.newQuote_(true))
         .appendField(new Blockly.FieldTextInput(''), 'TEXT')
@@ -138,7 +138,7 @@ Blocks.block('sparql_text_with_type_iri', {
    */
   init: function() {
     this.setHelpUrl(Blockly.Msg.TEXT_TEXT_HELPURL);
-    this.setColour(Blocks.text.HUE);
+    this.setColour(HUE);
     this.appendDummyInput()
         .appendField(this.newQuote_(true))
         .appendField(new Blockly.FieldTextInput(''), 'TEXT')
@@ -175,7 +175,7 @@ Blocks.block('sparql_text_join', {
    */
   init: function() {
     this.setHelpUrl(Blockly.Msg.TEXT_JOIN_HELPURL);
-    this.setColour(Blocks.text.HUE);
+    this.setColour(HUE);
     this.itemCount_ = 2;
     this.updateShape_();
     this.setOutput(true, 'StringExpr');
@@ -300,7 +300,7 @@ Blocks.block('sparql_text_create_join_container', {
    * @this Blockly.Block
    */
   init: function() {
-    this.setColour(Blocks.text.HUE);
+    this.setColour(HUE);
     this.appendDummyInput()
         .appendField(Blockly.Msg.TEXT_CREATE_JOIN_TITLE_JOIN);
     this.appendStatementInput('STACK');
@@ -315,7 +315,7 @@ Blocks.block('sparql_text_create_join_item', {
    * @this Blockly.Block
    */
   init: function() {
-    this.setColour(Blocks.text.HUE);
+    this.setColour(HUE);
     this.appendDummyInput()
         .appendField(Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TITLE_ITEM);
     this.setPreviousStatement(true);
@@ -332,7 +332,7 @@ Blocks.block('sparql_text_append', {
    */
   init: function() {
     this.setHelpUrl(Blockly.Msg.TEXT_APPEND_HELPURL);
-    this.setColour(Blocks.text.HUE);
+    this.setColour(HUE);
     this.appendValueInput('TEXT')
         .appendField(Blockly.Msg.TEXT_APPEND_TO)
         .appendField(new Blockly.FieldVariable(
@@ -385,7 +385,7 @@ Blocks.block('sparql_text_length', {
         }
       ],
       "output": 'NumberExpr',
-      "colour": Blocks.text.HUE,
+      "colour": HUE,
       "tooltip": Blockly.Msg.TEXT_LENGTH_TOOLTIP,
       "helpUrl": Blockly.Msg.TEXT_LENGTH_HELPURL
     });
@@ -408,7 +408,7 @@ Blocks.block('sparql_text_isEmpty', {
         }
       ],
       "output": 'BooleanExpr',
-      "colour": Blocks.text.HUE,
+      "colour": HUE,
       "tooltip": Blockly.Msg.TEXT_ISEMPTY_TOOLTIP,
       "helpUrl": Blockly.Msg.TEXT_ISEMPTY_HELPURL
     });
@@ -425,7 +425,7 @@ Blocks.block('sparql_text_indexOf', {
         [[Blockly.Msg.TEXT_INDEXOF_OPERATOR_FIRST, 'FIRST'],
          [Blockly.Msg.TEXT_INDEXOF_OPERATOR_LAST, 'LAST']];
     this.setHelpUrl(Blockly.Msg.TEXT_INDEXOF_HELPURL);
-    this.setColour(Blocks.text.HUE);
+    this.setColour(HUE);
     this.setOutput(true, 'NumberExpr');
     this.appendValueInput('VALUE')
         .setCheck(typeExt('StringExpr'))
@@ -448,7 +448,7 @@ Blocks.block('sparql_text_contains', {
    */
   init: function() {
     this.setHelpUrl("http://www.w3.org/TR/sparql11-query/#func-contains");
-    this.setColour(Blocks.text.HUE);
+    this.setColour(HUE);
     this.setOutput(true, 'BooleanExpr');
     // this.appendValueInput('FIND')
     //     .setCheck(typeExt('StringExpr'));
@@ -473,7 +473,7 @@ Blocks.block('sparql_text_regex', {
    */
   init: function() {
     this.setHelpUrl("http://www.w3.org/TR/sparql11-query/#func-regex");
-    this.setColour(Blocks.text.HUE);
+    this.setColour(HUE);
     this.setOutput(true, 'BooleanExpr');
     this.appendValueInput('FIND')
         .setCheck(typeExt('StringExpr'))
@@ -493,7 +493,7 @@ Blocks.block('sparql_text_lang', {
    */
   init: function() {
     this.setHelpUrl("http://www.w3.org/TR/sparql11-query/#func-lang");
-    this.setColour(Blocks.text.HUE);
+    this.setColour(HUE);
     this.setOutput(true, 'BooleanExpr');
     this.appendValueInput('VALUE')
         .setCheck(typeExt('StringExpr'))
@@ -519,7 +519,7 @@ Blocks.block('sparql_text_charAt', {
          [Blockly.Msg.TEXT_CHARAT_LAST, 'LAST'],
          [Blockly.Msg.TEXT_CHARAT_RANDOM, 'RANDOM']];
     this.setHelpUrl(Blockly.Msg.TEXT_CHARAT_HELPURL);
-    this.setColour(Blocks.text.HUE);
+    this.setColour(HUE);
     this.setOutput(true, 'StringExpr');
     this.appendValueInput('VALUE')
         .setCheck(typeExt('StringExpr'))
@@ -607,7 +607,7 @@ Blocks.block('sparql_text_getSubstring', {
          [Blockly.Msg.TEXT_GET_SUBSTRING_END_FROM_END, 'FROM_END'],
          [Blockly.Msg.TEXT_GET_SUBSTRING_END_LAST, 'LAST']];
     this.setHelpUrl(Blockly.Msg.TEXT_GET_SUBSTRING_HELPURL);
-    this.setColour(Blocks.text.HUE);
+    this.setColour(HUE);
     this.appendValueInput('STRING')
         .setCheck(typeExt('StringExpr'))
         .appendField(Blockly.Msg.TEXT_GET_SUBSTRING_INPUT_IN_TEXT);
@@ -708,7 +708,7 @@ Blocks.block('sparql_text_changeCase', {
          [Blockly.Msg.TEXT_CHANGECASE_OPERATOR_LOWERCASE, 'LOWERCASE'],
          [Blockly.Msg.TEXT_CHANGECASE_OPERATOR_TITLECASE, 'TITLECASE']];
     this.setHelpUrl(Blockly.Msg.TEXT_CHANGECASE_HELPURL);
-    this.setColour(Blocks.text.HUE);
+    this.setColour(HUE);
     this.appendValueInput('TEXT')
         .setCheck(typeExt('StringExpr'))
         .appendField(new Blockly.FieldDropdown(OPERATORS), 'CASE');
@@ -728,7 +728,7 @@ Blocks.block('sparql_text_trim', {
          [Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT, 'LEFT'],
          [Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT, 'RIGHT']];
     this.setHelpUrl(Blockly.Msg.TEXT_TRIM_HELPURL);
-    this.setColour(Blocks.text.HUE);
+    this.setColour(HUE);
     this.appendValueInput('TEXT')
         .setCheck(typeExt('StringExpr'))
         .appendField(new Blockly.FieldDropdown(OPERATORS), 'MODE');
@@ -750,7 +750,7 @@ Blocks.block('sparql_hash', {
          ['SHA384', 'SHA384'],
          ['SHA512', 'SHA512']];
     this.setHelpUrl('http://www.w3.org/TR/sparql11-query/#func-hash');
-    this.setColour(Blocks.text.HUE);
+    this.setColour(HUE);
     this.appendValueInput('TEXT')
         .setCheck(typeExt('StringExprOrLiteral'))
         .appendField(new Blockly.FieldDropdown(TYPES), 'TYPE')

@@ -66,7 +66,7 @@ $.getJSON( "../prefix.cc/all.file.json", function( data ) {
   });
 });
 
-exports = {
+module.exports = {
   lookForPrefix: lookForPrefix_,
   lookForIri: lookForIri_
 };

@@ -9,7 +9,7 @@ var Blockly = require('blockly');
 var defaultLimit = 5;
 var maxLimit = 50;
 
-exports = {
+module.exports = {
   init: function() {
       this.orderFieldCount_ = 1;
 

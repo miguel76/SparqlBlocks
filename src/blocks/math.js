@@ -27,7 +27,7 @@ var _ = require('underscore'),
 
 var typeExt = Types.getExtension;
 
-Blocks.math.HUE = 230;
+var HUE = 230;
 
 Blocks.block('sparql_math_number', {
   /**
@@ -36,7 +36,7 @@ Blocks.block('sparql_math_number', {
    */
   init: function() {
     this.setHelpUrl(Blockly.Msg.MATH_NUMBER_HELPURL);
-    this.setColour(Blocks.math.HUE);
+    this.setColour(HUE);
     this.appendDummyInput()
         .appendField(new Blockly.FieldTextInput('0',
         Blockly.FieldTextInput.numberValidator), 'NUM');
@@ -57,7 +57,7 @@ Blocks.block('sparql_math_arithmetic', {
          [Blockly.Msg.MATH_MULTIPLICATION_SYMBOL, 'MULTIPLY'],
          [Blockly.Msg.MATH_DIVISION_SYMBOL, 'DIVIDE']];
     this.setHelpUrl(Blockly.Msg.MATH_ARITHMETIC_HELPURL);
-    this.setColour(Blocks.math.HUE);
+    this.setColour(HUE);
     this.setOutput(true, 'NumberExpr');
     this.appendValueInput('A')
         .setCheck(typeExt('NumberExpr'));
@@ -90,7 +90,7 @@ Blocks.block('sparql_math_single', {
         [[Blockly.Msg.MATH_SINGLE_OP_ABSOLUTE, 'ABS'],
          ['-', 'NEG']];
     this.setHelpUrl(Blockly.Msg.MATH_SINGLE_HELPURL);
-    this.setColour(Blocks.math.HUE);
+    this.setColour(HUE);
     this.setOutput(true, 'NumberExpr');
     this.appendValueInput('NUM')
      .setCheck(typeExt('NumberExpr'))
@@ -123,7 +123,7 @@ Blocks.block('sparql_math_number_property', {
          [Blockly.Msg.MATH_IS_POSITIVE, 'POSITIVE'],
          [Blockly.Msg.MATH_IS_NEGATIVE, 'NEGATIVE'],
          [Blockly.Msg.MATH_IS_DIVISIBLE_BY, 'DIVISIBLE_BY']];
-    this.setColour(Blocks.math.HUE);
+    this.setColour(HUE);
     this.appendValueInput('NUMBER_TO_CHECK')
         .setCheck(typeExt('NumberExpr'));
     var dropdown = new Blockly.FieldDropdown(PROPERTIES, function(option) {
@@ -187,7 +187,7 @@ Blocks.block('sparql_math_round', {
          [Blockly.Msg.MATH_ROUND_OPERATOR_ROUNDUP, 'ROUNDUP'],
          [Blockly.Msg.MATH_ROUND_OPERATOR_ROUNDDOWN, 'ROUNDDOWN']];
     this.setHelpUrl(Blockly.Msg.MATH_ROUND_HELPURL);
-    this.setColour(Blocks.math.HUE);
+    this.setColour(HUE);
     this.setOutput(true, 'NumberExpr');
     this.appendValueInput('NUM')
         .setCheck(typeExt('NumberExpr'))
@@ -218,7 +218,7 @@ Blocks.block('sparql_math_modulo', {
       ],
       "inputsInline": true,
       "output": "NumberExpr",
-      "colour": Blocks.math.HUE,
+      "colour": HUE,
       "tooltip": Blockly.Msg.MATH_MODULO_TOOLTIP,
       "helpUrl": Blockly.Msg.MATH_MODULO_HELPURL
     });
@@ -252,7 +252,7 @@ Blocks.block('sparql_math_constrain', {
       ],
       "inputsInline": true,
       "output": "NumberExpr",
-      "colour": Blocks.math.HUE,
+      "colour": HUE,
       "tooltip": Blockly.Msg.MATH_CONSTRAIN_TOOLTIP,
       "helpUrl": Blockly.Msg.MATH_CONSTRAIN_HELPURL
     });
@@ -281,7 +281,7 @@ Blocks.block('sparql_math_random_int', {
       ],
       "inputsInline": true,
       "output": "NumberExpr",
-      "colour": Blocks.math.HUE,
+      "colour": HUE,
       "tooltip": Blockly.Msg.MATH_RANDOM_INT_TOOLTIP,
       "helpUrl": Blockly.Msg.MATH_RANDOM_INT_HELPURL
     });
@@ -295,7 +295,7 @@ Blocks.block('sparql_math_random_float', {
    */
   init: function() {
     this.setHelpUrl(Blockly.Msg.MATH_RANDOM_FLOAT_HELPURL);
-    this.setColour(Blocks.math.HUE);
+    this.setColour(HUE);
     this.setOutput(true, 'NumberExpr');
     this.appendDummyInput()
         .appendField(Blockly.Msg.MATH_RANDOM_FLOAT_TITLE_RANDOM);

@@ -1,34 +1,22 @@
 var gulp = require('gulp'), 
-    sass = require('gulp-ruby-sass') 
-    notify = require("gulp-notify") 
-    bower = require('gulp-bower'),
-    sass = require('gulp-ruby-sass');
+    sass = require('gulp-ruby-sass'), 
+    notify = require("gulp-notify") ;
 
 var config = {
   sassPath: './resources/scss',
-  bowerDir: './bower_components' ,
+  nodeDir: './node_modules' ,
   flaticonDir: './resources/flaticon' ,
+  cssDistDir: './dist/css'
 };
 
-gulp.task('bower', function() { 
-    return bower()
-         .pipe(gulp.dest(config.bowerDir)) 
-});
-
-// for FontAwesome, currently not used
-// gulp.task('icons', function() { 
-//     return gulp.src(config.bowerDir + '/fontawesome/fonts/**.*') 
-//         .pipe(gulp.dest('./public/fonts')); 
-// });
-
 gulp.task('octicons', function() { 
-    return gulp.src(config.bowerDir + '/octicons/octicons/@(*.eot|*.svg|*.ttf|*.woff)')
-              .pipe(gulp.dest('./dist/css/fonts'));
+    return gulp.src(config.nodeDir + '/octicons/octicons/@(*.eot|*.svg|*.ttf|*.woff)')
+              .pipe(gulp.dest(config.cssDistDir + '/fonts'));
 });
 
 gulp.task('flaticon', function() { 
     return gulp.src(config.flaticonDir + '/**.*') 
-              .pipe(gulp.dest('./dist/css/fonts')); 
+              .pipe(gulp.dest(config.cssDistDir + '/fonts')); 
 });
 
 gulp.task('icons', ['flaticon', 'octicons']);
@@ -38,12 +26,13 @@ gulp.task('css', function() { 
                  style: 'compressed',
                  loadPath: [
                    config.sassPath ,
-                  config.bowerDir
+                  config.nodeDir
                  ]
               }) .on("error", notify.onError(function (error) {
                 return "Error: " + error.message;
-              })).pipe(gulp.dest('./dist/css')); 
+              })).pipe(gulp.dest(config.cssDistDir)); 
 });
+
 
 // Rerun the task when a file changes
  gulp.task('watch-style', function() {
@@ -51,4 +40,4 @@ gulp.task('css', function() { 
   gulp.watch(config.flaticonDir + '/**/*.*', ['flaticon']); 
 });
 
-  gulp.task('default', ['bower', 'icons', 'css']);
+  gulp.task('makeStyle', ['icons', 'css']);

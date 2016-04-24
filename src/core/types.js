@@ -87,7 +87,7 @@ setType("LiteralString", { parents: ["Literal", "StringExpr" ] });
 setType("LiteralNumber", { parents: ["Literal", "NumberExpr" ] });
 setType("LiteralBoolean", { parents: ["Literal", "BooleanExpr" ] });
 
-exports = {
+module.exports = {
   setType: setType,
   getExtension: getExtension
 };

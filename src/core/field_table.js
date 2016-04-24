@@ -33,7 +33,7 @@ var JsonToBlocks = require('./jsonToBlocks.js');
  * @extends {FieldTable}
  * @constructor
  */
-FieldTable = function(data, opt_validator) {
+var FieldTable = function(data, opt_validator) {
   this.superClass_.constructor.call(this, '');
   this.setValidator(opt_validator);
   // Set the initial state.
@@ -49,7 +49,7 @@ FieldTable = function(data, opt_validator) {
     return this.prototype.createBlockFunc_.call(thisFieldTable, block);
   }
 };
-goog.inherits(FieldTable, Blockly.Field);
+FieldTable.prototype = Blockly.Field;
 
 /**
  * Editable fields are saved by the XML renderer, non-editable fields are not.

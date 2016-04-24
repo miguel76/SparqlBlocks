@@ -295,7 +295,7 @@ var checkWorkspace = function(workspace, checkStructure) {
   return null;
 };
 
-exports = {
+module.exports = {
   track: track_,
   check: checkWorkspace,
   replaceInLineBlockly: replaceInLineBlockly_

@@ -60,6 +60,6 @@ var track_ = function(workspace, options) {
   });
 }
 
-exports = {
+module.exports = {
   track: track_
 };

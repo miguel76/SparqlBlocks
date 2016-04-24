@@ -25,6 +25,8 @@
 
 var Blockly = require('blockly');
 
+var BlocklyDialogs = {};
+
 /**
  * Is the dialog currently onscreen?
  * @private
@@ -340,4 +342,4 @@ BlocklyDialogs.stopDialogKeyDown = function() {
 window['BlocklyDialogs'] = BlocklyDialogs;
 BlocklyDialogs['hideDialog'] = BlocklyDialogs.hideDialog;
 
-exports = BlocklyDialogs;
+module.exports = BlocklyDialogs;

@@ -25,7 +25,7 @@ var _ = require('underscore'),
     Blocks = require('../core/blocks.js'),
     Msg = require('../core/msg.js');
 
-Blocks.variables.HUE = 330;
+var HUE = 330;
 
 Blocks.block('sparql_variable', {
   /**
@@ -36,7 +36,7 @@ Blocks.block('sparql_variable', {
 
     // this.setHelpUrl(Blockly.Msg.VARIABLES_GET_HELPURL);
     this.setHelpUrl(Blockly.Msg.VARIABLES_GET_HELPURL);
-    this.setColour(Blocks.variables.HUE);
+    this.setColour(HUE);
     this.appendDummyInput()
         .appendField(new Blockly.FieldVariable(), "VAR");
     this.setOutput(true, "Var");

@@ -1,1 +1,1 @@
-exports = require('../../resources/msg/json/en.json');
+module.exports = require('../../resources/msg/json/en.json');

@@ -54,7 +54,7 @@ var insertOptionBeforeHelp_ = function (options, newOption) {
   }
 };
 
-exports = {
+module.exports = {
   block: block_,
   insertOptionBeforeHelp: insertOptionBeforeHelp_
 };

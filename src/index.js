@@ -18,7 +18,7 @@
  * @fileoverview Core JavaScript library for SparqlBlocks.
  * @author fraser@google.com (Neil Fraser), miguel.ceriani@gmail.com (Miguel Ceriani)
  */
-'use strict';
+// 'use strict';
 
 require('./shims/');
 
@@ -52,10 +52,16 @@ require('./blocks/exec.js');
 require('./blocks/table.js');
 require('./blocks/test.js');
 
-exports = {
+module.exports = {
   Storage: Storage,
   Guide: Guide,
   Track: Track,
   WorkspaceActions: WorkspaceActions,
   BlocklyDialogs: BlocklyDialogs
 };
+
+// SparqlBlocks.Storage = Storage;
+// SparqlBlocks.Guide = Guide;
+// SparqlBlocks.Track = Track;
+// SparqlBlocks.WorkspaceActions = WorkspaceActions;
+// SparqlBlocks.BlocklyDialogs = BlocklyDialogs;

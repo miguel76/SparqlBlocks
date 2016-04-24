@@ -23,7 +23,8 @@
 var Blockly = require('blockly'),
     $ = require('jquery'),
     TestBlocks = require('../blocks/test.js'),
-    bowerJson = require('../../bower.json');
+    packageJson = require('../../package.json'),
+    Clipboard = require('clipboard');
 
 var HTTPREQUEST_ERROR = 'There was a problem with the request.\n';
 var LINK_ALERT = 'Share your blocks with this link:\n\n%1';
@@ -83,7 +84,7 @@ var linkGist = function(opt_workspace, callback) {
   var metaData = _.extend(
     {
       generator: "SparqlBlocks",
-      version: bowerJson.version,
+      version: packageJson.version,
       baseURI: location.href,
       timestamp: $.now(),
       workspaceXmlFile: "workspace.xml"
@@ -408,7 +409,7 @@ var clearAlert = function() {
 
 
 
-exports = {
+module.exports = {
   backupOnUnload: backupOnUnload,
   restoreBlocks: restoreBlocks,
   linkGist: linkGist,

@@ -37,6 +37,6 @@ var execute_ = function(action, thisArg) {
   }
 }
 
-exports = {
+module.exports = {
   execute: execute_
 };

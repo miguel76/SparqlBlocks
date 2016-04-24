@@ -19,16 +19,13 @@
  */
 'use strict';
 
-goog.provide('Sparql');
-
-// goog.require('Blockly.Generator');
-
+var Blockly = require('blockly');
 
 /**
  * Sparql code generator.
  * @type !Blockly.Generator
  */
- Sparql = new Blockly.Generator('Sparql');
+var Sparql = new Blockly.Generator('Sparql');
 
 /**
  * List of illegal variable names.
@@ -176,3 +173,5 @@ Sparql.scrub_ = function(block, code) {
   var nextCode = Sparql.blockToCode(nextBlock);
   return commentCode + code + nextCode;
 };
+
+module.exports = Sparql;

@@ -221,7 +221,7 @@ var setAsSelfDuplicating_ = function(valueBlock, workspace) {
   }
 };
 
-exports = {
+module.exports = {
   blockFromValue: blockFromValue_,
   blockFromVar: blockFromVar_,
   selfDuplicatingBlockFromValue: selfDuplicatingBlockFromValue_,

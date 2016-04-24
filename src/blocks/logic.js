@@ -30,7 +30,7 @@ var typeContentExt = function(typeStr) {
   return typeExt(typeStr == "Var" ? "Expr" : typeStr);
 }
 
-Blocks.logic.HUE = 210;
+var HUE = 210;
 
 Blocks.block('sparql_logic_compare', {
   /**
@@ -54,7 +54,7 @@ Blocks.block('sparql_logic_compare', {
           ['\u2265', 'GTE']
         ];
     this.setHelpUrl(Blockly.Msg.LOGIC_COMPARE_HELPURL);
-    this.setColour(Blocks.logic.HUE);
+    this.setColour(HUE);
     this.setOutput(true, 'BooleanExpr');
     this.appendValueInput('A');
     this.appendValueInput('B')
@@ -118,7 +118,7 @@ Blocks.block('sparql_logic_operation', {
         [[Blockly.Msg.LOGIC_OPERATION_AND, 'AND'],
          [Blockly.Msg.LOGIC_OPERATION_OR, 'OR']];
     this.setHelpUrl(Blockly.Msg.LOGIC_OPERATION_HELPURL);
-    this.setColour(Blocks.logic.HUE);
+    this.setColour(HUE);
     this.setOutput(true, 'BooleanExpr');
     this.appendValueInput('A')
         .setCheck(typeExt('BooleanExpr'));
@@ -156,7 +156,7 @@ Blocks.block('sparql_logic_negate', {
         }
       ],
       "output": "BooleanExpr",
-      "colour": Blocks.logic.HUE,
+      "colour": HUE,
       "tooltip": Blockly.Msg.LOGIC_NEGATE_TOOLTIP,
       "helpUrl": Blockly.Msg.LOGIC_NEGATE_HELPURL
     });
@@ -173,7 +173,7 @@ Blocks.block('sparql_logic_boolean', {
         [[Blockly.Msg.LOGIC_BOOLEAN_TRUE, 'TRUE'],
          [Blockly.Msg.LOGIC_BOOLEAN_FALSE, 'FALSE']];
     this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
-    this.setColour(Blocks.logic.HUE);
+    this.setColour(HUE);
     this.setOutput(true, 'LiteralBoolean');
     this.appendDummyInput()
         .appendField(new Blockly.FieldDropdown(BOOLEANS), 'BOOL');
@@ -188,7 +188,7 @@ Blocks.block('sparql_logic_null', {
    */
   init: function() {
     this.setHelpUrl(Blockly.Msg.LOGIC_NULL_HELPURL);
-    this.setColour(Blocks.logic.HUE);
+    this.setColour(HUE);
     this.setOutput(true);
     this.appendDummyInput()
         .appendField(Blockly.Msg.LOGIC_NULL);
@@ -203,7 +203,7 @@ Blocks.block('sparql_logic_ternary', {
    */
   init: function() {
     this.setHelpUrl(Blockly.Msg.LOGIC_TERNARY_HELPURL);
-    this.setColour(Blocks.logic.HUE);
+    this.setColour(HUE);
     this.appendValueInput('IF')
         .setCheck(typeExt('BooleanExpr'))
         .appendField(Blockly.Msg.LOGIC_TERNARY_CONDITION);
@@ -254,7 +254,7 @@ Blocks.block('sparql_exists', {
    */
   init: function() {
     this.setHelpUrl('http://www.w3.org/TR/sparql11-query/#neg-exists');
-    this.setColour(Blocks.logic.HUE);
+    this.setColour(HUE);
     this.setOutput(true,'BooleanExpr');
     this.appendStatementInput("OP")
         .setCheck("TriplesBlock")
@@ -270,7 +270,7 @@ Blocks.block('sparql_not_exists', {
    */
   init: function() {
     this.setHelpUrl('http://www.w3.org/TR/sparql11-query/#neg-notexists');
-    this.setColour(Blocks.logic.HUE);
+    this.setColour(HUE);
     this.setOutput(true,'BooleanExpr');
     this.appendStatementInput("OP")
         .setCheck("TriplesBlock")

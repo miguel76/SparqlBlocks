@@ -156,7 +156,7 @@ var blockExec_ = function(block, queryBlock, resultsHolder) {
   blockExecQuery_(block, queryStr, resultsHolder);
 }
 
-exports = {
+module.exports = {
   sparqlExecAndPublish: sparqlExecAndPublish_,
   sparqlExecAndAlert: sparqlExecAndAlert_,
   sparqlExec: sparqlExec_,
