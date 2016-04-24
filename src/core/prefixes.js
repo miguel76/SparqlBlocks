@@ -57,7 +57,7 @@ var lookForIri_ = function(iri) {
   }
 }
 
-$.getJSON( "../prefix.cc/all.file.json", function( data ) {
+$.getJSON( "../json/prefix.cc.json", function( data ) {
   prefixMap_ = data;
   Object.keys(data).forEach( function(prefix) {
     if (!reverseMap_[data[prefix]]) {

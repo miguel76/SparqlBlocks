@@ -13,6 +13,7 @@ var fs = require('fs'),
     exposify = require('exposify');
 
 require('./blockly.js');
+require('./json.js');
 
 var config = {
   nodeDir: './node_modules' ,
@@ -51,4 +52,4 @@ gulp.task('browserify', function () {
         .pipe(gulp.dest('./dist/js/'));
 });
 
-gulp.task('makeJs', ['buildBlockly', 'browserify']);
+gulp.task('makeJs', ['buildBlockly', 'browserify', 'json']);

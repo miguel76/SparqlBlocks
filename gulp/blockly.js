@@ -5,6 +5,7 @@ var gulp = require('gulp'),
     insert = require('gulp-insert');
 
 var blocklyDir = "./node_modules/blockly";
+var mediaDistDir = "./dist/media";
 
 gulp.task('blockly', function() {
   return gulp.src(blocklyDir + "/blockly_compressed.js")
@@ -14,11 +15,16 @@ gulp.task('blockly', function() {
       .pipe(gulp.dest('lib'));
 });
 
-gulp.task('en', function() {
+gulp.task('blocklyMsgEn', function() {
   return gulp.src(blocklyDir + '/msg/js/en.js')
       .pipe(replace(/goog\.[^\n]+/g, ''))
       .pipe(insert.wrap('var Blockly = {}; Blockly.Msg={};  module.exports = function(){ ', 'return Blockly.Msg;}'))
       .pipe(gulp.dest('lib/i18n/'));
 });
 
-gulp.task('buildBlockly', ['blockly', 'en']);
+gulp.task('blocklyMedia', function() { 
+    return gulp.src(blocklyDir + '/media/**.*') 
+              .pipe(gulp.dest(mediaDistDir)); 
+});
+
+gulp.task('buildBlockly', ['blockly', 'blocklyMsgEn', 'blocklyMedia']);
