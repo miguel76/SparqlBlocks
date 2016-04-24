@@ -20,7 +20,7 @@
  */
 'use strict';
 
-var Blockly = require('Blockly');
+var Blockly = require('blockly');
 
 /**
  * By default there is no difference between the human-readable text and

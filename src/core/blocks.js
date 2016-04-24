@@ -20,7 +20,7 @@
  */
 'use strict';
 
-var Blockly = require("Blockly");
+var Blockly = require('blockly');
 
 var baseInit_ = function(callback) {
   return function() {

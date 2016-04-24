@@ -1,15 +1,24 @@
 var fs = require('fs'),
     gulp = require('gulp'), 
-    sass = require('gulp-ruby-sass') 
-    notify = require("gulp-notify") 
+    sass = require('gulp-ruby-sass') ,
+    notify = require("gulp-notify") ,
     bower = require('gulp-bower'),
     sass = require('gulp-ruby-sass'),
     browserify = require('browserify'),
-    uglify = require('gulp-uglify');
+    uglify = require('gulp-uglify'),
+    vfs = require('vinyl-fs'),
+    source = require('vinyl-source-stream'),
+    buffer = require('vinyl-buffer'),
+    gutil = require('gulp-util'),
+    sourcemaps = require('gulp-sourcemaps'),
+    aliasify = require('aliasify'),
+    pathmodify = require('pathmodify'),
+    closure = require('gulp-closure-compiler-service');
 
 var config = {
   sassPath: './resources/scss',
   bowerDir: './bower_components' ,
+  nodeDir: './node_modules' ,
   flaticonDir: './resources/flaticon' ,
   cssDistDir: "./dist/css",
   jsDistDir: "./dist",
@@ -28,7 +37,7 @@ gulp.task('bower', function() { 
 // });
 
 gulp.task('octicons', function() { 
-    return gulp.src(config.bowerDir + '/octicons/octicons/@(*.eot|*.svg|*.ttf|*.woff)')
+    return gulp.src(config.nodeDir + '/octicons/octicons/@(*.eot|*.svg|*.ttf|*.woff)')
               .pipe(gulp.dest(config.cssDistDir + '/fonts'));
 });
 
@@ -44,47 +53,33 @@ gulp.task('css', function() { 
                  style: 'compressed',
                  loadPath: [
                    config.sassPath ,
-                  config.bowerDir
+                  config.nodeDir
                  ]
               }) .on("error", notify.onError(function (error) {
                 return "Error: " + error.message;
               })).pipe(gulp.dest(config.cssDistDir)); 
 });
 
-gulp.task('browserify', function() {
-	var bundler = browserify({
-      entries: ["./src/index.js"],
-      standalone: "SparqlBlocks",
-      debug: true });
+gulp.task('javascript', function () {
+  // set up the browserify instance on a task basis
+  var b = browserify({
+    entries: './src/index.js',
+    debug: true
+  });
 
-	return bundler.bundle()
-                // .pipe(uglify())
-                var writeFileAtomicSync = require('write-file-atomic').sync
-                .pipe(fs.createWriteStream(config.jsDistDir + '/' + config.jsBundleName));
-
-		// // .transform({global:true}, shim)
-		// .bundle()
-		// .pipe(exorcist(config.bundleDir + '/' + config.bundleName + '.js.map'))
-		// .pipe(source(config.bundleName + '.js'))
-		// .pipe(gulp.dest(config.bundleDir))
-		// .pipe(rename(config.bundleName + '.min.js'))
-		// .pipe(buffer())
-		// .pipe(sourcemaps.init({
-		// 	loadMaps: true,
-		// 	debug:true,
-		// }))
-		// .pipe(uglify({
-		// 	compress: {
-		// 		//disable the compressions. Otherwise, breakpoints in minified files don't work (sourcemaped lines get offset w.r.t. original)
-		// 		//minified files does increase from 457 to 459 kb, but can live with that
-	  //           negate_iife: false,
-	  //           sequences: false
-	  //       }
-		// }))
-		// .pipe(sourcemaps.write('./'))
-		// .pipe(gulp.dest(config.bundleDir));
+  return b.plugin(pathmodify, {mods: [
+    pathmodify.mod.dir('../closure-library', '../google-closure-library')
+  ]})
+    .bundle()
+    .pipe(source('sparqlblocks.js'))
+    .pipe(buffer())
+    .pipe(sourcemaps.init({loadMaps: true}))
+        // Add transformation tasks to the pipeline here.
+        .pipe(uglify())
+        .on('error', gutil.log)
+    .pipe(sourcemaps.write('./'))
+    .pipe(gulp.dest('./dist/js/'));
 });
-
 
 // Rerun the task when a file changes
  gulp.task('watch', function() {
@@ -92,4 +87,4 @@ gulp.task('browserify', function() {
   gulp.watch(config.flaticonDir + '/**/*.*', ['flaticon']); 
 });
 
-  gulp.task('default', ['bower', 'icons', 'css', 'browserify']);
+  gulp.task('default', ['icons', 'css', 'javascript']);

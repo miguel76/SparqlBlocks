@@ -21,10 +21,10 @@
 'use strict';
 
 var SparqlGen = require('../generators/sparql.js'),
-    Blockly = require('Blockly'),
-    WorkspaceActions = require('WorkspaceActions.js'),
+    Blockly = require('blockly'),
+    WorkspaceActions = require('./workspaceActions.js'),
     msg = require('./msg.js'),
-    FieldTable = require('field_table.js'),
+    FieldTable = require('./field_table.js'),
     $ = require('jquery');
 
 // var corsProxy = "https://cors-anywhere.herokuapp.com/";

@@ -19,8 +19,8 @@
  */
 'use strict';
 
-var Prefixes = require('prefixes.js');
-var Blockly = require('Blockly');
+var Prefixes = require('./prefixes.js');
+var Blockly = require('blockly');
 
 var xsd_map_ = {};
 var xsd_ = function(localName) {

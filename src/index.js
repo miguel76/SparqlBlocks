@@ -20,13 +20,13 @@
  */
 'use strict';
 
-var BlocklyDialogs = require('BlocklyDialogs');
 require('./shims/');
 
 var Storage = require('./core/storage.js');
-var Guide = require('guide.js');
-var Track = require('track.js');
-var WorkspaceActions = require('workspaceActions.js');
+var Guide = require('./core/guide.js');
+var Track = require('./core/track.js');
+var BlocklyDialogs = require('./core/lib-dialogs');
+var WorkspaceActions = require('./core/workspaceActions.js');
 
 // require('./generators/sparql/');
 
@@ -56,5 +56,6 @@ exports = {
   Storage: Storage,
   Guide: Guide,
   Track: Track,
-  WorkspaceActions: WorkspaceActions
+  WorkspaceActions: WorkspaceActions,
+  BlocklyDialogs: BlocklyDialogs
 };

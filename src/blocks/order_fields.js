@@ -4,7 +4,7 @@
  */
 'use strict';
 
-var Blockly = require('Blockly');
+var Blockly = require('blockly');
 
 var defaultLimit = 5;
 var maxLimit = 50;

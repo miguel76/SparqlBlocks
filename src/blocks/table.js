@@ -19,7 +19,7 @@
  */
 'use strict';
 
-var Blockly = require('Blockly'),
+var Blockly = require('blockly'),
     Types = require('../core/types.js'),
     Blocks = require('../core/blocks.js'),
     FieldTable = require('../core/field_table.js'),

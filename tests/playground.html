@@ -9,7 +9,9 @@
 <link href='../css/main.css' rel='stylesheet' type='text/css'> -->
 <link rel="stylesheet" type="text/css" href="../dist/css/style.css">
 
-<script src="../lib/jquery-1.11.3.min.js"></script>
+<script src="../dist/js/sparqlblocks.js"></script>
+
+<!-- <script src="../lib/jquery-1.11.3.min.js"></script>
 <script src="../lib/jquery-migrate-1.2.1.min.js"></script>
 <script src="../lib/underscore-min.js"></script>
 <script src="../lib/md5.min.js"></script>
@@ -61,11 +63,13 @@
 <script src="../blocks/table.js"></script>
 <script src="../blocks/test.js"></script>
 
-<script src="../core/sparqlblocks.js"></script>
+<script src="../core/sparqlblocks.js"></script> -->
 
 <script>
 'use strict';
 function start() {
+
+  var BlocklyDialogs = SparqlBlocks.BlocklyDialogs;
 
   var sURLVariables = decodeURIComponent(window.location.search.substring(1)).split('&');
   var sParameters = {};

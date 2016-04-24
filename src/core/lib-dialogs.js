@@ -23,7 +23,7 @@
  */
 'use strict';
 
-var Blockly = require('Blockly');
+var Blockly = require('blockly');
 
 /**
  * Is the dialog currently onscreen?

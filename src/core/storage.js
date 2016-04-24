@@ -20,7 +20,7 @@
  */
 'use strict';
 
-var Blockly = require('Blockly'),
+var Blockly = require('blockly'),
     $ = require('jquery'),
     TestBlocks = require('../blocks/test.js'),
     bowerJson = require('../../bower.json');

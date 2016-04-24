@@ -21,7 +21,7 @@
 'use strict';
 
 var _ = require('underscore'),
-    Blockly = require('Blockly'),
+    Blockly = require('blockly'),
     Types = require('../core/types.js'),
     Blocks = require('../core/blocks.js'),
     Msg = require('../core/msg.js');

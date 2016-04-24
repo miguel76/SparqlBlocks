@@ -19,7 +19,7 @@
  */
 'use strict';
 
-var Blockly = require('Blockly'),
+var Blockly = require('blockly'),
     $ = require('jquery');
 
 var eventTypeDescr_ = function(eventTypeId) {

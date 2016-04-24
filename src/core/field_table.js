@@ -20,8 +20,8 @@
  */
 'use strict';
 
-var Blockly = require('Blockly');
-var JsonToBlocks = require('jsonToBlocks');
+var Blockly = require('blockly');
+var JsonToBlocks = require('./jsonToBlocks.js');
 
 /**
  * Class for a tabular field.

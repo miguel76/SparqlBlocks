@@ -19,7 +19,8 @@
  */
 'use strict';
 
-var Blockly = require('Blockly');
+var Blockly = require('blockly'),
+    BlocklyDialogs = require('./lib-dialogs.js');
 
 var filteredEventManager_ = function(workspace) {
   var listeners_ = [];
