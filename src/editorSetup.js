@@ -41,7 +41,7 @@ function start() {
 
     var workspace = Blockly.inject('blocklyDiv', {
         rtl: rtl,
-        media: '../dist/media/',
+        media: 'media/',
         comments: true,
         disable: true,
         collapse: true,
@@ -72,7 +72,7 @@ function start() {
            colour: '#ccc',
            snap: true},
         maxBlocks: Infinity,
-        media: '../media/',
+        media: 'media/',
         readOnly: false,
         rtl: rtl,
         scrollbars: true,

@@ -5,6 +5,8 @@
 'use strict';
 
 var Blockly = require('blockly');
+var Types = require('../core/types');
+var typeExt = Types.getExtension;
 
 var defaultLimit = 5;
 var maxLimit = 50;
