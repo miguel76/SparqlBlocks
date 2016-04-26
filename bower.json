@@ -14,16 +14,6 @@
     "test",
     "tests"
   ],
-  "dependencies": {
-    "jquery": "1.12.3",
-    "underscore": "^1.8.3",
-    "js-md5": "md5#^0.4.1",
-    "blob": "*",
-    "save-as": "*",
-    "clipboard": "^1.5.10",
-    "primer-css": "^3.0.1",
-    "google-blockly": "*",
-    "octicons": "^3.5.0"
-  },
+  "dependencies": {},
   "version": "0.3.0"
 }
