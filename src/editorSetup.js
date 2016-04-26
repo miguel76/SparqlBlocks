@@ -92,7 +92,7 @@ function start() {
     $('.blocklyToolboxDiv').prepend(
       '<div class="main-button-container clearfix">'+
         '<div class="main-button-container clearfix">'+
-        '<button class="main-button btn btn-block" disabled title="Save as Gist on GitHub" type="button" id="save-button" onclick="SparqlBlocks.Storage.linkGist()">'+
+        '<button class="main-button btn btn-block" disabled title="Save as Gist on GitHub" type="button" id="save-button">'+
           '<span class="octicon octicon-cloud-upload"></span>'+
           ' Save as Gist'+
         '</button>'+
@@ -105,6 +105,7 @@ function start() {
         '</div>'+
       '</div>');
 
+    $('#save-button').on('click', function() { SparqlBlocks.Storage.linkGist(); });
     SparqlBlocks.Storage.setCopyOnThisButton('#copy-button');
     SparqlBlocks.Storage.startup(workspace);
     SparqlBlocks.Track.track(workspace);

@@ -20,6 +20,8 @@
  */
 'use strict';
 
+var Blockly = require('blockly');
+
 var actionQueue = [];
 
 var execute_ = function(action, thisArg) {

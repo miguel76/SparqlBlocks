@@ -34,13 +34,13 @@ var JsonToBlocks = require('./jsonToBlocks.js');
  * @constructor
  */
 var FieldTable = function(data, opt_validator) {
-  this.superClass_.constructor.call(this, '');
+  FieldTable.constructor.call(this, '');
   this.setValidator(opt_validator);
   // Set the initial state.
   // this.setValue(json);
   this.width_ = 0;
   this.height_ = 0;
-  this.size_ = new goog.math.Size(this.width_, this.height_);
+  this.size_ = { width: this.width_, height: this.height_ };
   this.data_ = data;
   this.flyout_ = new Blockly.Flyout({});
   this.flyout_.autoClose = false;
@@ -49,7 +49,8 @@ var FieldTable = function(data, opt_validator) {
     return this.prototype.createBlockFunc_.call(thisFieldTable, block);
   }
 };
-FieldTable.prototype = Blockly.Field;
+FieldTable.prototype = Object.create(Blockly.Field.prototype);
+FieldTable.prototype.constructor = FieldTable;
 
 /**
  * Editable fields are saved by the XML renderer, non-editable fields are not.
@@ -239,7 +240,7 @@ FieldTable.prototype.renderCompute_ = function(headVars, headBlocks, blockRows) 
 
   this.width_ = totalWidth;
   this.height_ = totalHeight;
-  this.size_ = new goog.math.Size(this.width_, this.height_);
+  this.size_ = { width: this.width_, height: this.height_ };
   this.position_(headVars, headBlocks, blockRows, maxCellWidth, maxCellHeight);
 }
 
@@ -274,7 +275,7 @@ FieldTable.prototype.position_ = function( colNames,
  */
 FieldTable.prototype.dispose = function() {
   this.flyout_.dispose();
-  goog.dom.removeNode(this.rootElement_);
+  this.rootElement_.parentNode.removeChild(this.rootElement_);
   this.rootElement_ = null;
 };
 

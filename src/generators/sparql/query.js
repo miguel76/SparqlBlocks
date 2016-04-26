@@ -19,8 +19,9 @@
  */
 'use strict';
 
-var Sparql = require('../sparql.js');
-var Prefixes = require('../../core/prefixes.js')
+var Blockly = require('blockly'),
+    Sparql = require('../sparql.js'),
+    Prefixes = require('../../core/prefixes.js');
 
 var maxLimit = 50;
 
