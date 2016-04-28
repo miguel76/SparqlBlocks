@@ -108,7 +108,7 @@ function start() {
     $('#save-button').on('click', function() { SparqlBlocks.Storage.linkGist(); });
     SparqlBlocks.Storage.setCopyOnThisButton('#copy-button');
     SparqlBlocks.Storage.startup(workspace);
-    SparqlBlocks.Track.track(workspace);
+    // SparqlBlocks.Track.track(workspace);
 
     if (mode === "eval") {
 

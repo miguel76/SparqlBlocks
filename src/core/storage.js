@@ -89,9 +89,9 @@ var linkGist = function(opt_workspace, callback) {
       timestamp: $.now(),
       workspaceXmlFile: "workspace.xml"
     },
-    workspace.eventStack ? {
-      eventHistoryFile: "eventHistory.json"
-    } : {},
+    // workspace.eventStack ? {
+    //   eventHistoryFile: "eventHistory.json"
+    // } : {},
     testState ? {
       testStateFile: "testState.json"
     } : {},
