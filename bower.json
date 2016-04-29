@@ -1,0 +1,19 @@
+{
+  "name": "sparqlblocks",
+  "homepage": "https://github.com/miguel76/SparqlBlocks",
+  "authors": [
+    "miguel76 <miguel.ceriani@gmail.com>"
+  ],
+  "description": "Building SPARQL queries through block programming",
+  "main": "src/index.js",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {},
+  "version": "0.3.0"
+}

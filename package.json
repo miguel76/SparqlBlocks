@@ -1,0 +1,62 @@
+{
+  "name": "sparqlblocks",
+  "version": "0.3.0",
+  "description": "Building SPARQL queries through block programming",
+  "main": "src/index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/miguel76/SparqlBlocks.git"
+  },
+  "author": "Miguel Ceriani <miguel.ceriani@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/miguel76/SparqlBlocks/issues"
+  },
+  "homepage": "https://sparqlblocks.org",
+  "devDependencies": {
+    "aliasify": "^2.0.0",
+    "browserify": "^13.0.0",
+    "exposify": "^0.5.0",
+    "fs": "0.0.2",
+    "gulp": "^3.9.1",
+    "gulp-bower": "0.0.13",
+    "gulp-html-extend": "^1.1.6",
+    "gulp-insert": "^0.5.0",
+    "gulp-notify": "^2.2.0",
+    "gulp-remote-src": "^0.4.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-replace": "^0.5.4",
+    "gulp-ruby-sass": "^2.0.6",
+    "gulp-sourcemaps": "^2.0.0-alpha",
+    "gulp-uglify": "^1.5.3",
+    "gulp-util": "^3.0.7",
+    "pathmodify": "^0.5.0",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-fs": "^2.4.3",
+    "vinyl-source-stream": "^1.1.0"
+  },
+  "dependencies": {
+    "blob-polyfill": "^1.0.20150320",
+    "browser-filesaver": "^1.1.1",
+    "browserify-fs": "^1.0.0",
+    "clipboard": "^1.5.10",
+    "jquery": "^1.12.3",
+    "js-md5": "^0.4.1",
+    "octicons": "^3.5.0",
+    "primer-css": "^3.0.1",
+    "underscore": "^1.8.3"
+  },
+  "browser": {
+    "blockly": "./src/import/blockly.js"
+  },
+  "jshintConfig": {
+    "browserify": true,
+    "browser": true
+  }
+}
