@@ -22,9 +22,11 @@
 
 var Blockly = require('blockly'),
     $ = require('jquery'),
+    _ = require('underscore'),
     TestBlocks = require('../blocks/test.js'),
     packageJson = require('../../package.json'),
-    Clipboard = require('clipboard');
+    Clipboard = require('clipboard'),
+    MessageDisplay = require('./messageDisplay.js');
 
 var HTTPREQUEST_ERROR = 'There was a problem with the request.\n';
 var LINK_ALERT = 'Share your blocks with this link:\n\n%1';
@@ -76,7 +78,7 @@ var restoreBlocks = function(opt_workspace) {
  * @param {Blockly.WorkspaceSvg=} opt_workspace Workspace.
  */
 var linkGist = function(opt_workspace, callback) {
-  alert("Saving Workspace as Gist on GitHub...")
+  MessageDisplay.alert("Saving Workspace as Gist on GitHub...");
   var workspace = opt_workspace || Blockly.getMainWorkspace();
   var xml = Blockly.Xml.workspaceToDom(workspace);
   var data = Blockly.Xml.domToPrettyText(xml);
@@ -132,7 +134,7 @@ var linkGist = function(opt_workspace, callback) {
         "value": "gist:" + data.id
       } ];
       monitorChanges_(workspace);
-      alert(
+      MessageDisplay.alert(
           'Workspace Saved. ' +
           '<button class="main-button btn" title="Copy Link to Clipboard" id="temp-copy-button" type="button">'+
             '<span class="octicon octicon-clippy"></span>'+
@@ -146,9 +148,9 @@ var linkGist = function(opt_workspace, callback) {
     error: function(jqXHR, textStatus, errorThrown) {
       var errorDescr = jqXHR.responseText;
       if (!errorDescr) {
-        errorDescr = "Connection Error!"
+        errorDescr = "Connection Error!";
       }
-      alert("Error Saving Workspace: " + errorDescr, 'error');
+      MessageDisplay.alert("Error Saving Workspace: " + errorDescr, 'error');
       if (callback)
         callback(errorThrown);
     }
@@ -161,10 +163,10 @@ var setCopyOnThisButton = function(selector) {
           return window.location.href;
         }});
   cb.on('success', function(event) {
-    alert('Link Copied to Clipboard. Share it!!!', 'info', event);
+    MessageDisplay.alert('Link Copied to Clipboard. Share it!!!', 'info', event);
   });
   cb.on('error', function(e) {
-    alert('Could Not Copy! Please Copy it Manually from Address Bar','error');
+    MessageDisplay.alert('Could Not Copy! Please Copy it Manually from Address Bar','error');
   });
 };
 
@@ -174,8 +176,8 @@ var setCopyOnThisButton = function(selector) {
  */
 var linkGistAndAlert = function(opt_workspace) {
   linkGist(opt_workspace, function(err, dataId) {
-    if (err != null) {
-      alert(
+    if (err) {
+      MessageDisplay.alert(
         LINK_ALERT_GITHUB
         .replace('%1', window.location.href)
         .replace('%2', 'https://gist.github.com/' + dataId));
@@ -183,19 +185,7 @@ var linkGistAndAlert = function(opt_workspace) {
   });
 };
 
-/**
- * Save blocks to database and silently copy the URL.
- * @param {Blockly.WorkspaceSvg=} opt_workspace Workspace.
- */
-var linkGistAndCopy = function(opt_workspace) {
-  linkGist(opt_workspace, function(err, dataId) {
-    if (err != null) {
-      copy(window.location.href);
-    }
-  });
-};
-
-var retrieveGisRawUrl_ = function(id, callback) {
+var retrieveGisRawUrl_ = function(id, callback, workspace) {
   $.ajax({
     dataType: "json",
     method: "GET",
@@ -206,24 +196,24 @@ var retrieveGisRawUrl_ = function(id, callback) {
     error: function(jqXHR, textStatus, errorThrown) {
       var errorDescr = jqXHR.responseText;
       if (!errorDescr) {
-        errorDescr = "Connection Error!"
+        errorDescr = "Connection Error!";
       }
-      alert("Error Loading Workspace: " + errorDescr, 'error');
+      MessageDisplay.alert("Error Loading Workspace: " + errorDescr, 'error');
       window.location.hash = "";
       monitorChanges_(workspace);
     }
   });
-}
+};
 
-var urlFromKey_ = function(key, callback) {
+var urlFromKey_ = function(key, callback, workspace) {
   var keyParts = key.split(":");
   switch (keyParts[0]) {
     case "gist":
-      retrieveGisRawUrl_(keyParts[1], callback);
+      retrieveGisRawUrl_(keyParts[1], callback, workspace);
       break;
     default:
   }
-}
+};
 
 /**
  * Retrieve XML text from database using given key.
@@ -231,7 +221,7 @@ var urlFromKey_ = function(key, callback) {
  * @param {Blockly.WorkspaceSvg=} opt_workspace Workspace.
  */
 var retrieveXml = function(key, opt_workspace, callback) {
-  alert("Loading Saved Workspace...")
+  MessageDisplay.alert("Loading Saved Workspace...");
   var workspace = opt_workspace || Blockly.getMainWorkspace();
   urlFromKey_(key, function(url) {
     makeRequest_({
@@ -241,11 +231,11 @@ var retrieveXml = function(key, opt_workspace, callback) {
       url: url,
       success: function(data) {
         if (!data.length) {
-          alert(HASH_ERROR.replace('%1', window.location.hash), 'error');
+          MessageDisplay.alert(HASH_ERROR.replace('%1', window.location.hash), 'error');
         } else {
           loadXml_(data, workspace);
         }
-        alert("Workspace Loaded", "info");
+        MessageDisplay.alert("Workspace Loaded", "info");
         workspace.eventStack = [ {
           "workspaceId": workspace.id,
           "timestamp": $.now(),
@@ -261,16 +251,17 @@ var retrieveXml = function(key, opt_workspace, callback) {
       error: function(jqXHR, textStatus, errorThrown) {
         var errorDescr = jqXHR.responseText;
         if (!errorDescr) {
-          errorDescr = "Connection Error!"
+          errorDescr = "Connection Error!";
         }
-        alert("Error Loading Workspace: " + errorDescr, 'error');
+        MessageDisplay.alert("Error Loading Workspace: " + errorDescr, 'error');
         window.location.hash = "";
         monitorChanges_(workspace);
         if (_.isFunction(callback))
           callback();
       }
     });
-  });
+  },
+  workspace);
 };
 
 /**
@@ -302,8 +293,8 @@ var makeRequest_ = function(ajaxOptions) {
  */
 var monitorChanges_ = function(workspace) {
   var sendWorkspaceXML = true;
-  if (window.location.hash != "") {
-    $('#copy-button').prop('disabled', false)
+  if (window.location.hash !== "") {
+    $('#copy-button').prop('disabled', false);
   }
   $('#save-button').prop('disabled', true);
   var startXmlDom = Blockly.Xml.workspaceToDom(workspace);
@@ -330,7 +321,7 @@ var loadXml_ = function(xml, workspace) {
   try {
     xml = Blockly.Xml.textToDom(xml);
   } catch (e) {
-    alert(XML_ERROR + '\nXML: ' + xml);
+    MessageDisplay.alert(XML_ERROR + '\nXML: ' + xml);
     return;
   }
   // Clear the workspace to avoid merge.
@@ -354,69 +345,12 @@ var startup = function(opt_workspace, callback) {
   }
 };
 
-/**
- * Present a text message to the user.
- * @param {string} message Text to alert.
- * @param {string} messageType type of the message (alert, warn, error).
- */
-var alert = function(message, messageType, eventToExclude) {
-  // var timeToStay = (!messageType || messageType == "alert") ? 2000 : 0;
-  var closable = (messageType != "alert");
-  var timeToStay = 0; //(messageType == "info") ? 4000 : 0;
-  var messageClass = "flash-" + ((messageType == "info") ? "alert" : messageType);
-  var oldFlashMessage = $('.flash-messages .flash')[0];
-  if (oldFlashMessage) {
-    oldFlashMessage.parentElement.removeChild(oldFlashMessage);
-  }
-  $('.flash-messages').prepend(
-    '<div class="flash '+ messageClass +'">'+
-      // '<span class="octicon octicon-x flash-close js-flash-close" '+
-      //     'onclick="this.parentElement.parentElement.removeChild(this.parentElement)"></span>'+
-      message+
-    '</div>');
-  var flashMessage = $('.flash-messages .flash')[0];
-  if (timeToStay > 0) {
-    window.setTimeout( function() {
-      if (flashMessage && flashMessage.parentElement) {
-        flashMessage.parentElement.removeChild(flashMessage);
-      }
-    }, timeToStay );
-  }
-  if (messageType != "alert") {
-    var clickListener = function(event) {
-      if (flashMessage && flashMessage.parentElement) {
-        flashMessage.parentElement.removeChild(flashMessage);
-      }
-      window.removeEventListener('click', clickListener);
-    };
-    window.setTimeout( function() {
-      window.addEventListener('click', clickListener);
-    }, 0 );
-  }
-  return flashMessage;
-};
-
-/**
- * clear message area.
- */
-var clearAlert = function() {
-  var oldFlashMessages = $('.flash-messages .flash');
-  for (var i = 0; i < oldFlashMessages.length; i++) {
-    var flashMessage = oldFlashMessages[i];
-    flashMessage.parentElement.removeChild(flashMessage);
-  }
-};
-
-
-
 module.exports = {
   backupOnUnload: backupOnUnload,
   restoreBlocks: restoreBlocks,
   linkGist: linkGist,
-  linkGistAndCopy: linkGistAndCopy,
   linkGistAndAlert: linkGistAndAlert,
   retrieveXml: retrieveXml,
-  alert: alert,
   startup: startup,
   setCopyOnThisButton: setCopyOnThisButton
 };

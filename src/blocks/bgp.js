@@ -29,17 +29,17 @@ var typeExt = Types.getExtension;
 
 var _init = function(newBlock) {
   newBlock.setHelpUrl('http://www.w3.org/TR/sparql11-query/#QSynTriples');
-}
+};
 
 var _initVerb = function(newBlock) {
   _init(newBlock);
   newBlock.setColour(65);
-}
+};
 
 var _initSubject = function(newBlock) {
   _init(newBlock);
   newBlock.setColour(120);
-}
+};
 
 var _varsInScopeFromInput = function(block, inputName) {
   var inputConnection = block.getInputConnection(inputName);
@@ -53,7 +53,7 @@ var _varsInScopeFromInput = function(block, inputName) {
     }
   }
   return [];
-}
+};
 
 Blocks.block('sparql_verb_objectlist', {
   init: function() {

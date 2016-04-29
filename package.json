@@ -43,12 +43,9 @@
   },
   "dependencies": {
     "blob-polyfill": "^1.0.20150320",
-    "blockly": "google/blockly",
     "browser-filesaver": "^1.1.1",
     "browserify-fs": "^1.0.0",
     "clipboard": "^1.5.10",
-    "google-closure-library": "^20160315.0.0",
-    "gulp-closure-compiler-service": "^0.6.0",
     "jquery": "^1.12.3",
     "js-md5": "^0.4.1",
     "octicons": "^3.5.0",
@@ -57,5 +54,9 @@
   },
   "browser": {
     "blockly": "./src/import/blockly.js"
+  },
+  "jshintConfig": {
+    "browserify": true,
+    "browser": true
   }
 }

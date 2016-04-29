@@ -46,8 +46,8 @@ var FieldTable = function(data, opt_validator) {
   this.flyout_.autoClose = false;
   var thisFieldTable = this;
   this.flyout_.createBlockFunc_ = function(block) {
-    return this.prototype.createBlockFunc_.call(thisFieldTable, block);
-  }
+    return FieldTable.prototype.createBlockFunc_.call(thisFieldTable, block);
+  };
 };
 FieldTable.prototype = Object.create(Blockly.Field.prototype);
 FieldTable.prototype.constructor = FieldTable;
@@ -82,7 +82,7 @@ FieldTable.prototype.setEventBindingsForBlock_ = function(block) {
       block.addSelect));
   lstnrs.push(Blockly.bindEvent_(rect, 'mouseout', block,
       block.removeSelect));
-}
+};
 
 FieldTable.prototype.setEventBindings_ = function(colNames, headBlocks, blockRows) {
   var parent = this;
@@ -101,14 +101,14 @@ FieldTable.prototype.setEventBindings_ = function(colNames, headBlocks, blockRow
   // When the mouse is over the background, deselect all blocks.
   var deselectAll = function(e) {
     var blocks = this.workspace_.getTopBlocks(false);
-    for (var i = 0, block; block = blocks[i]; i++) {
-      block.removeSelect();
+    for (var blockIndex = 0; blockIndex < blocks.length; blockIndex++) {
+      blocks[blockIndex].removeSelect();
     }
   };
   this.flyout_.listeners_.push(Blockly.bindEvent_(
       this.flyout_.svgBackground_, 'mouseover',
       this.flyout_, deselectAll));
-}
+};
 
 /**
  * Install this text on a block.
@@ -242,11 +242,11 @@ FieldTable.prototype.renderCompute_ = function(headVars, headBlocks, blockRows) 
   this.height_ = totalHeight;
   this.size_ = { width: this.width_, height: this.height_ };
   this.position_(headVars, headBlocks, blockRows, maxCellWidth, maxCellHeight);
-}
+};
 
 FieldTable.prototype.positionBlock_ = function(block, x, y) {
   block.moveBy(Blockly.BlockSvg.TAB_HEIGHT + x, y);
-}
+};
 
 FieldTable.prototype.position_ = function( colNames,
                                                         headBlocks, blockRows,

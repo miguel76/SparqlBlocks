@@ -25,7 +25,7 @@ var typeDict = {};
 var setType = function(typeStr, typeObj) {
   typeDict[typeStr] = typeObj;
   typeObj.children = [];
-  if (typeObj.parents != null) {
+  if (typeObj.parents) {
     var parentStrArray = typeObj.parents;
     for (var i = 0; i < parentStrArray.length; i++) {
       var parentStr = parentStrArray[i];

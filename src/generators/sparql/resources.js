@@ -19,8 +19,9 @@
  */
 'use strict';
 
-var Sparql = require('../sparql.js');
-var Prefixes = require('../../core/prefixes.js')
+var Sparql = require('../sparql.js'),
+    Prefixes = require('../../core/prefixes.js'),
+    _ = require('underscore');
 
 var VIRTUOSO_PATCH = true;
 
@@ -30,9 +31,9 @@ var localNameEsc = function(localName) {
       [ '_', '~', '.', '-', '!', '$' , '&', "'", '(', ')', '\\', '*', '+', ',', ';', '=', '/', '?', '#', '@', '%' ],
       c) ? '\\' + c : c;
   }).join('');
-}
+};
 
-Sparql['sparql_prefixed_iri'] = function(block) {
+Sparql.sparql_prefixed_iri = function(block) {
   var text_prefix = block.getFieldValue('PREFIX');
   var text_local_name = block.getFieldValue('LOCAL_NAME');
   var code = null;
@@ -48,13 +49,13 @@ Sparql['sparql_prefixed_iri'] = function(block) {
   return [code, Sparql.ORDER_ATOMIC];
 };
 
-Sparql['sparql_iri'] = function(block) {
+Sparql.sparql_iri = function(block) {
   var text_iri = block.getFieldValue('IRI');
   var code = '<' + text_iri + '>';
   return [code, Sparql.ORDER_ATOMIC];
 };
 
-Sparql['variables_get'] = function(block) {
+Sparql.variables_get = function(block) {
   var text_var = block.getFieldValue('VAR');
   var code = '?' + text_var;
   return [code, Sparql.ORDER_ATOMIC];

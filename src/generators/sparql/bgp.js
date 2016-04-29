@@ -21,7 +21,7 @@
 
 var Sparql = require('../sparql.js');
 
-Sparql['sparql_isa'] = function(block) {
+Sparql.sparql_isa = function(block) {
   var value_type =
       Sparql.valueToCode(
           block,
@@ -36,7 +36,7 @@ Sparql['sparql_isa'] = function(block) {
 };
 
 
-Sparql['sparql_verb_object'] = function(block) {
+Sparql.sparql_verb_object = function(block) {
   var value_verb = Sparql.valueToCode(block, 'VERB', Sparql.ORDER_ATOMIC);
   var value_object = Sparql.valueToCode(block, 'OBJECT', Sparql.ORDER_ATOMIC);
   var code =
@@ -48,7 +48,7 @@ Sparql['sparql_verb_object'] = function(block) {
   return code;
 };
 
-Sparql['sparql_reversePath_object'] = function(block) {
+Sparql.sparql_reversePath_object = function(block) {
   var value_verb = Sparql.valueToCode(block, 'VERB', Sparql.ORDER_ATOMIC);
   var value_object = Sparql.valueToCode(block, 'OBJECT', Sparql.ORDER_ATOMIC);
   var code =
@@ -60,7 +60,7 @@ Sparql['sparql_reversePath_object'] = function(block) {
   return code;
 };
 
-Sparql['sparql_closurePath_object'] = function(block) {
+Sparql.sparql_closurePath_object = function(block) {
   var value_verb = Sparql.valueToCode(block, 'VERB', Sparql.ORDER_ATOMIC);
   var value_object = Sparql.valueToCode(block, 'OBJECT', Sparql.ORDER_ATOMIC);
   var code =
@@ -70,7 +70,7 @@ Sparql['sparql_closurePath_object'] = function(block) {
   return code;
 };
 
-Sparql['sparql_reverseClosurePath_object'] = function(block) {
+Sparql.sparql_reverseClosurePath_object = function(block) {
   var value_verb = Sparql.valueToCode(block, 'VERB', Sparql.ORDER_ATOMIC);
   var value_object = Sparql.valueToCode(block, 'OBJECT', Sparql.ORDER_ATOMIC);
   var code =
@@ -80,7 +80,7 @@ Sparql['sparql_reverseClosurePath_object'] = function(block) {
   return code;
 };
 
-Sparql['sparql_typedsubject_propertylist'] = function(block) {
+Sparql.sparql_typedsubject_propertylist = function(block) {
   var value_subject =
       Sparql.valueToCode(
           block,
@@ -96,12 +96,12 @@ Sparql['sparql_typedsubject_propertylist'] = function(block) {
           Sparql.statementToCode(block, 'PROPERTY_LIST'),
           ';\n');
   var code =
-      (value_type || statements_property_list != '') ?
+      (value_type || statements_property_list !== '') ?
           ( (value_subject ? value_subject : '[]') +
             (value_type ?
-                ' a ' + value_type + (statements_property_list != '' ? ';' : '') :
+                ' a ' + value_type + (statements_property_list !== '' ? ';' : '') :
                 '' ) +
-            (statements_property_list != '' ?
+            (statements_property_list !== '' ?
                 '\n' + statements_property_list :
                 '' ) +
             Sparql.STMNT_BRK) :
@@ -109,7 +109,7 @@ Sparql['sparql_typedsubject_propertylist'] = function(block) {
   return code;
 };
 
-Sparql['sparql_subject_propertylist'] = function(block) {
+Sparql.sparql_subject_propertylist = function(block) {
   var value_subject =
       Sparql.valueToCode(
           block,
@@ -120,9 +120,9 @@ Sparql['sparql_subject_propertylist'] = function(block) {
           Sparql.statementToCode(block, 'PROPERTY_LIST'),
           ';\n');
   var code =
-      (statements_property_list != '') ?
+      (statements_property_list !== '') ?
           ( (value_subject ? value_subject : '[]') +
-            (statements_property_list != '' ?
+            (statements_property_list !== '' ?
                 '\n' + statements_property_list :
                 '' ) +
             Sparql.STMNT_BRK) :
@@ -132,20 +132,20 @@ Sparql['sparql_subject_propertylist'] = function(block) {
 
 var generateAnonSubject = function(value_type, statements_property_list) {
   var code =
-      (value_type || statements_property_list != '') ?
+      (value_type || statements_property_list !== '') ?
           '[\n' +
           (value_type ?
-                ' a ' + value_type + (statements_property_list != '' ? ';\n' : '') :
+                ' a ' + value_type + (statements_property_list !== '' ? ';\n' : '') :
                 '' ) +
-          (statements_property_list != '' ?
+          (statements_property_list !== '' ?
                 statements_property_list :
                 '' ) +
           '\n]' :
           '[]';
   return [code, Sparql.ORDER_ATOMIC];
-}
+};
 
-Sparql['sparql_anontypedsubject_propertylist'] = function(block) {
+Sparql.sparql_anontypedsubject_propertylist = function(block) {
   var value_type =
       Sparql.valueToCode(
           block,
@@ -158,7 +158,7 @@ Sparql['sparql_anontypedsubject_propertylist'] = function(block) {
   return generateAnonSubject(value_type, statements_property_list);
 };
 
-Sparql['sparql_anonsubject_propertylist'] = function(block) {
+Sparql.sparql_anonsubject_propertylist = function(block) {
   var statements_property_list =
       Sparql.stmJoin(
           Sparql.statementToCode(block, 'PROPERTY_LIST'),

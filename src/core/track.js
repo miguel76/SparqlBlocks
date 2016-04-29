@@ -20,7 +20,8 @@
 'use strict';
 
 var Blockly = require('blockly'),
-    $ = require('jquery');
+    $ = require('jquery'),
+    _ = require('underscore');
 
 var eventTypeDescr_ = function(eventTypeId) {
 
@@ -36,8 +37,8 @@ var track_ = function(workspace, options) {
           options );
 
   workspace.addChangeListener(function(event) {
-    if (!options.sendMoveAroundEvents && event.type == Blockly.Events.MOVE
-        && !event.newParentId && !event.oldParentId) {
+    if (!options.sendMoveAroundEvents && event.type == Blockly.Events.MOVE &&
+        !event.newParentId && !event.oldParentId) {
       return;
     }
     if (!options.sendUIEvents && event.type == Blockly.Events.UI) {
@@ -50,15 +51,15 @@ var track_ = function(workspace, options) {
         {},
         event,
         { type: event.type, timestamp: $.now() },
-        options.sendEventXML && event.xml
-          ? { xmlText: Blockly.Xml.domToText(event.xml) }
-          : {},
-        options.sendWorkspaceXML
-          ? { workspace:
-                Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace)) }
-          : {} ));
+        options.sendEventXML && event.xml ?
+          { xmlText: Blockly.Xml.domToText(event.xml) } :
+          {},
+        options.sendWorkspaceXML ?
+          { workspace:
+                Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace)) } :
+          {} ));
   });
-}
+};
 
 module.exports = {
   track: track_

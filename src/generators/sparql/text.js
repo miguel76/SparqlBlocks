@@ -21,13 +21,13 @@
 
 var Sparql = require('../sparql.js');
 
-Sparql['sparql_text'] = function(block) {
+Sparql.sparql_text = function(block) {
   // Text value.
   var code = Sparql.quote_(block.getFieldValue('TEXT'));
   return [code, Sparql.ORDER_ATOMIC];
 };
 
-Sparql['sparql_text_with_lang'] = function(block) {
+Sparql.sparql_text_with_lang = function(block) {
   // Text value.
   var code = Sparql.quote_(block.getFieldValue('TEXT'));
   var text_lang = block.getFieldValue('LANG');
@@ -37,15 +37,15 @@ Sparql['sparql_text_with_lang'] = function(block) {
   return [code, Sparql.ORDER_ATOMIC];
 };
 
-Sparql['sparql_text_join'] = function(block) {
+Sparql.sparql_text_join = function(block) {
   // Create a string made up of any number of elements of any type.
   var code;
-  if (block.itemCount_ == 0) {
+  if (block.itemCount_ === 0) {
     return ['\'\'', Sparql.ORDER_ATOMIC];
   } else if (block.itemCount_ == 1) {
-    var argument0 = Sparql.valueToCode(block, 'ADD0',
+    var singleArgument = Sparql.valueToCode(block, 'ADD0',
         Sparql.ORDER_NONE) || '\'\'';
-    code = 'STR(' + argument0 + ')';
+    code = 'STR(' + singleArgument + ')';
     return [code, Sparql.ORDER_FUNCTION_CALL];
   } else if (block.itemCount_ == 2) {
     var argument0 = Sparql.valueToCode(block, 'ADD0',
@@ -65,21 +65,21 @@ Sparql['sparql_text_join'] = function(block) {
   }
 };
 
-Sparql['sparql_text_length'] = function(block) {
+Sparql.sparql_text_length = function(block) {
   // String length.
   var argument0 = Sparql.valueToCode(block, 'VALUE',
       Sparql.ORDER_NONE) || '\'\'';
   return ['STRLEN(' + argument0 + ')', Sparql.ORDER_FUNCTION_CALL];
 };
 
-Sparql['sparql_text_isEmpty'] = function(block) {
+Sparql.sparql_text_isEmpty = function(block) {
   // Is the string null?
   var argument0 = Sparql.valueToCode(block, 'VALUE',
       Sparql.ORDER_NONE) || '\'\'';
   return ['STRLEN(' + argument0 + ') == 0', Sparql.ORDER_EQUALITY];
 };
 
-// Sparql['sparql_text_indexOf'] = function(block) {
+// Sparql.sparql_text_indexOf = function(block) {
 //   // Search the text for a substring.
 //   var operator = block.getFieldValue('END') == 'FIRST' ?
 //       'indexOf' : 'lastIndexOf';
@@ -91,7 +91,7 @@ Sparql['sparql_text_isEmpty'] = function(block) {
 //   return [code, Sparql.ORDER_MEMBER];
 // };
 
-Sparql['sparql_text_contains'] = function(block) {
+Sparql.sparql_text_contains = function(block) {
   // Search the text for a substring.
   var argument0 = Sparql.valueToCode(block, 'FIND',
       Sparql.ORDER_COMMA) || '\'\'';
@@ -104,7 +104,7 @@ Sparql['sparql_text_contains'] = function(block) {
   return [code, Sparql.ORDER_FUNCTION_CALL];
 };
 
-Sparql['sparql_text_regex'] = function(block) {
+Sparql.sparql_text_regex = function(block) {
   // Search the text for a substring.
   var argument0 = Sparql.valueToCode(block, 'FIND',
       Sparql.ORDER_COMMA) || '\'\'';
@@ -114,7 +114,7 @@ Sparql['sparql_text_regex'] = function(block) {
   return [code, Sparql.ORDER_FUNCTION_CALL];
 };
 
-Sparql['sparql_text_lang'] = function(block) {
+Sparql.sparql_text_lang = function(block) {
   // Search the text for a substring.
   var lang =
       Sparql.valueToCode(
@@ -128,7 +128,7 @@ Sparql['sparql_text_lang'] = function(block) {
   return [code, Sparql.ORDER_FUNCTION_CALL];
 };
 
-Sparql['sparql_text_charAt'] = function(block) {
+Sparql.sparql_text_charAt = function(block) {
   // Get letter at index.
   // Note: Until January 2013 this block did not have the WHERE input.
   var where = block.getFieldValue('WHERE') || 'FROM_START';
@@ -138,18 +138,19 @@ Sparql['sparql_text_charAt'] = function(block) {
       Sparql.ORDER_COMMA) || '\'\'';
   switch (where) {
     case 'FIRST':
-      var code = 'SUBSTR(' + text + ', 1, 1)';
-      return [code, Sparql.ORDER_FUNCTION_CALL];
+      return ['SUBSTR(' + text + ', 1, 1)', Sparql.ORDER_FUNCTION_CALL];
     case 'LAST':
-      var code = 'SUBSTR(' + text + ', STRLEN(' + text + '), 1)';
-      return [code, Sparql.ORDER_FUNCTION_CALL];
+      return [
+        'SUBSTR(' + text + ', STRLEN(' + text + '), 1)',
+        Sparql.ORDER_FUNCTION_CALL];
     case 'FROM_START':
-      // Blockly uses one-based indicies.
-      var code = 'SUBSTR(' + text + ', ' + at + ', 1)';
-      return [code, Sparql.ORDER_FUNCTION_CALL];
+      return [
+        'SUBSTR(' + text + ', ' + at + ', 1)',
+        Sparql.ORDER_FUNCTION_CALL];
     case 'FROM_END':
-      var code = 'SUBSTR(' + text + ', STRLEN(' + text + ') + 1 - ' + at + ', 1)';
-      return [code, Sparql.ORDER_FUNCTION_CALL];
+      return [
+        'SUBSTR(' + text + ', STRLEN(' + text + ') + 1 - ' + at + ', 1)',
+        Sparql.ORDER_FUNCTION_CALL];
     // case 'RANDOM':
     //   var functionName = Sparql.provideFunction_(
     //       'text_random_letter',
@@ -164,7 +165,7 @@ Sparql['sparql_text_charAt'] = function(block) {
   throw 'Unhandled option (text_charAt).';
 };
 
-Sparql['sparql_text_getSubstring'] = function(block) {
+Sparql.sparql_text_getSubstring = function(block) {
   // Get substring.
   var text = Sparql.valueToCode(block, 'STRING',
       Sparql.ORDER_COMMA) || '\'\'';
@@ -213,17 +214,15 @@ Sparql['sparql_text_getSubstring'] = function(block) {
     } else {
       throw 'Unhandled option (text_getSubstring): ' + where2;
     }
-    var code;
-    if (len) {
-      code = 'SUBSTR(' + text + ', ' + pos + ', ' + len + ')';
-    } else {
-      code = 'SUBSTR(' + text + ', ' + pos + ')';
-    }
-    return [code, Sparql.ORDER_FUNCTION_CALL];
+    return [
+      len ?
+        'SUBSTR(' + text + ', ' + pos + ', ' + len + ')' :
+        'SUBSTR(' + text + ', ' + pos + ')',
+      Sparql.ORDER_FUNCTION_CALL];
   }
 };
 
-Sparql['sparql_text_changeCase'] = function(block) {
+Sparql.sparql_text_changeCase = function(block) {
   // Change capitalization.
   var FUNCTIONS = {
     'UPPERCASE': 'UCASE',
@@ -242,7 +241,7 @@ Sparql['sparql_text_changeCase'] = function(block) {
   throw "Unknown case type: " + caseStr;
 };
 
-// Sparql['sparql_text_trim'] = function(block) {
+// Sparql.sparql_text_trim = function(block) {
 //   // Trim spaces.
 //   var OPERATORS = {
 //     'LEFT': ".replace(/^[\\s\\xa0]+/, '')",
@@ -255,7 +254,7 @@ Sparql['sparql_text_changeCase'] = function(block) {
 //   return [argument0 + operator, Sparql.ORDER_FUNCTION_CALL];
 // };
 
-Sparql['sparql_hash'] = function(block) {
+Sparql.sparql_hash = function(block) {
   // Change capitalization.
   var typeStr = block.getFieldValue('TYPE');
   var functionName = typeStr; // At the moment the hash type is function name

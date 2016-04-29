@@ -1,6 +1,6 @@
 var fs = require('fs'),
-    gulp = require('gulp'), 
-    notify = require("gulp-notify") ,
+    gulp = require('gulp'),
+    notify = require("gulp-notify"),
     browserify = require('browserify'),
     uglify = require('gulp-uglify'),
     vfs = require('vinyl-fs'),
@@ -9,14 +9,13 @@ var fs = require('fs'),
     gutil = require('gulp-util'),
     sourcemaps = require('gulp-sourcemaps'),
     pathmodify = require('pathmodify'),
-    closure = require('gulp-closure-compiler-service'),
     exposify = require('exposify');
 
 require('./blockly.js');
 require('./json.js');
 
 var config = {
-  nodeDir: './node_modules' ,
+  nodeDir: './node_modules',
   jsDistDir: "./dist",
   jsBundleName: "sparqlblocks.js"
 };

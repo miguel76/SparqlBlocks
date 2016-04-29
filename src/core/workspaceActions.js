@@ -37,7 +37,7 @@ var execute_ = function(action, thisArg) {
       }
     }, 0);
   }
-}
+};
 
 module.exports = {
   execute: execute_

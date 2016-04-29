@@ -20,7 +20,9 @@
 'use strict';
 
 var Blockly = require('blockly'),
-    BlocklyDialogs = require('./lib-dialogs.js');
+    BlocklyDialogs = require('./lib-dialogs.js'),
+    _ = require('underscore'),
+    $ = require('jquery');
 
 var filteredEventManager_ = function(workspace) {
   var listeners_ = [];
@@ -39,8 +41,8 @@ var filteredEventManager_ = function(workspace) {
   };
 
   var fireChangeListener_ = function(event) {
-    for (var i = 0, func; func = listeners_[i]; i++) {
-      func(event);
+    for (var listenerIndex = 0; listenerIndex < listeners_.length; listenerIndex++) {
+      listeners_[listenerIndex](event);
     }
   };
 
@@ -50,11 +52,11 @@ var filteredEventManager_ = function(workspace) {
         fireChangeListener_(eventQueue_.shift());
       }
     }
-  }
+  };
 
   workspace.addChangeListener( function(lastEvent) {
-    if (lastEvent.type != Blockly.Events.MOVE
-        || lastEvent.newParentId || lastEvent.oldParentId) {
+    if (lastEvent.type != Blockly.Events.MOVE ||
+        lastEvent.newParentId || lastEvent.oldParentId) {
           var toAdd = true;
           var eventsBetweenCreateAndDelete = [];
           for (var pastEventId = eventQueue_.length - 1; pastEventId >= 0; pastEventId--) {
@@ -107,7 +109,7 @@ var filteredEventManager_ = function(workspace) {
     removeChangeListener: removeChangeListener_
   };
 
-}
+};
 
 var nonModalDefaultStyle = {
   "top": "inherit",
@@ -143,7 +145,13 @@ var replaceInLineBlockly_ = function(div) {
           } : {} ));
     Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom("<xml>" + content + "</xml>"), localWorkspace);
   }
-}
+};
+
+var setOkButtons = function(div) {
+  $(".blocklydialogs-ok").click(function() {
+    BlocklyDialogs.hideDialog(true);
+  });
+};
 
 var track_ = function(workspace, options) {
 
@@ -156,7 +164,6 @@ var track_ = function(workspace, options) {
 
   var stateList = options.stateList;
   if (!stateList || !stateList.length) {
-    console.err("Empty State List!");
     return;
   }
 
@@ -175,6 +182,7 @@ var track_ = function(workspace, options) {
 
     if (dialogDiv) {
       replaceInLineBlockly_(dialogDiv);
+      setOkButtons(dialogDiv);
     }
 
     if (currState.do) {
@@ -190,7 +198,7 @@ var track_ = function(workspace, options) {
           currState.style ? currState.style : {}
         ),
         function() { setTimeout(enterNewState); });
-    };
+    }
 
     if (currState.stepWhen) {
       var listener = eventManager.addChangeListener(function(event) {
@@ -211,7 +219,7 @@ var track_ = function(workspace, options) {
         }
       });
     }
-  }
+  };
 
   enterNewState();
   return {
@@ -223,9 +231,6 @@ var track_ = function(workspace, options) {
 };
 
 var checkBlock = function(block, checkStructure) {
-  console.log('Checking Block of Type ' + block.type + ' against Structure of Type ' + checkStructure.type + ':');
-  console.log(block);
-  console.log(JSON.stringify(checkStructure));
   if (checkStructure.type) {
     if (_.isArray(checkStructure.type)) {
       if (_.indexOf(checkStructure.type, block.type) === -1)
@@ -242,13 +247,13 @@ var checkBlock = function(block, checkStructure) {
     }
     var contentCheck = checkStructure[input];
     if (_.isArray(contentCheck)) { // check for a list statement blocks
-      var containedBlock = block.getInputTargetBlock(input);
+      var containedStmt = block.getInputTargetBlock(input);
       contentCheck = contentCheck.slice(); // create a copy so that can be modified
-      for (;containedBlock; containedBlock = containedBlock.getNextBlock()) {
+      for (;containedStmt; containedStmt = containedStmt.getNextBlock()) {
         var contentCheckFound = false;
         for (var contentCheckIndex = 0; contentCheckIndex < contentCheck.length; contentCheckIndex++) {
           var containedContentCheck = contentCheck[contentCheckIndex];
-          if (checkBlock(containedBlock, containedContentCheck)) {
+          if (checkBlock(containedStmt, containedContentCheck)) {
             // contentCheckFound = contentCheckIndex;
             contentCheckFound = true;
             contentCheck.splice(contentCheckIndex, 1);
@@ -263,8 +268,8 @@ var checkBlock = function(block, checkStructure) {
         return false;
       }
     } else if (_.isObject(contentCheck)) { // check for a simple input block
-      var containedBlock = block.getInputTargetBlock(input);
-      if (!containedBlock || !checkBlock(containedBlock, contentCheck)) {
+      var containedValueBlock = block.getInputTargetBlock(input);
+      if (!containedValueBlock || !checkBlock(containedValueBlock, contentCheck)) {
         return false;
       }
     } else if (_.isNull(contentCheck)) { // check for an empty simple input
@@ -280,14 +285,12 @@ var checkBlock = function(block, checkStructure) {
 
   }
   return true; // if everything went right
-}
+};
 
 var checkWorkspace = function(workspace, checkStructure) {
   var topBlocks = workspace.getTopBlocks();
   for (var i = 0; i < topBlocks.length; i++) {
     var topBlock = topBlocks[i];
-    console.log('Checking TopBlock ' + i + ':');
-    console.log(topBlock);
     if (checkBlock(topBlock, checkStructure)) {
       return topBlock;
     }
@@ -298,5 +301,6 @@ var checkWorkspace = function(workspace, checkStructure) {
 module.exports = {
   track: track_,
   check: checkWorkspace,
-  replaceInLineBlockly: replaceInLineBlockly_
+  replaceInLineBlockly: replaceInLineBlockly_,
+  setOkButtons: setOkButtons
 };

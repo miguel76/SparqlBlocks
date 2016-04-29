@@ -11,16 +11,33 @@ var typeExt = Types.getExtension;
 var defaultLimit = 5;
 var maxLimit = 50;
 
+var setOrderField = function(queryBlock, index, lastField) {
+  var inputName = 'ORDER_FIELD' + index;
+  var labelFieldName = 'ORDER_LABEL' + index;
+  var dirFieldName = 'ORDER_DIRECTION' + index;
+  var oldDirValue = queryBlock.getFieldValue(dirFieldName);
+  var input = queryBlock.getInput(inputName);
+  if (input) {
+    input.removeField(dirFieldName);
+    input.removeField(labelFieldName);
+  } else {
+    input = queryBlock.appendValueInput(inputName)
+                      .setCheck(typeExt("Expr"));
+    queryBlock.moveInputBefore(inputName, "AFTER_ORDER");
+  }
+  var dirField = new Blockly.FieldDropdown([["↓", "ASC"], ["↑", "DESC"]]);
+  if (oldDirValue) dirField.setValue(oldDirValue);
+  input.appendField(
+      index > 1 ?
+          (index > 2 ? ", " : "") + (lastField ? "and " : "") + "then by" :
+          "order by",
+      labelFieldName);
+  input.appendField(dirField, dirFieldName);
+};
+
 module.exports = {
   init: function() {
       this.orderFieldCount_ = 1;
-
-      this.appendValueInput("ORDER_FIELD1")
-          .setCheck(typeExt("Expr"))
-          .appendField("order by", "ORDER_LABEL1")
-          .appendField(
-            new Blockly.FieldDropdown([["↓", "ASC"], ["↑", "DESC"]]),
-            "ORDER_DIRECTION1");
 
       this.appendDummyInput("AFTER_ORDER")
           .appendField("& limit to first")
@@ -30,6 +47,8 @@ module.exports = {
               Blockly.FieldTextInput.nonnegativeIntegerValidator),
             "LIMIT")
           .appendField("rows");
+
+      setOrderField(this, this.orderFieldCount_, true);
   },
   onchange: function() {
     // Check and correct limit field if over max
@@ -43,56 +62,18 @@ module.exports = {
     var lastOrderConnection = lastOrderInput && lastOrderInput.connection.targetConnection;
     if (lastOrderConnection) { // last order item is connected
       if (this.orderFieldCount_ > 1) {
-        var inputName = 'ORDER_FIELD' + this.orderFieldCount_;
-        var labelFieldName = 'ORDER_LABEL' + this.orderFieldCount_;
-        var dirFieldName = 'ORDER_DIRECTION' + this.orderFieldCount_;
-        var input = this.getInput(inputName);
-        var dirField = new Blockly.FieldDropdown([["↓", "ASC"], ["↑", "DESC"]]);
-        dirField.setValue(this.getFieldValue(dirFieldName));
-        input.removeField(dirFieldName);
-        input.removeField(labelFieldName);
-        input.appendField(", then by", labelFieldName);
-        input.appendField(dirField, dirFieldName);
+        setOrderField(this, this.orderFieldCount_, false);
       }
       this.orderFieldCount_++;
-      var inputName = 'ORDER_FIELD' + this.orderFieldCount_;
-      this.appendValueInput(inputName)
-          .setCheck(typeExt("Expr"))
-          .appendField((this.orderFieldCount_ > 2 ? ", " : "") + "and then by",
-                       "ORDER_LABEL" + this.orderFieldCount_)
-          .appendField(
-            new Blockly.FieldDropdown([["↓", "ASC"], ["↑", "DESC"]]),
-            'ORDER_DIRECTION' + this.orderFieldCount_);
-      this.moveInputBefore(inputName, "AFTER_ORDER");
+      setOrderField(this, this.orderFieldCount_, true);
     } else if (this.orderFieldCount_ > 1) {
-      var lastButOneOrderInput =
-          this.getInput('ORDER_FIELD' + (this.orderFieldCount_ - 1));
-      if (lastButOneOrderInput &&
-          !lastButOneOrderInput.connection.targetConnection) {
+      while ( this.orderFieldCount_ > 1 &&
+              !(this.getInput('ORDER_FIELD' + (this.orderFieldCount_ - 1))
+                    .connection.targetConnection)) {
         this.removeInput('ORDER_FIELD' + this.orderFieldCount_);
         this.orderFieldCount_--;
-        while ( this.orderFieldCount_ > 1
-                && !(this.getInput('ORDER_FIELD' + (this.orderFieldCount_ - 1))
-                         .connection.targetConnection)) {
-          this.removeInput('ORDER_FIELD' + (this.orderFieldCount_ - 1));
-          this.orderFieldCount_--;
-        }
-        lastButOneOrderInput.name = 'ORDER_FIELD' + this.orderFieldCount_;
-        var labelFieldName = 'ORDER_LABEL' + this.orderFieldCount_;
-        var dirFieldName = 'ORDER_DIRECTION' + this.orderFieldCount_;
-        var prevLabelFieldName = lastButOneOrderInput.fieldRow[0].name;
-        var prevDirFieldName = lastButOneOrderInput.fieldRow[1].name;
-        var dirField = new Blockly.FieldDropdown([["↓", "ASC"], ["↑", "DESC"]]);
-        dirField.setValue(this.getFieldValue(prevDirFieldName));
-        lastButOneOrderInput.removeField(prevDirFieldName);
-        lastButOneOrderInput.removeField(prevLabelFieldName);
-        lastButOneOrderInput.appendField(
-              this.orderFieldCount_ > 1 ?
-                (this.orderFieldCount_ > 2 ? ", " : "") + "and then by" :
-                "order by",
-              labelFieldName);
-        lastButOneOrderInput.appendField(dirField, dirFieldName);
       }
+      setOrderField(this, this.orderFieldCount_, true);
     }
   },
   /**

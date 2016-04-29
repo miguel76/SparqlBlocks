@@ -25,7 +25,7 @@ var Blockly = require('blockly');
 var baseInit_ = function(callback) {
   return function() {
     callback.call(this);
-  }
+  };
 };
 
 var baseCustomContextMenu_ = function(callback) {

@@ -21,7 +21,7 @@
 
 var Sparql = require('../sparql.js');
 
-Sparql['variables_get'] = function(block) {
+Sparql.variables_get = function(block) {
   var text_var = block.getFieldValue('VAR');
   var code = '?' + text_var;
   return [code, Sparql.ORDER_ATOMIC];

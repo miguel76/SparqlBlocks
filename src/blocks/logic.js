@@ -28,7 +28,7 @@ var _ = require('underscore'),
 var typeExt = Types.getExtension;
 var typeContentExt = function(typeStr) {
   return typeExt(typeStr == "Var" ? "Expr" : typeStr);
-}
+};
 
 var HUE = 210;
 
@@ -93,7 +93,7 @@ Blocks.block('sparql_logic_compare', {
         !blockA.outputConnection.checkType_(blockB.outputConnection) &&
         _.intersection(
           typeContentExt(blockA.outputConnection.check_),
-          typeContentExt(blockB.outputConnection.check_)).length == 0 ) {
+          typeContentExt(blockB.outputConnection.check_)).length === 0 ) {
       // Mismatch between two inputs.  Disconnect previous and bump it away.
       for (var i = 0; i < this.prevBlocks_.length; i++) {
         var block = this.prevBlocks_[i];

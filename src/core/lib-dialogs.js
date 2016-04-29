@@ -23,7 +23,8 @@
  */
 'use strict';
 
-var Blockly = require('blockly');
+var Blockly = require('blockly'),
+    $ = require('jquery');
 
 var BlocklyDialogs = {};
 
@@ -191,7 +192,7 @@ BlocklyDialogs.hideDialog = function(opt_animate) {
   }
 
   BlocklyDialogs.isDialogVisible_ = false;
-  BlocklyDialogs.dialogDispose_ && BlocklyDialogs.dialogDispose_();
+  if (BlocklyDialogs.dialogDispose_) BlocklyDialogs.dialogDispose_();
   BlocklyDialogs.dialogDispose_ = null;
   var origin = (opt_animate === false) ? null : BlocklyDialogs.dialogOrigin_;
   var dialog = document.getElementById('dialog');
@@ -264,7 +265,8 @@ BlocklyDialogs.matchBorder_ = function(element, animate, opacity) {
  * @private
  */
 BlocklyDialogs.getBBox_ = function(element) {
-  var box = goog.style.getPageOffset(element);
+  var offset = $(element).offset();
+  var box = { x: offset.left, y: offset.top };
   if (element.getBBox) {
     // SVG element.
     var bBox = element.getBBox();
@@ -336,10 +338,5 @@ BlocklyDialogs.stopDialogKeyDown = function() {
   document.body.removeEventListener('keydown',
       BlocklyDialogs.dialogKeyDown_, true);
 };
-
-// Export symbols that would otherwise be renamed by Closure compiler.
-// templace.soy has a hardcoded onclick="BlocklyDialogs.hidedialogs()".
-window['BlocklyDialogs'] = BlocklyDialogs;
-BlocklyDialogs['hideDialog'] = BlocklyDialogs.hideDialog;
 
 module.exports = BlocklyDialogs;

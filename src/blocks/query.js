@@ -25,7 +25,9 @@ var _ = require('underscore'),
     Types = require('../core/types.js'),
     Blocks = require('../core/blocks.js'),
     Msg = require('../core/msg.js'),
-    orderFields = require('./order_fields.js');
+    orderFields = require('./order_fields.js'),
+    SparqlGen = require('../generators/sparql.js'),
+    FileSaver = require('browser-filesaver');
 
 var typeExt = Types.getExtension;
 
@@ -70,10 +72,10 @@ Blocks.block('sparql_select', {
     this.setTooltip(Msg.SELECT_TOOLTIP);
   },
   saveQueryAsSparql: function() {
-    var sparqlFragment = Sparql.blockToCode(this);
+    var sparqlFragment = SparqlGen.blockToCode(this);
     if (sparqlFragment) {
       var outputBlob = new Blob([sparqlFragment], {type : 'application/sparql-query'});
-      saveAs(outputBlob, "query.rq" );
+      FileSaver.saveAs(outputBlob, "query.rq" );
     }
   },
   customContextMenu: function(options) {

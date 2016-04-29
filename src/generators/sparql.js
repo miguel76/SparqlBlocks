@@ -43,7 +43,7 @@ Sparql.stmJoin = function(statements, joinStr) {
   stmntArray.pop();
   // console.log('stmntArray (after pop):' + stmntArray);
   return stmntArray.join(joinStr);
-}
+};
 
 Sparql.statementToGraphPattern = function(block, inputName) {
   // var stmntArray =
@@ -56,7 +56,7 @@ Sparql.statementToGraphPattern = function(block, inputName) {
   return Sparql.stmJoin(
           Sparql.statementToCode(block, inputName),
           '.\n');
-}
+};
 
 /**
  * Order of operation ENUMs.
@@ -161,9 +161,9 @@ Sparql.scrub_ = function(block, code) {
       if (block.inputList[x].type == Blockly.INPUT_VALUE) {
         var childBlock = block.inputList[x].connection.targetBlock();
         if (childBlock) {
-          var comment = Sparql.allNestedComments(childBlock);
-          if (comment) {
-            commentCode += Sparql.prefixLines(comment, '// ');
+          var childComment = Sparql.allNestedComments(childBlock);
+          if (childComment) {
+            commentCode += Sparql.prefixLines(childComment, '// ');
           }
         }
       }

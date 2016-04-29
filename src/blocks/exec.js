@@ -25,7 +25,9 @@ var _ = require('underscore'),
     Types = require('../core/types.js'),
     Blocks = require('../core/blocks.js'),
     Exec = require('../core/exec.js'),
-    Msg = require('../core/msg.js');
+    Msg = require('../core/msg.js'),
+    SparqlGen = require('../generators/sparql.js'),
+    FileSaver = require('browser-filesaver');
 
 require('blob-polyfill');
 
@@ -135,9 +137,9 @@ var execBlock = function(options) {
                 var parameter = options.parameters[i];
                 parametersDict[parameter.name] =
                     parameter.name ?
-                      Sparql.valueToCode(
+                      SparqlGen.valueToCode(
                           this, parameter.name,
-                          Sparql.ORDER_NONE) :
+                          SparqlGen.ORDER_NONE) :
                       null;
               }
             }
@@ -169,14 +171,14 @@ var execBlock = function(options) {
      */
     domToMutation: Blocks.query.orderFields.domToMutation,
     customContextMenu: function(options) {
+      var thisBlock = this;
       if (this.sparqlQueryStr) {
-        var thisBlock = this;
         Blocks.insertOptionBeforeHelp(options, {
           text: "Save Query as SPARQL",
           enabled: true,
           callback: function() {
             var outputBlob = new Blob([thisBlock.sparqlQueryStr], {type : 'application/sparql-query'});
-            saveAs(outputBlob, "query.rq" );
+            FileSaver.saveAs(outputBlob, "query.rq" );
           }
         });
         Blocks.insertOptionBeforeHelp(options, {
@@ -195,7 +197,6 @@ var execBlock = function(options) {
         });
       }
       if (this.resultsData) {
-        var thisBlock = this;
         Blocks.insertOptionBeforeHelp(options, {
           text: "Save Results as JSON",
           enabled: true,
@@ -204,14 +205,14 @@ var execBlock = function(options) {
             if (jsonString) {
               var outputBlob =
                   new Blob([jsonString], {type : 'application/sparql-results+json'});
-              saveAs(outputBlob, "results.json" );
+              FileSaver.saveAs(outputBlob, "results.json" );
             }
           }
         });
       }
     }
   };
-}
+};
 
 var DESCR_LENGTH = 40;
 
@@ -249,7 +250,7 @@ var setNewBlock_ = function(name, baseBlock, connection) {
   newBlock.initSvg();
   newBlock.render();
   return newBlock;
-}
+};
 
 var sparqlExecAndPublish_ = function(endpointUrl, query, block, connection, callback) {
   var progressBlock = setNewBlock_('sparql_execution_in_progress', block, connection);
@@ -289,7 +290,7 @@ var sparqlExecAndPublish_ = function(endpointUrl, query, block, connection, call
     // connect_(connection, resultBlock);
     callback(data);
   });
-}
+};
 
 var blockExecQuery_ = function(block, queryStr) {
   var resInput = block.getInput('RESULTS');
@@ -305,7 +306,6 @@ var blockExecQuery_ = function(block, queryStr) {
       block.queryReq.abort();
     }
     if (queryStr) {
-      console.log('Ready to execute query: ' + queryStr);
       block.resultsData = null;
       block.queryReq = sparqlExecAndPublish_(
           endpointUri, queryStr,
@@ -316,7 +316,6 @@ var blockExecQuery_ = function(block, queryStr) {
             block.resultsData = data;
           } );
     } else {
-      console.log('Empty query');
       block.resultsData = null;
       var phBlock = setNewBlock_('sparql_execution_placeholder', block, resConnection);
       // newBlock.initSvg();
@@ -326,15 +325,15 @@ var blockExecQuery_ = function(block, queryStr) {
 
   }
 
-}
+};
 
 var blockExec_ = function(block, queryBlock) {
   if (!queryBlock) {
     queryBlock = block.getInputTargetBlock('QUERY');
   }
-  var queryStr = Sparql.sparqlQuery(queryBlock);
+  var queryStr = SparqlGen.sparqlQuery(queryBlock);
   blockExecQuery_(block, queryStr);
-}
+};
 
 Blocks.block(
     'sparql_execution',

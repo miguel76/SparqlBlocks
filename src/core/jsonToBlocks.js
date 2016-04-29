@@ -30,7 +30,7 @@ var xsd_ = function(localName) {
     xsd_map_[localName] = extended;
   }
   return extended;
-}
+};
 
 var blockFromTypedLiteral_ = function(value, type, workspace) {
   var typedBlock = null;
@@ -76,12 +76,12 @@ var blockFromTypedLiteral_ = function(value, type, workspace) {
       }
   }
   return typedBlock;
-}
+};
 
 var blockFromStringLiteral_ = function(value, workspace) {
   var strBlock = null;
   var lang = value["xml:lang"];
-  var datatype = value["datatype"];
+  var datatype = value.datatype;
   if (lang) {
     strBlock = workspace.newBlock('sparql_text_with_lang');
     strBlock.initSvg();
@@ -92,7 +92,7 @@ var blockFromStringLiteral_ = function(value, workspace) {
   }
   strBlock.setFieldValue(value.value, 'TEXT');
   return strBlock;
-}
+};
 
 
 var blockFromLiteral_ = function(value, workspace) {
@@ -102,12 +102,12 @@ var blockFromLiteral_ = function(value, workspace) {
   } else {
     return blockFromStringLiteral_(value, workspace);
   }
-}
+};
 
 var blockFromUri_ = function(value, workspace) {
   var iri = value.value;
   var luRes = Prefixes.lookForIri(iri);
-  if (luRes != null) {
+  if (luRes) {
     var prefBlock = workspace.newBlock('sparql_prefixed_iri');
     prefBlock.initSvg();
     prefBlock.setFieldValue(luRes.prefix, 'PREFIX');
@@ -119,7 +119,7 @@ var blockFromUri_ = function(value, workspace) {
     uriBlock.setFieldValue(iri, 'IRI');
     return uriBlock;
   }
-}
+};
 
 var blockFromBnode_ = function(value, workspace) {
   var bnodeLabel = value.value;
@@ -128,7 +128,7 @@ var blockFromBnode_ = function(value, workspace) {
   prefBlock.setFieldValue('_', 'PREFIX');
   prefBlock.setFieldValue(bnodeLabel, 'LOCAL_NAME');
   return prefBlock;
-}
+};
 
 var blockFromValue_ = function(value, workspace) {
   var valueBlock = null;

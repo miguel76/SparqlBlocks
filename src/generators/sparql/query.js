@@ -30,7 +30,7 @@ Sparql.sparqlQuery = function(block) {
     return '';
   }
   var statements_where = Sparql.statementToGraphPattern(block, 'WHERE');
-  if (statements_where == '') {
+  if (statements_where === '') {
     return '';
   }
   var limit = Blockly.FieldTextInput.nonnegativeIntegerValidator(block.getFieldValue("LIMIT"));
@@ -84,9 +84,9 @@ Sparql.sparqlQuery = function(block) {
   }
 
   return code; // [code, Sparql.ORDER_ATOMIC];
-}
+};
 
-Sparql['sparql_select'] = function(block) {
+Sparql.sparql_select = function(block) {
   var query = Sparql.sparqlQuery(block);
   return query ?
         '{\n' +

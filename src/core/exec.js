@@ -25,7 +25,8 @@ var SparqlGen = require('../generators/sparql.js'),
     WorkspaceActions = require('./workspaceActions.js'),
     msg = require('./msg.js'),
     FieldTable = require('./field_table.js'),
-    $ = require('jquery');
+    $ = require('jquery'),
+    MessageDisplay = require('./messageDisplay.js');
 
 // var corsProxy = "https://cors-anywhere.herokuapp.com/";
 
@@ -45,20 +46,20 @@ var sparqlExec_ = function(endpointUrl, query, callback) {
     .fail(function(jqXHR, textStatus, errorThrown) {
       callback({ jqXHR: jqXHR, textStatus: textStatus, errorThrown: errorThrown });
     });
-}
+};
 
 var sparqlExecAndAlert_ = function(endpointUrl, query) {
   return sparqlExec_(endpointUrl, query, function(err, data) {
     if (err) {
-      alert("Error: " + err);
+      MessageDisplay.alert("Error: " + err);
     } else {
-      alert("Results:\n" + JSON.stringify(data));
+      MessageDisplay.alert("Results:\n" + JSON.stringify(data));
     }
-  })
-}
+  });
+};
 
 var sparqlExecAndBlock_ = function(endpointUrl, query, workspace, callback) {
-}
+};
 
 var connect_ = function(connection, block) {
   var targetBlock = connection.targetBlock();
@@ -67,14 +68,14 @@ var connect_ = function(connection, block) {
   }
   connection.connect(block.previousConnection);
   block.render();
-}
+};
 
 var unconnect_ = function(connection) {
   var targetBlock = connection.targetBlock();
   if (targetBlock) {
     targetBlock.dispose();
   }
-}
+};
 
 var DESCR_LENGTH = 40;
 
@@ -112,7 +113,7 @@ var sparqlExecAndPublish_ = function(endpointUrl, query, workspace, resultsInput
     setResult_(resultsInput, resultField);
     callback(data);
   });
-}
+};
 
 var blockExecQuery_ = function(block, queryStr, resultsHolder) {
   if (!resultsHolder) {
@@ -128,7 +129,6 @@ var blockExecQuery_ = function(block, queryStr, resultsHolder) {
       block.queryReq.abort();
     }
     if (queryStr && endpointUri) {
-      console.log('Ready to execute query: ' + queryStr);
       block.resultsData = null;
       block.queryReq = sparqlExecAndPublish_(
           endpointUri, queryStr,
@@ -146,7 +146,7 @@ var blockExecQuery_ = function(block, queryStr, resultsHolder) {
 
   }
 
-}
+};
 
 var blockExec_ = function(block, queryBlock, resultsHolder) {
   if (!queryBlock) {
@@ -154,7 +154,7 @@ var blockExec_ = function(block, queryBlock, resultsHolder) {
   }
   var queryStr = SparqlGen.sparqlQuery(queryBlock);
   blockExecQuery_(block, queryStr, resultsHolder);
-}
+};
 
 module.exports = {
   sparqlExecAndPublish: sparqlExecAndPublish_,

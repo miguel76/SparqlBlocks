@@ -21,7 +21,7 @@
 
 var Sparql = require('../sparql.js');
 
-Sparql['sparql_math_number'] = function(block) {
+Sparql.sparql_math_number = function(block) {
   // Numeric value.
   var numStr = block.getFieldValue('NUM');
   var asIntStr = "" + parseInt(numStr);
@@ -35,7 +35,7 @@ Sparql['sparql_math_number'] = function(block) {
   throw "Not a number: " + numStr;
 };
 
-Sparql['sparql_math_arithmetic'] = function(block) {
+Sparql.sparql_math_arithmetic = function(block) {
   // Basic arithmetic operators, and power.
   var OPERATORS = {
     'ADD': [' + ', Sparql.ORDER_ADDITION],
@@ -53,7 +53,7 @@ Sparql['sparql_math_arithmetic'] = function(block) {
   return [code, order];
 };
 
-Sparql['sparql_math_single'] = function(block) {
+Sparql.sparql_math_single = function(block) {
   // Math operators with single operand.
   var operator = block.getFieldValue('OP');
   var code;
@@ -96,22 +96,22 @@ Sparql['sparql_math_single'] = function(block) {
 var isWhole = function(argument0) {
   var code = 'FLOOR(' + argument0 + ') = ' + argument0;
   return [code, Sparql.ORDER_EQUALITY];
-}
+};
 
 var isNotWhole = function(argument0) {
   var code = 'FLOOR(' + argument0 + ') != ' + argument0;
-  return [code, ORDER_EQUALITY];
-}
+  return [code, Sparql.ORDER_EQUALITY];
+};
 
 var divisible = function(argument0,argument1) {
   return isWhole(argument0 + ' / ' + argument1)[0];
-}
+};
 
 var notDivisible = function(argument0,argument1) {
   return isNotWhole(argument0 + ' / ' + argument1)[0];
-}
+};
 
-Sparql['sparql_math_number_property'] = function(block) {
+Sparql.sparql_math_number_property = function(block) {
   // Check if a number is even, odd, prime, whole, positive, or negative
   // or if it is divisible by certain number. Returns true or false.
   var number_to_check = Sparql.valueToCode(block, 'NUMBER_TO_CHECK',
@@ -139,14 +139,14 @@ Sparql['sparql_math_number_property'] = function(block) {
 };
 
 // Rounding functions have a single operand.
-Sparql['sparql_math_round'] = Sparql['sparql_math_single'];
+Sparql.sparql_math_round = Sparql.sparql_math_single;
 // Trigonometry functions have a single operand.
-// Sparql['sparql_math_trig'] = Sparql['sparql_math_single'];
+// Sparql.sparql_math_trig = Sparql.sparql_math_single;
 
 var idivAbs = function(argument0,argument1) {
   var code = 'FLOOR(ABS(' + argument0 + ' / ' + argument1 + '))';
   return [code, Sparql.ORDER_FUNCTION_CALL];
-}
+};
 
 var idiv = function(argument0,argument1) {
   var code =
@@ -154,7 +154,7 @@ var idiv = function(argument0,argument1) {
       ' * (ABS(' + argument0 + ') / ' + argument0 + ')' +
       ' * (ABS(' + argument1 + ') / ' + argument1 + ')';
   return [code, Sparql.ORDER_MULTIPLICATION];
-}
+};
 
 var modulo = function(argument0,argument1) {
   var code =
@@ -163,9 +163,9 @@ var modulo = function(argument0,argument1) {
       ' * ABS(' + argument0 + ') / ' + argument0 +
       ' * ABS(' + argument1 + ')';
   return [code, Sparql.ORDER_SUBTRACTION];
-}
+};
 
-Sparql['sparql_math_modulo'] = function(block) {
+Sparql.sparql_math_modulo = function(block) {
   // Remainder computation.
   var argument0 = Sparql.valueToCode(block, 'DIVIDEND',
       Sparql.ORDER_DIVISION) || '0';
@@ -174,7 +174,7 @@ Sparql['sparql_math_modulo'] = function(block) {
   return modulo(argument0, argument1);
 };
 
-Sparql['sparql_math_constrain'] = function(block) {
+Sparql.sparql_math_constrain = function(block) {
   // Constrain a number between two limits.
   var argument0 = Sparql.valueToCode(block, 'VALUE',
       Sparql.ORDER_RELATIONAL) || '0';
@@ -189,7 +189,7 @@ Sparql['sparql_math_constrain'] = function(block) {
   return [code, Sparql.ORDER_FUNCTION_CALL];
 };
 
-Sparql['sparql_math_random_int'] = function(block) {
+Sparql.sparql_math_random_int = function(block) {
   // Random integer between [X] and [Y].
   var argument0 = Sparql.valueToCode(block, 'FROM',
       Sparql.ORDER_ADDITION) || '0';
@@ -199,7 +199,7 @@ Sparql['sparql_math_random_int'] = function(block) {
   return [code, Sparql.ORDER_FUNCTION_CALL];
 };
 
-Sparql['sparql_math_random_float'] = function(block) {
+Sparql.sparql_math_random_float = function(block) {
   // Random fraction between 0 and 1.
   return ['RAND()', Sparql.ORDER_FUNCTION_CALL];
 };

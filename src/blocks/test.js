@@ -24,7 +24,10 @@ var _ = require('underscore'),
     Types = require('../core/types.js'),
     Blocks = require('../core/blocks.js'),
     WorkspaceActions = require('../core/workspaceActions.js'),
-    Storage = require('../core/storage.js');
+    Storage = require('../core/storage.js'),
+    SparqlGen = require('../generators/sparql.js'),
+    md5 = require('js-md5'),
+    MessageDisplay = require('../core/messageDisplay.js');
 
 var typeExt = Types.getExtension;
 
@@ -35,8 +38,8 @@ var questionState = null;
 var initQuestionState = function() {
   if (!questionState) {
     questionState = {};
-  }get
-}
+  }
+};
 
 exports.getState = function() {
   return questionState;
@@ -51,7 +54,7 @@ var fixAsRightAnswer = function(questionBlock, answerBlock) {
     questionBlock.appendDummyInput().appendField("⭐");
     questionBlock.isRightAnswer = true;
   }
-}
+};
 
 Blocks.block('sparql_test', {
   /**
@@ -100,26 +103,25 @@ Blocks.block('sparql_test', {
       return;
     }
 
-    var value = Sparql.valueToCode(
+    var value = SparqlGen.valueToCode(
                     this,
                     'ANSWER',
-                    Sparql.ORDER_NONE);
-    if (value && value != "" && value != this.currentAnswer) {
+                    SparqlGen.ORDER_NONE);
+    if (value && value !== "" && value != this.currentAnswer) {
+      var answerBlock = this.getInputTargetBlock('ANSWER');
       if (md5(value) === data.answerMD5) {
-        Storage.alert("⭐  Bingo! It is the right block!   ⭐", "info");
+        MessageDisplay.alert("⭐  Bingo! It is the right block!   ⭐", "info");
         if (!questionState[data.id]) {
           questionState[data.id] = {};
         }
         questionState[data.id].rightAnswer = value;
-        var xml = goog.dom.createDom('xml');
-        var answerBlock = this.getInputTargetBlock('ANSWER');
+        var xml = document.createElement('xml');
         xml.appendChild(Blockly.Xml.blockToDom(answerBlock));
         questionState[data.id].rightAnswerXML = Blockly.Xml.domToText(xml);
         fixAsRightAnswer(this, answerBlock);
       } else {
-        var answerBlock = this.getInputTargetBlock('ANSWER');
         answerBlock.unplug();
-        Storage.alert("Sorry, wrong block. Try with another one...", "error");
+        MessageDisplay.alert("Sorry, wrong block. Try with another one...", "error");
       }
     }
     this.currentAnswer = value;

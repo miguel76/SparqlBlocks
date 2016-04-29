@@ -27,19 +27,20 @@ function start() {
   }
 
   function setMode(newMode) {
-    sParameters["mode"] = newMode;
+    sParameters.mode = newMode;
     rebuildSearch();
   }
 
   // Depending on the URL argument, render as LTR or RTL.
-  var rtl = sParameters["rtl"];
+  var rtl = sParameters.rtl;
 
-  var mode = _.isString(sParameters["mode"]) ? sParameters["mode"] : "demo";
+  var mode = _.isString(sParameters.mode) ? sParameters.mode : "demo";
   var isReadOnly = (mode === "view");
 
+  var workspace;
   if (isReadOnly) {
 
-    var workspace = Blockly.inject('blocklyDiv', {
+    workspace = Blockly.inject('blocklyDiv', {
         rtl: rtl,
         media: 'media/',
         comments: true,
@@ -62,7 +63,7 @@ function start() {
               document.getElementById('toolboxGuide') :
               document.getElementById('toolboxDemo') );
 
-    var workspace = Blockly.inject('blocklyDiv', {
+    workspace = Blockly.inject('blocklyDiv', {
         comments: true,
         disable: true,
         collapse: true,
@@ -82,7 +83,7 @@ function start() {
            wheel: false,
            startScale: 1.0,
            maxScale: 4,
-           minScale: .25,
+           minScale: 0.25,
            scaleSpeed: 1.1
           },
         // Enable shadow blocks morphing to regular ones on change
@@ -120,7 +121,7 @@ function start() {
         } else {
           return false;
         }
-      }
+      };
 
       var guideStateList = [
         {
@@ -271,7 +272,7 @@ function start() {
           do: function(data) {
             data.check.WHERE[0].SUBJECT = {
               type: ["sparql_prefixed_iri", "sparql_iri"]
-            }
+            };
           },
           stepWhen: function(event, data) {
             return check(data);
@@ -445,8 +446,8 @@ function start() {
       workspace.trackingGuide = SparqlBlocks.Guide.track(
         workspace,
         _.extend({ stateList: guideStateList },
-          $.isNumeric(sParameters["startGuideFrom"]) ?
-              { startStateId: Math.round(0 + sParameters["startGuideFrom"]) } : {}
+          $.isNumeric(sParameters.startGuideFrom) ?
+              { startStateId: Math.round(0 + sParameters.startGuideFrom) } : {}
         )
       );
 
@@ -456,6 +457,7 @@ function start() {
         return;
       $(".flash-messages").css("display", "none");
       SparqlBlocks.Guide.replaceInLineBlockly(testAlertDiv);
+      SparqlBlocks.Guide.setOkButtons(testAlertDiv);
       BlocklyDialogs.showDialog(
         testAlertDiv, false, false, true,
         { width: '75%',
@@ -469,7 +471,7 @@ function start() {
 
   }
 
-  var selCat = sParameters["selCat"];
+  var selCat = sParameters.selCat;
   if (_.isString(selCat) &&
       workspace && workspace.toolbox_ && workspace.toolbox_.tree_) {
     var nodeNum = parseInt(selCat, 10);

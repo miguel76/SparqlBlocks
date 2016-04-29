@@ -26,12 +26,12 @@ var reverseMap_ = {};
 
 var lookForPrefix_ = function(prefix) {
   return prefixMap_[prefix];
-}
+};
 
 var lookForIri_ = function(iri) {
   var prefix = reverseMap_[iri];
   if (prefix) {
-    return { prefix: prefix, localPart: '' }
+    return { prefix: prefix, localPart: '' };
   }
   var base = null;
   var toSearch = iri.substr(0, iri.length - 1);
@@ -44,18 +44,18 @@ var lookForIri_ = function(iri) {
       base = iri.substr(0,sepIndex + 1);
     }
   }
-  if (base != null) {
+  if (base) {
     var res = lookForIri_(base);
     if (res) {
       return {
         prefix: res.prefix,
         localPart: res.localPart + iri.substr(sepIndex + 1)
-      }
+      };
     }
   } else {
     return null;
   }
-}
+};
 
 $.getJSON( "json/prefix.cc.json", function( data ) {
   prefixMap_ = data;

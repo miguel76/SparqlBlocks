@@ -21,7 +21,7 @@
 
 var Sparql = require('../sparql.js');
 
-Sparql['sparql_logic_compare'] = function(block) {
+Sparql.sparql_logic_compare = function(block) {
   // Comparison operator.
   var OPERATORS = {
     'EQ': '=',
@@ -40,7 +40,7 @@ Sparql['sparql_logic_compare'] = function(block) {
   return [code, order];
 };
 
-Sparql['sparql_logic_operation'] = function(block) {
+Sparql.sparql_logic_operation = function(block) {
   // Operations 'and', 'or'.
   var operator = (block.getFieldValue('OP') == 'AND') ? '&&' : '||';
   var order = (operator == '&&') ? Sparql.ORDER_LOGICAL_AND :
@@ -65,7 +65,7 @@ Sparql['sparql_logic_operation'] = function(block) {
   return [code, order];
 };
 
-Sparql['sparql_logic_negate'] = function(block) {
+Sparql.sparql_logic_negate = function(block) {
   // Negation.
   var order = Sparql.ORDER_LOGICAL_NOT;
   var argument0 = Sparql.valueToCode(block, 'BOOL', order) ||
@@ -74,18 +74,18 @@ Sparql['sparql_logic_negate'] = function(block) {
   return [code, order];
 };
 
-Sparql['sparql_logic_boolean'] = function(block) {
+Sparql.sparql_logic_boolean = function(block) {
   // Boolean values true and false.
   var code = (block.getFieldValue('BOOL') == 'TRUE') ? 'true' : 'false';
   return [code, Sparql.ORDER_ATOMIC];
 };
 
-// Sparql['sparql_logic_null'] = function(block) {
+// Sparql.sparql_logic_null = function(block) {
 //   // Null data type.
 //   return ['null', Sparql.ORDER_ATOMIC];
 // };
 
-Sparql['sparql_logic_ternary'] = function(block) {
+Sparql.sparql_logic_ternary = function(block) {
   // Ternary operator.
   var value_if = Sparql.valueToCode(block, 'IF',
       Sparql.ORDER_COMMA) || 'false';
@@ -97,16 +97,16 @@ Sparql['sparql_logic_ternary'] = function(block) {
   return [code, Sparql.ORDER_FUNCTION_CALL];
 };
 
-Sparql['sparql_exists'] = function(block) {
+Sparql.sparql_exists = function(block) {
   var statements_op = Sparql.statementToGraphPattern(block, 'OP');
-  return [ ( (statements_op == '') ?
+  return [ ( (statements_op === '') ?
                 'true' :
                 'EXISTS {\n' + statements_op + '\n}'), Sparql.ORDER_FUNCTION_CALL];
 };
 
-Sparql['sparql_not_exists'] = function(block) {
+Sparql.sparql_not_exists = function(block) {
   var statements_op = Sparql.statementToGraphPattern(block, 'OP');
-  return [ ( (statements_op == '') ?
+  return [ ( (statements_op === '') ?
                 'true' :
                 'NOT EXISTS {\n' + statements_op + '\n}'), Sparql.ORDER_FUNCTION_CALL];
 };

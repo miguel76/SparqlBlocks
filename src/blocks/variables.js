@@ -88,5 +88,5 @@ Blocks.block('sparql_variable', {
   // }
 });
 
-Blockly.Blocks['variables_get'] = Blockly.Blocks['sparql_variable']
-Blockly.Blocks['variables_set'] = null;
+Blockly.Blocks.variables_get = Blockly.Blocks.sparql_variable;
+Blockly.Blocks.variables_set = null;
