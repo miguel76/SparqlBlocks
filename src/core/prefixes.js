@@ -21,8 +21,14 @@
 
 var $ = require('jquery');
 
-var prefixMap_ = null;
+var prefixMap_ = require('../../resources/json/prefix.cc.json');
+
 var reverseMap_ = {};
+Object.keys(prefixMap_).forEach( function(prefix) {
+  if (!reverseMap_[prefixMap_[prefix]]) {
+    reverseMap_[prefixMap_[prefix]] = prefix;
+  }
+});
 
 var lookForPrefix_ = function(prefix) {
   return prefixMap_[prefix];
@@ -56,15 +62,6 @@ var lookForIri_ = function(iri) {
     return null;
   }
 };
-
-$.getJSON( "json/prefix.cc.json", function( data ) {
-  prefixMap_ = data;
-  Object.keys(data).forEach( function(prefix) {
-    if (!reverseMap_[data[prefix]]) {
-      reverseMap_[data[prefix]] = prefix;
-    }
-  });
-});
 
 module.exports = {
   lookForPrefix: lookForPrefix_,

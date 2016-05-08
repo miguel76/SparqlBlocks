@@ -20,7 +20,8 @@
  */
 'use strict';
 
-var Blockly = require('blockly');
+var Blockly = require('blockly'),
+    exportSvg = require('./exportSvg');
 
 var baseInit_ = function(callback) {
   return function() {
@@ -30,6 +31,14 @@ var baseInit_ = function(callback) {
 
 var baseCustomContextMenu_ = function(callback) {
   return function(options) {
+    var thisBlock = this;
+    insertOptionBeforeHelp_(options, {
+      text: "Save Block Image as SVG",
+      enabled: true,
+      callback: function() {
+        exportSvg(thisBlock);
+      }
+    });
     if (callback) {
       callback.call(this, options);
     }
