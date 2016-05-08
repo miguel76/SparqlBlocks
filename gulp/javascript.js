@@ -40,6 +40,7 @@ gulp.task('browserify', function () {
   //   .pipe(fs.createWriteStream(path.join(__dirname, 'bundle.js'), 'utf8'))
 
   return b.transform(exposify)
+        .transform('brfs')
         .bundle()
         .pipe(source('sparqlblocks.min.js'))
         .pipe(buffer())
@@ -51,4 +52,4 @@ gulp.task('browserify', function () {
         .pipe(gulp.dest('./dist/js/'));
 });
 
-gulp.task('makeJs', ['buildBlockly', 'browserify', 'json']);
+gulp.task('makeJs', ['buildBlockly', 'browserify']);
