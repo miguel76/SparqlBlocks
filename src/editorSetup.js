@@ -476,7 +476,7 @@ function start() {
       workspace && workspace.toolbox_ && workspace.toolbox_.tree_) {
     var nodeNum = parseInt(selCat, 10);
     if (!_.isNaN(nodeNum)) {
-      var node = Blockly.mainWorkspace.toolbox_.tree_.getChildAt(nodeNum);
+      var node = workspace.toolbox_.tree_.getChildAt(nodeNum);
       if (node) {
         workspace.toolbox_.tree_.setSelectedItem(node);
       }
