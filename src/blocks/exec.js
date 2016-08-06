@@ -379,7 +379,7 @@ Blocks.block(
                 (params.GRAPH ?
                 "  }\n" : "") +
                 "}\n" +
-                "ORDER BY (STRLEN(?label)), STRLEN(COALESCE(LANG(?label),''))";
+                "ORDER BY (STRLEN(?label)) STRLEN(COALESCE(LANG(?label),''))";
       }
     }));
 
@@ -410,7 +410,7 @@ Blocks.block(
                 (params.GRAPH ?
                 "  }\n" : "") +
                 "}\n" +
-                "ORDER BY (STRLEN(?label)), STRLEN(COALESCE(LANG(?label),''))";
+                "ORDER BY (STRLEN(?label)) STRLEN(COALESCE(LANG(?label),''))";
       }
     }));
 
@@ -446,7 +446,7 @@ Blocks.block(
                     (params.GRAPH ?
                     "  }\n" : "") +
                     "}\n" +
-                    "ORDER BY (STRLEN(?label)), STRLEN(COALESCE(LANG(?label),''))";
+                    "ORDER BY (STRLEN(?label)) STRLEN(COALESCE(LANG(?label),''))";
           }
         }));
 
