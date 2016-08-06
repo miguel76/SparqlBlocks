@@ -47,7 +47,7 @@ Sparql.sparqlQuery = function(block) {
     if (text_order) {
       var text_orderDir = block.getFieldValue('ORDER_DIRECTION' + i);
       if (orderByCode) {
-        orderByCode += ', ';
+        orderByCode += ' ';
       } else {
         orderByCode = 'ORDER BY ';
       }
