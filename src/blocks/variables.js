@@ -33,7 +33,6 @@ Blocks.block('sparql_variable', {
    * @this Blockly.Block
    */
   init: function() {
-
     // this.setHelpUrl(Blockly.Msg.VARIABLES_GET_HELPURL);
     this.setHelpUrl(Blockly.Msg.VARIABLES_GET_HELPURL);
     this.setColour(HUE);
@@ -49,43 +48,7 @@ Blocks.block('sparql_variable', {
     // this.setTooltip(Blockly.Msg.VARIABLES_GET_TOOLTIP);
     // this.contextMenuMsg_ = Blockly.Msg.VARIABLES_GET_CREATE_SET;
     // this.contextMenuType_ = 'variables_set';
-  },
-  /**
-   * Return all variables referenced by this block.
-   * @return {!Array.<string>} List of variable names.
-   * @this Blockly.Block
-   */
-  getVars: function() {
-    return [this.getFieldValue('VAR')];
-  },
-  /**
-   * Notification that a variable is renaming.
-   * If the name matches one of this block's variables, rename it.
-   * @param {string} oldName Previous name of variable.
-   * @param {string} newName Renamed variable.
-   * @this Blockly.Block
-   */
-  renameVar: function(oldName, newName) {
-    if (Blockly.Names.equals(oldName, this.getFieldValue('VAR'))) {
-      this.setFieldValue(newName, 'VAR');
-    }
   }
-  /**
-   * Add menu option to create getter/setter block for this setter/getter.
-   * @param {!Array} options List of menu options to add to.
-   * @this Blockly.Block
-   */
-  // customContextMenu: function(options) {
-  //   var option = {enabled: true};
-  //   var name = this.getFieldValue('VAR');
-  //   option.text = this.contextMenuMsg_.replace('%1', name);
-  //   var xmlField = goog.dom.createDom('field', null, name);
-  //   xmlField.setAttribute('name', 'VAR');
-  //   var xmlBlock = goog.dom.createDom('block', null, xmlField);
-  //   xmlBlock.setAttribute('type', this.contextMenuType_);
-  //   option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);
-  //   options.push(option);
-  // }
 });
 
 Blockly.Blocks.variables_get = Blockly.Blocks.sparql_variable;
