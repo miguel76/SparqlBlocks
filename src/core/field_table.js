@@ -42,12 +42,6 @@ var FieldTable = function(data, opt_validator) {
   this.height_ = 0;
   this.size_ = { width: this.width_, height: this.height_ };
   this.data_ = data;
-  this.flyout_ = new Blockly.Flyout({});
-  this.flyout_.autoClose = false;
-  var thisFieldTable = this;
-  this.flyout_.createBlockFunc_ = function(block) {
-    return FieldTable.prototype.createBlockFunc_.call(thisFieldTable, block);
-  };
 };
 FieldTable.prototype = Object.create(Blockly.Field.prototype);
 FieldTable.prototype.constructor = FieldTable;
@@ -122,6 +116,13 @@ FieldTable.prototype.init = function() {
   // FieldTable.superClass_.init.call(this, block);
 
   var block = this.sourceBlock_;
+
+  this.flyout_ = new Blockly.Flyout({parentWorkspace: block.workspace});
+  this.flyout_.autoClose = false;
+  var thisFieldTable = this;
+  this.flyout_.createBlockFunc_ = function(block) {
+    return FieldTable.prototype.createBlockFunc_.call(thisFieldTable, block);
+  };
 
   // Build the DOM.
   this.rootElement_ = Blockly.createSvgElement(
