@@ -7,6 +7,36 @@
 var Blockly = require('blockly');
 
 /**
+ * When a field changes, generate event and manage shadow state.
+ * @param {Object} oldValue The old field value
+ * @param {Object} newValue The new field value
+ * @protected
+ */
+Blockly.Field.prototype.fieldHasChanged = function(oldValue, newValue, manageEvent) {
+  var noGroup = false;
+  if (this.sourceBlock_) {
+    if (true /*this.sourceBlock_.workspace.options.shadowMorphEnabled*/ &&
+        Blockly.Events.recordUndo) {
+      if (Blockly.Events.isEnabled()) {
+        noGroup = !Blockly.Events.getGroup();
+        if (noGroup) {
+          Blockly.Events.setGroup(true);
+        }
+      }
+      this.sourceBlock_.setShadow(false);
+    }
+    if (Blockly.Events.isEnabled()) {
+      Blockly.Events.fire(new Blockly.Events.Change(
+        this.sourceBlock_, 'field', this.name, oldValue, newValue));
+    }
+  }
+  manageEvent();
+  if (noGroup) {
+    Blockly.Events.setGroup(false);
+  }
+};
+
+/**
  * By default there is no difference between the human-readable text and
  * the language-neutral values.  Subclasses (such as dropdown) may define this.
  * @param {string} newText New text.
@@ -20,25 +50,83 @@ Blockly.Field.prototype.setValue = function(newText) {
   if (oldText == newText) {
     return;
   }
-  var noGroup = false;
-  if (this.sourceBlock_ && Blockly.Events.isEnabled()) {
-    noGroup = !Blockly.Events.getGroup();
-    if (noGroup) {
-      Blockly.Events.setGroup(true);
-    }
+  var that = this;
+  this.fieldHasChanged(oldText, newText, function() {
+    that.setText(newText);
+  });
+};
+
+/**
+ * Set the checkbox to be checked if strBool is 'TRUE', unchecks otherwise.
+ * @param {string} strBool New state.
+ */
+Blockly.FieldCheckbox.prototype.setValue = function(strBool) {
+  var newState = (strBool == 'TRUE');
+  if (this.state_ !== newState) {
+    var that = this;
+    this.fieldHasChanged(this.state_, newState, function() {
+      that.state_ = newState;
+      if (that.checkElement_) {
+        that.checkElement_.style.display = newState ? 'block' : 'none';
+      };
+    });
   }
-  if (true /*workspace.options.shadowMorphEnabled*/ &&
-      this.sourceBlock_ &&
-      Blockly.Events.recordUndo) {
-    this.sourceBlock_.setShadow(false);
+};
+
+/**
+ * Set the colour.
+ * @param {string} colour The new colour in '#rrggbb' format.
+ */
+Blockly.FieldColour.prototype.setValue = function(colour) {
+  if (this.colour_ != colour) {
+    var that = this;
+    this.fieldHasChanged(this.colour_, colour, function() {
+      that.colour_ = colour;
+      if (that.borderRect_) {
+        that.borderRect_.style.fill = colour;
+      }
+    });
   }
-  if (this.sourceBlock_ && Blockly.Events.isEnabled()) {
-    Blockly.Events.fire(new Blockly.Events.Change(
-        this.sourceBlock_, 'field', this.name, oldText, newText));
+};
+
+/**
+ * Set the language-neutral value for this dropdown menu.
+ * @param {string} newValue New value to set.
+ */
+Blockly.FieldDropdown.prototype.setValue = function(newValue) {
+  if (newValue === null || newValue === this.value_) {
+    return;  // No change if null.
   }
-  this.setText(newText);
-  if (noGroup) {
-    Blockly.Events.setGroup(false);
+  if (newValue != this.value_) {
+    var that = this;
+    this.fieldHasChanged(this.colour_, colour, function() {
+      that.value_ = newValue;
+      // Look up and display the human-readable text.
+      var options = that.getOptions_();
+      for (var i = 0; i < options.length; i++) {
+        // Options are tuples of human-readable text and language-neutral values.
+        if (options[i][1] == newValue) {
+          that.setText(options[i][0]);
+          return;
+        }
+      }
+      // Value not found.  Add it, maybe it will become valid once set
+      // (like variable names).
+      that.setText(newValue);
+    });
+  }
+};
+
+/**
+ * Set the variable name.
+ * @param {string} newValue New text.
+ */
+Blockly.FieldVariable.prototype.setValue = function(newValue) {
+  if (newValue != this.value_) {
+    this.fieldHasChanged(this.colour_, colour, function() {
+      that.value_ = newValue;
+      that.setText(newValue);
+    });
   }
 };
 
