@@ -41,22 +41,12 @@ module.exports = {
 
       this.appendDummyInput("AFTER_ORDER")
           .appendField("& limit to first")
-          .appendField(
-            new Blockly.FieldTextInput(
-              "" + defaultLimit,
-              Blockly.FieldTextInput.nonnegativeIntegerValidator),
-            "LIMIT")
+          .appendField(new Blockly.FieldNumber(defaultLimit, 0, maxLimit), "LIMIT")
           .appendField("rows");
 
       setOrderField(this, this.orderFieldCount_, true);
   },
   onchange: function() {
-    // Check and correct limit field if over max
-    var limit = this.getFieldValue('LIMIT');
-    if (limit > maxLimit) {
-      this.setFieldValue('' + maxLimit, 'LIMIT');
-    }
-
     // Dynamically add or remove order fields as needed
     var lastOrderInput = this.getInput('ORDER_FIELD' + this.orderFieldCount_);
     var lastOrderConnection = lastOrderInput && lastOrderInput.connection.targetConnection;

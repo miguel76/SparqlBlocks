@@ -99,7 +99,7 @@ Blockly.FieldDropdown.prototype.setValue = function(newValue) {
   }
   if (newValue != this.value_) {
     var that = this;
-    this.fieldHasChanged(this.colour_, colour, function() {
+    this.fieldHasChanged(this.value_, newValue, function() {
       that.value_ = newValue;
       // Look up and display the human-readable text.
       var options = that.getOptions_();
@@ -123,7 +123,8 @@ Blockly.FieldDropdown.prototype.setValue = function(newValue) {
  */
 Blockly.FieldVariable.prototype.setValue = function(newValue) {
   if (newValue != this.value_) {
-    this.fieldHasChanged(this.colour_, colour, function() {
+    var that = this;
+    this.fieldHasChanged(this.value_, newValue, function() {
       that.value_ = newValue;
       that.setText(newValue);
     });
@@ -158,11 +159,13 @@ Blockly.Events.Change.prototype.run = function(forward) {
     block.mutator.setVisible(false);
   }
   var value = forward ? this.newValue : this.oldValue;
-
   switch (this.element) {
     case 'field':
       var field = block.getField(this.name);
       if (field) {
+        // Run the validator for any side-effects it may have.
+        // The validator's opinion on validity is ignored.
+        field.callValidator(value);
         field.setValue(value);
       } else {
         console.warn("Can't set non-existant field: " + this.name);

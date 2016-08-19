@@ -38,8 +38,7 @@ Blocks.block('sparql_math_number', {
     this.setHelpUrl(Blockly.Msg.MATH_NUMBER_HELPURL);
     this.setColour(HUE);
     this.appendDummyInput()
-        .appendField(new Blockly.FieldTextInput('0',
-        Blockly.FieldTextInput.numberValidator), 'NUM');
+        .appendField(new Blockly.FieldNumber(0), 'NUM');
     this.setOutput(true, 'LiteralNumber');
     this.setTooltip(Msg.MATH_NUMBER_TOOLTIP);
   }

@@ -34,6 +34,7 @@ require('blob-polyfill');
 var typeExt = Types.getExtension;
 
 var defaultLimit = 5;
+var maxLimit = 50;
 
 var execBlock = function(options) {
   options = _.extend({}, options);
@@ -69,11 +70,7 @@ var execBlock = function(options) {
         if (!options.selfLimiting) {
           this.appendDummyInput()
               .appendField("limit to first")
-              .appendField(
-                new Blockly.FieldTextInput(
-                  "" + defaultLimit,
-                  Blockly.FieldTextInput.nonnegativeIntegerValidator),
-                "LIMIT")
+              .appendField(new Blockly.FieldNumber(defaultLimit, 0, maxLimit), "LIMIT")
               .appendField("rows");
         }
       } else {
