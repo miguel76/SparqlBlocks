@@ -33,7 +33,7 @@ Sparql.sparqlQuery = function(block) {
   if (statements_where === '') {
     return '';
   }
-  var limit = Blockly.FieldTextInput.nonnegativeIntegerValidator(block.getFieldValue("LIMIT"));
+  var limit = block.getFieldValue("LIMIT");
   if (limit === null) {
     limit = 0;
   }

@@ -123,7 +123,7 @@ var execBlock = function(options) {
       if  ( !options.dontExecute &&
             !this.isInFlyout &&
             ( options.selfLimiting ||
-              Blockly.FieldTextInput.nonnegativeIntegerValidator(this.getFieldValue("LIMIT")) !== null)) {
+              this.getFieldValue("LIMIT") !== null)) {
         if (options.directResultsField) {
           Exec.blockExec(this);
         } else {
