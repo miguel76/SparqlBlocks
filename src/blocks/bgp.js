@@ -170,6 +170,19 @@ Blocks.block('sparql_subject_propertylist', {
   }
 });
 
+Blocks.block('sparql_variable_subject_propertylist', {
+  init: function() {
+    this.setColour(330);
+    this.appendStatementInput("PROPERTY_LIST")
+        .setCheck("PropertyList")
+        .appendField(new Blockly.FieldVariable(), "VAR");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, typeExt("TriplesBlock"));
+    this.setNextStatement(true, typeExt("GraphPattern"));
+    this.setTooltip('');
+  }
+});
+
 Blocks.block('sparql_typedsubject_propertylist', {
   init: function() {
     _initSubject(this);
