@@ -42,6 +42,26 @@ Blocks.block('sparql_prefixed_iri', {
   }
 });
 
+Blocks.block('sparql_prefixed_iri_prop', {
+  init: function() {
+    this.setHelpUrl('http://www.w3.org/TR/sparql11-query/#prefNames');
+    this.setColour(20);
+    this.appendDummyInput()
+        .appendField("━┫")
+        .appendField(new Blockly.FieldTextInput(""), "PREFIX")
+        .appendField(":")
+        .appendField(new Blockly.FieldTextInput(""), "LOCAL_NAME");
+    this.appendValueInput("OBJECT")
+        .setCheck(typeExt("Object"))
+        .appendField("┣━▶");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, "PropertyList");
+    this.setNextStatement(true, "PropertyList");
+    this.setTooltip(Msg.PREFIXED_IRI_TOOLTIP);
+  }
+
+});
+
 Blocks.block('sparql_iri', {
   init: function() {
     this.setHelpUrl('http://www.w3.org/TR/sparql11-query/#QSynIRI');
@@ -54,4 +74,24 @@ Blocks.block('sparql_iri', {
     this.setOutput(true, "Iri");
     this.setTooltip(Msg.IRI_TOOLTIP);
   }
+});
+
+Blocks.block('sparql_iri_prop', {
+  init: function() {
+    this.setHelpUrl('http://www.w3.org/TR/sparql11-query/#QSynIRI');
+    this.setColour(20);
+    this.appendDummyInput()
+        .appendField("━┫")
+        .appendField("<")
+        .appendField(new Blockly.FieldTextInput(""), "IRI")
+        .appendField(">");
+    this.appendValueInput("OBJECT")
+        .setCheck(typeExt("Object"))
+        .appendField("┣━▶");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, "PropertyList");
+    this.setNextStatement(true, "PropertyList");
+    this.setTooltip(Msg.IRI_TOOLTIP);
+  }
+
 });
