@@ -41,6 +41,24 @@
       </statement>
     </block>
     <sep gap="32"></sep>
+    <block type="sparql_variable_subject_propertylist">
+      <field name="VAR">res</field>
+      <statement name="PROPERTY_LIST">
+        <block type="sparql_verb_object">
+          <value name="VERB">
+            <block type="variables_get">
+              <field name="VAR">pred</field>
+            </block>
+          </value>
+          <value name="OBJECT">
+            <block type="variables_get">
+              <field name="VAR">obj</field>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+    <sep gap="32"></sep>
     <block type="sparql_anonsubject_propertylist">
       <statement name="PROPERTY_LIST">
         <block type="sparql_verb_object">
