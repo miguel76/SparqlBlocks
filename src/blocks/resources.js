@@ -45,15 +45,16 @@ Blocks.block('sparql_prefixed_iri', {
 Blocks.block('sparql_prefixed_iri_prop', {
   init: function() {
     this.setHelpUrl('http://www.w3.org/TR/sparql11-query/#prefNames');
-    this.setColour(20);
-    this.appendDummyInput()
-        .appendField("━┫")
-        .appendField(new Blockly.FieldTextInput(""), "PREFIX")
-        .appendField(":")
-        .appendField(new Blockly.FieldTextInput(""), "LOCAL_NAME");
+    this.setColour(65);
     this.appendValueInput("OBJECT")
         .setCheck(typeExt("Object"))
-        .appendField("┣━▶");
+        .appendField("━")
+        // .appendField("━┫")
+        .appendField(new Blockly.FieldTextInput(""), "PREFIX")
+        .appendField(":")
+        .appendField(new Blockly.FieldTextInput(""), "LOCAL_NAME")
+        // .appendField("┣━▶");
+        .appendField("━▶");
     this.setInputsInline(true);
     this.setPreviousStatement(true, "PropertyList");
     this.setNextStatement(true, "PropertyList");

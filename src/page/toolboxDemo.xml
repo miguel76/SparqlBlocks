@@ -14,6 +14,7 @@
     </block>
   </category>
   <category name="&#xf104; Patterns" colour="120">
+    <block type="sparql_rooted_bgp"></block>
     <block type="sparql_typedsubject_propertylist">
       <value name="SUBJECT">
         <block type="variables_get">
@@ -23,6 +24,28 @@
       <value name="TYPE">
         <block type="variables_get">
           <field name="VAR">type</field>
+        </block>
+      </value>
+      <statement name="PROPERTY_LIST">
+        <block type="sparql_verb_object">
+          <value name="VERB">
+            <block type="variables_get">
+              <field name="VAR">pred</field>
+            </block>
+          </value>
+          <value name="OBJECT">
+            <block type="variables_get">
+              <field name="VAR">obj</field>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+    <sep gap="32"></sep>
+    <block type="sparql_subject_propertylist">
+      <value name="SUBJECT">
+        <block type="variables_get">
+          <field name="VAR">res</field>
         </block>
       </value>
       <statement name="PROPERTY_LIST">
@@ -90,6 +113,15 @@
           <field name="VAR">pred</field>
         </block>
       </value>
+      <value name="OBJECT">
+        <block type="variables_get">
+          <field name="VAR">obj</field>
+        </block>
+      </value>
+    </block>
+    <sep gap="8"></sep>
+    <block type="sparql_variable_verb_object">
+      <field name="VAR">pred</field>
       <value name="OBJECT">
         <block type="variables_get">
           <field name="VAR">obj</field>

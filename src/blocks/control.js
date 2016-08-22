@@ -48,9 +48,10 @@ Blocks.block('sparql_union', {
     this.appendStatementInput("OP1")
         .setCheck(typeExt("GraphPattern"));
         // .appendField("this");
+    this.appendDummyInput().appendField("union");
     this.appendStatementInput("OP2")
-        .setCheck(typeExt("GraphPattern"))
-        .appendField("union");
+        .setCheck(typeExt("GraphPattern"));
+        // .appendField("union");
     this.setInputsInline(true);
     this.setPreviousStatement(true, typeExt("GraphPattern"));
     this.setNextStatement(true, typeExt("GraphPattern"));
@@ -79,6 +80,7 @@ Blocks.block('sparql_graph', {
     this.appendValueInput("GRAPHNAME")
         .setCheck(typeExt("ResourceOrVar"))
         .appendField("choose graph");
+    this.appendDummyInput();
     this.appendStatementInput("OP")
         .setCheck(typeExt("GraphPattern"))
         .appendField("");

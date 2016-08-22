@@ -84,10 +84,30 @@ Blocks.block('sparql_verb_object', {
     _initVerb(this);
     this.appendValueInput("VERB")
         .setCheck(typeExt("Verb"))
-        .appendField("━┫");
+        // .appendField("━┫");
+        .appendField("━");
     this.appendValueInput("OBJECT")
         .setCheck(typeExt("Object"))
-        .appendField("┣━▶");
+        // .appendField("┣━▶(");
+        .appendField("━▶");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, "PropertyList");
+    this.setNextStatement(true, "PropertyList");
+    this.setTooltip(Msg.VERB_OBJECT_TOOLTIP);
+  }
+});
+
+Blocks.block('sparql_variable_verb_object', {
+  init: function() {
+    _initVerb(this);
+    this.appendValueInput("OBJECT")
+        .setCheck(typeExt("Object"))
+        // .appendField("┣━▶(");
+        .appendField("━")
+        .appendField(new Blockly.FieldVariable(), "VAR")
+        .appendField("━▶");
+    // this.appendDummyInput()
+    //     .appendField(")");
     this.setInputsInline(true);
     this.setPreviousStatement(true, "PropertyList");
     this.setNextStatement(true, "PropertyList");
@@ -161,9 +181,10 @@ Blocks.block('sparql_subject_propertylist', {
     _initSubject(this);
     this.appendValueInput("SUBJECT")
         .setCheck(typeExt("ResourceOrVar"));
+        // .appendField("(");
     this.appendStatementInput("PROPERTY_LIST")
-        .setCheck("PropertyList")
-        .appendField("  ⌊");
+        .setCheck("PropertyList");
+        // .appendField(")");
     this.setInputsInline(true);
     this.setPreviousStatement(true, typeExt("TriplesBlock"));
     this.setNextStatement(true, typeExt("GraphPattern"));
@@ -231,26 +252,6 @@ Blocks.block('sparql_subject_verb_objectlist', {
         .setCheck("ObjectList")
         .appendField("↳");
 //        .appendField("               ↳");
-    this.setInputsInline(true);
-    this.setPreviousStatement(true, typeExt("TriplesBlock"));
-    this.setNextStatement(true, typeExt("GraphPattern"));
-    this.setTooltip('');
-  }
-});
-
-Blocks.block('sparql_subject_verb_object', {
-  init: function() {
-    _initSubject(this);
-    this.appendValueInput("SUBJECT")
-        .setCheck(typeExt("ResourceOrVar"));
-    this.appendValueInput("VERB")
-        .appendField("has")
-        .setCheck(typeExt("Verb"));
-        // .appendField(" -[");
-    this.appendValueInput("OBJECT")
-        .setCheck(typeExt("GraphTermOrVar"))
-        .appendField("→");
-        // .appendField("]→ ");
     this.setInputsInline(true);
     this.setPreviousStatement(true, typeExt("TriplesBlock"));
     this.setNextStatement(true, typeExt("GraphPattern"));

@@ -41,12 +41,16 @@ var execBlock = function(options) {
   return {
     init: function() {
       this.setHelpUrl('http://www.w3.org/TR/2013/REC-sparql11-protocol-20130321/#query-operation');
+      var titleAndEndpointInput = null;
       if (options.title) {
-        this.appendDummyInput()
-            .appendField(options.title);
+        titleAndEndpointInput = this.appendDummyInput();
+        titleAndEndpointInput.appendField(options.title);
       }
       if (options.endpointField) {
-        this.appendDummyInput()
+        // if (!titleAndEndpointInput) {
+          titleAndEndpointInput = this.appendDummyInput();
+        // }
+        titleAndEndpointInput
             .appendField("from")
             .appendField(new Blockly.FieldTextInput(""), "ENDPOINT");
       }
@@ -65,6 +69,7 @@ var execBlock = function(options) {
           }
         }
       }
+      this.setInputsInline(false);
       if (options.builtinQuery) {
         this.setColour(290);
         if (!options.selfLimiting) {
@@ -76,6 +81,7 @@ var execBlock = function(options) {
       } else {
         if (options.baseQuery) {
           this.setColour(290);
+          // this.appendDummyInput();
           this.appendStatementInput("WHERE")
               .setCheck(typeExt("GraphPattern"))
               .appendField("where");
@@ -93,6 +99,7 @@ var execBlock = function(options) {
             .appendField("↪")
             .appendField("", "RESULTS_CONTAINER");
       } else {
+        // this.appendDummyInput();
         this.appendStatementInput("RESULTS")
             .setCheck(typeExt("Table"))
             .appendField("↪");
