@@ -118,6 +118,13 @@ FieldTable.prototype.init = function() {
   var block = this.sourceBlock_;
 
   this.flyout_ = new Blockly.Flyout({parentWorkspace: block.workspace});
+  // this.flyout_.init(block.workspace);
+  this.flyout_.scrollbar_ = {
+    isVisible: function () {
+      return false;
+    },
+    dispose: function() {}
+  };
   this.flyout_.autoClose = false;
   var thisFieldTable = this;
   this.flyout_.createBlockFunc_ = function(block) {
