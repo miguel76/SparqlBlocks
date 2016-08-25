@@ -14,71 +14,25 @@
     </block>
   </category>
   <category name="&#xf104; Patterns" colour="120">
-    <block type="sparql_rooted_bgp"></block>
-    <block type="sparql_typedsubject_propertylist">
-      <value name="SUBJECT">
-        <block type="variables_get">
-          <field name="VAR">res</field>
-        </block>
-      </value>
-      <value name="TYPE">
-        <block type="variables_get">
-          <field name="VAR">type</field>
-        </block>
-      </value>
-      <statement name="PROPERTY_LIST">
-        <block type="sparql_verb_object">
-          <value name="VERB">
-            <block type="variables_get">
-              <field name="VAR">pred</field>
-            </block>
-          </value>
-          <value name="OBJECT">
-            <block type="variables_get">
-              <field name="VAR">obj</field>
-            </block>
-          </value>
-        </block>
-      </statement>
-    </block>
-    <sep gap="32"></sep>
     <block type="sparql_subject_propertylist">
       <value name="SUBJECT">
-        <block type="variables_get">
-          <field name="VAR">res</field>
-        </block>
+        <shadow type="variables_get">
+          <field name="VAR">subj</field>
+        </shadow>
       </value>
       <statement name="PROPERTY_LIST">
-        <block type="sparql_verb_object">
+        <shadow type="sparql_verb_object">
           <value name="VERB">
-            <block type="variables_get">
+            <shadow type="variables_get">
               <field name="VAR">pred</field>
-            </block>
+            </shadow>
           </value>
           <value name="OBJECT">
-            <block type="variables_get">
+            <shadow type="variables_get">
               <field name="VAR">obj</field>
-            </block>
+            </shadow>
           </value>
-        </block>
-      </statement>
-    </block>
-    <sep gap="32"></sep>
-    <block type="sparql_variable_subject_propertylist">
-      <field name="VAR">res</field>
-      <statement name="PROPERTY_LIST">
-        <block type="sparql_verb_object">
-          <value name="VERB">
-            <block type="variables_get">
-              <field name="VAR">pred</field>
-            </block>
-          </value>
-          <value name="OBJECT">
-            <block type="variables_get">
-              <field name="VAR">obj</field>
-            </block>
-          </value>
-        </block>
+        </shadow>
       </statement>
     </block>
     <sep gap="32"></sep>
@@ -86,70 +40,29 @@
       <statement name="PROPERTY_LIST">
         <block type="sparql_verb_object">
           <value name="VERB">
-            <block type="variables_get">
+            <shadow type="variables_get">
               <field name="VAR">pred</field>
-            </block>
+            </shadow>
           </value>
           <value name="OBJECT">
-            <block type="variables_get">
+            <shadow type="variables_get">
               <field name="VAR">obj</field>
-            </block>
+            </shadow>
           </value>
         </block>
       </statement>
     </block>
     <sep gap="32"></sep>
-    <block type="sparql_isa">
-      <value name="TYPE">
-        <block type="variables_get">
-          <field name="VAR">type</field>
-        </block>
-      </value>
-    </block>
-    <sep gap="8"></sep>
     <block type="sparql_verb_object">
       <value name="VERB">
-        <block type="variables_get">
+        <shadow type="variables_get">
           <field name="VAR">pred</field>
-        </block>
+        </shadow>
       </value>
       <value name="OBJECT">
-        <block type="variables_get">
+        <shadow type="variables_get">
           <field name="VAR">obj</field>
-        </block>
-      </value>
-    </block>
-    <sep gap="8"></sep>
-    <block type="sparql_variable_verb_object">
-      <field name="VAR">pred</field>
-      <value name="OBJECT">
-        <block type="variables_get">
-          <field name="VAR">obj</field>
-        </block>
-      </value>
-    </block>
-    <sep gap="8"></sep>
-    <block type="sparql_reversePath_object">
-      <value name="OBJECT">
-        <block type="variables_get">
-          <field name="VAR">subj</field>
-        </block>
-      </value>
-    </block>
-    <sep gap="8"></sep>
-    <block type="sparql_closurePath_object">
-      <value name="OBJECT">
-        <block type="variables_get">
-          <field name="VAR">to</field>
-        </block>
-      </value>
-    </block>
-    <sep gap="8"></sep>
-    <block type="sparql_reverseClosurePath_object">
-      <value name="OBJECT">
-        <block type="variables_get">
-          <field name="VAR">from</field>
-        </block>
+        </shadow>
       </value>
     </block>
   </category>
@@ -379,19 +292,60 @@
     <sep gap="8"></sep>
     <block type="sparql_iri"></block>
     <sep gap="32"></sep>
-    <block type="sparql_prefixed_iri_prop">
-      <field name="PREFIX">rdfs</field>
-      <field name="LOCAL_NAME">seeAlso</field>
+    <block type="sparql_verb_object">
+      <value name="VERB">
+        <block type="sparql_prefixed_iri">
+          <field name="PREFIX">rdfs</field>
+          <field name="LOCAL_NAME">type</field>
+        </block>
+      </value>
+      <value name="OBJECT">
+        <shadow type="variables_get">
+          <field name="VAR">type</field>
+        </shadow>
+      </value>
     </block>
     <sep gap="8"></sep>
-    <block type="sparql_prefixed_iri_prop">
-      <field name="PREFIX">rdfs</field>
-      <field name="LOCAL_NAME">isDefinedBy</field>
+    <block type="sparql_verb_object">
+      <value name="VERB">
+        <block type="sparql_prefixed_iri">
+          <field name="PREFIX">rdfs</field>
+          <field name="LOCAL_NAME">seeAlso</field>
+        </block>
+      </value>
+      <value name="OBJECT">
+        <shadow type="variables_get">
+          <field name="VAR">relatedResource</field>
+        </shadow>
+      </value>
     </block>
     <sep gap="8"></sep>
-    <block type="sparql_prefixed_iri">
-      <field name="PREFIX">rdf</field>
-      <field name="LOCAL_NAME">value</field>
+    <block type="sparql_verb_object">
+      <value name="VERB">
+        <block type="sparql_prefixed_iri">
+          <field name="PREFIX">rdfs</field>
+          <field name="LOCAL_NAME">isDefinedBy</field>
+        </block>
+      </value>
+      <value name="OBJECT">
+        <shadow type="variables_get">
+          <field name="VAR">definition</field>
+        </shadow>
+      </value>
+    </block>
+    <sep gap="8"></sep>
+    <block type="sparql_verb_object">
+      <value name="VERB">
+        <block type="sparql_prefixed_iri">
+          <field name="PREFIX">rdf</field>
+          <field name="LOCAL_NAME">value</field>
+        </block>
+      </value>
+      <value name="OBJECT">
+        <shadow type="variables_get">
+          <field name="VAR">value</field>
+        </shadow>
+      </value>
     </block>
     <sep gap="32"></sep>
     <block type="sparql_prefixed_iri">

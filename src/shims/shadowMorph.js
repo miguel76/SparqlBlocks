@@ -18,7 +18,7 @@ Blockly.Field.prototype.fieldHasChanged = function(oldValue, newValue, manageEve
     if (true /*this.sourceBlock_.workspace.options.shadowMorphEnabled*/ &&
         Blockly.Events.recordUndo) {
       if (Blockly.Events.isEnabled()) {
-        noGroup = !Blockly.Events.getGroup();
+        noGroup = true; //!Blockly.Events.getGroup();
         if (noGroup) {
           Blockly.Events.setGroup(true);
         }
