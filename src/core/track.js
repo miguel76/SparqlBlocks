@@ -27,6 +27,10 @@ var eventTypeDescr_ = function(eventTypeId) {
 
 };
 
+var logEvent_ = function(event) {
+  console.log(event);
+};
+
 var track_ = function(workspace, options) {
   options =
       _.extend(
@@ -44,10 +48,7 @@ var track_ = function(workspace, options) {
     if (!options.sendUIEvents && event.type == Blockly.Events.UI) {
       return;
     }
-    if (!workspace.eventStack) {
-      workspace.eventStack = [];
-    }
-    workspace.eventStack.push(_.extend(
+    logEvent_(_.extend(
         {},
         event,
         { type: event.type, timestamp: $.now() },

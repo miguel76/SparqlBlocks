@@ -21,22 +21,28 @@
         </shadow>
       </value>
       <statement name="PROPERTY_LIST">
-        <shadow type="sparql_verb_object">
+        <block type="sparql_verb_object">
           <value name="VERB">
-            <shadow type="variables_get">
-              <field name="VAR">pred</field>
-            </shadow>
+            <block type="sparql_prefixed_iri">
+              <field name="PREFIX">rdfs</field>
+              <field name="LOCAL_NAME">type</field>
+            </block>
           </value>
           <value name="OBJECT">
             <shadow type="variables_get">
-              <field name="VAR">obj</field>
+              <field name="VAR">type</field>
             </shadow>
           </value>
-        </shadow>
+        </block>
       </statement>
     </block>
-    <sep gap="32"></sep>
-    <block type="sparql_anonsubject_propertylist">
+    <sep gap="8"></sep>
+    <block type="sparql_subject_propertylist">
+      <value name="SUBJECT">
+        <shadow type="variables_get">
+          <field name="VAR">subj</field>
+        </shadow>
+      </value>
       <statement name="PROPERTY_LIST">
         <block type="sparql_verb_object">
           <value name="VERB">
@@ -55,6 +61,20 @@
     <sep gap="32"></sep>
     <block type="sparql_verb_object">
       <value name="VERB">
+        <block type="sparql_prefixed_iri">
+          <field name="PREFIX">rdfs</field>
+          <field name="LOCAL_NAME">type</field>
+        </block>
+      </value>
+      <value name="OBJECT">
+        <shadow type="variables_get">
+          <field name="VAR">type</field>
+        </shadow>
+      </value>
+    </block>
+    <sep gap="8"></sep>
+    <block type="sparql_verb_object">
+      <value name="VERB">
         <shadow type="variables_get">
           <field name="VAR">pred</field>
         </shadow>
@@ -64,6 +84,23 @@
           <field name="VAR">obj</field>
         </shadow>
       </value>
+    </block>
+    <sep gap="32"></sep>
+    <block type="sparql_anonsubject_propertylist">
+      <statement name="PROPERTY_LIST">
+        <block type="sparql_verb_object">
+          <value name="VERB">
+            <shadow type="variables_get">
+              <field name="VAR">pred</field>
+            </shadow>
+          </value>
+          <value name="OBJECT">
+            <shadow type="variables_get">
+              <field name="VAR">obj</field>
+            </shadow>
+          </value>
+        </block>
+      </statement>
     </block>
   </category>
   <category name="&#xf101; Compose" colour="260">
