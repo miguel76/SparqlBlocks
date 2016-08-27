@@ -1,0 +1,11 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/google/blockly.git
+	branch = master
+	commit = 31055ac2eb2731b3790ae085a5788c6edf0085f5
+	parent = 715ce7e28e84b324c8927850dbd951ec0ff4f9f6
+	cmdver = 0.3.0
