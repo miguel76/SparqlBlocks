@@ -147,8 +147,7 @@ var execBlock = function(options) {
                       null;
               }
             }
-            var limit_text = this.getFieldValue("LIMIT");
-            var limit = limit_text & Blockly.FieldTextInput.nonnegativeIntegerValidator(limit_text);
+            var limit = this.getFieldValue("LIMIT");
             if (limit || options.selfLimiting) {
               var limitStr = limit ? '\nLIMIT ' + limit : '';
               var sparql = options.builtinQuery(parametersDict) + limitStr;
