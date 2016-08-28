@@ -38,21 +38,23 @@ Blocks.block('sparql_logic_compare', {
    * @this Blockly.Block
    */
   init: function() {
-    var OPERATORS = this.RTL ? [
-          ['=', 'EQ'],
-          ['\u2260', 'NEQ'],
-          ['>', 'LT'],
-          ['\u2265', 'LTE'],
-          ['<', 'GT'],
-          ['\u2264', 'GTE']
-        ] : [
-          ['=', 'EQ'],
-          ['\u2260', 'NEQ'],
-          ['<', 'LT'],
-          ['\u2264', 'LTE'],
-          ['>', 'GT'],
-          ['\u2265', 'GTE']
-        ];
+    var rtlOperators = [
+      ['=', 'EQ'],
+      ['\u2260', 'NEQ'],
+      ['\u200F<\u200F', 'LT'],
+      ['\u200F\u2264\u200F', 'LTE'],
+      ['\u200F>\u200F', 'GT'],
+      ['\u200F\u2265\u200F', 'GTE']
+    ];
+    var ltrOperators = [
+      ['=', 'EQ'],
+      ['\u2260', 'NEQ'],
+      ['<', 'LT'],
+      ['\u2264', 'LTE'],
+      ['>', 'GT'],
+      ['\u2265', 'GTE']
+    ];
+    var OPERATORS = this.RTL ? rtlOperators : ltrOperators;
     this.setHelpUrl(Blockly.Msg.LOGIC_COMPARE_HELPURL);
     this.setColour(HUE);
     this.setOutput(true, 'BooleanExpr');
@@ -81,27 +83,23 @@ Blocks.block('sparql_logic_compare', {
    * Prevent mismatched types from being compared.
    * @this Blockly.Block
    */
-  onchange: function() {
-    if (!this.workspace) {
-      // Block has been deleted.
-      return;
-    }
+  onchange: function(e) {
     var blockA = this.getInputTargetBlock('A');
     var blockB = this.getInputTargetBlock('B');
-    // Kick blocks that existed prior to this change if they don't match.
+    // Disconnect blocks that existed prior to this change if they don't match.
     if (blockA && blockB &&
-        !blockA.outputConnection.checkType_(blockB.outputConnection) &&
-        _.intersection(
-          typeContentExt(blockA.outputConnection.check_),
-          typeContentExt(blockB.outputConnection.check_)).length === 0 ) {
+        !blockA.outputConnection.checkType_(blockB.outputConnection)) {
       // Mismatch between two inputs.  Disconnect previous and bump it away.
+      // Ensure that any disconnections are grouped with the causing event.
+      Blockly.Events.setGroup(e.group);
       for (var i = 0; i < this.prevBlocks_.length; i++) {
         var block = this.prevBlocks_[i];
         if (block === blockA || block === blockB) {
-          block.setParent(null);
+          block.unplug();
           block.bumpNeighbours_();
         }
       }
+      Blockly.Events.setGroup(false);
     }
     this.prevBlocks_[0] = blockA;
     this.prevBlocks_[1] = blockB;
@@ -220,26 +218,25 @@ Blocks.block('sparql_logic_ternary', {
    * Prevent mismatched types.
    * @this Blockly.Block
    */
-  onchange: function() {
-    if (!this.workspace) {
-      // Block has been deleted.
-      return;
-    }
+  onchange: function(e) {
     var blockA = this.getInputTargetBlock('THEN');
     var blockB = this.getInputTargetBlock('ELSE');
     var parentConnection = this.outputConnection.targetConnection;
-    // Kick blocks that existed prior to this change if they don't match.
+    // Disconnect blocks that existed prior to this change if they don't match.
     if ((blockA || blockB) && parentConnection) {
       for (var i = 0; i < 2; i++) {
         var block = (i == 1) ? blockA : blockB;
         if (block && !block.outputConnection.checkType_(parentConnection)) {
+          // Ensure that any disconnections are grouped with the causing event.
+          Blockly.Events.setGroup(e.group);
           if (parentConnection === this.prevParentConnection_) {
-            this.setParent(null);
-            parentConnection.sourceBlock_.bumpNeighbours_();
+            this.unplug();
+            parentConnection.getSourceBlock().bumpNeighbours_();
           } else {
-            block.setParent(null);
+            block.unplug();
             block.bumpNeighbours_();
           }
+          Blockly.Events.setGroup(false);
         }
       }
     }
@@ -259,6 +256,7 @@ Blocks.block('sparql_exists', {
     this.appendStatementInput("OP")
         .setCheck("TriplesBlock")
         .appendField("exists");
+    this.setInputsInline(true);
     this.setTooltip(Msg.EXISTS_TOOLTIP);
   }
 });
@@ -275,6 +273,7 @@ Blocks.block('sparql_not_exists', {
     this.appendStatementInput("OP")
         .setCheck("TriplesBlock")
         .appendField("not exists");
+    this.setInputsInline(true);
     this.setTooltip(Msg.NOT_EXISTS_TOOLTIP);
   }
 });
