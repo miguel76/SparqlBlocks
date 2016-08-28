@@ -21,41 +21,20 @@
         </shadow>
       </value>
       <statement name="PROPERTY_LIST">
-        <block type="sparql_verb_object">
+        <shadow type="sparql_verb_object">
           <value name="VERB">
-            <block type="sparql_prefixed_iri">
+            <shadow type="sparql_prefixed_iri">
               <field name="PREFIX">rdf</field>
               <field name="LOCAL_NAME">type</field>
-            </block>
-          </value>
-          <value name="OBJECT">
-            <shadow type="variables_get">
-              <field name="VAR">type</field>
             </shadow>
           </value>
-        </block>
-      </statement>
-    </block>
-    <sep gap="8"></sep>
-    <block type="sparql_subject_propertylist">
-      <value name="SUBJECT">
-        <shadow type="variables_get">
-          <field name="VAR">subj</field>
+          <value name="OBJECT">
+            <shadow type="sparql_prefixed_iri">
+              <field name="PREFIX">owl</field>
+              <field name="LOCAL_NAME">Thing</field>
+            </shadow>
+          </value>
         </shadow>
-      </value>
-      <statement name="PROPERTY_LIST">
-        <block type="sparql_verb_object">
-          <value name="VERB">
-            <shadow type="variables_get">
-              <field name="VAR">pred</field>
-            </shadow>
-          </value>
-          <value name="OBJECT">
-            <shadow type="variables_get">
-              <field name="VAR">obj</field>
-            </shadow>
-          </value>
-        </block>
       </statement>
     </block>
     <sep gap="32"></sep>
@@ -87,20 +66,6 @@
     </block>
     <sep gap="32"></sep>
     <block type="sparql_anonsubject_propertylist">
-      <statement name="PROPERTY_LIST">
-        <block type="sparql_verb_object">
-          <value name="VERB">
-            <shadow type="variables_get">
-              <field name="VAR">pred</field>
-            </shadow>
-          </value>
-          <value name="OBJECT">
-            <shadow type="variables_get">
-              <field name="VAR">obj</field>
-            </shadow>
-          </value>
-        </block>
-      </statement>
     </block>
   </category>
   <category name="&#xf101; Compose" colour="260">
@@ -108,9 +73,9 @@
     <block type="sparql_optional"></block>
     <block type="sparql_graph">
       <value name="GRAPHNAME">
-        <block type="variables_get">
+        <shadow type="variables_get">
           <field name="VAR">graph</field>
-        </block>
+        </shadow>
       </value>
     </block>
   </category>
