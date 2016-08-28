@@ -6,6 +6,14 @@
 
 var Blockly = require('blockly');
 
+var morphShadowRec = function(block) {
+  var parentBlock = block.getParent();
+  if (parentBlock) {
+    morphShadowRec(parentBlock);
+  }
+  block.setShadow(false);
+};
+
 /**
  * When a field changes, generate event and manage shadow state.
  * @param {Object} oldValue The old field value
@@ -23,7 +31,7 @@ Blockly.Field.prototype.fieldHasChanged = function(oldValue, newValue, manageEve
           Blockly.Events.setGroup(true);
         }
       }
-      this.sourceBlock_.setShadow(false);
+      morphShadowRec(this.sourceBlock_);
     }
     if (Blockly.Events.isEnabled()) {
       Blockly.Events.fire(new Blockly.Events.Change(
