@@ -77,32 +77,6 @@ Blocks.block('sparql_logic_compare', {
       return TOOLTIPS[op];
     });
     this.prevBlocks_ = [null, null];
-  },
-  /**
-   * Called whenever anything on the workspace changes.
-   * Prevent mismatched types from being compared.
-   * @this Blockly.Block
-   */
-  onchange: function(e) {
-    var blockA = this.getInputTargetBlock('A');
-    var blockB = this.getInputTargetBlock('B');
-    // Disconnect blocks that existed prior to this change if they don't match.
-    if (blockA && blockB &&
-        !blockA.outputConnection.checkType_(blockB.outputConnection)) {
-      // Mismatch between two inputs.  Disconnect previous and bump it away.
-      // Ensure that any disconnections are grouped with the causing event.
-      Blockly.Events.setGroup(e.group);
-      for (var i = 0; i < this.prevBlocks_.length; i++) {
-        var block = this.prevBlocks_[i];
-        if (block === blockA || block === blockB) {
-          block.unplug();
-          block.bumpNeighbours_();
-        }
-      }
-      Blockly.Events.setGroup(false);
-    }
-    this.prevBlocks_[0] = blockA;
-    this.prevBlocks_[1] = blockB;
   }
 });
 
@@ -212,35 +186,6 @@ Blocks.block('sparql_logic_ternary', {
     this.setOutput(true,'Expr');
     this.setTooltip(Blockly.Msg.LOGIC_TERNARY_TOOLTIP);
     this.prevParentConnection_ = null;
-  },
-  /**
-   * Called whenever anything on the workspace changes.
-   * Prevent mismatched types.
-   * @this Blockly.Block
-   */
-  onchange: function(e) {
-    var blockA = this.getInputTargetBlock('THEN');
-    var blockB = this.getInputTargetBlock('ELSE');
-    var parentConnection = this.outputConnection.targetConnection;
-    // Disconnect blocks that existed prior to this change if they don't match.
-    if ((blockA || blockB) && parentConnection) {
-      for (var i = 0; i < 2; i++) {
-        var block = (i == 1) ? blockA : blockB;
-        if (block && !block.outputConnection.checkType_(parentConnection)) {
-          // Ensure that any disconnections are grouped with the causing event.
-          Blockly.Events.setGroup(e.group);
-          if (parentConnection === this.prevParentConnection_) {
-            this.unplug();
-            parentConnection.getSourceBlock().bumpNeighbours_();
-          } else {
-            block.unplug();
-            block.bumpNeighbours_();
-          }
-          Blockly.Events.setGroup(false);
-        }
-      }
-    }
-    this.prevParentConnection_ = parentConnection;
   }
 });
 

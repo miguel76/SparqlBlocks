@@ -98,15 +98,35 @@
   </category>
   <sep></sep>
   <category name="&#xf102; Logic" colour="210">
-    <block type="sparql_filter"></block>
-
+    <block type="sparql_filter">
+      <value name="CONDITION">
+        <shadow type="sparql_logic_boolean"></shadow>
+      </value>
+    </block>
     <sep gap="32"></sep>
     <block type="sparql_logic_boolean"></block>
-
     <sep gap="32"></sep>
-    <block type="sparql_logic_compare"></block>
+    <block type="sparql_logic_compare">
+      <value name="A">
+        <shadow type="sparql_math_number">
+          <field name="NUM">0</field>
+        </shadow>
+      </value>
+      <value name="B">
+        <shadow type="sparql_math_number">
+          <field name="NUM">0</field>
+        </shadow>
+      </value>
+    </block>
     <sep gap="8"></sep>
-    <block type="sparql_logic_operation"></block>
+    <block type="sparql_logic_operation">
+      <value name="A">
+        <shadow type="sparql_logic_boolean"></shadow>
+      </value>
+      <value name="B">
+        <shadow type="sparql_logic_boolean"></shadow>
+      </value>
+    </block>
     <sep gap="8"></sep>
     <block type="sparql_logic_negate"></block>
     <!-- <block type="sparql_logic_null"></block> -->
