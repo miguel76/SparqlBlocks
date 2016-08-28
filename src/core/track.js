@@ -27,8 +27,16 @@ var eventTypeDescr_ = function(eventTypeId) {
 
 };
 
-var logEvent_ = function(event) {
-  console.log(event);
+var logEvent_ = function(workspace, event) {
+  if (logToConsole) {
+    console.log(event);
+  }
+  if (record) {
+    if (!workspace.eventStack) {
+      workspace.eventStack = [];
+    }
+    workspace.eventStack.push(event);
+  }
 };
 
 var track_ = function(workspace, options) {
@@ -37,7 +45,10 @@ var track_ = function(workspace, options) {
           { sendEventXML: true,
             sendWorkspaceXML: false,
             sendMoveAroundEvents: true,
-            sendUIEvents: true },
+            sendUIEvents: true,
+            record:true,
+            logToConsole:true
+          },
           options );
 
   workspace.addChangeListener(function(event) {
@@ -48,7 +59,7 @@ var track_ = function(workspace, options) {
     if (!options.sendUIEvents && event.type == Blockly.Events.UI) {
       return;
     }
-    logEvent_(_.extend(
+    logEvent_(workspace, _.extend(
         {},
         event,
         { type: event.type, timestamp: $.now() },
