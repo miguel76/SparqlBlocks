@@ -27,11 +27,11 @@ var eventTypeDescr_ = function(eventTypeId) {
 
 };
 
-var logEvent_ = function(workspace, event) {
-  if (logToConsole) {
+var logEvent_ = function(workspace, event, options) {
+  if (options.logToConsole) {
     console.log(event);
   }
-  if (record) {
+  if (options.record) {
     if (!workspace.eventStack) {
       workspace.eventStack = [];
     }
@@ -69,7 +69,7 @@ var track_ = function(workspace, options) {
         options.sendWorkspaceXML ?
           { workspace:
                 Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace)) } :
-          {} ));
+          {} ), options);
   });
 };
 
