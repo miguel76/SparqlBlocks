@@ -24,7 +24,7 @@
         <block type="sparql_verb_object">
           <value name="VERB">
             <block type="sparql_prefixed_iri">
-              <field name="PREFIX">rdfs</field>
+              <field name="PREFIX">rdf</field>
               <field name="LOCAL_NAME">type</field>
             </block>
           </value>
@@ -62,7 +62,7 @@
     <block type="sparql_verb_object">
       <value name="VERB">
         <block type="sparql_prefixed_iri">
-          <field name="PREFIX">rdfs</field>
+          <field name="PREFIX">rdf</field>
           <field name="LOCAL_NAME">type</field>
         </block>
       </value>
@@ -332,7 +332,7 @@
     <block type="sparql_verb_object">
       <value name="VERB">
         <block type="sparql_prefixed_iri">
-          <field name="PREFIX">rdfs</field>
+          <field name="PREFIX">rdf</field>
           <field name="LOCAL_NAME">type</field>
         </block>
       </value>
