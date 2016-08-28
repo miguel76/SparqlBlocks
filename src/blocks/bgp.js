@@ -180,7 +180,7 @@ Blocks.block('sparql_subject_propertylist', {
   init: function() {
     _initSubject(this);
     this.appendValueInput("SUBJECT")
-        .setCheck(typeExt("ResourceOrVar"));
+        .setCheck(typeExt("ObjectNotLiteral"));
         // .appendField("(");
     this.appendStatementInput("PROPERTY_LIST")
         .setCheck("PropertyList");
@@ -227,10 +227,12 @@ Blocks.block('sparql_typedsubject_propertylist', {
 Blocks.block('sparql_anonsubject_propertylist', {
   init: function() {
     _initSubject(this);
+    this.setColour(330);
     this.appendStatementInput("PROPERTY_LIST")
         .setCheck("PropertyList")
-        // .appendField("⭕");
-        .appendField("s.t.");
+        // .appendField("✱");
+        .appendField("[ ]");
+        // .appendField("s.t.");
     this.setInputsInline(true);
     this.setOutput(true, typeExt("RootedPropertyList"));
     this.setTooltip(Msg.ANONSUBJECT_PROPERTYLIST_TOOLTIP);
