@@ -97,6 +97,18 @@ Blocks.block('sparql_verb_object', {
   }
 });
 
+Blocks.block('sparql_any_verb_object', {
+  init: function() {
+    _initVerb(this);
+    this.appendDummyInput()
+        .appendField("━▶ ◯");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, "PropertyList");
+    this.setNextStatement(true, "PropertyList");
+    this.setTooltip(Msg.VERB_OBJECT_TOOLTIP);
+  }
+});
+
 Blocks.block('sparql_variable_verb_object', {
   init: function() {
     _initVerb(this);
@@ -231,7 +243,7 @@ Blocks.block('sparql_anonsubject_propertylist', {
     this.appendStatementInput("PROPERTY_LIST")
         .setCheck("PropertyList")
         // .appendField("✱");
-        .appendField("[ ]");
+        .appendField("◯");
         // .appendField("s.t.");
     this.setInputsInline(true);
     this.setOutput(true, typeExt("RootedPropertyList"));

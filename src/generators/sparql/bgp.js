@@ -48,6 +48,11 @@ Sparql.sparql_verb_object = function(block) {
   return code;
 };
 
+Sparql.sparql_any_verb_object = function(block) {
+  var code = '<>|!<> []' + Sparql.STMNT_BRK;
+  return code;
+};
+
 Sparql.sparql_reversePath_object = function(block) {
   var value_verb = Sparql.valueToCode(block, 'VERB', Sparql.ORDER_ATOMIC);
   var value_object = Sparql.valueToCode(block, 'OBJECT', Sparql.ORDER_ATOMIC);
