@@ -20,6 +20,27 @@ var morphShadowRec = function(block) {
  * @param {Object} newValue The new field value
  * @protected
  */
+Blockly.Block.prototype.blockIsTargetOfConnection = function(childBlock, manageEvent) {
+  var noGroup = false;
+  if (Blockly.Events.recordUndo) {
+    if (Blockly.Events.isEnabled()) {
+      noGroup = true; //!Blockly.Events.getGroup();
+      Blockly.Events.setGroup(true);
+    }
+    morphShadowRec(this);
+  }
+  manageEvent();
+  if (noGroup) {
+    Blockly.Events.setGroup(false);
+  }
+};
+
+/**
+ * When a field changes, generate event and manage shadow state.
+ * @param {Object} oldValue The old field value
+ * @param {Object} newValue The new field value
+ * @protected
+ */
 Blockly.Field.prototype.fieldHasChanged = function(oldValue, newValue, manageEvent) {
   var noGroup = false;
   if (this.sourceBlock_) {
