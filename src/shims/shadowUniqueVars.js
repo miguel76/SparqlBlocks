@@ -43,6 +43,8 @@ var justPrefix = function(varName) {
   return varName.substr(0, varName.length - varName.match(/[0-9]*$/)[0].length);
 };
 
+var defaultVarNamesByWorkspace = {};
+
 /**
  * Install this dropdown on a block.
  */
@@ -58,10 +60,13 @@ Blockly.FieldVariable.prototype.init = function() {
           this.sourceBlock_.workspace.targetWorkspace :
           this.sourceBlock_.workspace;
   var newValue = null;
+  var newValueGenerated = false;
   if (!this.getValue()) {
     newValue = Blockly.Variables.generateUniqueName(workspace);
+    newValueGenerated = true;
   } else if (this.sourceBlock_.isShadow_ && !this.sourceBlock_.isInFlyout) {
     newValue = generateUniqueName(workspace, justPrefix(this.getValue()));
+    newValueGenerated = true;
   }
   if (newValue) {
     this.value_ = newValue;
@@ -72,5 +77,32 @@ Blockly.FieldVariable.prototype.init = function() {
   // in by default.
   if (!this.sourceBlock_.isInFlyout) {
     this.sourceBlock_.workspace.createVariable(this.getValue());
+    if (newValueGenerated) {
+      var defaultVarNames = defaultVarNamesByWorkspace[this.sourceBlock_.workspace];
+      if (!defaultVarNames) {
+        defaultVarNames = [];
+        defaultVarNamesByWorkspace[this.sourceBlock_.workspace] = defaultVarNames;
+      }
+      defaultVarNames.push(this.getValue());
+    }
+  }
+  this.workspace_ = workspace;
+};
+
+/**
+ * Dispose of all DOM objects belonging to this editable field.
+ */
+Blockly.FieldVariable.prototype.dispose = function() {
+  var varName = this.getValue();
+  var block = this.sourceBlock_;
+  var workspace = this.workspace_;
+  Blockly.Field.prototype.dispose.call(this);
+  this.workspace_ = null;
+  var defaultVarNames = workspace && defaultVarNamesByWorkspace[workspace];
+  if (block && varName && workspace
+      && defaultVarNames
+      && defaultVarNames.indexOf(varName) != -1
+      && workspace.getVariableUses(varName).length == 0) {
+    workspace.deleteVariable(varName);
   }
 };
