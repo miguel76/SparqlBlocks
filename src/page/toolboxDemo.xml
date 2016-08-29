@@ -23,15 +23,13 @@
       <statement name="PROPERTY_LIST">
         <shadow type="sparql_verb_object">
           <value name="VERB">
-            <shadow type="sparql_prefixed_iri">
-              <field name="PREFIX">rdf</field>
-              <field name="LOCAL_NAME">type</field>
+            <shadow type="variables_get">
+              <field name="VAR">pred</field>
             </shadow>
           </value>
           <value name="OBJECT">
-            <shadow type="sparql_prefixed_iri">
-              <field name="PREFIX">owl</field>
-              <field name="LOCAL_NAME">Thing</field>
+            <shadow type="variables_get">
+              <field name="VAR">obj</field>
             </shadow>
           </value>
         </shadow>
