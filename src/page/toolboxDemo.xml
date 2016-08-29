@@ -313,121 +313,246 @@
     <block type="sparql_prefixed_iri"></block>
     <sep gap="8"></sep>
     <block type="sparql_iri"></block>
-    <sep gap="32"></sep>
-    <block type="sparql_verb_object">
-      <value name="VERB">
-        <block type="sparql_prefixed_iri">
-          <field name="PREFIX">rdf</field>
-          <field name="LOCAL_NAME">type</field>
-        </block>
-      </value>
-      <value name="OBJECT">
-        <shadow type="variables_get">
-          <field name="VAR">type</field>
-        </shadow>
-      </value>
-    </block>
-    <sep gap="8"></sep>
-    <block type="sparql_verb_object">
-      <value name="VERB">
-        <block type="sparql_prefixed_iri">
-          <field name="PREFIX">rdfs</field>
-          <field name="LOCAL_NAME">seeAlso</field>
-        </block>
-      </value>
-      <value name="OBJECT">
-        <shadow type="variables_get">
-          <field name="VAR">relatedResource</field>
-        </shadow>
-      </value>
-    </block>
-    <sep gap="8"></sep>
-    <block type="sparql_verb_object">
-      <value name="VERB">
-        <block type="sparql_prefixed_iri">
-          <field name="PREFIX">rdfs</field>
-          <field name="LOCAL_NAME">isDefinedBy</field>
-        </block>
-      </value>
-      <value name="OBJECT">
-        <shadow type="variables_get">
-          <field name="VAR">definition</field>
-        </shadow>
-      </value>
-    </block>
-    <sep gap="8"></sep>
-    <block type="sparql_verb_object">
-      <value name="VERB">
-        <block type="sparql_prefixed_iri">
-          <field name="PREFIX">rdf</field>
-          <field name="LOCAL_NAME">value</field>
-        </block>
-      </value>
-      <value name="OBJECT">
-        <shadow type="variables_get">
-          <field name="VAR">value</field>
-        </shadow>
-      </value>
-    </block>
-    <sep gap="32"></sep>
-    <block type="sparql_prefixed_iri">
-      <field name="PREFIX">dcterms</field>
-      <field name="LOCAL_NAME">title</field>
-    </block>
-    <sep gap="8"></sep>
-    <block type="sparql_prefixed_iri">
-      <field name="PREFIX">dcterms</field>
-      <field name="LOCAL_NAME">subject</field>
-    </block>
-    <sep gap="8"></sep>
-    <block type="sparql_prefixed_iri">
-      <field name="PREFIX">dcterms</field>
-      <field name="LOCAL_NAME">creator</field>
-    </block>
-    <sep gap="8"></sep>
-    <block type="sparql_prefixed_iri">
-      <field name="PREFIX">dcterms</field>
-      <field name="LOCAL_NAME">publisher</field>
-    </block>
-    <sep gap="32"></sep>
-    <block type="sparql_prefixed_iri">
-      <field name="PREFIX">foaf</field>
-      <field name="LOCAL_NAME">Agent</field>
-    </block>
-    <sep gap="8"></sep>
-    <block type="sparql_prefixed_iri">
-      <field name="PREFIX">foaf</field>
-      <field name="LOCAL_NAME">Person</field>
-    </block>
-    <sep gap="8"></sep>
-    <block type="sparql_prefixed_iri">
-      <field name="PREFIX">foaf</field>
-      <field name="LOCAL_NAME">name</field>
-    </block>
-    <sep gap="8"></sep>
-    <block type="sparql_prefixed_iri">
-      <field name="PREFIX">foaf</field>
-      <field name="LOCAL_NAME">depiction</field>
-    </block>
-    <sep gap="8"></sep>
-    <block type="sparql_prefixed_iri">
-      <field name="PREFIX">foaf</field>
-      <field name="LOCAL_NAME">knows</field>
-    </block>
-    <sep gap="32"></sep>
-    <block type="sparql_prefixed_iri">
-      <field name="PREFIX">geo</field>
-      <field name="LOCAL_NAME">lat</field>
-    </block>
-    <sep gap="8"></sep>
-    <block type="sparql_prefixed_iri">
-      <field name="PREFIX">geo</field>
-      <field name="LOCAL_NAME">long</field>
-    </block>
   </category>
   <sep></sep>
   <category name="&#xf10b; Variables" colour="330" custom="VARIABLE"></category>
   <sep></sep>
+  <category name="&#xf100; Vocab" colour="20">
+    <category name="• RDF(S)">
+      <block type="sparql_verb_object">
+        <value name="VERB">
+          <block type="sparql_prefixed_iri">
+            <field name="PREFIX">rdf</field>
+            <field name="LOCAL_NAME">type</field>
+          </block>
+        </value>
+        <value name="OBJECT">
+          <shadow type="variables_get">
+            <field name="VAR">type</field>
+          </shadow>
+        </value>
+      </block>
+      <sep gap="8"></sep>
+      <block type="sparql_verb_object">
+        <value name="VERB">
+          <block type="sparql_prefixed_iri">
+            <field name="PREFIX">rdfs</field>
+            <field name="LOCAL_NAME">seeAlso</field>
+          </block>
+        </value>
+        <value name="OBJECT">
+          <shadow type="variables_get">
+            <field name="VAR">relatedResource</field>
+          </shadow>
+        </value>
+      </block>
+      <sep gap="8"></sep>
+      <block type="sparql_verb_object">
+        <value name="VERB">
+          <block type="sparql_prefixed_iri">
+            <field name="PREFIX">rdfs</field>
+            <field name="LOCAL_NAME">isDefinedBy</field>
+          </block>
+        </value>
+        <value name="OBJECT">
+          <shadow type="variables_get">
+            <field name="VAR">definition</field>
+          </shadow>
+        </value>
+      </block>
+      <sep gap="8"></sep>
+      <block type="sparql_verb_object">
+        <value name="VERB">
+          <block type="sparql_prefixed_iri">
+            <field name="PREFIX">rdf</field>
+            <field name="LOCAL_NAME">value</field>
+          </block>
+        </value>
+        <value name="OBJECT">
+          <shadow type="variables_get">
+            <field name="VAR">value</field>
+          </shadow>
+        </value>
+      </block>
+    </category>
+    <category name="• Dublin Core">
+      <block type="sparql_verb_object">
+        <value name="VERB">
+          <block type="sparql_prefixed_iri">
+            <field name="PREFIX">dcterms</field>
+            <field name="LOCAL_NAME">title</field>
+          </block>
+        </value>
+        <value name="OBJECT">
+          <shadow type="variables_get">
+            <field name="VAR">title</field>
+          </shadow>
+        </value>
+      </block>
+      <sep gap="8"></sep>
+      <block type="sparql_verb_object">
+        <value name="VERB">
+          <block type="sparql_prefixed_iri">
+            <field name="PREFIX">dcterms</field>
+            <field name="LOCAL_NAME">subject</field>
+          </block>
+        </value>
+        <value name="OBJECT">
+          <shadow type="variables_get">
+            <field name="VAR">subject</field>
+          </shadow>
+        </value>
+      </block>
+      <sep gap="8"></sep>
+      <block type="sparql_verb_object">
+        <value name="VERB">
+          <block type="sparql_prefixed_iri">
+            <field name="PREFIX">dcterms</field>
+            <field name="LOCAL_NAME">creator</field>
+          </block>
+        </value>
+        <value name="OBJECT">
+          <shadow type="variables_get">
+            <field name="VAR">creator</field>
+          </shadow>
+        </value>
+      </block>
+      <sep gap="8"></sep>
+      <block type="sparql_verb_object">
+        <value name="VERB">
+          <block type="sparql_prefixed_iri">
+            <field name="PREFIX">dcterms</field>
+            <field name="LOCAL_NAME">publisher</field>
+          </block>
+        </value>
+        <value name="OBJECT">
+          <shadow type="variables_get">
+            <field name="VAR">publisher</field>
+          </shadow>
+        </value>
+      </block>
+    </category>
+    <category name="• FOAF">
+      <block type="sparql_subject_propertylist">
+        <value name="SUBJECT">
+          <shadow type="variables_get">
+            <field name="VAR">agent</field>
+          </shadow>
+        </value>
+        <statement name="PROPERTY_LIST">
+          <block type="sparql_verb_object">
+            <value name="VERB">
+              <block type="sparql_prefixed_iri">
+                <field name="PREFIX">rdf</field>
+                <field name="LOCAL_NAME">type</field>
+              </block>
+            </value>
+            <value name="OBJECT">
+              <block type="sparql_prefixed_iri">
+                <field name="PREFIX">foaf</field>
+                <field name="LOCAL_NAME">Agent</field>
+              </block>
+            </value>
+          </block>
+        </statement>
+      </block>
+      <sep gap="8"></sep>
+      <block type="sparql_subject_propertylist">
+        <value name="SUBJECT">
+          <shadow type="variables_get">
+            <field name="VAR">person</field>
+          </shadow>
+        </value>
+        <statement name="PROPERTY_LIST">
+          <block type="sparql_verb_object">
+            <value name="VERB">
+              <block type="sparql_prefixed_iri">
+                <field name="PREFIX">rdf</field>
+                <field name="LOCAL_NAME">type</field>
+              </block>
+            </value>
+            <value name="OBJECT">
+              <block type="sparql_prefixed_iri">
+                <field name="PREFIX">foaf</field>
+                <field name="LOCAL_NAME">Person</field>
+              </block>
+            </value>
+          </block>
+        </statement>
+      </block>
+      <sep gap="32"></sep>
+      <block type="sparql_verb_object">
+        <value name="VERB">
+          <block type="sparql_prefixed_iri">
+            <field name="PREFIX">foaf</field>
+            <field name="LOCAL_NAME">name</field>
+          </block>
+        </value>
+        <value name="OBJECT">
+          <shadow type="variables_get">
+            <field name="VAR">name</field>
+          </shadow>
+        </value>
+      </block>
+      <sep gap="8"></sep>
+      <block type="sparql_verb_object">
+        <value name="VERB">
+          <block type="sparql_prefixed_iri">
+            <field name="PREFIX">foaf</field>
+            <field name="LOCAL_NAME">depiction</field>
+          </block>
+        </value>
+        <value name="OBJECT">
+          <shadow type="variables_get">
+            <field name="VAR">picture</field>
+          </shadow>
+        </value>
+      </block>
+      <sep gap="8"></sep>
+      <block type="sparql_verb_object">
+        <value name="VERB">
+          <block type="sparql_prefixed_iri">
+            <field name="PREFIX">foaf</field>
+            <field name="LOCAL_NAME">knows</field>
+          </block>
+        </value>
+        <value name="OBJECT">
+          <shadow type="variables_get">
+            <field name="VAR">friend</field>
+          </shadow>
+        </value>
+      </block>
+    </category>
+    <category name="• Geo">
+      <block type="sparql_verb_object">
+        <value name="VERB">
+          <block type="sparql_prefixed_iri">
+            <field name="PREFIX">geo</field>
+            <field name="LOCAL_NAME">lat</field>
+          </block>
+        </value>
+        <value name="OBJECT">
+          <shadow type="variables_get">
+            <field name="VAR">latitude</field>
+          </shadow>
+        </value>
+      </block>
+      <sep gap="8"></sep>
+      <block type="sparql_verb_object">
+        <value name="VERB">
+          <block type="sparql_prefixed_iri">
+            <field name="PREFIX">geo</field>
+            <field name="LOCAL_NAME">long</field>
+          </block>
+        </value>
+        <value name="OBJECT">
+          <shadow type="variables_get">
+            <field name="VAR">longitude</field>
+          </shadow>
+        </value>
+      </block>
+    </category>
+  </category>
   <category name="&#xf10a; Search" colour="290">
     <block type="sparql_builtin_resources">
       <field name="ENDPOINT">http://dbpedia.org/sparql</field>
