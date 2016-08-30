@@ -153,12 +153,106 @@
     </block>
   </category>
   <category name="&#xf101; Compose" colour="260">
-    <block type="sparql_union"></block>
-    <block type="sparql_optional"></block>
+    <block type="sparql_union">
+      <value name="OP1">
+        <shadow type="sparql_subject_propertylist">
+          <value name="SUBJECT">
+            <shadow type="variables_get">
+              <field name="VAR">subj</field>
+            </shadow>
+          </value>
+          <statement name="PROPERTY_LIST">
+            <shadow type="sparql_verb_object">
+              <value name="VERB">
+                <shadow type="variables_get">
+                  <field name="VAR">pred</field>
+                </shadow>
+              </value>
+              <value name="OBJECT">
+                <shadow type="variables_get">
+                  <field name="VAR">obj</field>
+                </shadow>
+              </value>
+            </shadow>
+          </statement>
+        </shadow>
+      </value>
+      <value name="OP2">
+        <shadow type="sparql_subject_propertylist">
+          <value name="SUBJECT">
+            <shadow type="variables_get">
+              <field name="VAR">subj</field>
+            </shadow>
+          </value>
+          <statement name="PROPERTY_LIST">
+            <shadow type="sparql_verb_object">
+              <value name="VERB">
+                <shadow type="variables_get">
+                  <field name="VAR">pred</field>
+                </shadow>
+              </value>
+              <value name="OBJECT">
+                <shadow type="variables_get">
+                  <field name="VAR">obj</field>
+                </shadow>
+              </value>
+            </shadow>
+          </statement>
+        </shadow>
+      </value>
+    </block>
+    <block type="sparql_optional">
+      <value name="OP">
+        <shadow type="sparql_subject_propertylist">
+          <value name="SUBJECT">
+            <shadow type="variables_get">
+              <field name="VAR">subj</field>
+            </shadow>
+          </value>
+          <statement name="PROPERTY_LIST">
+            <shadow type="sparql_verb_object">
+              <value name="VERB">
+                <shadow type="variables_get">
+                  <field name="VAR">pred</field>
+                </shadow>
+              </value>
+              <value name="OBJECT">
+                <shadow type="variables_get">
+                  <field name="VAR">obj</field>
+                </shadow>
+              </value>
+            </shadow>
+          </statement>
+        </shadow>
+      </value>
+    </block>
     <block type="sparql_graph">
       <value name="GRAPHNAME">
         <shadow type="variables_get">
           <field name="VAR">graph</field>
+        </shadow>
+      </value>
+      <value name="OP">
+        <shadow type="sparql_subject_propertylist">
+          <value name="SUBJECT">
+            <shadow type="variables_get">
+              <field name="VAR">subj</field>
+            </shadow>
+          </value>
+          <statement name="PROPERTY_LIST">
+            <shadow type="sparql_verb_object">
+              <value name="VERB">
+                <shadow type="variables_get">
+                  <field name="VAR">pred</field>
+                </shadow>
+              </value>
+              <value name="OBJECT">
+                <shadow type="variables_get">
+                  <field name="VAR">obj</field>
+                </shadow>
+              </value>
+            </shadow>
+          </statement>
         </shadow>
       </value>
     </block>
@@ -199,12 +293,74 @@
     <!-- <block type="sparql_logic_null"></block> -->
 
     <sep gap="32"></sep>
-    <block type="sparql_logic_ternary"></block>
+    <block type="sparql_logic_ternary">
+      <value name="IF">
+        <shadow type="sparql_logic_boolean"></shadow>
+      </value>
+      <value name="THEN">
+        <shadow type="sparql_math_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+      <value name="ELSE">
+        <shadow type="sparql_math_number">
+          <field name="NUM">0</field>
+        </shadow>
+      </value>
+    </block>
 
     <sep gap="32"></sep>
-    <block type="sparql_exists"></block>
+    <block type="sparql_exists">
+      <value name="OP">
+        <shadow type="sparql_subject_propertylist">
+          <value name="SUBJECT">
+            <shadow type="variables_get">
+              <field name="VAR">subj</field>
+            </shadow>
+          </value>
+          <statement name="PROPERTY_LIST">
+            <shadow type="sparql_verb_object">
+              <value name="VERB">
+                <shadow type="variables_get">
+                  <field name="VAR">pred</field>
+                </shadow>
+              </value>
+              <value name="OBJECT">
+                <shadow type="variables_get">
+                  <field name="VAR">obj</field>
+                </shadow>
+              </value>
+            </shadow>
+          </statement>
+        </shadow>
+      </value>
+    </block>
     <sep gap="8"></sep>
-    <block type="sparql_not_exists"></block>
+    <block type="sparql_not_exists">
+      <value name="OP">
+        <shadow type="sparql_subject_propertylist">
+          <value name="SUBJECT">
+            <shadow type="variables_get">
+              <field name="VAR">subj</field>
+            </shadow>
+          </value>
+          <statement name="PROPERTY_LIST">
+            <shadow type="sparql_verb_object">
+              <value name="VERB">
+                <shadow type="variables_get">
+                  <field name="VAR">pred</field>
+                </shadow>
+              </value>
+              <value name="OBJECT">
+                <shadow type="variables_get">
+                  <field name="VAR">obj</field>
+                </shadow>
+              </value>
+            </shadow>
+          </statement>
+        </shadow>
+      </value>
+    </block>
   </category>
   <category name="&#xf103; Math" colour="230">
     <block type="sparql_math_number"></block>
