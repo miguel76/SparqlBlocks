@@ -58,9 +58,8 @@ var lookForIri_ = function(iri) {
         localPart: res.localPart + iri.substr(sepIndex + 1)
       };
     }
-  } else {
-    return null;
   }
+  return null;
 };
 
 module.exports = {
