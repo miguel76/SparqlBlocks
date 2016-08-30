@@ -40,7 +40,7 @@ module.exports = {
       this.orderFieldCount_ = 1;
 
       this.appendDummyInput("AFTER_ORDER")
-          .appendField("& limit to first")
+          .appendField("  limit to first")
           .appendField(new Blockly.FieldNumber(defaultLimit, 0, maxLimit), "LIMIT")
           .appendField("rows");
 
