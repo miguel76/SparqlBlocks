@@ -320,7 +320,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
           // }
           // this.renderFields_(input.fieldRow, fieldX, fieldY);
           // cursorX = inputRows.statementEdge + Blockly.BlockSvg.NOTCH_WIDTH;
-          cursorX += Blockly.BlockSvg.NOTCH_WIDTH - input.renderWidth;
+          cursorX += 1.5 * Blockly.BlockSvg.SEP_SPACE_X - input.renderWidth;
           steps.push('H', cursorX);
           steps.push(Blockly.BlockSvg.INNER_TOP_LEFT_CORNER);
           steps.push('v', row.height - 2 * Blockly.BlockSvg.CORNER_RADIUS);
