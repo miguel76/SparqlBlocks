@@ -150,6 +150,20 @@
     </block>
     <sep gap="32"></sep>
     <block type="sparql_anonsubject_propertylist">
+      <statement name="PROPERTY_LIST">
+        <shadow type="sparql_verb_object">
+          <value name="VERB">
+            <shadow type="variables_get">
+              <field name="VAR">pred</field>
+            </shadow>
+          </value>
+          <value name="OBJECT">
+            <shadow type="variables_get">
+              <field name="VAR">obj</field>
+            </shadow>
+          </value>
+        </shadow>
+      </statement>
     </block>
   </category>
   <category name="&#xf101; Compose" colour="260">
