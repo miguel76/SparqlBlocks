@@ -475,9 +475,9 @@
     <sep gap="8"></sep>
     <block type="sparql_text_charAt">
       <value name="VALUE">
-        <block type="variables_get">
-          <field name="VAR">text</field>
-        </block>
+        <shadow type="sparql_text">
+          <field name="TEXT">abc</field>
+        </shadow>
       </value>
       <value name="AT">
         <shadow type="sparql_math_number">
@@ -488,9 +488,19 @@
     <sep gap="8"></sep>
     <block type="sparql_text_getSubstring">
       <value name="STRING">
-        <block type="variables_get">
-          <field name="VAR">text</field>
-        </block>
+        <shadow type="sparql_text">
+          <field name="TEXT">abc</field>
+        </shadow>
+      </value>
+      <value name="AT1">
+        <shadow type="sparql_math_number">
+          <field name="NUM">2</field>
+        </shadow>
+      </value>
+      <value name="AT2">
+        <shadow type="sparql_math_number">
+          <field name="NUM">3</field>
+        </shadow>
       </value>
     </block>
     <sep gap="8"></sep>
@@ -505,13 +515,13 @@
     <block type="sparql_text_contains">
       <value name="FIND">
         <shadow type="sparql_text">
-          <field name="TEXT">abc</field>
+          <field name="TEXT">bc</field>
         </shadow>
       </value>
       <value name="VALUE">
-        <block type="variables_get">
-          <field name="VAR">text</field>
-        </block>
+        <shadow type="sparql_text">
+          <field name="TEXT">abcd</field>
+        </shadow>
       </value>
     </block>
     <!-- <block type="sparql_text_regex">
@@ -532,9 +542,10 @@
         </shadow>
       </value>
       <value name="VALUE">
-        <block type="variables_get">
-          <field name="VAR">text</field>
-        </block>
+        <shadow type="sparql_text_with_lang">
+          <field name="TEXT">play</field>
+          <field name="LANG">en</field>
+        </shadow>
       </value>
     </block>
     <sep gap="32"></sep>
