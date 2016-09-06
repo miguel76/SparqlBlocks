@@ -95,11 +95,36 @@ Sparql.ORDER_ASSIGNMENT = 16;    // = += -= *= /= %= <<= >>= ...
 Sparql.ORDER_COMMA = 17;         // ,
 Sparql.ORDER_NONE = 99;          // (...)
 
+Sparql.VAR_PREFIX = '?';
+
 /**
  * Initialise the database of variable names.
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  */
 Sparql.init = function(workspace) {
+  // // Create a dictionary of definitions to be printed before the code.
+  // Sparql.definitions_ = Object.create(null);
+  // Create a dictionary mapping desired function names in definitions_
+  // to actual function names (to avoid collisions with user functions).
+  Sparql.functionNames_ = Object.create(null);
+
+  if (!Sparql.variableDB_) {
+    Sparql.variableDB_ =
+        new Blockly.Names(Sparql.RESERVED_WORDS_, Sparql.VAR_PREFIX);
+  } else {
+    Sparql.variableDB_.reset();
+  }
+
+  // var defvars = [];
+  // var variables = workspace.variableList;
+  // if (variables.length) {
+  //   for (var i = 0; i < variables.length; i++) {
+  //     defvars[i] = Sparql.variableDB_.getName(variables[i],
+  //         Blockly.Variables.NAME_TYPE);
+  //   }
+  //   Sparql.definitions_['variables'] =
+  //       'var ' + defvars.join(', ') + ';';
+  // }
 };
 
 /**

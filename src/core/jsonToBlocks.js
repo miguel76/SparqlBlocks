@@ -19,8 +19,9 @@
  */
 'use strict';
 
-var Prefixes = require('./prefixes.js');
 var Blockly = require('blockly');
+var SparqlGen = require('../generators/sparql.js');
+var Prefixes = require('./prefixes.js');
 
 var xsd_map_ = {};
 var xsd_ = function(localName) {
@@ -152,7 +153,10 @@ var blockFromValue_ = function(value, workspace) {
 var blockFromVar_ = function(varName, workspace) {
   var varBlock = workspace.newBlock('variables_get');
   varBlock.initSvg();
-  varBlock.setFieldValue(varName, 'VAR');
+  varBlock.setFieldValue(
+      SparqlGen.variableDB_ ?
+          SparqlGen.variableDB_.getUserProvidedName(varName) :
+          varName, 'VAR');
   return varBlock;
 };
 

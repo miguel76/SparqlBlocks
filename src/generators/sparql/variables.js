@@ -19,10 +19,10 @@
  */
 'use strict';
 
-var Sparql = require('../sparql.js');
+var Blockly = require('blockly'),
+    Sparql = require('../sparql.js');
 
 Sparql.variables_get = function(block) {
-  var text_var = block.getFieldValue('VAR');
-  var code = '?' + text_var;
+  var code = Sparql.variableDB_.getName(block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
   return [code, Sparql.ORDER_ATOMIC];
 };

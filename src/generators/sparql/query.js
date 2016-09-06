@@ -29,6 +29,7 @@ Sparql.sparqlQuery = function(block) {
   if (!block) {
     return '';
   }
+  Sparql.init(block.workspace);
   var statements_where = Sparql.statementToGraphPattern(block, 'WHERE');
   if (statements_where === '') {
     return '';
