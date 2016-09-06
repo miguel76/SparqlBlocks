@@ -27,7 +27,8 @@ var _ = require('underscore'),
     Exec = require('../core/exec.js'),
     Msg = require('../core/msg.js'),
     SparqlGen = require('../generators/sparql.js'),
-    FileSaver = require('browser-filesaver');
+    FileSaver = require('browser-filesaver'),
+    JsonToBlocks = require('../core/jsonToBlocks.js');
 
 require('blob-polyfill');
 
@@ -132,7 +133,7 @@ var execBlock = function(options) {
             ( options.selfLimiting ||
               this.getFieldValue("LIMIT") !== null)) {
         if (options.directResultsField) {
-          Exec.blockExec(this);
+          Exec.blockExec(this, options.extraColumns);
         } else {
           if (options.builtinQuery && _.isFunction(options.builtinQuery)) {
             var parametersDict = {};
@@ -152,11 +153,11 @@ var execBlock = function(options) {
               var limitStr = limit ? '\nLIMIT ' + limit : '';
               var sparql = options.builtinQuery(parametersDict) + limitStr;
                 if (sparql) {
-                  Exec.blockExecQuery(this, sparql, this.resultsInput);
+                  Exec.blockExecQuery(this, sparql, options.extraColumns, this.resultsInput);
                 }
               }
           } else {
-            Exec.blockExec(this, this, this.resultsInput);
+            Exec.blockExec(this, options.extraColumns, this, this.resultsInput);
           }
         }
       }
@@ -383,6 +384,36 @@ Blocks.block(
                 "  }\n" : "") +
                 "}\n" +
                 "ORDER BY (STRLEN(?label)) STRLEN(COALESCE(LANG(?label),''))";
+      },
+      extraColumns: {
+        varNames: ['pattern'],
+        mappings: {
+          pattern: function(binding, workspace) {
+            var resource = binding['class'];
+            if (resource) {
+              var resourceBlock = JsonToBlocks.blockFromValue(resource, workspace);
+              resourceBlock.setEditable(true);
+              var labelTerm = binding['label'];
+              var label = (labelTerm && labelTerm.value) ||
+                          resourceBlock.getFieldValue('LOCAL_NAME') ||
+                          'instance';
+              var typePropBlock = workspace.newBlock('sparql_prefixed_iri');
+              typePropBlock.setFieldValue('rdf', 'PREFIX');
+              typePropBlock.setFieldValue('type', 'LOCAL_NAME');
+              var instanceVarBlock = workspace.newBlock('variables_get');
+              instanceVarBlock.setFieldValue(label, 'VAR');
+              var typeBlock = workspace.newBlock('sparql_verb_object');
+              typeBlock.getInput('VERB').connection.connect(typePropBlock.outputConnection);
+              typeBlock.getInput('OBJECT').connection.connect(resourceBlock.outputConnection);
+              var patternBlock = workspace.newBlock('sparql_subject_propertylist');
+              patternBlock.getInput('SUBJECT').connection.connect(instanceVarBlock.outputConnection);
+              patternBlock.getInput('PROPERTY_LIST').connection.connect(typeBlock.previousConnection);
+              patternBlock.initSvg();
+              patternBlock.setCollapsed(true);
+              return patternBlock
+            } else return null;
+          }
+        }
       }
     }));
 
@@ -417,41 +448,65 @@ Blocks.block(
       }
     }));
 
-    Blocks.block(
-        'sparql_builtin_properties',
-        execBlock({
-          endpointField: true,
-          title: "search Properties",
-          parameters: [
-            { name: "GRAPH", type: "Resource", label: "in graph" },
-            { name: "FROM", type: "Resource", label: "from class" },
-            { name: "TO", type: "Resource", label: "to class" },
-            { name: "FIND", type: "StringExpr", label: "named" }],
-          builtinQuery: function(params) {
-            if (!params.FIND) { // if not FIND then empty query
-              return "";
-            }
-            return  "SELECT DISTINCT * WHERE {\n" +
-                    (params.GRAPH ?
-                    "  GRAPH " + params.GRAPH + " {\n" : "") +
-                    "    ?property\n" +
-                    "      <http://www.w3.org/2000/01/rdf-schema#label> ?label;\n" +
-                    "      <http://www.w3.org/2000/01/rdf-schema#domain> ?domain;\n" +
-                    "      <http://www.w3.org/2000/01/rdf-schema#range> ?range.\n" +
-                    (params.FROM ?
-                    "    " + params.FROM + " <http://www.w3.org/2000/01/rdf-schema#subClassOf>* ?domain.\n" : "")+
-                    (params.TO ?
-                    "    " + params.TO + " <http://www.w3.org/2000/01/rdf-schema#subClassOf>* ?range.\n" : "")+
-                    "    FILTER(" +
-                          "REGEX(?label, STR(" + params.FIND + "), 'i') " +
-                          "&& (COALESCE(LANG(" + params.FIND + "),'') = ''" +
-                              "|| LANGMATCHES(LANG(?label), LANG(" + params.FIND + ")))).\n" +
-                    (params.GRAPH ?
-                    "  }\n" : "") +
-                    "}\n" +
-                    "ORDER BY (STRLEN(?label)) STRLEN(COALESCE(LANG(?label),''))";
-          }
-        }));
+Blocks.block(
+  'sparql_builtin_properties',
+  execBlock({
+    endpointField: true,
+    title: "search Properties",
+    parameters: [
+      { name: "GRAPH", type: "Resource", label: "in graph" },
+      { name: "FROM", type: "Resource", label: "from class" },
+      { name: "TO", type: "Resource", label: "to class" },
+      { name: "FIND", type: "StringExpr", label: "named" }],
+    builtinQuery: function(params) {
+      if (!params.FIND) { // if not FIND then empty query
+        return "";
+      }
+      return  "SELECT DISTINCT * WHERE {\n" +
+              (params.GRAPH ?
+              "  GRAPH " + params.GRAPH + " {\n" : "") +
+              "    ?property\n" +
+              "      <http://www.w3.org/2000/01/rdf-schema#label> ?label;\n" +
+              "      <http://www.w3.org/2000/01/rdf-schema#domain> ?domain;\n" +
+              "      <http://www.w3.org/2000/01/rdf-schema#range> ?range.\n" +
+              (params.FROM ?
+              "    " + params.FROM + " <http://www.w3.org/2000/01/rdf-schema#subClassOf>* ?domain.\n" : "")+
+              (params.TO ?
+              "    " + params.TO + " <http://www.w3.org/2000/01/rdf-schema#subClassOf>* ?range.\n" : "")+
+              "    FILTER(" +
+                    "REGEX(?label, STR(" + params.FIND + "), 'i') " +
+                    "&& (COALESCE(LANG(" + params.FIND + "),'') = ''" +
+                        "|| LANGMATCHES(LANG(?label), LANG(" + params.FIND + ")))).\n" +
+              (params.GRAPH ?
+              "  }\n" : "") +
+              "}\n" +
+              "ORDER BY (STRLEN(?label)) STRLEN(COALESCE(LANG(?label),''))";
+    },
+    extraColumns: {
+      varNames: ['pattern'],
+      mappings: {
+        pattern: function(binding, workspace) {
+          var resource = binding['property'];
+          if (resource) {
+            var resourceBlock = JsonToBlocks.blockFromValue(resource, workspace);
+            resourceBlock.setEditable(true);
+            var labelTerm = binding['label'];
+            var label = (labelTerm && labelTerm.value) ||
+                        resourceBlock.getFieldValue('LOCAL_NAME') ||
+                        'object';
+            var objectVarBlock = workspace.newBlock('variables_get');
+            objectVarBlock.setFieldValue(label, 'VAR');
+            var branchBlock = workspace.newBlock('sparql_verb_object');
+            branchBlock.getInput('VERB').connection.connect(resourceBlock.outputConnection);
+            branchBlock.getInput('OBJECT').connection.connect(objectVarBlock.outputConnection);
+            branchBlock.initSvg();
+            branchBlock.setCollapsed(true);
+            return branchBlock
+          } else return null;
+        }
+      }
+    }
+  }));
 
 Blocks.block('sparql_execution_placeholder', {
     init: function() {

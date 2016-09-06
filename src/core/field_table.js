@@ -26,25 +26,32 @@ var JsonToBlocks = require('./jsonToBlocks.js');
 /**
  * Class for a tabular field.
  * @param {string} data The initial content of the field.
- * @param {Function=} opt_validator An optional function that is called
- *     to validate any constraints on what the user entered.  Takes the new
- *     text as an argument and returns either the accepted text, a replacement
- *     text, or null to abort the change.
+ * @param {Object} opt_extraColumns An optional set of variables to add
+ *    (varNames: Array of strings, mappings: dictionary from varname to funct binding -> cellBlock)
  * @extends {FieldTable}
  * @constructor
  */
-var FieldTable = function(data, opt_validator) {
+var FieldTable = function(data, opt_extraColumns) {
   FieldTable.constructor.call(this, '');
-  this.setValidator(opt_validator);
   // Set the initial state.
   // this.setValue(json);
   this.width_ = 0;
   this.height_ = 0;
   this.size_ = { width: this.width_, height: this.height_ };
   this.data_ = data;
+  this.extraColumns_ = opt_extraColumns ? opt_extraColumns : {
+    varNames: [],
+    mappings: {}
+  };
 };
 FieldTable.prototype = Object.create(Blockly.Field.prototype);
 FieldTable.prototype.constructor = FieldTable;
+
+FieldTable.NO_PATTERN = 0;
+FieldTable.CLASS_PATTERN = 1;
+FieldTable.PROPERTY_PATTERN = 2;
+
+FieldTable.PATTERN_LABEL = 'pattern';
 
 /**
  * Editable fields are saved by the XML renderer, non-editable fields are not.
@@ -52,30 +59,31 @@ FieldTable.prototype.constructor = FieldTable;
 FieldTable.prototype.EDITABLE = false;
 
 FieldTable.prototype.setEventBindingsForBlock_ = function(block) {
+  if (block) {
+    var root = block.getSvgRoot();
 
-  var root = block.getSvgRoot();
+    // Create an invisible rectangle under the block to act as a button.  Just
+    // using the block as a button is poor, since blocks have holes in them.
+    var rect = Blockly.createSvgElement('rect', {'fill-opacity': 0}, null);
+    // Add the rectangles under the blocks, so that the blocks' tooltips work.
+    this.flyout_.workspace_.getCanvas().insertBefore(rect, root);
+    block.flyoutRect_ = rect;
 
-  // Create an invisible rectangle under the block to act as a button.  Just
-  // using the block as a button is poor, since blocks have holes in them.
-  var rect = Blockly.createSvgElement('rect', {'fill-opacity': 0}, null);
-  // Add the rectangles under the blocks, so that the blocks' tooltips work.
-  this.flyout_.workspace_.getCanvas().insertBefore(rect, root);
-  block.flyoutRect_ = rect;
-
-  var lstnrs = this.flyout_.listeners_;
-  lstnrs.push(Blockly.bindEvent_(
-      root, 'mousedown', null,
-      this.flyout_.blockMouseDown_(block)));
-  lstnrs.push(Blockly.bindEvent_(root, 'mouseover', block,
-      block.addSelect));
-  lstnrs.push(Blockly.bindEvent_(root, 'mouseout', block,
-      block.removeSelect));
-  lstnrs.push(Blockly.bindEvent_(rect, 'mousedown', null,
-      this.createBlockFunc_(block)));
-  lstnrs.push(Blockly.bindEvent_(rect, 'mouseover', block,
-      block.addSelect));
-  lstnrs.push(Blockly.bindEvent_(rect, 'mouseout', block,
-      block.removeSelect));
+    var lstnrs = this.flyout_.listeners_;
+    lstnrs.push(Blockly.bindEvent_(
+        root, 'mousedown', null,
+        this.flyout_.blockMouseDown_(block)));
+    lstnrs.push(Blockly.bindEvent_(root, 'mouseover', block,
+        block.addSelect));
+    lstnrs.push(Blockly.bindEvent_(root, 'mouseout', block,
+        block.removeSelect));
+    lstnrs.push(Blockly.bindEvent_(rect, 'mousedown', null,
+        this.createBlockFunc_(block)));
+    lstnrs.push(Blockly.bindEvent_(rect, 'mouseover', block,
+        block.addSelect));
+    lstnrs.push(Blockly.bindEvent_(rect, 'mouseout', block,
+        block.removeSelect));
+  }
 };
 
 FieldTable.prototype.setEventBindings_ = function(colNames, headBlocks, blockRows) {
@@ -149,10 +157,15 @@ FieldTable.prototype.init = function() {
   var workspace = this.flyout_.workspace_;
   workspace.targetWorkspace = block.workspace;
 
+  var extraColumns = this.extraColumns_;
+
   var head = this.data_.head;
   if (head) {
     var headVars = this.data_.head.vars;
     if (headVars) {
+      for (var i = 0; i < extraColumns.varNames.length; i++) {
+        headVars.push(extraColumns.varNames[i]);
+      }
       var varBlocks = this.varBlocks_ = {};
       headVars.forEach( function(varName) {
         var varBlock = JsonToBlocks.blockFromVar(varName, workspace);
@@ -165,10 +178,18 @@ FieldTable.prototype.init = function() {
         this.blockRows_ = bindings.map( function(binding, index) {
           var rowCellBlocks = {};
           headVars.forEach( function(varName) {
-            var value = binding[varName];
-            if (value) {
-              var valueBlock = JsonToBlocks.blockFromValue(value, workspace);
-              rowCellBlocks[varName] = valueBlock;
+            var mapping = extraColumns.mappings[varName];
+            if (mapping) {
+              var cellBlock = mapping(binding, workspace);
+              if (cellBlock) {
+                rowCellBlocks[varName] = cellBlock;
+              }
+            } else {
+              var value = binding[varName];
+              if (value) {
+                var valueBlock = JsonToBlocks.blockFromValue(value, workspace);
+                rowCellBlocks[varName] = valueBlock;
+              }
             }
           });
           return rowCellBlocks;
@@ -253,7 +274,9 @@ FieldTable.prototype.renderCompute_ = function(headVars, headBlocks, blockRows) 
 };
 
 FieldTable.prototype.positionBlock_ = function(block, x, y) {
-  block.moveBy(Blockly.BlockSvg.TAB_HEIGHT + x, y);
+  if (block) {
+    block.moveBy(Blockly.BlockSvg.TAB_HEIGHT + x, y);
+  }
 };
 
 FieldTable.prototype.position_ = function( colNames,
@@ -330,6 +353,7 @@ FieldTable.prototype.createBlockFunc_ = function(originBlock) {
     var xml = Blockly.Xml.blockToDom(originBlock);
     var block = Blockly.Xml.domToBlock(xml, workspace);
     block.setEditable(true);
+    block.setCollapsed(false);
     // Place it in the same spot as the flyout copy.
     var svgRootOld = originBlock.getSvgRoot();
     if (!svgRootOld) {

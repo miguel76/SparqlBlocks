@@ -86,7 +86,7 @@ var setResult_ = function(resultsInput, resultField) {
   });
 };
 
-var sparqlExecAndPublish_ = function(endpointUrl, query, workspace, resultsInput, callback) {
+var sparqlExecAndPublish_ = function(endpointUrl, query, workspace, resultsInput, extraColumns, callback) {
 
   setResult_(resultsInput, msg.EXECUTION_IN_PROGRESS);
 
@@ -108,14 +108,14 @@ var sparqlExecAndPublish_ = function(endpointUrl, query, workspace, resultsInput
         resultField = msg.EXECUTION_CONNECTION_ERROR;
       }
     } else {
-      resultField = new FieldTable(data);
+      resultField = new FieldTable(data, extraColumns);
     }
     setResult_(resultsInput, resultField);
     callback(data);
   });
 };
 
-var blockExecQuery_ = function(block, queryStr, resultsHolder) {
+var blockExecQuery_ = function(block, queryStr, extraColumns, resultsHolder) {
   if (!resultsHolder) {
     resultsHolder = block.getInput('RESULTS');
   }
@@ -134,6 +134,7 @@ var blockExecQuery_ = function(block, queryStr, resultsHolder) {
           endpointUri, queryStr,
           block.workspace,
           resultsHolder,
+          extraColumns,
           function(data) {
             block.queryReq = null;
             block.resultsData = data;
@@ -148,12 +149,12 @@ var blockExecQuery_ = function(block, queryStr, resultsHolder) {
 
 };
 
-var blockExec_ = function(block, queryBlock, resultsHolder) {
+var blockExec_ = function(block, extraColumns, queryBlock, resultsHolder) {
   if (!queryBlock) {
     queryBlock = block.getInputTargetBlock('QUERY');
   }
   var queryStr = SparqlGen.sparqlQuery(queryBlock);
-  blockExecQuery_(block, queryStr, resultsHolder);
+  blockExecQuery_(block, queryStr, extraColumns, resultsHolder);
 };
 
 module.exports = {
