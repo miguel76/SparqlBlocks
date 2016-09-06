@@ -329,6 +329,7 @@ FieldTable.prototype.createBlockFunc_ = function(originBlock) {
     // Create the new block by cloning the block in the flyout (via XML).
     var xml = Blockly.Xml.blockToDom(originBlock);
     var block = Blockly.Xml.domToBlock(xml, workspace);
+    block.setEditable(true);
     // Place it in the same spot as the flyout copy.
     var svgRootOld = originBlock.getSvgRoot();
     if (!svgRootOld) {

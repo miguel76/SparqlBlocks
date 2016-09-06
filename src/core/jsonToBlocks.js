@@ -147,6 +147,7 @@ var blockFromValue_ = function(value, workspace) {
     }
     // containerBlock.getInput('VALUE').connection;
   }
+  valueBlock.setEditable(false);
   return valueBlock;
 };
 
@@ -157,6 +158,7 @@ var blockFromVar_ = function(varName, workspace) {
       SparqlGen.variableDB_ ?
           SparqlGen.variableDB_.getUserProvidedName(varName) :
           varName, 'VAR');
+  varBlock.setEditable(false);
   return varBlock;
 };
 
