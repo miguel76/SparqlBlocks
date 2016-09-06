@@ -111,8 +111,6 @@ Sparql.init = function(workspace) {
   if (!Sparql.variableDB_) {
     Sparql.variableDB_ =
         new Blockly.Names(Sparql.RESERVED_WORDS_, Sparql.VAR_PREFIX);
-  } else {
-    Sparql.variableDB_.reset();
   }
 
   // var defvars = [];
