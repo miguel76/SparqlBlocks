@@ -12,17 +12,12 @@ var defaultLimit = 5;
 var maxLimit = 50;
 
 var setOrderField = function(queryBlock, index, lastOrderField, limitField) {
-  console.log('setOrderField(' + queryBlock + ', ' + index + ', ' + lastOrderField + ', ' + limitField + ')');
   var inputName = limitField ? 'LIMIT' : 'ORDER_FIELD' + index;
-  console.log('inputName: ' + inputName);
   var otherFieldNames = limitField ?
           ['LIMIT_LABEL_PRE', 'LIMIT', 'LIMIT_LABEL_POST'] :
           ['ORDER_LABEL' + index];
-  console.log('otherFieldNames: ' + otherFieldNames);
   var dirFieldName = index > 1 && 'ORDER_DIRECTION' + (index - 1);
-  console.log('dirFieldName: ' + dirFieldName);
   var oldDirValue = dirFieldName && queryBlock.getFieldValue(dirFieldName);
-  console.log('oldDirValue: ' + oldDirValue);
   var input = queryBlock.getInput(inputName);
   if (input) {
     // remove all the fields
