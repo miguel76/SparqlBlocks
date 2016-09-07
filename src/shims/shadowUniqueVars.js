@@ -17,9 +17,9 @@ var Blockly = require('blockly');
 var generateUniqueName = function(workspace, prefix) {
   var variableList = Blockly.Variables.allVariables(workspace);
   var newName = '';
-  var nameSuffix = 1;
+  var nameSuffix = 0;
   while (!newName) {
-    var potName = '' + prefix + nameSuffix;
+    var potName = '' + prefix + (nameSuffix ? nameSuffix : '');
     var inUse = false;
     for (var i = 0; i < variableList.length; i++) {
       if (variableList[i].toLowerCase() == potName) {
