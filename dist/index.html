@@ -883,6 +883,29 @@
     <block type="sparql_execution_endpoint_query">
       <field name="ENDPOINT">http://dbpedia.org/sparql</field>
       <field name="LIMIT">5</field>
+      <value name="WHERE">
+        <shadow type="sparql_subject_propertylist">
+          <value name="SUBJECT">
+            <shadow type="variables_get">
+              <field name="VAR">subj</field>
+            </shadow>
+          </value>
+          <statement name="PROPERTY_LIST">
+            <shadow type="sparql_verb_object">
+              <value name="VERB">
+                <shadow type="variables_get">
+                  <field name="VAR">pred</field>
+                </shadow>
+              </value>
+              <value name="OBJECT">
+                <shadow type="variables_get">
+                  <field name="VAR">obj</field>
+                </shadow>
+              </value>
+            </shadow>
+          </statement>
+        </shadow>
+      </value>
     </block>
   </category>
 <!-- start toolboxCommon.xml-->
@@ -1743,6 +1766,29 @@
     <block type="sparql_execution_endpoint_query">
       <field name="ENDPOINT">http://live.dbpedia.org/sparql</field>
       <field name="LIMIT">5</field>
+      <value name="WHERE">
+        <shadow type="sparql_subject_propertylist">
+          <value name="SUBJECT">
+            <shadow type="variables_get">
+              <field name="VAR">subj</field>
+            </shadow>
+          </value>
+          <statement name="PROPERTY_LIST">
+            <shadow type="sparql_verb_object">
+              <value name="VERB">
+                <shadow type="variables_get">
+                  <field name="VAR">pred</field>
+                </shadow>
+              </value>
+              <value name="OBJECT">
+                <shadow type="variables_get">
+                  <field name="VAR">obj</field>
+                </shadow>
+              </value>
+            </shadow>
+          </statement>
+        </shadow>
+      </value>
     </block>
   </category>
 <!-- start toolboxCommon.xml-->
@@ -2530,7 +2576,7 @@
 
     <div id="flash-messages" class="flash-messages"></div>
 
-<!-- start dialogsForGuide.xml-->
+<!-- start dialogsForGuide2.xml-->
 <div id="dialogs" class="dialogHiddenContent">
   <div id="dialogWelcome" class="dialogHiddenContent">
       <div class="dialogTitle">Welcome to SparqlBlocks</div>
@@ -2571,8 +2617,34 @@
         </p>
       </div>
       <div class="dialogToDo">
-        <div class="blockly-readOnly" blockly-zoom="0.5" style="height: 62px; width: 146px; float:right; display:block; margin: 3px;">
-          <block x="0" y="0" type="sparql_execution_endpoint_query"></block>
+        <div class="blockly-readOnly" blockly-zoom="0.5" style="height: 82px; width: 188px; float:right; display:block; margin: 3px;">
+          <block x="0" y="0" type="sparql_execution_endpoint_query_fake">
+            <field name="ENDPOINT">http://live.dbpedia.org/sparql</field>
+            <field name="LIMIT">5</field>
+            <value name="WHERE">
+              <shadow type="sparql_subject_propertylist">
+                <value name="SUBJECT">
+                  <shadow type="variables_get">
+                    <field name="VAR">subj</field>
+                  </shadow>
+                </value>
+                <statement name="PROPERTY_LIST">
+                  <shadow type="sparql_verb_object">
+                    <value name="VERB">
+                      <shadow type="variables_get">
+                        <field name="VAR">pred</field>
+                      </shadow>
+                    </value>
+                    <value name="OBJECT">
+                      <shadow type="variables_get">
+                        <field name="VAR">obj</field>
+                      </shadow>
+                    </value>
+                  </shadow>
+                </statement>
+              </shadow>
+            </value>
+          </block>
         </div>
         click on the <span class="dialog-command">&#xf106; Query</span> category and drag the query block
         to the Workspace.
@@ -2580,7 +2652,7 @@
         or drag it already to a specific position in the workspace. -->
       </div>
   </div>
-  <div id="dialogAddGraphPattern" style="width: 400px" class="dialogHiddenContent">
+  <div id="dialogGraphPattern" style="width: 400px" class="dialogHiddenContent">
       <div class="dialogTitle">Queries and Patterns</div>
       <div class="dialogContent">
         <p>
@@ -2594,41 +2666,13 @@
           <!-- Those patterns are graphs in which some nodes (concepts) are unknown. -->
           <!-- that is replaced by a Variable. -->
         </p>
+        <p>
+          The pattern you see has a lighter shade, to mean that these blocks are there by default.
+          They can be replaced by other blocks or changed, becoming then regular blocks.
+        </p>
       </div>
-      <div class="dialogToDo">
-        <div class="blockly-readOnly" blockly-zoom="0.5" style="height: 46px; width: 146px; float:right; display:block; margin: 3px;">
-          <block x="0" y="0" type="sparql_typedsubject_propertylist">
-            <value name="SUBJECT">
-              <block type="variables_get">
-                <field name="VAR">res</field>
-              </block>
-            </value>
-            <value name="TYPE">
-              <block type="variables_get">
-                <field name="VAR">type</field>
-              </block>
-            </value>
-            <statement name="PROPERTY_LIST">
-              <block type="sparql_verb_object">
-                <value name="VERB">
-                  <block type="variables_get">
-                    <field name="VAR">pred</field>
-                  </block>
-                </value>
-                <value name="OBJECT">
-                  <block type="variables_get">
-                    <field name="VAR">obj</field>
-                  </block>
-                </value>
-              </block>
-            </statement>
-          </block>
-        </div>
-        from the <span class="dialog-command">&#xf104; Patterns</span> category,
-        pick the first pattern block
-        and drag it inside the query block.
-        <!-- To bring it to the workspace, you can either just click on it
-        or drag it already to a specific position in the workspace. -->
+      <div class="farSide" style="padding: 1ex 3ex 0">
+        <button class="blocklydialogs-ok"></button>
       </div>
   </div>
   <div id="dialogResults" style="width: 400px" class="dialogHiddenContent">
@@ -2642,13 +2686,11 @@
         (although only the first 5 rows are shown).
       </p>
       </p>
-        This is a very generic pattern, that match every resource (concept)
-        that has some type and is related somehow to some other resource.
+        This is the most generic pattern, that match every connection (triple) in the input graph.
       </p>
     </div>
     <div class="farSide" style="padding: 1ex 3ex 0">
       <button class="blocklydialogs-ok"></button>
-
     </div>
   </div>
   <div id="dialogVariables" style="width: 400px" class="dialogHiddenContent">
@@ -2656,38 +2698,22 @@
     <div class="dialogContent">
       <p>
         The blocks
-        <!-- <span class="blockly-readOnly" style="height: 26px; width: 70px;">
-          <block x="8" y="0" type="variables_get"><field name="VAR">type</field></block>
-        </span>,
-        <span class="blockly-readOnly" style="height: 26px; width: 63px;">
-          <block x="8" y="0" type="variables_get"><field name="VAR">res</field></block>
-        </span>,
-        <span class="blockly-readOnly" style="height: 26px; width: 72px;">
-          <block x="8" y="0" type="variables_get"><field name="VAR">pred</field></block>
-        </span>, and
-        <span class="blockly-readOnly" style="height: 26px; width: 62px;">
-          <block x="8" y="0" type="variables_get"><field name="VAR">obj</field></block>
-        </span> -->
-        <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 50px; vertical-align: middle;">
-          <block x="8" y="0" type="variables_get"><field name="VAR">res</field></block>
-        </span>,
         <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 56px; vertical-align: middle;">
-          <block x="8" y="0" type="variables_get"><field name="VAR">type</field></block>
+          <block x="8" y="0" type="variables_get"><field name="VAR">subj</field></block>
         </span>,
-        <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 57px; vertical-align: middle;">
+        <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 58px; vertical-align: middle;">
           <block x="8" y="0" type="variables_get"><field name="VAR">pred</field></block>
         </span>, and
         <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 50px; vertical-align: middle;">
           <block x="8" y="0" type="variables_get"><field name="VAR">obj</field></block>
         </span>
         are <span class="dialog-def">variables</span>.
-        Each matching of the pattern <span class="dialog-def">binds</span> each variable to the corresponding value in the input graph.
-        This value is shown under the corresponding column in the table of results.
+        For each matching of the pattern, each variable is <span class="dialog-def">bound</span> to the corresponding value in the input graph.
+        In the table of results, the rows are the matchings and the columns are the variables.
       </p>
     </div>
     <div class="farSide" style="padding: 1ex 3ex 0">
       <button class="blocklydialogs-ok"></button>
-
     </div>
   </div>
   <div id="dialogNavigate" style="width: 400px" class="dialogHiddenContent">
@@ -2708,7 +2734,6 @@
     </div>
     <div class="farSide" style="padding: 1ex 3ex 0">
       <button class="blocklydialogs-ok"></button>
-
     </div>
   </div>
   <div id="dialogKeyboard" class="dialogHiddenContent">
@@ -2777,31 +2802,12 @@
     </div>
     <div class="farSide" style="padding: 1ex 3ex 0">
       <button class="blocklydialogs-ok"></button>
-
-    </div>
-  </div>
-  <div id="dialogDeleteVar" style="width: 400px" class="dialogHiddenContent">
-    <div class="dialogTitle">Change the Pattern</div>
-    <div class="dialogContent">
-      <p>
-        You may change the pattern according to your needs.
-        For example, remove the <span class="dialog-def">type</span> from it.
-      </p>
-    </div>
-    <div class="dialogToDo">
-      drag the variable block
-      <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 56px; vertical-align: middle;">
-        <block x="8" y="0" type="variables_get"><field name="VAR">type</field></block>
-      </span>
-      to the trash bin <span class="icon_trash"></span>.
-      <!-- or right-click on the variable block and select <span class="dialog-command">Delete Block</span>. -->
     </div>
   </div>
   <div id="dialogAddResource" style="width: 400px" class="dialogHiddenContent">
     <div class="dialogTitle">From Variables to Fixed Values, Resources</div>
     <div class="dialogContent">
-      <p>
-        <!-- You can see that,  -->
+      <!-- <p>
         As the variable
         <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 56px; vertical-align: middle;">
           <block x="8" y="0" type="variables_get"><field name="VAR">type</field></block>
@@ -2809,7 +2815,7 @@
         is not used anymore,
         the corresponding column
         disappeared from the result set.
-      </p>
+      </p> -->
       <p>
         <!-- In the pattern -->
         <!-- You may replace variables with -->
@@ -2851,24 +2857,49 @@
       </p>
     </div>
     <div class="dialogToDo">
-      from the <span class="dialog-command">&#xf107; Resources</span> category,
-      drag the
-      <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 96px; vertical-align: middle;">
-        <block x="8" y="0" type="sparql_prefixed_iri">
-          <field name="PREFIX">foaf</field>
-          <field name="LOCAL_NAME">knows</field>
-        </block>
-      </span>
-      resource block to the pattern,
+      from the <span class="dialog-command">&#xf100; Vocab/FOAF</span> category,
+      drag the <code>foaf:knows</code> pattern
+      to the query pattern,
       <!-- as the predicate ( -->
-      replacing
-      <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 57px; vertical-align: middle;">
-        <block x="8" y="0" type="variables_get"><field name="VAR">pred</field></block>
-      </span>.
+      replacing the -&nbsp;<code>pred</code>&nbsp;->&nbsp;<code>obj</code> part.
+      <div class="blockly-readOnly" blockly-zoom="0.5" style="height: 21px; width: 145px; float:right; display:block; margin: 3px;">
+        <block x="0" y="0" type="sparql_verb_object">
+          <value name="VERB">
+            <block type="sparql_prefixed_iri">
+              <field name="PREFIX">foaf</field>
+              <field name="LOCAL_NAME">knows</field>
+            </block>
+          </value>
+          <value name="OBJECT">
+            <shadow type="variables_get">
+              <field name="VAR">friend</field>
+            </shadow>
+          </value>
+        </block>
+      </div>
     </div>
   </div>
-  <div id="dialogChangeVarName" style="width: 400px" class="dialogHiddenContent">
+  <!-- <div id="dialogChangeVarName" style="width: 400px" class="dialogHiddenContent">
     <div class="dialogTitle">Properties and Variable Names</div>
+    <div class="dialogContent">
+      <p>
+        Variables are just placeholders,
+        changing their names does not change the pattern.
+      </p>
+    </div>
+    <div class="dialogToDo">
+      click on
+      <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 50px; vertical-align: middle;">
+        <block x="8" y="0" type="variables_get"><field name="VAR">obj</field></block>
+      </span>
+      and <span class="dialog-command">Rename variable...</span> as
+      <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 64px; vertical-align: middle;">
+        <block x="8" y="0" type="variables_get"><field name="VAR">friend</field></block>
+      </span>.
+    </div>
+  </div> -->
+  <div id="dialogAddBranch" style="width: 400px" class="dialogHiddenContent">
+    <div class="dialogTitle">Grow your Pattern</div>
     <div class="dialogContent">
       <p>
         Now the query looks for pairs of resources linked by
@@ -2889,79 +2920,36 @@
         are called <span class="dialog-def">properties</span>.
       </p>
       <p>
-        Variables are just placeholders,
-        changing their names does not change the pattern.
-      </p>
-    </div>
-    <div class="dialogToDo">
-      click on
-      <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 50px; vertical-align: middle;">
-        <block x="8" y="0" type="variables_get"><field name="VAR">obj</field></block>
-      </span>
-      and <span class="dialog-command">Rename variable...</span> as
-      <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 64px; vertical-align: middle;">
-        <block x="8" y="0" type="variables_get"><field name="VAR">friend</field></block>
-      </span>.
-    </div>
-    <!-- <td>
-      <img src="../img/help/help.png">
-    </td> -->
-  </div>
-  <div id="dialogAddBranch" style="width: 400px" class="dialogHiddenContent">
-    <div class="dialogTitle">Grow your Pattern</div>
-    <div class="dialogContent">
-      <p>
         Things get interesting when patterns are composed by multiple links.
         Add a new branch to your pattern to look for the name of
-        <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 50px; vertical-align: middle;">
-          <block x="8" y="0" type="variables_get"><field name="VAR">res</field></block>
+        <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 56px; vertical-align: middle;">
+          <block x="8" y="0" type="variables_get"><field name="VAR">subj</field></block>
         </span>.
       </p>
     </div>
     <div class="dialogToDo">
       <ol>
         <li>
-          <div class="blockly-readOnly" blockly-zoom="0.5" style="height: 21px; width: 127px; float:right; display:block; margin: 3px;">
+          from the <span class="dialog-command">&#xf100; Vocab/FOAF</span> category,
+          drag the <code>foaf:name</code> pattern
+          and drag it in the existing query pattern,
+          as a new branch.
+          <div class="blockly-readOnly" blockly-zoom="0.5" style="height: 21px; width: 143px; float:right; display:block; margin: 3px;">
             <block x="0" y="0" type="sparql_verb_object">
               <value name="VERB">
-                <block type="variables_get">
-                  <field name="VAR">pred</field>
+                <block type="sparql_prefixed_iri">
+                  <field name="PREFIX">foaf</field>
+                  <field name="LOCAL_NAME">name</field>
                 </block>
               </value>
               <value name="OBJECT">
-                <block type="variables_get">
-                  <field name="VAR">obj</field>
-                </block>
+                <shadow type="variables_get">
+                  <field name="VAR">name</field>
+                </shadow>
               </value>
             </block>
           </div>
-          from the <span class="dialog-command">&#xf104; Patterns</span> category,
-          pick the fourth block
-          and drag it inside the existing pattern; </li>
-        <li>
-          from the <span class="dialog-command">&#xf107; Resources</span> category,
-          drag the
-          <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 92px; vertical-align: middle;">
-            <block x="8" y="0" type="sparql_prefixed_iri">
-              <field name="PREFIX">foaf</field>
-              <field name="LOCAL_NAME">name</field>
-            </block>
-          </span>
-          resource block to the new branch,
-          <!-- as the predicate ( -->
-          replacing
-          <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 57px; vertical-align: middle;">
-            <block x="8" y="0" type="variables_get"><field name="VAR">pred</field></block>
-          </span>;</li>
-        <li>
-          click on
-          <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 50px; vertical-align: middle;">
-            <block x="8" y="0" type="variables_get"><field name="VAR">obj</field></block>
-          </span>
-          and <span class="dialog-command">Rename variable...</span> as
-          <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 64px; vertical-align: middle;">
-            <block x="8" y="0" type="variables_get"><field name="VAR">name</field></block>
-          </span>.</li>
+        </li>
         </ol>
     </div>
     <!-- <td>
@@ -3007,17 +2995,17 @@
     </div>
     <div class="dialogToDo">
       from the column under the header
-      <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 50px; vertical-align: middle;">
-        <block x="8" y="0" type="variables_get"><field name="VAR">res</field></block>
+      <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 56px; vertical-align: middle;">
+        <block x="8" y="0" type="variables_get"><field name="VAR">subj</field></block>
       </span>,
       <!-- of the table of results, -->
       drag one of the results to the pattern above,
       to replace the variable
-      <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 50px; vertical-align: middle;">
-        <block x="8" y="0" type="variables_get"><field name="VAR">res</field></block>
+      <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 56px; vertical-align: middle;">
+        <block x="8" y="0" type="variables_get"><field name="VAR">subj</field></block>
       </span>.
       <!-- <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 50px; vertical-align: middle;">
-        <block x="8" y="0" type="variables_get"><field name="VAR">res</field></block>
+        <block x="8" y="0" type="variables_get"><field name="VAR">subj</field></block>
       </span>. -->
     </div>
     <!-- <td>
@@ -3040,64 +3028,45 @@
     <div class="dialogToDo">
       <ol>
         <li>
-          <div class="blockly-readOnly" blockly-zoom="0.5" style="height: 46px; width: 146px; float:right; display:block; margin: 3px;">
-            <block x="0" y="0" type="sparql_typedsubject_propertylist">
+          from the <span class="dialog-command">&#xf100; Vocab/FOAF</span> category,
+          drag the <code>foaf:Person</code> pattern,
+          <!-- and drag it -->
+          after the existing pattern;
+          <!-- inside the existing query (before or after the existing pattern); -->
+          <div class="blockly-readOnly" blockly-zoom="0.5" style="height: 33px; width: 211px; float:right; display:block; margin: 3px;">
+            <block x="0" y="0" type="sparql_subject_propertylist">
               <value name="SUBJECT">
-                <block type="variables_get">
-                  <field name="VAR">res</field>
-                </block>
-              </value>
-              <value name="TYPE">
-                <block type="variables_get">
-                  <field name="VAR">type</field>
-                </block>
+                <shadow type="variables_get">
+                  <field name="VAR">person</field>
+                </shadow>
               </value>
               <statement name="PROPERTY_LIST">
                 <block type="sparql_verb_object">
                   <value name="VERB">
-                    <block type="variables_get">
-                      <field name="VAR">pred</field>
+                    <block type="sparql_prefixed_iri">
+                      <field name="PREFIX">rdf</field>
+                      <field name="LOCAL_NAME">type</field>
                     </block>
                   </value>
                   <value name="OBJECT">
-                    <block type="variables_get">
-                      <field name="VAR">obj</field>
+                    <block type="sparql_prefixed_iri">
+                      <field name="PREFIX">foaf</field>
+                      <field name="LOCAL_NAME">Person</field>
                     </block>
                   </value>
                 </block>
               </statement>
             </block>
-          </div>
-          from the <span class="dialog-command">&#xf104; Patterns</span> category,
-          drag again the first block,
-          <!-- and drag it -->
-          after the existing pattern;
-          <!-- inside the existing query (before or after the existing pattern); -->
-        </li>
+          </div></li>
         <li>
           click on the variable
-          <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 50px; vertical-align: middle;">
-            <block x="8" y="0" type="variables_get"><field name="VAR">res</field></block>
+          <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 70px; vertical-align: middle;">
+            <block x="8" y="0" type="variables_get"><field name="VAR">person</field></block>
           </span>
           and change it to use
           <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 64px; vertical-align: middle;">
             <block x="8" y="0" type="variables_get"><field name="VAR">friend</field></block>
-          </span> instead; </li>
-        <li>
-          from the <span class="dialog-command">&#xf107; Resources</span> category,
-          drag the
-          <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 100px; vertical-align: middle;">
-            <block x="8" y="0" type="sparql_prefixed_iri">
-              <field name="PREFIX">foaf</field>
-              <field name="LOCAL_NAME">Person</field>
-            </block>
-          </span>
-          resource block to the new pattern,
-          <!-- as the predicate ( -->
-          replacing
-          <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 56px; vertical-align: middle;">
-            <block x="8" y="0" type="variables_get"><field name="VAR">type</field></block>
-          </span>.</li>
+          </span> instead.</li>
       </ol>
     </div>
   </div>
@@ -3112,24 +3081,30 @@
     <div class="dialogToDo">
       <ol>
         <li>
-          from the <span class="dialog-command">&#xf107; Resources</span> category,
-          drag again the
-          <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 92px; vertical-align: middle;">
-            <block x="8" y="0" type="sparql_prefixed_iri">
-              <field name="PREFIX">foaf</field>
-              <field name="LOCAL_NAME">name</field>
-            </block>
-          </span>
-          resource block to the new pattern,
+          from the <span class="dialog-command">&#xf100; Vocab/FOAF</span> category,
+          drag again the <code>foaf:name</code> pattern,
+          inside the new pattern,
           <!-- as the predicate ( -->
-          replacing
-          <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 57px; vertical-align: middle;">
-            <block x="8" y="0" type="variables_get"><field name="VAR">pred</field></block>
-          </span>;</li>
+          replacing the -&nbsp;<code>pred</code>&nbsp;->&nbsp;<code>obj</code> part;
+          <div class="blockly-readOnly" blockly-zoom="0.5" style="height: 21px; width: 143px; float:right; display:block; margin: 3px;">
+            <block x="0" y="0" type="sparql_verb_object">
+              <value name="VERB">
+                <block type="sparql_prefixed_iri">
+                  <field name="PREFIX">foaf</field>
+                  <field name="LOCAL_NAME">name</field>
+                </block>
+              </value>
+              <value name="OBJECT">
+                <shadow type="variables_get">
+                  <field name="VAR">name</field>
+                </shadow>
+              </value>
+            </block>
+          </div></li>
         <li>
           click on
-          <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 50px; vertical-align: middle;">
-            <block x="8" y="0" type="variables_get"><field name="VAR">obj</field></block>
+          <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 70px; vertical-align: middle;">
+            <block x="8" y="0" type="variables_get"><field name="VAR">name1</field></block>
           </span>
           and <span class="dialog-command">Rename variable...</span> as
           <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 95px; vertical-align: middle;">
@@ -3165,7 +3140,7 @@
           field;
         </li>
         <li>
-          change the order direction from ↓ (asc.) to ↑ (desc.);
+          change the order direction from ◢ (asc.) to ◣ (desc.);
           </li>
       </ol>
     </div>
@@ -3183,7 +3158,7 @@
         <li>
           set the value of the field
           <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 19px; width: 110px; vertical-align: middle;">
-            <block x="-147" y="-56" type="sparql_execution_endpoint_query"></block>
+            <block x="-141" y="-56" type="sparql_execution_endpoint_query"></block>
           </span>
           to 3.
           </li>
@@ -3200,42 +3175,45 @@
     <div class="dialogToDo">
       <ol>
         <li>
-          <div class="blockly-readOnly" blockly-zoom="0.5" style="height: 21px; width: 40px; float:right; display:block; margin: 3px;">
-            <block x="0" y="0" type="sparql_filter"></block>
+          <div class="blockly-readOnly" blockly-zoom="0.5" style="height: 21px; width: 63px; float:right; display:block; margin: 3px;">
+            <block x="0" y="0" type="sparql_filter">
+              <value name="CONDITION">
+                <shadow type="sparql_logic_boolean"></shadow>
+              </value>
+            </block>
           </div>
           from the <span class="dialog-command">&#xf102; Logic</span> category,
           drag a filter block to the query (before, among, or after the existing patterns);
         </li>
         <li>
-          <div class="blockly-readOnly" blockly-zoom="0.5" style="height: 21px; width: 132px; float:right; display:block; margin: 3px;">
+          from the <span class="dialog-command">&#xf109; Text</span> category,
+          drag a contains block inside the filter;
+          <div class="blockly-readOnly" blockly-zoom="0.5" style="height: 21px; width: 148px; float:right; display:block; margin: 3px;">
             <block x="8" y="0" type="sparql_text_contains">
               <value name="FIND">
                 <shadow type="sparql_text">
-                  <field name="TEXT">abc</field>
+                  <field name="TEXT">bc</field>
                 </shadow>
               </value>
               <value name="VALUE">
-                <block type="variables_get">
-                  <field name="VAR">text</field>
-                </block>
+                <shadow type="sparql_text">
+                  <field name="TEXT">abcd</field>
+                </shadow>
               </value>
             </block>
-          </div>
-          from the <span class="dialog-command">&#xf109; Text</span> category,
-          drag a contains block inside the filter;
+        </div>
         </li>
         <li>
-          change the variable
-          <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 53px; vertical-align: middle;">
-            <block x="8" y="0" type="variables_get"><field name="VAR">text</field></block>
-          </span>
-          to
+          drag the variable
           <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 95px; vertical-align: middle;">
             <block x="8" y="0" type="variables_get"><field name="VAR">friendName</field></block>
+          </span> in place of
+          <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 95px; vertical-align: middle;">
+            <block x="8" y="0" type="sparql_text"><field name="TEXT">abcd</field></block>
           </span>;
         </li>
         <li>
-          change the text “abc”
+          change the text “bc”
           to “tim”.
         </li>
       </ol>
@@ -3575,7 +3553,7 @@
   </div>
 </div>
 
-<!-- end dialogsForGuide.xml-->
+<!-- end dialogsForGuide2.xml-->
 
   </body>
 </html>
