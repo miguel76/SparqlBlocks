@@ -11,39 +11,61 @@ var typeExt = Types.getExtension;
 var defaultLimit = 5;
 var maxLimit = 50;
 
-var setOrderField = function(queryBlock, index, lastField) {
-  var inputName = 'ORDER_FIELD' + index;
-  var labelFieldName = 'ORDER_LABEL' + index;
-  var dirFieldName = 'ORDER_DIRECTION' + index;
-  var oldDirValue = queryBlock.getFieldValue(dirFieldName);
+var setOrderField = function(queryBlock, index, lastOrderField, limitField) {
+  console.log('setOrderField(' + queryBlock + ', ' + index + ', ' + lastOrderField + ', ' + limitField + ')');
+  var inputName = limitField ? 'LIMIT' : 'ORDER_FIELD' + index;
+  console.log('inputName: ' + inputName);
+  var otherFieldNames = limitField ?
+          ['LIMIT_LABEL_PRE', 'LIMIT', 'LIMIT_LABEL_POST'] :
+          ['ORDER_LABEL' + index];
+  console.log('otherFieldNames: ' + otherFieldNames);
+  var dirFieldName = index > 1 && 'ORDER_DIRECTION' + (index - 1);
+  console.log('dirFieldName: ' + dirFieldName);
+  var oldDirValue = dirFieldName && queryBlock.getFieldValue(dirFieldName);
+  console.log('oldDirValue: ' + oldDirValue);
   var input = queryBlock.getInput(inputName);
   if (input) {
-    input.removeField(dirFieldName);
-    input.removeField(labelFieldName);
+    // remove all the fields
+    while (input.fieldRow.length > 0) {
+      input.removeField(input.fieldRow[0].name);
+    }
   } else {
-    input = queryBlock.appendValueInput(inputName)
-                      .setCheck(typeExt("Expr"));
-    queryBlock.moveInputBefore(inputName, "AFTER_ORDER");
+    input = limitField ?
+              queryBlock.appendDummyInput(inputName) :
+              queryBlock.appendValueInput(inputName)
+                        .setCheck(typeExt("Expr"));
+    if (!limitField && queryBlock.getInput("LIMIT")) {
+      queryBlock.moveInputBefore(inputName, "LIMIT");
+    }
+    // queryBlock.moveInputBefore(inputName, "RESULTS");
   }
-  var dirField = new Blockly.FieldDropdown([["◢", "ASC"], ["◣", "DESC"]]);
-  if (oldDirValue) dirField.setValue(oldDirValue);
-  input.appendField(
-      index > 1 ?
-          (index > 2 ? ", " : "") + (lastField ? "and " : "") + "then by" :
-          "order by",
-      labelFieldName);
-  input.appendField(dirField, dirFieldName);
+  if (dirFieldName) {
+    var dirField = new Blockly.FieldDropdown([["◣", "ASC"], ["◤", "DESC"]]);
+    if (oldDirValue) {
+      dirField.setValue(oldDirValue);
+    }
+    input.appendField(dirField, dirFieldName);
+  }
+  if (limitField) {
+    input.appendField("  limit to first", otherFieldNames[0])
+        .appendField(new Blockly.FieldNumber(defaultLimit, 0, maxLimit), otherFieldNames[1])
+        .appendField("rows", otherFieldNames[2]);
+  } else {
+    input.appendField(
+        index > 1 ?
+            (!lastOrderField || index > 2 ? ", " : "") +
+                (lastOrderField ? "and " : "") + "then by" :
+            "order by",
+        otherFieldNames[0]);
+  }
+  if (lastOrderField) {
+    setOrderField(queryBlock, index + 1, false, true);
+  }
 };
 
 module.exports = {
   init: function() {
       this.orderFieldCount_ = 1;
-
-      this.appendDummyInput("AFTER_ORDER")
-          .appendField("  limit to first")
-          .appendField(new Blockly.FieldNumber(defaultLimit, 0, maxLimit), "LIMIT")
-          .appendField("rows");
-
       setOrderField(this, this.orderFieldCount_, true);
   },
   onchange: function() {
@@ -86,12 +108,12 @@ module.exports = {
     for (var i = 2; i <= this.orderFieldCount_; i++) {
       var inputName = 'ORDER_FIELD' + i;
       var labelFieldName = 'ORDER_LABEL' + i;
-      var dirFieldName = 'ORDER_DIRECTION' + i;
-      var dirField = new Blockly.FieldDropdown([["◢", "ASC"], ["◣", "DESC"]]);
+      var dirFieldName = 'ORDER_DIRECTION' + (i - 1);
+      var dirField = new Blockly.FieldDropdown([["◣", "ASC"], ["◤", "DESC"]]);
       this.appendValueInput(inputName)
           .setCheck(typeExt("Expr"))
           .appendField(
-            (i > 2 ? ", " : "") + "and then by",
+            (i !== this.orderFieldCount_ || i > 2 ? ", " : "") + "and then by",
             labelFieldName)
           .appendField(dirField, dirFieldName);
       this.moveInputBefore(inputName, "AFTER_ORDER");
