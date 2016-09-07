@@ -25,7 +25,7 @@ var setOrderField = function(queryBlock, index, lastField) {
                       .setCheck(typeExt("Expr"));
     queryBlock.moveInputBefore(inputName, "AFTER_ORDER");
   }
-  var dirField = new Blockly.FieldDropdown([["↓", "ASC"], ["↑", "DESC"]]);
+  var dirField = new Blockly.FieldDropdown([["◢", "ASC"], ["◣", "DESC"]]);
   if (oldDirValue) dirField.setValue(oldDirValue);
   input.appendField(
       index > 1 ?
@@ -87,7 +87,7 @@ module.exports = {
       var inputName = 'ORDER_FIELD' + i;
       var labelFieldName = 'ORDER_LABEL' + i;
       var dirFieldName = 'ORDER_DIRECTION' + i;
-      var dirField = new Blockly.FieldDropdown([["↓", "ASC"], ["↑", "DESC"]]);
+      var dirField = new Blockly.FieldDropdown([["◢", "ASC"], ["◣", "DESC"]]);
       this.appendValueInput(inputName)
           .setCheck(typeExt("Expr"))
           .appendField(
