@@ -1,5 +1,5 @@
 /**
- * @fileoverview Shim on Blockly to a bug when dynamically creating fields
+ * @fileoverview Shim on Blockly to fix a bug when dynamically creating fields
  * @author miguel.ceriani@gmail.com (Miguel Ceriani)
  */
 'use strict';
