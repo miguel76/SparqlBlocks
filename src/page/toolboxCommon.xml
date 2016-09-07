@@ -473,11 +473,7 @@
     </value>
   </block>
 </category>
-<category name="&#xf107; Resources" colour="20">
-  <block type="sparql_prefixed_iri"></block>
-  <sep gap="8"></sep>
-  <block type="sparql_iri"></block>
-</category>
+<category name="&#xf107; Resources" colour="20" custom="RESOURCE"></category>
 <sep></sep>
 <category name="&#xf10b; Variables" colour="330" custom="VARIABLE"></category>
 <sep></sep>

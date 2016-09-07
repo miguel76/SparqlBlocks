@@ -25,7 +25,8 @@ var _ = require('underscore'),
     Types = require('../core/types.js'),
     Blocks = require('../core/blocks.js'),
     Msg = require('../core/msg.js'),
-    Prefixes = require('../core/prefixes.js');
+    Prefixes = require('../core/prefixes.js'),
+    Resources = require('../core/resources.js');
 
 var typeExt = Types.getExtension;
 
@@ -40,6 +41,9 @@ Blocks.block('sparql_prefixed_iri', {
     this.setInputsInline(true);
     this.setOutput(true, "Iri");
     this.setTooltip(Msg.PREFIXED_IRI_TOOLTIP);
+  },
+  onchange: function(e) {
+    Resources.saveResource(this);
   }
 });
 
@@ -61,7 +65,6 @@ Blocks.block('sparql_prefixed_iri_prop', {
     this.setNextStatement(true, "PropertyList");
     this.setTooltip(Msg.PREFIXED_IRI_TOOLTIP);
   }
-
 });
 
 Blocks.block('sparql_iri', {
@@ -105,6 +108,7 @@ Blocks.block('sparql_iri', {
         Blockly.Events.fire(changeLocalEvent);
       }
     }
+    Resources.saveResource(this);
   },
   /**
    * Create XML to represent if it is in prefix form.
