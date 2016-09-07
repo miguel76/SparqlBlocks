@@ -40,7 +40,7 @@ var setOrderField = function(queryBlock, index, lastOrderField, limitField) {
     // queryBlock.moveInputBefore(inputName, "RESULTS");
   }
   if (dirFieldName) {
-    var dirField = new Blockly.FieldDropdown([["◣", "ASC"], ["◤", "DESC"]]);
+    var dirField = new Blockly.FieldDropdown([["▲", "ASC"], ["▼", "DESC"]]);
     if (oldDirValue) {
       dirField.setValue(oldDirValue);
     }
@@ -109,7 +109,7 @@ module.exports = {
       var inputName = 'ORDER_FIELD' + i;
       var labelFieldName = 'ORDER_LABEL' + i;
       var dirFieldName = 'ORDER_DIRECTION' + (i - 1);
-      var dirField = new Blockly.FieldDropdown([["◣", "ASC"], ["◤", "DESC"]]);
+      var dirField = new Blockly.FieldDropdown([["▲", "ASC"], ["▼", "DESC"]]);
       this.appendValueInput(inputName)
           .setCheck(typeExt("Expr"))
           .appendField(
