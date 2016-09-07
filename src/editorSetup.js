@@ -81,7 +81,7 @@ function start() {
         zoom:
           {controls: true,
            wheel: false,
-           startScale: 1.0,
+           startScale: 0.9,
            maxScale: 4,
            minScale: 0.25,
            scaleSpeed: 1.1
@@ -137,7 +137,24 @@ function start() {
             data.check = {
               type: "sparql_execution_endpoint_query",
               ENDPOINT: "http://live.dbpedia.org/sparql",
-              WHERE: []
+              WHERE: [{
+                type: "sparql_subject_propertylist",
+                SUBJECT: {
+                  type: "variables_get",
+                  VAR: "subj"
+                },
+                PROPERTY_LIST: [{
+                  type: "sparql_verb_object",
+                  VERB: {
+                    type: "variables_get",
+                    VAR: "pred"
+                  },
+                  OBJECT: {
+                    type: "variables_get",
+                    VAR: "obj"
+                  }
+                }]
+              }]
             };
           },
           stepWhen: function(event, data) {
@@ -145,26 +162,10 @@ function start() {
           }
         },
         {
-          dialog: "dialogAddGraphPattern", //"Add a graph pattern ...",
+          dialog: "dialogGraphPattern",
           useFocus: true,
           style: {
             "top": "10px", "right": "25px"
-          },
-          do: function(data) {
-            data.check.WHERE = [
-              { type: "sparql_typedsubject_propertylist",
-                SUBJECT: { type: "variables_get", VAR: "res" },
-                TYPE: { type: "variables_get", VAR: "type" },
-                PROPERTY_LIST: [
-                  { type: "sparql_verb_object",
-                    VERB: { type: "variables_get", VAR: "pred" },
-                    OBJECT: { type: "variables_get", VAR: "obj" } }
-                ]
-              }
-            ];
-          },
-          stepWhen: function(event, data) {
-            return check(data);
           }
         },
         {
@@ -196,19 +197,19 @@ function start() {
           dialog: "dialogDelete",
           modal: true
         },
-        {
-          dialog: "dialogDeleteVar",
-          style: {
-            "bottom": "25px", "left": "15px"
-          },
-          useFocus: true,
-          do: function(data) {
-            data.check.WHERE[0].TYPE = null;
-          },
-          stepWhen: function(event, data) {
-            return (event.type == Blockly.Events.DELETE && check(data));
-          }
-        },
+        // {
+        //   dialog: "dialogDeleteVar",
+        //   style: {
+        //     "bottom": "25px", "left": "15px"
+        //   },
+        //   useFocus: true,
+        //   do: function(data) {
+        //     data.check.WHERE[0].TYPE = null;
+        //   },
+        //   stepWhen: function(event, data) {
+        //     return (event.type == Blockly.Events.DELETE && check(data));
+        //   }
+        // },
         {
           dialog: "dialogAddResource",
           useFocus: true,
@@ -221,24 +222,25 @@ function start() {
               PREFIX: "foaf",
               LOCAL_NAME: "knows"
             };
-          },
-          stepWhen: function(event, data) {
-            return check(data);
-          }
-        },
-        {
-          dialog: "dialogChangeVarName",
-          useFocus: true,
-          style: {
-            "top": "10px", "right": "25px"
-          },
-          do: function(data) {
             data.check.WHERE[0].PROPERTY_LIST[0].OBJECT.VAR = "friend";
           },
           stepWhen: function(event, data) {
             return check(data);
           }
         },
+        // {
+        //   dialog: "dialogChangeVarName",
+        //   useFocus: true,
+        //   style: {
+        //     "top": "10px", "right": "25px"
+        //   },
+        //   do: function(data) {
+        //     data.check.WHERE[0].PROPERTY_LIST[0].OBJECT.VAR = "friend";
+        //   },
+        //   stepWhen: function(event, data) {
+        //     return check(data);
+        //   }
+        // },
         {
           dialog: "dialogAddBranch",
           useFocus: true,
@@ -286,13 +288,21 @@ function start() {
           },
           do: function(data) {
             data.check.WHERE.push({
-              type: "sparql_typedsubject_propertylist",
+              type: "sparql_subject_propertylist",
               SUBJECT: { type: "variables_get", VAR: "friend" },
-              TYPE: {
-                type: "sparql_prefixed_iri",
-                PREFIX: "foaf",
-                LOCAL_NAME: "Person"
-              }
+              PROPERTY_LIST: [{
+                type: "sparql_verb_object",
+                VERB: {
+                  type: "sparql_prefixed_iri",
+                  PREFIX: "rdf",
+                  LOCAL_NAME: "type"
+                },
+                OBJECT: {
+                  type: "sparql_prefixed_iri",
+                  PREFIX: "foaf",
+                  LOCAL_NAME: "Person"
+                }
+              }]
             });
           },
           stepWhen: function(event, data) {
@@ -306,16 +316,15 @@ function start() {
             "top": "10px", "right": "25px"
           },
           do: function(data) {
-            data.check.WHERE[1].PROPERTY_LIST = [
-              { type: "sparql_verb_object",
-                VERB: {
-                  type: "sparql_prefixed_iri",
-                  PREFIX: "foaf",
-                  LOCAL_NAME: "name"
-                },
-                OBJECT: { type: "variables_get", VAR: "friendName" }
-              }
-            ];
+            data.check.WHERE[1].PROPERTY_LIST.push({
+              type: "sparql_verb_object",
+              VERB: {
+                type: "sparql_prefixed_iri",
+                PREFIX: "foaf",
+                LOCAL_NAME: "name"
+              },
+              OBJECT: { type: "variables_get", VAR: "friendName" }
+            });
           },
           stepWhen: function(event, data) {
             return check(data);
