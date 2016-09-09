@@ -402,6 +402,7 @@ Blocks.block(
               typePropBlock.setFieldValue('type', 'LOCAL_NAME');
               var instanceVarBlock = workspace.newBlock('variables_get');
               instanceVarBlock.setFieldValue(label, 'VAR');
+              instanceVarBlock.setShadow(true);
               var typeBlock = workspace.newBlock('sparql_verb_object');
               typeBlock.getInput('VERB').connection.connect(typePropBlock.outputConnection);
               typeBlock.getInput('OBJECT').connection.connect(resourceBlock.outputConnection);
@@ -496,6 +497,7 @@ Blocks.block(
                         'object';
             var objectVarBlock = workspace.newBlock('variables_get');
             objectVarBlock.setFieldValue(label, 'VAR');
+            objectVarBlock.setShadow(true);
             var branchBlock = workspace.newBlock('sparql_verb_object');
             branchBlock.getInput('VERB').connection.connect(resourceBlock.outputConnection);
             branchBlock.getInput('OBJECT').connection.connect(objectVarBlock.outputConnection);
