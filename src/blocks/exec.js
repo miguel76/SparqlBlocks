@@ -483,9 +483,9 @@ Blocks.block(
               "ORDER BY (STRLEN(?label)) STRLEN(COALESCE(LANG(?label),''))";
     },
     extraColumns: {
-      varNames: ['pattern'],
+      varNames: ['branch'],
       mappings: {
-        pattern: function(binding, workspace) {
+        branch: function(binding, workspace) {
           var resource = binding['property'];
           if (resource) {
             var resourceBlock = JsonToBlocks.blockFromValue(resource, workspace);

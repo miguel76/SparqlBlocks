@@ -34,7 +34,7 @@
         </p>
         <p>
           On the left there is the <span class="dialog-def">toolbox</span>, where you can pick the blocks to use.
-          They are grouped in <span class="dialog-def">categories</span> (<span class="dialog-command">&#xf106; Query</span>, <span class="dialog-command">&#xf104; Patterns</span>,...).
+          They are grouped in <span class="dialog-def">categories</span> (<span class="dialog-command">&#xf106;&nbsp;Query</span>, <span class="dialog-command">&#xf104;&nbsp;Patterns</span>,...).
         </p>
       </div>
       <div class="dialogToDo">
@@ -67,7 +67,7 @@
             </value>
           </block>
         </div>
-        click on the <span class="dialog-command">&#xf106; Query</span> category and drag the query block
+        click on the <span class="dialog-command">&#xf106;&nbsp;Query</span> category and drag the query block
         to the Workspace.
         <!-- To bring it to the workspace, you can either just click on it
         or drag it already to a specific position in the workspace. -->
@@ -82,13 +82,58 @@
           (the default source is <a href="http://dbpedia.org/" target="_blank">DBpedia</a>).
         </p>
         <p>
+          <div class="blockly-readOnly" blockly-zoom="0.5" style="height: 33px; width: 157px; float:right; display:block; margin: 3px;">
+            <block type="sparql_subject_propertylist">
+              <value name="SUBJECT">
+                <block type="variables_get">
+                  <field name="VAR">subj</field>
+                </block>
+              </value>
+              <statement name="PROPERTY_LIST">
+                <block type="sparql_verb_object">
+                  <value name="VERB">
+                    <block type="variables_get">
+                      <field name="VAR">pred</field>
+                    </block>
+                  </value>
+                  <value name="OBJECT">
+                    <block type="variables_get">
+                      <field name="VAR">obj</field>
+                    </block>
+                  </value>
+                </block>
+              </statement>
+            </block>
+          </div>
           Linked Data sources are graphs (networks) of concepts.
           A query is built with <span class="dialog-def">patterns</span> to be matched against the input graphs.
           <!-- Those patterns are graphs in which some nodes (concepts) are unknown. -->
           <!-- that is replaced by a Variable. -->
         </p>
         <p>
-          The pattern you see has a lighter shade, to mean that these blocks are there by default.
+          <div class="blockly-readOnly" blockly-zoom="0.5" style="height: 21px; width: 113px; float:right; display:block; margin: 3px;">
+            <block type="sparql_verb_object">
+              <value name="VERB">
+                <block type="variables_get">
+                  <field name="VAR">pred</field>
+                </block>
+              </value>
+              <value name="OBJECT">
+                <block type="variables_get">
+                  <field name="VAR">obj</field>
+                </block>
+              </value>
+            </block>
+          </div>
+          The pattern itself contains an inner part that we call <span class="dialog-def">branch</span>.
+          A pattern is rooted on a node of the graph (in this case
+          <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 56px; vertical-align: middle;">
+            <block x="8" y="0" type="variables_get"><field name="VAR">subj</field></block>
+          </span>)
+          and may hold any number of branches.
+        </p>
+        <p>
+          The pattern inside the query has a lighter shade, to mean that these blocks are there by default.
           They can be replaced by other blocks or changed, becoming then regular blocks.
         </p>
       </div>
@@ -240,7 +285,7 @@
       <p>
         <!-- In the pattern -->
         <!-- You may replace variables with -->
-        Variables may be replaced by
+        Variables in the pattern may be replaced by
         <!-- To set parts of a pattern -->
         <!-- values -->
         <span class="dialog-def">resources</span> (concepts)
@@ -273,16 +318,16 @@
         </span>), -->
         <!-- in place of variables, -->
         <!-- may replace variables in the pattern, -->
-        to represent the fixed parts
-         of a pattern.
+        to represent fixed parts of the pattern.
       </p>
     </div>
     <div class="dialogToDo">
-      from the <span class="dialog-command">&#xf100; Vocab/FOAF</span> category,
-      drag the <code>foaf:knows</code> pattern
+      from the <span class="dialog-command">&#xf100;&nbsp;Vocab&nbsp;>&nbsp;FOAF</span> category,
+      drag the <code>foaf:knows</code> branch
       to the query pattern,
       <!-- as the predicate ( -->
-      replacing the -&nbsp;<code>pred</code>&nbsp;->&nbsp;<code>obj</code> part.
+      replacing the existing branch.
+      <!-- -&nbsp;<code>pred</code>&nbsp;->&nbsp;<code>obj</code> part. -->
       <div class="blockly-readOnly" blockly-zoom="0.5" style="height: 21px; width: 145px; float:right; display:block; margin: 3px;">
         <block x="0" y="0" type="sparql_verb_object">
           <value name="VERB">
@@ -341,7 +386,7 @@
         are called <span class="dialog-def">properties</span>.
       </p>
       <p>
-        Things get interesting when patterns are composed by multiple links.
+        Things get interesting when patterns are composed of multiple links.
         Add a new branch to your pattern to look for the name of
         <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 56px; vertical-align: middle;">
           <block x="8" y="0" type="variables_get"><field name="VAR">subj</field></block>
@@ -351,10 +396,6 @@
     <div class="dialogToDo">
       <ol>
         <li>
-          from the <span class="dialog-command">&#xf100; Vocab/FOAF</span> category,
-          drag the <code>foaf:name</code> pattern
-          and drag it in the existing query pattern,
-          as a new branch.
           <div class="blockly-readOnly" blockly-zoom="0.5" style="height: 21px; width: 143px; float:right; display:block; margin: 3px;">
             <block x="0" y="0" type="sparql_verb_object">
               <value name="VERB">
@@ -370,6 +411,9 @@
               </value>
             </block>
           </div>
+          from the <span class="dialog-command">&#xf100;&nbsp;Vocab&nbsp;>&nbsp;FOAF</span> category,
+          drag the <code>foaf:name</code> branch
+          in the existing query pattern.
         </li>
         </ol>
     </div>
@@ -437,23 +481,18 @@
     <div class="dialogTitle">Grow the Pattern Again 1/2</div>
     <div class="dialogContent">
       <p>
-        The query pattern
+        The query
         <!-- in a simple query like this -->
         <!-- is called a <span class="dialog-def">Basic Graph Pattern</span> and -->
-        is composed of a set of star-like patterns.
+        may contain multiple patterns.
         <!-- each one centered on a common subject, that can be a Resource or a Variable. -->
         <!-- By using common Variables they can be used to represent any pattern in the graph. -->
-        Add another star-like pattern to get data about the people that are friends of this person.
+        Add another pattern to get data about the people that are friends of this person.
       </p>
     </div>
     <div class="dialogToDo">
       <ol>
         <li>
-          from the <span class="dialog-command">&#xf100; Vocab/FOAF</span> category,
-          drag the <code>foaf:Person</code> pattern,
-          <!-- and drag it -->
-          after the existing pattern;
-          <!-- inside the existing query (before or after the existing pattern); -->
           <div class="blockly-readOnly" blockly-zoom="0.5" style="height: 33px; width: 211px; float:right; display:block; margin: 3px;">
             <block x="0" y="0" type="sparql_subject_propertylist">
               <value name="SUBJECT">
@@ -478,7 +517,13 @@
                 </block>
               </statement>
             </block>
-          </div></li>
+          </div>
+          from the <span class="dialog-command">&#xf100;&nbsp;Vocab&nbsp;>&nbsp;FOAF</span> category,
+          drag the <code>foaf:Person</code> pattern,
+          <!-- and drag it -->
+          after the existing pattern;
+          <!-- inside the existing query (before or after the existing pattern); -->
+        </li>
         <li>
           click on the variable
           <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 70px; vertical-align: middle;">
@@ -502,11 +547,6 @@
     <div class="dialogToDo">
       <ol>
         <li>
-          from the <span class="dialog-command">&#xf100; Vocab/FOAF</span> category,
-          drag again the <code>foaf:name</code> pattern,
-          inside the new pattern,
-          <!-- as the predicate ( -->
-          replacing the -&nbsp;<code>pred</code>&nbsp;->&nbsp;<code>obj</code> part;
           <div class="blockly-readOnly" blockly-zoom="0.5" style="height: 21px; width: 143px; float:right; display:block; margin: 3px;">
             <block x="0" y="0" type="sparql_verb_object">
               <value name="VERB">
@@ -521,7 +561,13 @@
                 </shadow>
               </value>
             </block>
-          </div></li>
+          </div>
+          from the <span class="dialog-command">&#xf100;&nbsp;Vocab&nbsp;>&nbsp;FOAF</span> category,
+          drag again the <code>foaf:name</code> branch,
+          inside the new pattern;
+          <!-- as the predicate ( -->
+          <!-- replacing the -&nbsp;<code>pred</code>&nbsp;->&nbsp;<code>obj</code> part; -->
+        </li>
         <li>
           click on
           <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 70px; vertical-align: middle;">
@@ -551,7 +597,7 @@
           <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 95px; vertical-align: middle;">
             <block x="8" y="0" type="variables_get"><field name="VAR">friendName</field></block>
           </span>
-          (either from the <span class="dialog-command">&#xf10b; Variables</span> category,
+          (either from the <span class="dialog-command">&#xf10b;&nbsp;Variables</span> category,
           from the column header in the results,
           or as duplicate of the block in the pattern)
           to the
@@ -603,12 +649,10 @@
               </value>
             </block>
           </div>
-          from the <span class="dialog-command">&#xf102; Logic</span> category,
+          from the <span class="dialog-command">&#xf102;&nbsp;Logic</span> category,
           drag a filter block to the query (before, among, or after the existing patterns);
         </li>
         <li>
-          from the <span class="dialog-command">&#xf109; Text</span> category,
-          drag a contains block inside the filter;
           <div class="blockly-readOnly" blockly-zoom="0.5" style="height: 21px; width: 148px; float:right; display:block; margin: 3px;">
             <block x="8" y="0" type="sparql_text_contains">
               <value name="FIND">
@@ -622,7 +666,9 @@
                 </shadow>
               </value>
             </block>
-        </div>
+          </div>
+          from the <span class="dialog-command">&#xf109;&nbsp;Text</span> category,
+          drag a contains block inside the filter;
         </li>
         <li>
           drag the variable
@@ -656,7 +702,7 @@
           delete everything from the workspace;
         </li>
         <li>
-          from the <span class="dialog-command">&#xf10a; Search</span> category,
+          from the <span class="dialog-command">&#xf10a;&nbsp;Search</span> category,
           drag the <em>search Classes</em> block in the workspace;
         </li>
         <li>
@@ -699,7 +745,7 @@
           and the pattern (you can delete the <em>search Classes</em> block);
         </li>
         <li>
-          from the <span class="dialog-command">&#xf10a; Search</span> category,
+          from the <span class="dialog-command">&#xf10a;&nbsp;Search</span> category,
           drag the <em>search Resources</em> block in the workspace;
         </li>
         <li>
@@ -737,7 +783,7 @@
     <div class="dialogContent">
       <p>
         There is
-        also a pre-built query to look for properties.
+        also a pre-built query to look for <span class="dialog-def">properties</span>.
         Properties identify a "type of link" between resources.
         For each property, the class of resources from which the links come from
         is called <span class="dialog-def">domain</span>, while
@@ -766,11 +812,11 @@
           </span>;
         <!-- </li>
         <li> -->
-          if you loose these resource or any used resource, you can find them back in the
-          <span class="dialog-command">&#xf107; Resources</span> category;
+          if you loose this resource or any used resource, you can find them back in the
+          <span class="dialog-command">&#xf107;&nbsp;Resources</span> category;
         </li>
         <li>
-          from the <span class="dialog-command">&#xf10a; Search</span> category,
+          from the <span class="dialog-command">&#xf10a;&nbsp;Search</span> category,
           drag the <em>search Properties</em> block in the workspace;
         </li>
         <li>
@@ -788,31 +834,35 @@
           change the text “abc” to “located”;
         </li>
         <li>
-          pick from the results the pattern found and drag it to the workspace.
+          pick from the results the branch found
+          (under column
+          <span class="blockly-readOnly" blockly-zoom="0.8" style="height: 21px; width: 70px; vertical-align: middle;">
+            <block x="8" y="0" type="variables_get"><field name="VAR">branch</field></block>
+          </span>)and drag it to the workspace.
           <!-- to the workspace. -->
         </li>
       </ol>
     </div>
   </div>
   <div id="dialogQueryFromPatterns" style="width: 400px" class="dialogHiddenContent">
-    <div class="dialogTitle">Build a Query from Patterns found with Search</div>
+    <div class="dialogTitle">Build a Query from Patterns and Branches found with Search</div>
     <div class="dialogContent">
       <p>
-        You can directly use the patterns obtained from
+        You can directly use the patterns and branches obtained from
         <em>search Classes</em> and <em>search Properties</em> to build queries.</p>
     </div>
     <div class="dialogToDo">
       <ol>
         <li>
-          keep the patterns previously obtained from
-          <em>search Classes</em> and <em>search Properties</em>
+          keep the pattern previously obtained from
+          <em>search Classes</em> and the branch from <em>search Properties</em>
           (you can delete everything else);</li>
         <li>
           drag a new query block in the workspace;</li>
         <li>
-          replace the query pattern with the <code>rdf:type</code> pattern from <em>search Classes</em>;</li>
+          replace the query pattern with the <code>dbo:Lake</code> pattern from <em>search Classes</em>;</li>
         <li>
-          add the <code>dbo:locatedInArea</code> pattern from <em>search Properties</em>.</li>
+          add the <code>dbo:locatedInArea</code> branch from <em>search Properties</em>.</li>
       </ol>
     </div>
   </div>
@@ -879,19 +929,19 @@
         Some pointers to other useful stuff:
         <ul>
           <li>
-            the <span class="dialog-command">&#xf104; Patterns</span> category contains
+            the <span class="dialog-command">&#xf104;&nbsp;Patterns</span> category contains
             more blocks to build patterns;
           </li>
           <li>
-            the <span class="dialog-command">&#xf101; Compose</span> category
+            the <span class="dialog-command">&#xf101;&nbsp;Compose</span> category
             contains blocks to compose patterns into complex
             queries;
           </li>
           <li>
             the categories
-            <span class="dialog-command">&#xf102; Logic</span>,
-            <span class="dialog-command">&#xf103; Math</span>, and
-            <span class="dialog-command">&#xf109; Text</span>
+            <span class="dialog-command">&#xf102;&nbsp;Logic</span>,
+            <span class="dialog-command">&#xf103;&nbsp;Math</span>, and
+            <span class="dialog-command">&#xf109;&nbsp;Text</span>
             allow you to
             build filters
             <!-- deal  -->
@@ -947,7 +997,7 @@
             }</data>
           </block>
         </div>
-        In the category <span class="dialog-command">&#xf108; Test</span> there is a set of blocks that are statements
+        In the category <span class="dialog-command">&#xf108;&nbsp;Test</span> there is a set of blocks that are statements
         with a missing part. Try to solve them through Linked Data queries!
       </p>
         The suggested method
