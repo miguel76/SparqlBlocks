@@ -116,7 +116,11 @@ function start() {
       var check = function(data) {
         var block = SparqlBlocks.Guide.check(workspace, data.check);
         if (block) {
-          data.focus = block.getSvgRoot();
+          if (block.getSvgRoot) {
+            data.focus = block.getSvgRoot();
+          } else if (block[0] && block[0].getSvgRoot) {
+            data.focus = block[0].getSvgRoot();
+          }
           return true;
         } else {
           return false;
@@ -140,18 +144,18 @@ function start() {
               WHERE: [{
                 type: "sparql_subject_propertylist",
                 SUBJECT: {
-                  type: "variables_get",
-                  VAR: "subj"
+                  type: "variables_get"
+                  // VAR: "subj"
                 },
                 PROPERTY_LIST: [{
                   type: "sparql_verb_object",
                   VERB: {
-                    type: "variables_get",
-                    VAR: "pred"
+                    type: "variables_get"
+                    // VAR: "pred"
                   },
                   OBJECT: {
-                    type: "variables_get",
-                    VAR: "obj"
+                    type: "variables_get"
+                    // VAR: "obj"
                   }
                 }]
               }]
@@ -256,8 +260,8 @@ function start() {
                 LOCAL_NAME: "name"
               },
               OBJECT: {
-                type: "variables_get",
-                VAR: "name"
+                type: "variables_get"
+                // VAR: "name"
               }
             });
           },
@@ -387,16 +391,22 @@ function start() {
             "top": "10px", "right": "25px"
           },
           do: function(data) {
-            data.check = {};
+            var classBlock = {type: "sparql_prefixed_iri", PREFIX: "dbo", LOCAL_NAME: "Lake"};
+            data.check = [
+              classBlock,
+              {
+                type: "sparql_subject_propertylist",
+                SUBJECT: {type: "variables_get"},
+                PROPERTY_LIST: [{
+                  type: "sparql_verb_object",
+                  VERB: {type: "sparql_prefixed_iri", PREFIX: "rdf", LOCAL_NAME: "type"},
+                  OBJECT: classBlock
+                }]
+              }
+            ];
           },
           stepWhen: function(event, data) {
-            if (event.type == Blockly.Events.CREATE &&
-                event.block.type == "sparql_prefixed_iri" &&
-                  event.block.getFieldValue("PREFIX") == "dbo" &&
-                  event.block.getFieldValue("LOCAL_NAME") == "Lake") {
-                    data.focus = event.block.getSvgRoot();
-                    return true;
-            }
+            return check(data);
           }
         },
         {
@@ -417,18 +427,50 @@ function start() {
         },
         {
           dialog: "dialogFindProperty",
+          useFocus: false,
+          style: {
+            "top": "10px", "right": "25px"
+          },
+          do: function(data) {
+            data.check = {
+              type: "sparql_verb_object",
+              VERB: {type: "sparql_prefixed_iri", PREFIX: "dbo", LOCAL_NAME: "locatedInArea"}
+            };
+          },
+          stepWhen: function(event, data) {
+            return check(data);
+          }
+        },
+        {
+          dialog: "dialogQueryFromPatterns",
           useFocus: true,
           style: {
             "top": "10px", "right": "25px"
           },
+          do: function(data) {
+            data.check = {
+              type: "sparql_execution_endpoint_query",
+              ENDPOINT: "http://live.dbpedia.org/sparql",
+              WHERE: [{
+                type: "sparql_subject_propertylist",
+                SUBJECT: {
+                  type: "variables_get"
+                  // VAR: "subj"
+                },
+                PROPERTY_LIST: [{
+                  type: "sparql_verb_object",
+                  VERB: {type: "sparql_prefixed_iri", PREFIX: "rdf", LOCAL_NAME: "type"},
+                  OBJECT: {type: "sparql_prefixed_iri", PREFIX: "dbo", LOCAL_NAME: "Lake"}
+                },{
+                  type: "sparql_verb_object",
+                  VERB: {type: "sparql_prefixed_iri", PREFIX: "dbo", LOCAL_NAME: "locatedInArea"},
+                  OBJECT: {type: "variables_get"}
+                }]
+              }]
+            };
+          },
           stepWhen: function(event, data) {
-            if (event.type == Blockly.Events.CREATE &&
-                event.block.type == "sparql_prefixed_iri" &&
-                  event.block.getFieldValue("PREFIX") == "dbo" &&
-                  event.block.getFieldValue("LOCAL_NAME") == "locatedInArea") {
-                    // data.focus = event.block.getSvgRoot();
-                    return true;
-            }
+            return check(data);
           }
         },
         {

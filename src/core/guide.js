@@ -143,7 +143,10 @@ var replaceInLineBlockly_ = function(div) {
                 wheel: false,
                 startScale: zoom }
           } : {} ));
+    var recordUndoBackup = Blockly.Events.recordUndo;
+    Blockly.Events.recordUndo = false; // trick to permit top-level shadow blocks
     Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom("<xml>" + content + "</xml>"), localWorkspace);
+    Blockly.Events.recordUndo = recordUndoBackup;
   }
 };
 
@@ -288,6 +291,21 @@ var checkBlock = function(block, checkStructure) {
 };
 
 var checkWorkspace = function(workspace, checkStructure) {
+  if (Array.isArray ?
+        Array.isArray(checkStructure) :
+        Object.prototype.toString.call(checkStructure) === '[object Array]') {
+    var blockList = [];
+    for (var i = 0; i < checkStructure.length; i++) {
+      var foundBlock = checkWorkspace(workspace, checkStructure[i]);
+      if (foundBlock) {
+        blockList.push(foundBlock);
+      } else {
+        blockList.splice(0);
+        return null;
+      }
+    }
+    return blockList;
+  }
   var topBlocks = workspace.getTopBlocks();
   for (var i = 0; i < topBlocks.length; i++) {
     var topBlock = topBlocks[i];
