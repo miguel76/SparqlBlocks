@@ -29,7 +29,7 @@ var setOrderField = function(queryBlock, index, lastOrderField, limitField) {
     input = limitField ?
               queryBlock.appendDummyInput(inputName) :
               queryBlock.appendValueInput(inputName)
-                        .setCheck(typeExt("Expr"));
+                        .setCheck(typeExt("OrderByValue"));
     if (!limitField && queryBlock.getInput("LIMIT")) {
       queryBlock.moveInputBefore(inputName, "LIMIT");
     }
@@ -109,7 +109,7 @@ module.exports = {
       var dirFieldName = 'ORDER_DIRECTION' + (i - 1);
       var dirField = new Blockly.FieldDropdown([["▲", "ASC"], ["▼", "DESC"]]);
       this.appendValueInput(inputName)
-          .setCheck(typeExt("Expr"))
+          .setCheck(typeExt("OrderByValue"))
           .appendField(
             (i !== this.orderFieldCount_ || i > 2 ? ", " : "") + "and then by",
             labelFieldName)
