@@ -18,6 +18,7 @@ var setOrderField = function(queryBlock, index, lastOrderField, limitField) {
           ['ORDER_LABEL' + index];
   var dirFieldName = index > 1 && 'ORDER_DIRECTION' + (index - 1);
   var oldDirValue = dirFieldName && queryBlock.getFieldValue(dirFieldName);
+  var oldLimitValue = queryBlock.getFieldValue('LIMIT');
   var input = queryBlock.getInput(inputName);
   if (input) {
     // remove all the fields
@@ -43,7 +44,9 @@ var setOrderField = function(queryBlock, index, lastOrderField, limitField) {
   }
   if (limitField) {
     input.appendField("  limit to first", otherFieldNames[0])
-        .appendField(new Blockly.FieldNumber(defaultLimit, 0, maxLimit), otherFieldNames[1])
+        .appendField(
+          new Blockly.FieldNumber(oldLimitValue || defaultLimit, 0, maxLimit),
+          otherFieldNames[1])
         .appendField("rows", otherFieldNames[2]);
   } else {
     input.appendField(
