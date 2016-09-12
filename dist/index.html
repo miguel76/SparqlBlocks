@@ -1677,16 +1677,18 @@
 <!-- end toolboxCommon.xml-->
   <sep></sep>
   <category name="&#xf108; Test" colour="330">
-    <block type="sparql_test">
-      <field name="QUESTION">a) Class for mountains:</field>
+    <block type="sparql_test_class">
+      <field name="INDEX">a.1)</field>
+      <field name="QUESTION">mountains:</field>
       <data>{
         "id": "1",
         "answerMD5": "2bd86839cd03700675d6bcf3f34a8684"
       }</data>
     </block>
     <sep gap="8"></sep>
-    <block type="sparql_test">
-      <field name="QUESTION">a) Property for elevation of mountains:</field>
+    <block type="sparql_test_property">
+      <field name="INDEX">a.2)</field>
+      <field name="QUESTION">elevation of mountains:</field>
       <data>{
         "id": "2",
         "answerMD5": "2f9c48a704a5537b6c31fded840b8900"
@@ -1694,7 +1696,8 @@
     </block>
     <sep gap="8"></sep>
     <block type="sparql_test">
-      <field name="QUESTION">A) 3rd highest mountain:</field>
+      <field name="INDEX">A)</field>
+      <field name="QUESTION">3rd highest mountain:</field>
       <data>{
         "id": "3",
         "answerMD5": "0ec28cc250117935cf9a2cdb8ccc31ba"
@@ -1702,39 +1705,44 @@
     </block>
     <sep gap="32"></sep>
     <block type="sparql_test">
-      <field name="QUESTION">B) Lowest mountain above 8,000 m:</field>
+      <field name="INDEX">B)</field>
+      <field name="QUESTION">Lowest mountain above 8,000 m:</field>
       <data>{
         "id": "4",
         "answerMD5": "28b96c850d9186e0781fecb5e854ea2b"
       }</data>
     </block>
     <sep gap="32"></sep>
-    <block type="sparql_test">
-      <field name="QUESTION">c) Class for countries:</field>
+    <block type="sparql_test_class">
+      <field name="INDEX">c.1)</field>
+      <field name="QUESTION">countries:</field>
       <data>{
         "id": "5",
         "answerMD5": "9f5ea8213289919f8fa8bedd19f3eb96"
       }</data>
     </block>
     <sep gap="8"></sep>
-    <block type="sparql_test">
-      <field name="QUESTION">c) Property for 'located in' (mountain->country):</field>
+    <block type="sparql_test_property">
+      <field name="INDEX">c.2)</field>
+      <field name="QUESTION">'located in' (mountain->country):</field>
       <data>{
         "id": "6",
         "answerMD5": "c0b2865f7555c5d0963e39fdc149458a"
       }</data>
     </block>
     <sep gap="8"></sep>
-    <block type="sparql_test">
-      <field name="QUESTION">c) Resource for China:</field>
+    <block type="sparql_test_resource">
+      <field name="INDEX">c.3)</field>
+      <field name="QUESTION">China:</field>
       <data>{
         "id": "7",
         "answerMD5": "9be7bcb10ccd7c92e55a9c09b91bf30d"
       }</data>
     </block>
     <sep gap="8"></sep>
-    <block type="sparql_test">
-      <field name="QUESTION">c) Resource for Nepal:</field>
+    <block type="sparql_test_resource">
+      <field name="INDEX">c.4)</field>
+      <field name="QUESTION">Nepal:</field>
       <data>{
         "id": "8",
         "answerMD5": "bd2b07bfff06dbad927da2e2dd1a5a33"
@@ -1742,7 +1750,8 @@
     </block>
     <sep gap="8"></sep>
     <block type="sparql_test">
-      <field name="QUESTION">C) 3rd highest mountain between China and Nepal:</field>
+      <field name="INDEX">C)</field>
+      <field name="QUESTION">3rd highest mountain between China and Nepal:</field>
       <data>{
         "id": "9",
         "answerMD5": "b2e13235a2e1ee782e78e78589828c03"
@@ -3597,9 +3606,10 @@
     <div class="dialogTitle">Evaluation of SparqlBlocks</div>
     <div class="dialogContent">
       <p>
-        <div class="blockly-readOnly" blockly-zoom="0.8" style="height: 29px; width: 155px; float:right; display:block; margin: 3px;">
+        <div class="blockly-readOnly" blockly-zoom="0.8" style="height: 29px; width: 160px; float:right; display:block; margin: 3px;">
           <block type="sparql_test" x="0" y="0">
-            <field name="QUESTION">X) The longest river is</field>
+            <field name="INDEX">X)</field>
+            <field name="QUESTION">The longest river is</field>
             <data>{
               "id": "0",
               "answerMD5": "b3aa0a5b32a2cf84b377a389b6250e31"
@@ -3621,9 +3631,10 @@
           <li>with the resources found in the previous step, design the query that solves the problem.</li>
         </ol>
       <p>
-        <div class="blockly-readOnly" blockly-zoom="0.8" style="height: 30px; width: 339px; float:right; display:block; margin: 3px;">
+        <div class="blockly-readOnly" blockly-zoom="0.8" style="height: 30px; width: 344px; float:right; display:block; margin: 3px;">
           <block type="sparql_test" x="0" y="0">
-            <field name="QUESTION">X) The longest river is</field>
+            <field name="INDEX">X)</field>
+            <field name="QUESTION">The longest river is</field>
             <data>{
               "id": "0",
               "answerMD5": "b3aa0a5b32a2cf84b377a389b6250e31"

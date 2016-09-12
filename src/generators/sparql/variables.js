@@ -23,6 +23,7 @@ var Blockly = require('blockly'),
     Sparql = require('../sparql.js');
 
 Sparql.variables_get = function(block) {
+  Sparql.init(block.workspace);
   var code = Sparql.variableDB_.getName(block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
   return [code, Sparql.ORDER_ATOMIC];
 };

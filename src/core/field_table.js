@@ -28,10 +28,11 @@ var JsonToBlocks = require('./jsonToBlocks.js');
  * @param {string} data The initial content of the field.
  * @param {Object} opt_extraColumns An optional set of variables to add
  *    (varNames: Array of strings, mappings: dictionary from varname to funct binding -> cellBlock)
+ * @param {boolean} hideHeaders True to hide headers
  * @extends {FieldTable}
  * @constructor
  */
-var FieldTable = function(data, opt_extraColumns) {
+var FieldTable = function(data, opt_extraColumns, hideHeaders) {
   FieldTable.constructor.call(this, '');
   // Set the initial state.
   // this.setValue(json);
@@ -43,6 +44,7 @@ var FieldTable = function(data, opt_extraColumns) {
     varNames: [],
     mappings: {}
   };
+  this.showHeaders = !hideHeaders;
 };
 FieldTable.prototype = Object.create(Blockly.Field.prototype);
 FieldTable.prototype.constructor = FieldTable;
@@ -88,10 +90,12 @@ FieldTable.prototype.setEventBindingsForBlock_ = function(block) {
 
 FieldTable.prototype.setEventBindings_ = function(colNames, headBlocks, blockRows) {
   var parent = this;
-  colNames.forEach( function(colName) {
-    var block = headBlocks[colName];
-    parent.setEventBindingsForBlock_(block);
-  });
+  if (this.showHeaders) {
+    colNames.forEach( function(colName) {
+      var block = headBlocks[colName];
+      parent.setEventBindingsForBlock_(block);
+    });
+  }
   blockRows.forEach( function(blockRow) {
     colNames.forEach( function(colName) {
       var block = blockRow[colName];
@@ -167,10 +171,12 @@ FieldTable.prototype.init = function() {
         headVars.push(extraColumns.varNames[i]);
       }
       var varBlocks = this.varBlocks_ = {};
-      headVars.forEach( function(varName) {
-        var varBlock = JsonToBlocks.blockFromVar(varName, workspace);
-        varBlocks[varName] = varBlock;
-      });
+      if (this.showHeaders) {
+        headVars.forEach( function(varName) {
+          var varBlock = JsonToBlocks.blockFromVar(varName, workspace);
+          varBlocks[varName] = varBlock;
+        });
+      }
 
       this.blockRows_ = [];
       var bindings = this.data_.results && this.data_.results.bindings;
@@ -234,15 +240,20 @@ FieldTable.prototype.renderCompute_ = function(headVars, headBlocks, blockRows) 
   var maxCellHeight = [0];
   var cellOffsetX = 0;
   headVars.forEach( function(varName) {
-    var varBlock = headBlocks[varName];
-    varBlock.render();
-    var blockSize = varBlock.getHeightWidth();
-    if (blockSize.height > maxCellHeight[0]) {
-      maxCellHeight[0] = blockSize.height;
-    }
-    maxCellWidth[varName] = blockSize.width;
+    maxCellWidth[varName] = 0;
   });
-  totalHeight += maxCellHeight[0];
+  if (this.showHeaders) {
+    headVars.forEach( function(varName) {
+      var varBlock = headBlocks[varName];
+      varBlock.render();
+      var blockSize = varBlock.getHeightWidth();
+      if (blockSize.height > maxCellHeight[0]) {
+        maxCellHeight[0] = blockSize.height;
+      }
+      maxCellWidth[varName] = blockSize.width;
+    });
+    totalHeight += maxCellHeight[0];
+  }
 
   blockRows.forEach( function(blockRow, rowIndex) {
     maxCellHeight[rowIndex + 1] = 0; // leaves index 0 for the head
@@ -285,11 +296,13 @@ FieldTable.prototype.position_ = function( colNames,
   var offsetX = this.marginX_;
   var offsetY = this.marginY_;
   var fieldTable = this;
-  colNames.forEach( function(colName, colIndex) {
-    var block = headBlocks[colName];
-    fieldTable.positionBlock_(block, offsetX, offsetY);
-    offsetX += maxCellWidth[colName] + fieldTable.cellSepX_;
-  });
+  if (this.showHeaders) {
+    colNames.forEach( function(colName, colIndex) {
+      var block = headBlocks[colName];
+      fieldTable.positionBlock_(block, offsetX, offsetY);
+      offsetX += maxCellWidth[colName] + fieldTable.cellSepX_;
+    });
+  }
   blockRows.forEach( function(blockRow, rowIndex) {
     var offsetX = fieldTable.marginX_;
     offsetY += maxCellHeight[rowIndex] + fieldTable.cellSepY_;

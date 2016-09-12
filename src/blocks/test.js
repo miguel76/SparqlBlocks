@@ -25,9 +25,13 @@ var _ = require('underscore'),
     Blocks = require('../core/blocks.js'),
     WorkspaceActions = require('../core/workspaceActions.js'),
     Storage = require('../core/storage.js'),
+    ResourcesToPatterns = require('../core/resourcesToPatterns.js'),
+    FieldTable = require('../core/field_table.js'),
     SparqlGen = require('../generators/sparql.js'),
     md5 = require('js-md5'),
     MessageDisplay = require('../core/messageDisplay.js');
+
+var rdfType = '<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>';
 
 var typeExt = Types.getExtension;
 
@@ -45,86 +49,213 @@ exports.getState = function() {
   return questionState;
 };
 
-var fixAsRightAnswer = function(questionBlock, answerBlock) {
-  answerBlock.setEditable(false);
-  if (!questionBlock.isRightAnswer) {
-    answerBlock.setTooltip('Looks like you have found the right answer!');
-    questionBlock.setTooltip('Looks like you have found the right answer!');
-    questionBlock.getInput("ANSWER").appendField("⭐");
-    questionBlock.appendDummyInput().appendField("⭐");
-    questionBlock.isRightAnswer = true;
-  }
-};
+var testBlock = function(options) {
+  options = options || {};
+  return {
+    /**
+     * Block for making a test
+     * @this Blockly.Block
+     */
+    init: function() {
+      initQuestionState();
+      this.setColour(HUE);
+      this.setTooltip('1) Look for the right block and 2) Drop it in here');
+      this.addedVarNames = [];
+      // this.appendDummyInput()
+      //     .appendField(questionField, "QUESTION");
+      var answerValueInput = this.appendValueInput('ANSWER')
+      if (options.index) {
+        var indexField = new Blockly.FieldLabel("");
+        indexField.EDITABLE = true; // trick to enable serialization
+        answerValueInput.appendField(indexField, "INDEX");
+      }
+      if (options.prefix) {
+        answerValueInput.appendField(options.prefix, "PREFIX");
+      }
+      var questionField = new Blockly.FieldLabel("");
+      questionField.EDITABLE = true; // trick to enable serialization
+      answerValueInput.appendField(questionField, "QUESTION");
+      var nextInput = null;
+      if (options.classPattern) {
+        this.hasClassPattern = true;
+        this.addedVarNames.push('pattern');
+        var lastInput = this.appendStatementInput('PATTERN')
+                            .setCheck(typeExt("TriplesBlock"));
+        nextInput = nextInput || lastInput;
+      }
+      if (options.propertyBranch) {
+        this.hasPropertyBranch = true;
+        this.addedVarNames.push('branch');
+        var lastInput = this.appendStatementInput('BRANCH')
+                            .setCheck(typeExt("PropertyList"));
+        nextInput = nextInput || lastInput;
+      }
+      if (!nextInput) {
+        nextInput = this.appendDummyInput('LAST_INPUT');
+      }
+      this.nextInput = nextInput;
+      this.setInputsInline(true);
+      // this.currentAnswer = null;
+      this.isRightAnswer = false;
+      this.check();
+    },
+    check: function() {
+      var id = this.getFieldValue('INDEX');
+      if (id && questionState[id] && questionState[id].rightAnswer
+          && !this.getInput('ANSWER_TABLE')) {
+        var rightAnswer = questionState[id].rightAnswer;
+        var rightAnswerLabel = questionState[id].rightAnswerLabel;
+        this.isRightAnswer = true;
+        var indexBackup = this.getFieldValue('INDEX');
+        var questionBackup = this.getFieldValue('QUESTION');
+        WorkspaceActions.execute(function() {
 
-Blocks.block('sparql_test', {
-  /**
-   * Block for making a test
-   * @this Blockly.Block
-   */
-  init: function() {
-    initQuestionState();
-    this.setColour(HUE);
-    this.setTooltip('1) Look for the right block and 2) Drop it in here');
-    var questionField = new Blockly.FieldLabel("");
-    questionField.EDITABLE = true; // trick to enable serialization
-    this.appendValueInput('ANSWER')
-        .appendField(questionField, "QUESTION");
-    this.setInputsInline(true);
-    this.currentAnswer = null;
-    this.isRightAnswer = false;
-  },
+          this.removeInput('ANSWER');
+          if (this.hasClassPattern) {
+            this.removeInput('PATTERN');
+          }
+          if (options.propertyBranch) {
+            this.removeInput('BRANCH');
+          }
+          if (this.getInput('LAST_INPUT')) {
+            this.removeInput('LAST_INPUT');
+          }
 
-  onchange: function() {
-    if (Blockly.dragMode_) {
-      return;
-    }
+          var resultField = new FieldTable({
+            head: { vars: ['resource'] },
+            results: {
+              bindings: [
+                {
+                  'resource': {
+                    type: 'uri',
+                    value: rightAnswer.substr(1, rightAnswer.length-2)
+                  }
+                }
+              ]
+            }
+          }, {
+            varNames: this.addedVarNames,
+            mappings: {
+              pattern: function(binding, workspace) {
+                return ResourcesToPatterns.patternFromClass(binding['resource'], workspace, rightAnswerLabel);
+              },
+              branch: function(binding, workspace) {
+                return ResourcesToPatterns.branchFromProperty(binding['resource'], workspace, rightAnswerLabel);
+              }
+            }
+          }, true);
 
-    if (this.isRightAnswer && this.getInputTargetBlock('ANSWER')) {
-      return;
-    }
-    var data = JSON.parse(this.data);
-    if (!data) {
-      return;
-    }
+          var answerTableInput = this.appendDummyInput("ANSWER_TABLE")
 
-    if (data.id && questionState[data.id] && questionState[data.id].rightAnswer) {
-      this.currentAnswer = questionState[data.id].rightAnswer;
-      WorkspaceActions.execute(function() {
-        var answerConnection = this.getInput('ANSWER').connection;
-        var targetBlock = answerConnection.targetBlock();
-        if (targetBlock) {
-          targetBlock.dispose();
-        }
-        var xml = Blockly.Xml.textToDom(questionState[data.id].rightAnswerXML);
-        var answerBlock = Blockly.Xml.domToBlock(xml.firstChild, this.workspace);
-        answerConnection.connect(answerBlock.outputConnection);
-        fixAsRightAnswer(this, answerBlock);
-      }, this);
-      return;
-    }
+          if (options.index) {
+            var indexField = new Blockly.FieldLabel(indexBackup);
+            indexField.EDITABLE = true; // trick to enable serialization
+            answerTableInput.appendField(indexField, "INDEX");
+          }
+          if (options.prefix) {
+            answerTableInput.appendField(options.prefix, "PREFIX");
+          }
+          var questionField = new Blockly.FieldLabel(questionBackup);
+          questionField.EDITABLE = true; // trick to enable serialization
+          answerTableInput.appendField(questionField, "QUESTION");
 
-    var value = SparqlGen.valueToCode(
-                    this,
-                    'ANSWER',
-                    SparqlGen.ORDER_NONE);
-    if (value && value !== "" && value != this.currentAnswer) {
+          answerTableInput.appendField('⭐')
+              .appendField(resultField, "ANSWER")
+              .appendField('⭐');
+
+        }, this);
+        return;
+      }
+    },
+    onchange: function() {
+      if (Blockly.dragMode_) {
+        return;
+      }
+
+      if (this.isRightAnswer) { // && this.getInputTargetBlock('ANSWER')) {
+        return;
+      }
+      var data = JSON.parse(this.data);
+      if (!data) {
+        return;
+      }
+
+      this.check();
+
+      var id = this.getFieldValue('INDEX');
+      var value = SparqlGen.valueToCode(
+                      this,
+                      'ANSWER',
+                      SparqlGen.ORDER_NONE);
       var answerBlock = this.getInputTargetBlock('ANSWER');
-      if (md5(value) === data.answerMD5) {
-        MessageDisplay.alert("⭐  Bingo! It is the right block!   ⭐", "info");
-        if (!questionState[data.id]) {
-          questionState[data.id] = {};
+      var label = null;
+
+      if (!value) {
+        var patternBlock = this.getInputTargetBlock('PATTERN');
+        if (patternBlock) {
+          var subjectBlock = patternBlock.getInputTargetBlock('SUBJECT');
+          if (subjectBlock && subjectBlock.type === 'variables_get') {
+            label = subjectBlock.getFieldValue('VAR');
+            if (label) {
+              var propertyList = patternBlock.getInputTargetBlock('PROPERTY_LIST');
+              if (propertyList) {
+                if (SparqlGen.valueToCode(propertyList, 'VERB', SparqlGen.ORDER_NONE) === rdfType) {
+                  value = SparqlGen.valueToCode(propertyList, 'OBJECT', SparqlGen.ORDER_NONE);
+                  answerBlock = patternBlock;
+                }
+              }
+            }
+          }
         }
-        questionState[data.id].rightAnswer = value;
-        var xml = document.createElement('xml');
-        xml.appendChild(Blockly.Xml.blockToDom(answerBlock));
-        questionState[data.id].rightAnswerXML = Blockly.Xml.domToText(xml);
-        fixAsRightAnswer(this, answerBlock);
-      } else {
+      }
+
+      if (!value) {
+        var branchBlock = this.getInputTargetBlock('BRANCH');
+        if (branchBlock) {
+          var objectBlock = branchBlock.getInputTargetBlock('OBJECT');
+          if (objectBlock && objectBlock.type === 'variables_get') {
+            label = objectBlock.getFieldValue('VAR');
+            if (label) {
+              value = SparqlGen.valueToCode(branchBlock, 'VERB', SparqlGen.ORDER_NONE);
+              answerBlock = branchBlock;
+            }
+          }
+        }
+      }
+
+      if (value && md5(value) === data.answerMD5) {
+        MessageDisplay.alert("⭐  Bingo! It is the right block!   ⭐", "info");
+        if (!questionState[id]) {
+          questionState[id] = {};
+        }
+        questionState[id].rightAnswer = value;
+        if (label) {
+          questionState[id].rightAnswerLabel = label;
+        }
+        answerBlock.dispose();
+        this.check();
+      } else if (answerBlock) {
         answerBlock.unplug();
         MessageDisplay.alert("Sorry, wrong block. Try with another one...", "error");
       }
     }
-    this.currentAnswer = value;
-  }
+  };
+};
 
-});
+Blocks.block('sparql_test', testBlock({
+  index: true
+}));
+Blocks.block('sparql_test_resource', testBlock({
+  index: true,
+  prefix: 'Resource for'
+}));
+Blocks.block('sparql_test_class', testBlock({
+  index: true,
+  classPattern: true,
+  prefix: 'Class/Pattern for'
+}));
+Blocks.block('sparql_test_property', testBlock({
+  index: true,
+  propertyBranch: true,
+  prefix: 'Property/Branch for'
+}));

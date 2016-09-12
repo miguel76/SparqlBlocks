@@ -26,6 +26,7 @@ var _ = require('underscore'),
     Blocks = require('../core/blocks.js'),
     Exec = require('../core/exec.js'),
     Msg = require('../core/msg.js'),
+    ResourcesToPatterns = require('../core/resourcesToPatterns.js'),
     SparqlGen = require('../generators/sparql.js'),
     FileSaver = require('browser-filesaver'),
     JsonToBlocks = require('../core/jsonToBlocks.js');
@@ -390,29 +391,9 @@ Blocks.block(
         mappings: {
           pattern: function(binding, workspace) {
             var resource = binding['class'];
-            if (resource) {
-              var resourceBlock = JsonToBlocks.blockFromValue(resource, workspace);
-              resourceBlock.setEditable(true);
-              var labelTerm = binding['label'];
-              var label = (labelTerm && labelTerm.value) ||
-                          resourceBlock.getFieldValue('LOCAL_NAME') ||
-                          'instance';
-              var typePropBlock = workspace.newBlock('sparql_prefixed_iri');
-              typePropBlock.setFieldValue('rdf', 'PREFIX');
-              typePropBlock.setFieldValue('type', 'LOCAL_NAME');
-              var instanceVarBlock = workspace.newBlock('variables_get');
-              instanceVarBlock.setFieldValue(label, 'VAR');
-              instanceVarBlock.setShadow(true);
-              var typeBlock = workspace.newBlock('sparql_verb_object');
-              typeBlock.getInput('VERB').connection.connect(typePropBlock.outputConnection);
-              typeBlock.getInput('OBJECT').connection.connect(resourceBlock.outputConnection);
-              var patternBlock = workspace.newBlock('sparql_subject_propertylist');
-              patternBlock.getInput('SUBJECT').connection.connect(instanceVarBlock.outputConnection);
-              patternBlock.getInput('PROPERTY_LIST').connection.connect(typeBlock.previousConnection);
-              patternBlock.initSvg();
-              patternBlock.setCollapsed(true);
-              return patternBlock
-            } else return null;
+            var labelTerm = binding['label'];
+            return ResourcesToPatterns.patternFromClass(
+                resource, workspace, labelTerm && labelTerm.value);
           }
         }
       }
@@ -488,23 +469,9 @@ Blocks.block(
       mappings: {
         branch: function(binding, workspace) {
           var resource = binding['property'];
-          if (resource) {
-            var resourceBlock = JsonToBlocks.blockFromValue(resource, workspace);
-            resourceBlock.setEditable(true);
-            var labelTerm = binding['label'];
-            var label = (labelTerm && labelTerm.value) ||
-                        resourceBlock.getFieldValue('LOCAL_NAME') ||
-                        'object';
-            var objectVarBlock = workspace.newBlock('variables_get');
-            objectVarBlock.setFieldValue(label, 'VAR');
-            objectVarBlock.setShadow(true);
-            var branchBlock = workspace.newBlock('sparql_verb_object');
-            branchBlock.getInput('VERB').connection.connect(resourceBlock.outputConnection);
-            branchBlock.getInput('OBJECT').connection.connect(objectVarBlock.outputConnection);
-            branchBlock.initSvg();
-            branchBlock.setCollapsed(true);
-            return branchBlock
-          } else return null;
+          var labelTerm = binding['label'];
+          return ResourcesToPatterns.branchFromProperty(
+              resource, workspace, labelTerm && labelTerm.value);
         }
       }
     }

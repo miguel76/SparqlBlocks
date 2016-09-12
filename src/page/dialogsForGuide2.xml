@@ -1030,9 +1030,10 @@
     <div class="dialogTitle">Evaluation of SparqlBlocks</div>
     <div class="dialogContent">
       <p>
-        <div class="blockly-readOnly" blockly-zoom="0.8" style="height: 29px; width: 155px; float:right; display:block; margin: 3px;">
+        <div class="blockly-readOnly" blockly-zoom="0.8" style="height: 29px; width: 160px; float:right; display:block; margin: 3px;">
           <block type="sparql_test" x="0" y="0">
-            <field name="QUESTION">X) The longest river is</field>
+            <field name="INDEX">X)</field>
+            <field name="QUESTION">The longest river is</field>
             <data>{
               "id": "0",
               "answerMD5": "b3aa0a5b32a2cf84b377a389b6250e31"
@@ -1054,9 +1055,10 @@
           <li>with the resources found in the previous step, design the query that solves the problem.</li>
         </ol>
       <p>
-        <div class="blockly-readOnly" blockly-zoom="0.8" style="height: 30px; width: 339px; float:right; display:block; margin: 3px;">
+        <div class="blockly-readOnly" blockly-zoom="0.8" style="height: 30px; width: 344px; float:right; display:block; margin: 3px;">
           <block type="sparql_test" x="0" y="0">
-            <field name="QUESTION">X) The longest river is</field>
+            <field name="INDEX">X)</field>
+            <field name="QUESTION">The longest river is</field>
             <data>{
               "id": "0",
               "answerMD5": "b3aa0a5b32a2cf84b377a389b6250e31"
