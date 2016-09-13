@@ -44,10 +44,10 @@ var track_ = function(workspace, options) {
       _.extend(
           { sendEventXML: true,
             sendWorkspaceXML: false,
-            sendMoveAroundEvents: true,
-            sendUIEvents: true,
-            record:true,
-            logToConsole:true
+            sendMoveAroundEvents: false,
+            sendUIEvents: false,
+            record: true,
+            logToConsole: true
           },
           options );
 
