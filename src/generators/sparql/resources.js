@@ -33,26 +33,35 @@ var localNameEsc = function(localName) {
   }).join('');
 };
 
-Sparql.sparql_prefixed_iri = function(block) {
-  var text_prefix = block.getFieldValue('PREFIX');
-  var text_local_name = block.getFieldValue('LOCAL_NAME');
+var codeFromPrefixed = function(prefix, localName) {
   var code = null;
   if (VIRTUOSO_PATCH) {
-    var extension = Prefixes.lookForPrefix(text_prefix);
+    var extension = Prefixes.lookForPrefix(prefix);
     if (extension) {
-      code = '<' + extension + text_local_name + '>';
+      code = '<' + extension + localName + '>';
     }
   }
   if (!code) {
-    code = text_prefix + ':' + localNameEsc(text_local_name);
+    code = prefix + ':' + localNameEsc(localName);
   }
   return [code, Sparql.ORDER_ATOMIC];
+}
+
+Sparql.sparql_prefixed_iri = function(block) {
+  var text_prefix = block.getFieldValue('PREFIX');
+  var text_local_name = block.getFieldValue('LOCAL_NAME');
+  return codeFromPrefixed(text_prefix, text_local_name);
 };
 
 Sparql.sparql_iri = function(block) {
   var text_iri = block.getFieldValue('IRI');
-  var code = '<' + text_iri + '>';
-  return [code, Sparql.ORDER_ATOMIC];
+  if (text_iri) {
+    return ['<' + text_iri + '>', Sparql.ORDER_ATOMIC];
+  } else {
+    var text_prefix = block.getFieldValue('PREFIX');
+    var text_local_name = block.getFieldValue('LOCAL_NAME');
+    return codeFromPrefixed(text_prefix, text_local_name);
+  }
 };
 
 Sparql.variables_get = function(block) {
