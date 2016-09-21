@@ -37,6 +37,9 @@ var logEvent_ = function(workspace, event, options) {
     }
     workspace.eventStack.push(event);
   }
+  if (options.webSocket) {
+    options.webSocket.emit(event.type, event);
+  }
 };
 
 var track_ = function(workspace, options) {
@@ -47,7 +50,8 @@ var track_ = function(workspace, options) {
             sendMoveAroundEvents: false,
             sendUIEvents: false,
             record: true,
-            logToConsole: true
+            logToConsole: true,
+            webSocket: false
           },
           options );
 

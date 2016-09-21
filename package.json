@@ -1,6 +1,6 @@
 {
   "name": "sparqlblocks",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Building SPARQL queries through block programming",
   "main": "src/index.js",
   "directories": {
@@ -51,6 +51,7 @@
     "js-md5": "^0.4.1",
     "octicons": "^3.5.0",
     "primer-css": "^3.0.1",
+    "socket.io-client": "^1.4.8",
     "underscore": "^1.8.3"
   },
   "browser": {

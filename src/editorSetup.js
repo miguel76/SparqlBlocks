@@ -3,9 +3,15 @@
 var SparqlBlocks = require('./index.js'),
     _ = require('underscore'),
     $ = require('jquery'),
-    Blockly = require('blockly');
+    Blockly = require('blockly'),
+    io = require('socket.io-client');
 
 function start() {
+
+  var socket = io();
+  socket.on('error', function(errorData) {
+    console.warn('Error connecting to server socket:' + errorData);
+  });
 
   var BlocklyDialogs = SparqlBlocks.BlocklyDialogs;
 
@@ -109,7 +115,7 @@ function start() {
     $('#save-button').on('click', function() { SparqlBlocks.Storage.linkGist(); });
     SparqlBlocks.Storage.setCopyOnThisButton('#copy-button');
     SparqlBlocks.Storage.startup(workspace);
-    SparqlBlocks.Track.track(workspace);
+    SparqlBlocks.Track.track(workspace, {webSocket: socket});
 
     if (mode === "eval") {
 
