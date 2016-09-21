@@ -231,20 +231,26 @@ var retrieveXml = function(key, opt_workspace, callback) {
       success: function(data) {
         if (!data.length) {
           MessageDisplay.alert(HASH_ERROR.replace('%1', window.location.hash), 'error');
+          if (_.isFunction(callback))
+            callback('Unknown error');
         } else {
+          if (Blockly.Events.isEnabled()) {
+            Blockly.Events.setGroup(true);
+            var loadEvent = new Blockly.Events.Abstract(null);
+            loadEvent.type = "load-snapshot";
+            loadEvent.workspaceId = workspace.id;
+            loadEvent.value = key;
+            Blockly.Events.fire(loadEvent);
+          }
           loadXml_(data, workspace);
+          MessageDisplay.alert("Workspace Loaded", "info");
+          if (Blockly.Events.isEnabled()) {
+            Blockly.Events.setGroup(false);
+          }
+          monitorChanges_(workspace);
+          if (_.isFunction(callback))
+            callback();
         }
-        MessageDisplay.alert("Workspace Loaded", "info");
-        if (Blockly.Events.isEnabled()) {
-          var loadEvent = new Blockly.Events.Abstract(null);
-          loadEvent.type = "load-snapshot";
-          loadEvent.workspaceId = workspace.id;
-          loadEvent.value = key;
-          Blockly.Events.fire(loadEvent);
-        }
-        monitorChanges_(workspace);
-        if (_.isFunction(callback))
-          callback();
       },
       error: function(jqXHR, textStatus, errorThrown) {
         var errorDescr = jqXHR.responseText;

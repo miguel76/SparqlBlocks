@@ -184,6 +184,13 @@ var execBlock = function(options) {
           callback: function() {
             var outputBlob = new Blob([thisBlock.sparqlQueryStr], {type : 'application/sparql-query'});
             FileSaver.saveAs(outputBlob, "query.rq" );
+            if (Blockly.Events.isEnabled()) {
+              var event = new Blockly.Events.Ui(null, 'download-query', null, {
+                query: thisBlock.sparqlQueryStr
+              });
+              event.workspaceId = thisBlock.workspace.id;
+              Blockly.Events.fire(event);
+            }
           }
         });
         Blocks.insertOptionBeforeHelp(options, {
@@ -198,6 +205,14 @@ var execBlock = function(options) {
                   "&endpoint=" + encodeURIComponent(endpointUri_txt):
                   "");
             window.open(yasguiUrl,'_blank');
+            if (Blockly.Events.isEnabled()) {
+              var event = new Blockly.Events.Ui(null, 'query-on-yasgui', null, {
+                query: thisBlock.sparqlQueryStr,
+                endpoint: endpointUri_txt
+              });
+              event.workspaceId = thisBlock.workspace.id;
+              Blockly.Events.fire(event);
+            }
           }
         });
       }
@@ -211,6 +226,14 @@ var execBlock = function(options) {
               var outputBlob =
                   new Blob([jsonString], {type : 'application/sparql-results+json'});
               FileSaver.saveAs(outputBlob, "results.json" );
+              if (Blockly.Events.isEnabled()) {
+                var event = new Blockly.Events.Ui(null, 'download-results', null, {
+                  query: thisBlock.sparqlQueryStr,
+                  results: thisBlock.resultsData
+                });
+                event.workspaceId = thisBlock.workspace.id;
+                Blockly.Events.fire(event);
+              }
             }
           }
         });

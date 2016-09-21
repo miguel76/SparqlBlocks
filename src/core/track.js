@@ -48,7 +48,7 @@ var track_ = function(workspace, options) {
           { sendEventXML: true,
             sendWorkspaceXML: false,
             sendMoveAroundEvents: false,
-            sendUIEvents: false,
+            sendUIEvents: true,
             record: false,
             logToConsole: false,
             webSocket: false
