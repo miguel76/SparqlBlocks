@@ -126,7 +126,7 @@ var linkGist = function(opt_workspace, callback) {
     success: function(data) {
       window.location.hash = "gist:" + data.id;
       if (Blockly.Events.isEnabled()) {
-        saveEvent = new Blockly.Events.Abstract(null);
+        var saveEvent = new Blockly.Events.Abstract(null);
         saveEvent.type = "save-snapshot";
         saveEvent.workspaceId = workspace.id;
         saveEvent.value = "gist:" + data.id;
