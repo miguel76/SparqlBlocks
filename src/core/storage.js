@@ -91,9 +91,9 @@ var linkGist = function(opt_workspace, callback) {
       timestamp: $.now(),
       workspaceXmlFile: "workspace.xml"
     },
-    // workspace.eventStack ? {
-    //   eventHistoryFile: "eventHistory.json"
-    // } : {},
+    workspace.eventStack ? {
+      eventHistoryFile: "eventHistory.json"
+    } : {},
     testState ? {
       testStateFile: "testState.json"
     } : {},
@@ -125,14 +125,13 @@ var linkGist = function(opt_workspace, callback) {
     url: "https://api.github.com/gists",
     success: function(data) {
       window.location.hash = "gist:" + data.id;
-      workspace.eventStack = [ {
-        "workspaceId": workspace.id,
-        "timestamp": $.now(),
-        "group": "",
-        "xml": {},
-        "type": "snapshot",
-        "value": "gist:" + data.id
-      } ];
+      if (Blockly.Events.isEnabled()) {
+        saveEvent = new Blockly.Events.Abstract(null);
+        saveEvent.type = "save-snapshot";
+        saveEvent.workspaceId = workspace.id;
+        saveEvent.value = "gist:" + data.id;
+        Blockly.Events.fire(saveEvent);
+      }
       monitorChanges_(workspace);
       MessageDisplay.alert(
           'Workspace Saved. ' +
@@ -236,14 +235,13 @@ var retrieveXml = function(key, opt_workspace, callback) {
           loadXml_(data, workspace);
         }
         MessageDisplay.alert("Workspace Loaded", "info");
-        workspace.eventStack = [ {
-          "workspaceId": workspace.id,
-          "timestamp": $.now(),
-          "group": "",
-          "xml": {},
-          "type": "snapshot",
-          "value": key
-        } ];
+        if (Blockly.Events.isEnabled()) {
+          var loadEvent = new Blockly.Events.Abstract(null);
+          loadEvent.type = "load-snapshot";
+          loadEvent.workspaceId = workspace.id;
+          loadEvent.value = key;
+          Blockly.Events.fire(loadEvent);
+        }
         monitorChanges_(workspace);
         if (_.isFunction(callback))
           callback();
