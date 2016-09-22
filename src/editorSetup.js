@@ -155,9 +155,21 @@ function start() {
 var setup = function(mode, workspace, sParameters) {
     if (localStorage && !localStorage.clientId) {
       localStorage.clientId = uuid.v4();
+      if (Blockly.Events.isEnabled()) {
+        var newClientEvent = new Blockly.Events.Abstract(null);
+        newClientEvent.type = "new-client";
+        newClientEvent.workspaceId = workspace.id;
+        Blockly.Events.fire(newClientEvent);
+      }
     }
     if (sessionStorage && !sessionStorage.sessionId) {
       sessionStorage.sessionId = uuid.v4();
+      if (Blockly.Events.isEnabled()) {
+        var newSessionEvent = new Blockly.Events.Abstract(null);
+        newSessionEvent.type = "new-session";
+        newSessionEvent.workspaceId = workspace.id;
+        Blockly.Events.fire(newSessionEvent);
+      }
     }
     if (mode === "eval") {
       var check = function(data) {
