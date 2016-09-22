@@ -73,6 +73,12 @@ var track_ = function(workspace, options) {
         options.sendWorkspaceXML ?
           { workspace:
                 Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace)) } :
+          {},
+        localStorage && localStorage.clientId ?
+          { clientId: localStorage.clientId } :
+          {},
+        sessionStorage && sessionStorage.sessionId ?
+          { sessionId: sessionStorage.sessionId } :
           {} ), options);
   });
 };

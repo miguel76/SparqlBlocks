@@ -4,7 +4,10 @@ var SparqlBlocks = require('./index.js'),
     _ = require('underscore'),
     $ = require('jquery'),
     Blockly = require('blockly'),
-    io = require('socket.io-client');
+    io = require('socket.io-client'),
+    uuid = require('uuid');
+
+var BlocklyDialogs = SparqlBlocks.BlocklyDialogs;
 
 function start() {
 
@@ -12,8 +15,6 @@ function start() {
   socket.on('error', function(errorData) {
     console.warn('Error connecting to server socket:' + errorData);
   });
-
-  var BlocklyDialogs = SparqlBlocks.BlocklyDialogs;
 
   var sURLVariables = decodeURIComponent(window.location.search.substring(1)).split('&');
   var sParameters = {};
@@ -117,8 +118,48 @@ function start() {
     SparqlBlocks.Storage.startup(workspace);
     SparqlBlocks.Track.track(workspace, {webSocket: socket});
 
-    if (mode === "eval") {
+    var dataNoticeDiv = document.getElementById("dialogDataNotice");
+    if (!dataNoticeDiv)
+      return;
+    SparqlBlocks.Guide.setOkButtons(dataNoticeDiv);
+    if ((localStorage && localStorage.clientId) ||
+        (sessionStorage && sessionStorage.sessionId)) {
+      setup(mode, workspace, sParameters);
+    } else {
+      BlocklyDialogs.showDialog(
+        dataNoticeDiv, false, false, true,
+        { width: '75%',
+          bottom: "inherit",
+          left: '15%',
+          top: '5%'
+        }, function() {
+          setTimeout(function() { setup(mode, workspace, sParameters); });
+        });
+    }
+  }
 
+  var selCat = sParameters.selCat;
+  if (_.isString(selCat) &&
+      workspace && workspace.toolbox_ && workspace.toolbox_.tree_) {
+    var nodeNum = parseInt(selCat, 10);
+    if (!_.isNaN(nodeNum)) {
+      var node = workspace.toolbox_.tree_.getChildAt(nodeNum);
+      if (node) {
+        workspace.toolbox_.tree_.setSelectedItem(node);
+      }
+    }
+  }
+
+}
+
+var setup = function(mode, workspace, sParameters) {
+    if (localStorage && !localStorage.clientId) {
+      localStorage.clientId = uuid.v4();
+    }
+    if (sessionStorage && !sessionStorage.sessionId) {
+      sessionStorage.sessionId = uuid.v4();
+    }
+    if (mode === "eval") {
       var check = function(data) {
         var block = SparqlBlocks.Guide.check(workspace, data.check);
         if (block) {
@@ -207,19 +248,6 @@ function start() {
           dialog: "dialogDelete",
           modal: true
         },
-        // {
-        //   dialog: "dialogDeleteVar",
-        //   style: {
-        //     "bottom": "25px", "left": "15px"
-        //   },
-        //   useFocus: true,
-        //   do: function(data) {
-        //     data.check.WHERE[0].TYPE = null;
-        //   },
-        //   stepWhen: function(event, data) {
-        //     return (event.type == Blockly.Events.DELETE && check(data));
-        //   }
-        // },
         {
           dialog: "dialogAddResource",
           useFocus: true,
@@ -238,19 +266,6 @@ function start() {
             return check(data);
           }
         },
-        // {
-        //   dialog: "dialogChangeVarName",
-        //   useFocus: true,
-        //   style: {
-        //     "top": "10px", "right": "25px"
-        //   },
-        //   do: function(data) {
-        //     data.check.WHERE[0].PROPERTY_LIST[0].OBJECT.VAR = "friend";
-        //   },
-        //   stepWhen: function(event, data) {
-        //     return check(data);
-        //   }
-        // },
         {
           dialog: "dialogAddBranch",
           useFocus: true,
@@ -525,21 +540,6 @@ function start() {
           $(".flash-messages").css("display", "");
         });
     }
-
-  }
-
-  var selCat = sParameters.selCat;
-  if (_.isString(selCat) &&
-      workspace && workspace.toolbox_ && workspace.toolbox_.tree_) {
-    var nodeNum = parseInt(selCat, 10);
-    if (!_.isNaN(nodeNum)) {
-      var node = workspace.toolbox_.tree_.getChildAt(nodeNum);
-      if (node) {
-        workspace.toolbox_.tree_.setSelectedItem(node);
-      }
-    }
-  }
-
 }
 
 window.onload = start;

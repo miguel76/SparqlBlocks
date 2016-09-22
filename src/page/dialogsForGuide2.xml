@@ -1084,4 +1084,20 @@
 
     </div>
   </div>
+  <div id="dialogDataNotice" class="dialogHiddenContent">
+    <div class="dialogTitle">Notice on User Privacy</div>
+    <div class="dialogContent">
+      <p>
+        By using this tool you acknowledge the collection
+        of usage data for improving the tool and research purposes.
+      </p>
+      <p>
+        For any questions or special requests you can contact
+        <a href="mailto:privacy@sparqlblocks.org">privacy@sparqlblocks.org</a>.
+      </p>
+    </div>
+    <div class="farSide" style="padding: 1ex 3ex 0">
+      <button class="blocklydialogs-ok"></button>
+    </div>
+  </div>
 </div>
