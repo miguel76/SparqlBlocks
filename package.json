@@ -1,6 +1,6 @@
 {
   "name": "sparqlblocks",
-  "version": "0.3.7",
+  "version": "0.3.8",
   "description": "Building SPARQL queries through block programming",
   "main": "src/index.js",
   "directories": {

@@ -344,6 +344,12 @@ var startup = function(opt_workspace, callback) {
     retrieveXml(window.location.hash.substring(1), workspace, callback);
   } else {
     monitorChanges_(workspace);
+    if (Blockly.Events.isEnabled()) {
+      var newEvent = new Blockly.Events.Abstract(null);
+      newEvent.type = "new-workspace";
+      newEvent.workspaceId = workspace.id;
+      Blockly.Events.fire(newEvent);
+    }
     if (_.isFunction(callback))
       callback();
   }
