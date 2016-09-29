@@ -210,6 +210,9 @@ var urlFromKey_ = function(key, callback, workspace) {
     case "gist":
       retrieveGisRawUrl_(keyParts[1], callback, workspace);
       break;
+    case "xml":
+      callback('data:,' + keyParts[1]);
+      break;
     default:
   }
 };
@@ -296,23 +299,24 @@ var makeRequest_ = function(ajaxOptions) {
  * @private
  */
 var monitorChanges_ = function(workspace) {
-  var sendWorkspaceXML = true;
   if (window.location.hash !== "") {
     $('#copy-button').prop('disabled', false);
   }
   $('#save-button').prop('disabled', true);
-  var startXmlDom = Blockly.Xml.workspaceToDom(workspace);
-  var startXmlText = Blockly.Xml.domToText(startXmlDom);
-  var bindData = workspace.addChangeListener( function (event) {
-    var xmlDom = Blockly.Xml.workspaceToDom(workspace);
-    var xmlText = Blockly.Xml.domToText(xmlDom);
-    if (startXmlText != xmlText) {
-      window.location.hash = '';
-      $('#copy-button').prop('disabled', true);
-      $('#save-button').prop('disabled', false);
-      setTimeout( function() { workspace.removeChangeListener(bindData); });
-    }
-  });
+  setTimeout( function() {
+    var startXmlDom = Blockly.Xml.workspaceToDom(workspace);
+    var startXmlText = Blockly.Xml.domToText(startXmlDom);
+    var bindData = workspace.addChangeListener( function (event) {
+      var xmlDom = Blockly.Xml.workspaceToDom(workspace);
+      var xmlText = Blockly.Xml.domToText(xmlDom);
+      if (startXmlText != xmlText) {
+        window.location.hash = '';
+        $('#copy-button').prop('disabled', true);
+        $('#save-button').prop('disabled', false);
+        setTimeout( function() { workspace.removeChangeListener(bindData); });
+      }
+    });
+  } );
 };
 
 /**
