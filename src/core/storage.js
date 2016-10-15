@@ -291,8 +291,6 @@ var makeRequest_ = function(ajaxOptions) {
   var protocolAndRest = ajaxOptions.url.split(":");
   if (protocolAndRest[0] === 'data') {
     var formatAndRest = protocolAndRest[1].split(",");
-    console.log(formatAndRest[1]);
-    console.log(decodeURIComponent(formatAndRest[1]));
     ajaxOptions.success(decodeURIComponent(formatAndRest[1]));
   } else {
     httpRequest_ = $.ajax(ajaxOptions);
