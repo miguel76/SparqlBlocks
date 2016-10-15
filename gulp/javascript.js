@@ -20,36 +20,32 @@ var config = {
   jsBundleName: "sparqlblocks.js"
 };
 
-gulp.task('browserify', function () {
-  // set up the browserify instance on a task basis
-  var b = browserify({
-    // entries: './src/index.js',
-    entries: './src/editorSetup.js',
-    debug: true
-  });
+exposify.config = { jquery: '$', underscore: '_' };
 
-  exposify.config = { jquery: '$', underscore: '_' };
-
-  // browserify()
-  //   .require(require.resolve('./main'), { entry: true })
-  //   .transform(exposify)
-  //   .bundle({ debug: true })
-  //   .on('end', function () {
-  //     console.log('all done, open index.html')
-  //   })
-  //   .pipe(fs.createWriteStream(path.join(__dirname, 'bundle.js'), 'utf8'))
-
-  return b.transform(exposify)
-        .transform('brfs')
-        .bundle()
-        .pipe(source('sparqlblocks.min.js'))
-        .pipe(buffer())
-        .pipe(sourcemaps.init({loadMaps: true}))
-        // Add transformation tasks to the pipeline here.
-        .pipe(uglify())
-        .on('error', gutil.log)
-        .pipe(sourcemaps.write('./'))
-        .pipe(gulp.dest('./dist/js/'));
+var browserifyEditorSetup = browserify({
+  entries: './src/editorSetup.js',
+  debug: true
 });
 
-gulp.task('makeJs', ['buildBlockly', 'browserify']);
+var processJs = function(pipe) {
+  return pipe.transform('brfs')
+      .bundle()
+      .pipe(source('sparqlblocks.min.js'))
+      .pipe(buffer())
+      .pipe(sourcemaps.init({loadMaps: true}))
+      .pipe(uglify())
+      .on('error', gutil.log)
+      .pipe(sourcemaps.write('./'))
+      .pipe(gulp.dest('./dist/js/'));
+}
+
+gulp.task('processJs', function () {
+  return processJs(browserifyEditorSetup);
+});
+
+gulp.task('processJs-extlibs', function () {
+  return processJs(browserifyEditorSetup.transform('exposify'));
+});
+
+gulp.task('makeJs', ['buildBlockly', 'processJs-extlibs']);
+gulp.task('makeJs-bundleAll', ['buildBlockly', 'processJs']);
