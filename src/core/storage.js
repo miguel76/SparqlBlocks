@@ -279,7 +279,7 @@ var retrieveXml = function(key, opt_workspace, callback) {
 var httpRequest_ = null;
 
 /**
- * Callback function for AJAX call.
+ * Function for AJAX call.
  * @private
  */
 var makeRequest_ = function(ajaxOptions) {
@@ -288,7 +288,15 @@ var makeRequest_ = function(ajaxOptions) {
     httpRequest_.abort();
     httpRequest_ = null;
   }
-  httpRequest_ = $.ajax(ajaxOptions);
+  var protocolAndRest = ajaxOptions.url.split(":");
+  if (protocolAndRest[0] === 'data') {
+    var formatAndRest = protocolAndRest[1].split(",");
+    console.log(formatAndRest[1]);
+    console.log(decodeURIComponent(formatAndRest[1]));
+    ajaxOptions.success(decodeURIComponent(formatAndRest[1]));
+  } else {
+    httpRequest_ = $.ajax(ajaxOptions);
+  }
 };
 
 /**
