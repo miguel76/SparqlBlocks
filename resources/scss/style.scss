@@ -18,7 +18,7 @@ html, body {
 }
 body {
   background-color: #fff;
-  font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-family: 'Open Sans', sans-serif !important;
   overflow: hidden;
 }
 h1 {
@@ -61,6 +61,10 @@ h1 {
 
 .blocklyTreeRow .blocklyTreeLabel {
   font-family: "Flaticon", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+}
+
+.blocklyText {
+  font-family: 'Open Sans', sans-serif !important;
 }
 
 #flash-messages {

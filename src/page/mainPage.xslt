@@ -15,6 +15,7 @@
         <meta charset="utf-8"/>
         <title>SparqlBlocks Demo</title>
 
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet"/>
         <link rel="stylesheet" type="text/css" href="css/style.css"/>
 
         <xsl:if test="not($bundledLibs)">
