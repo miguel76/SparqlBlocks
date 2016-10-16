@@ -59,7 +59,6 @@ function start() {
        });
 
     SparqlBlocks.Storage.startup(workspace, function() {
-      // workspace.zoomToFit();
     });
 
   } else {
