@@ -26,20 +26,22 @@ var SparqlGen = require('../generators/sparql.js'),
     msg = require('./msg.js'),
     FieldTable = require('./field_table.js'),
     $ = require('jquery'),
-    MessageDisplay = require('./messageDisplay.js');
+    MessageDisplay = require('./messageDisplay.js'),
+    URL = require('url-parse');
 
 // var corsProxy = "https://cors-anywhere.herokuapp.com/";
 
 var sparqlExec_ = function(endpointUrl, query, callback) {
-  var queryUrl =
-      // corsProxy +
-      endpointUrl +
-      "?query=" + encodeURIComponent(query);
+  var parsedUrl = new URL(endpointUrl);
+  parsedUrl.set(
+    'query',
+    (parsedUrl.query ? parsedUrl.query + '&' : '?') +
+    "query=" + encodeURIComponent(query));
   return $.ajax({
       headers: {Accept: "application/sparql-results+json"},
       dataType: "json",
       method: "GET",
-      url: queryUrl})
+      url: parsedUrl.href})
     .done(function(data) {
       callback(null,data);
     })
