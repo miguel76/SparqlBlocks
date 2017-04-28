@@ -37,6 +37,7 @@ Blocks.block('sparql_variable', {
     this.setHelpUrl(Blockly.Msg.VARIABLES_GET_HELPURL);
     this.setColour(HUE);
     this.appendDummyInput()
+        .appendField("?")
         .appendField(new Blockly.FieldVariable(), "VAR");
     this.setOutput(true, "Var");
     this.setTooltip('');
