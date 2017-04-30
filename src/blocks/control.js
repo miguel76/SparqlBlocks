@@ -59,6 +59,21 @@ Blocks.block('sparql_union', {
   }
 });
 
+// The generator is currently not working, do not use!!!
+Blocks.block('sparql_union1', {
+  init: function() {
+    this.setHelpUrl('http://www.w3.org/TR/sparql11-query/#alternatives');
+    this.setColour(260);
+    this.appendDummyInput().appendField("union");
+    this.appendStatementInput("OP")
+        .setCheck(typeExt("GraphPattern"));
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, typeExt("GraphPattern"));
+    this.setNextStatement(true, typeExt("GraphPattern"));
+    this.setTooltip(Msg.UNION_TOOLTIP);
+  }
+});
+
 Blocks.block('sparql_optional', {
   init: function() {
     this.setHelpUrl('http://www.w3.org/TR/sparql11-query/#optionals');

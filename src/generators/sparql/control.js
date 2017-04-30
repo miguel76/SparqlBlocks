@@ -45,6 +45,14 @@ Sparql.sparql_union = function(block) {
                       Sparql.STMNT_BRK );
 };
 
+// Currently not working, wrong syntax!!!
+Sparql.sparql_union1 = function(block) {
+  var statements_op = Sparql.statementToGraphPattern(block, 'OP');
+  return (statements_op === '') ?
+            '' :
+            'UNION {\n' + statements_op + '\n}' + Sparql.STMNT_BRK;
+};
+
 Sparql.sparql_optional = function(block) {
   var statements_op = Sparql.statementToGraphPattern(block, 'OP');
   return (statements_op === '') ?
