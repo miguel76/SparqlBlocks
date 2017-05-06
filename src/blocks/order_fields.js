@@ -104,17 +104,7 @@ module.exports = {
   domToMutation: function(xmlElement) {
     this.orderFieldCount_ = parseInt(xmlElement.getAttribute('order_field_count'), 10);
     for (var i = 2; i <= this.orderFieldCount_; i++) {
-      var inputName = 'ORDER_FIELD' + i;
-      var labelFieldName = 'ORDER_LABEL' + i;
-      var dirFieldName = 'ORDER_DIRECTION' + (i - 1);
-      var dirField = new Blockly.FieldDropdown([["▲", "ASC"], ["▼", "DESC"]]);
-      this.appendValueInput(inputName)
-          .setCheck(typeExt("OrderByValue"))
-          .appendField(
-            (i !== this.orderFieldCount_ || i > 2 ? ", " : "") + "and then by",
-            labelFieldName)
-          .appendField(dirField, dirFieldName);
-      this.moveInputBefore(inputName, "AFTER_ORDER");
+      setOrderField(this, i, true);
     }
   }
 };
