@@ -15,7 +15,9 @@
  */
 
 /**
- * @fileoverview BGP blocks for SPARQL
+ * @fileoverview Defines the blocks used in SparqlBlocks to represent SPARQL
+ *  Basic Graph Patterns (BGPs).
+ *  They include two main groups of blocks: the BGP blocks and the branch blocks.
  * @author miguel.ceriani@gmail.com (Miguel Ceriani)
  */
 'use strict';
@@ -28,15 +30,27 @@ var _ = require('underscore'),
 
 var typeExt = Types.getExtension;
 
+/**
+ * Set the help URL, the same for every one of these blocks.
+ * @param {newBlock} Blockly.Block
+ */
 var _init = function(newBlock) {
   newBlock.setHelpUrl('http://www.w3.org/TR/sparql11-query/#QSynTriples');
 };
 
+/**
+ * Set the block colour, for the branch blocks.
+ * @param {newBlock} Blockly.Block
+ */
 var _initVerb = function(newBlock) {
   _init(newBlock);
   newBlock.setColour(65);
 };
 
+/**
+ * Set the block colour, for the BGP blocks.
+ * @param {newBlock} Blockly.Block
+ */
 var _initSubject = function(newBlock) {
   _init(newBlock);
   newBlock.setColour(120);
@@ -57,13 +71,16 @@ var _varsInScopeFromInput = function(block, inputName) {
 };
 
 Blocks.block('sparql_verb_objectlist', {
+  /**
+   * Branch block consisting of a single verb (a predicate) followed by a list
+   * of objects.
+   * Note: currently not used in the standard toolbox.
+   * @this Blockly.Block
+   */
   init: function() {
     _initVerb(this);
     this.appendValueInput("VERB")
         .setCheck(typeExt("Verb"));
-    //     .appendField("-[");
-    // this.appendDummyInput()
-    //     .appendField("]");
     this.appendStatementInput("OBJECT")
         .setCheck("ObjectList")
         .appendField("↳");
@@ -80,15 +97,18 @@ Blocks.block('sparql_verb_objectlist', {
 });
 
 Blocks.block('sparql_verb_object', {
+  /**
+   * Branch block consisting of a single verb (a predicate) followed by a single
+   * object.
+   * @this Blockly.Block
+   */
   init: function() {
     _initVerb(this);
     this.appendValueInput("VERB")
         .setCheck(typeExt("Verb"))
-        // .appendField("━┫");
         .appendField("━");
     this.appendValueInput("OBJECT")
         .setCheck(typeExt("Object"))
-        // .appendField("┣━▶(");
         .appendField("━▶");
     this.setInputsInline(true);
     this.setPreviousStatement(true, "PropertyList");
@@ -98,6 +118,12 @@ Blocks.block('sparql_verb_object', {
 });
 
 Blocks.block('sparql_any_verb_object', {
+  /**
+   * Branch block consisting of an anonymous verb (predicate) followed by an
+   * anonymous object.
+   * Note: currently not used in the standard toolbox.
+   * @this Blockly.Block
+   */
   init: function() {
     _initVerb(this);
     this.appendDummyInput()
@@ -110,16 +136,19 @@ Blocks.block('sparql_any_verb_object', {
 });
 
 Blocks.block('sparql_variable_verb_object', {
+  /**
+   * Branch block consisting of a single verb (a predicate) that is always a
+   * variable, followed by a single object.
+   * Note: currently not used in the standard toolbox.
+   * @this Blockly.Block
+   */
   init: function() {
     _initVerb(this);
     this.appendValueInput("OBJECT")
         .setCheck(typeExt("Object"))
-        // .appendField("┣━▶(");
         .appendField("━")
         .appendField(new Blockly.FieldVariable(), "VAR")
         .appendField("━▶");
-    // this.appendDummyInput()
-    //     .appendField(")");
     this.setInputsInline(true);
     this.setPreviousStatement(true, "PropertyList");
     this.setNextStatement(true, "PropertyList");
@@ -128,6 +157,12 @@ Blocks.block('sparql_variable_verb_object', {
 });
 
 Blocks.block('sparql_reversePath_object', {
+  /**
+   * Branch block consisting of a reverse path (in-going edge) with a single
+   * verb (predicate) that must be an IRI (restriction from SPARQL property
+   * paths) and a subject.
+   * @this Blockly.Block
+   */
   init: function() {
     _initVerb(this);
     this.appendValueInput("VERB")
@@ -144,6 +179,12 @@ Blocks.block('sparql_reversePath_object', {
 });
 
 Blocks.block('sparql_closurePath_object', {
+  /**
+   * Branch block consisting of a "star-path", i.e. the transitive closure of a
+   * property. It has a single verb (predicate) that must be an IRI (restriction from SPARQL property
+   * paths) and an object.
+   * @this Blockly.Block
+   */
   init: function() {
     _initVerb(this);
     this.appendValueInput("VERB")
@@ -193,10 +234,8 @@ Blocks.block('sparql_subject_propertylist', {
     _initSubject(this);
     this.appendValueInput("SUBJECT")
         .setCheck(typeExt("ObjectNotLiteral"));
-        // .appendField("(");
     this.appendStatementInput("PROPERTY_LIST")
         .setCheck("PropertyList");
-        // .appendField(")");
     this.setInputsInline(true);
     this.setPreviousStatement(true, typeExt("TriplesBlock"));
     this.setNextStatement(true, typeExt("GraphPattern"));
@@ -227,7 +266,6 @@ Blocks.block('sparql_typedsubject_propertylist', {
         .appendField("is a");
     this.appendStatementInput("PROPERTY_LIST")
         .setCheck("PropertyList")
-//        .appendField("  ⌊");
         .appendField("  &");
     this.setInputsInline(true);
     this.setPreviousStatement(true, typeExt("TriplesBlock"));
@@ -241,9 +279,6 @@ Blocks.block('sparql_anonsubject_propertylist', {
     _initSubject(this);
     this.appendStatementInput("PROPERTY_LIST")
         .setCheck("PropertyList");
-        // .appendField("✱");
-        // .appendField("◯");
-        // .appendField("s.t.");
     this.setInputsInline(true);
     this.setOutput(true, typeExt("RootedPropertyList"));
     this.setTooltip(Msg.ANONSUBJECT_PROPERTYLIST_TOOLTIP);
@@ -258,13 +293,9 @@ Blocks.block('sparql_subject_verb_objectlist', {
     this.appendValueInput("VERB")
         .appendField("has")
         .setCheck(typeExt("Verb"));
-//        .appendField(" -[");
-    // this.appendDummyInput()
-    //     .appendField("]");
     this.appendStatementInput("OBJECT_LIST")
         .setCheck("ObjectList")
         .appendField("↳");
-//        .appendField("               ↳");
     this.setInputsInline(true);
     this.setPreviousStatement(true, typeExt("TriplesBlock"));
     this.setNextStatement(true, typeExt("GraphPattern"));
