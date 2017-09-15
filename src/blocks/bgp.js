@@ -56,6 +56,13 @@ var _initSubject = function(newBlock) {
   newBlock.setColour(120);
 };
 
+
+/**
+ * Get the variables in scope in an inner block.
+ * Currently not used!!!!
+ * @param {block} Blockly.Block
+ * @param {inputName} String name of the input connection
+ */
 var _varsInScopeFromInput = function(block, inputName) {
   var inputConnection = block.getInputConnection(inputName);
   if (inputConnection) {
@@ -88,11 +95,6 @@ Blocks.block('sparql_verb_objectlist', {
     this.setPreviousStatement(true, "PropertyList");
     this.setNextStatement(true, "PropertyList");
     this.setTooltip('');
-  },
-  getVarsInScope: function() {
-    return _.union(
-        _varsInScopeFromInput(this, "VERB"),
-        _varsInScopeFromInput(this, "OBJECT"));
   }
 });
 
@@ -161,6 +163,7 @@ Blocks.block('sparql_reversePath_object', {
    * Branch block consisting of a reverse path (in-going edge) with a single
    * verb (predicate) that must be an IRI (restriction from SPARQL property
    * paths) and a subject.
+   * Note: currently not used in the standard toolbox.
    * @this Blockly.Block
    */
   init: function() {
@@ -181,8 +184,9 @@ Blocks.block('sparql_reversePath_object', {
 Blocks.block('sparql_closurePath_object', {
   /**
    * Branch block consisting of a "star-path", i.e. the transitive closure of a
-   * property. It has a single verb (predicate) that must be an IRI (restriction from SPARQL property
-   * paths) and an object.
+   * property. It has a single verb (predicate) that must be an IRI (restriction
+   * from SPARQL property paths) and an object.
+   * Note: currently not used in the standard toolbox.
    * @this Blockly.Block
    */
   init: function() {
@@ -201,6 +205,13 @@ Blocks.block('sparql_closurePath_object', {
 });
 
 Blocks.block('sparql_reverseClosurePath_object', {
+  /**
+   * Branch block consisting of a reverse "star-path", i.e. the inverse of the
+   * transitive closure of a property. It has a single verb (predicate) that must be an IRI (restriction
+   * from SPARQL property paths) and a subject.
+   * Note: currently not used in the standard toolbox.
+   * @this Blockly.Block
+   */
   init: function() {
     _initVerb(this);
     this.appendValueInput("VERB")
@@ -217,6 +228,11 @@ Blocks.block('sparql_reverseClosurePath_object', {
 });
 
 Blocks.block('sparql_isa', {
+  /**
+   * Branch block consisting of a type associated with the current subject.
+   * Note: currently not used in the standard toolbox.
+   * @this Blockly.Block
+   */
   init: function() {
     _initVerb(this);
     this.appendValueInput("TYPE")
@@ -230,6 +246,11 @@ Blocks.block('sparql_isa', {
 });
 
 Blocks.block('sparql_subject_propertylist', {
+  /**
+   * Basic Graph Pattern block consisting of a single subject followed by a list
+   * of branches.
+   * @this Blockly.Block
+   */
   init: function() {
     _initSubject(this);
     this.appendValueInput("SUBJECT")
@@ -244,6 +265,12 @@ Blocks.block('sparql_subject_propertylist', {
 });
 
 Blocks.block('sparql_variable_subject_propertylist', {
+  /**
+   * Basic Graph Pattern block consisting of a single subject, which is a
+   * variable, followed by a list of branches.
+   * Note: currently not used in the standard toolbox.
+   * @this Blockly.Block
+   */
   init: function() {
     this.setColour(330);
     this.appendStatementInput("PROPERTY_LIST")
@@ -257,6 +284,12 @@ Blocks.block('sparql_variable_subject_propertylist', {
 });
 
 Blocks.block('sparql_typedsubject_propertylist', {
+  /**
+   * Basic Graph Pattern block consisting of a single subject associated to a
+   * type and followed by a list of branches.
+   * Note: currently not used in the standard toolbox.
+   * @this Blockly.Block
+   */
   init: function() {
     _initSubject(this);
     this.appendValueInput("SUBJECT")
@@ -275,6 +308,12 @@ Blocks.block('sparql_typedsubject_propertylist', {
 });
 
 Blocks.block('sparql_anonsubject_propertylist', {
+  /**
+   * Basic Graph Pattern block consisting of a single anonymous subject followed
+   * by a list of branches.
+   * Note: currently not used in the standard toolbox.
+   * @this Blockly.Block
+   */
   init: function() {
     _initSubject(this);
     this.appendStatementInput("PROPERTY_LIST")
@@ -286,6 +325,12 @@ Blocks.block('sparql_anonsubject_propertylist', {
 });
 
 Blocks.block('sparql_subject_verb_objectlist', {
+  /**
+   * Basic Graph Pattern block consisting of a single subject and a single verb
+   * (a predicate) followed by a list of objects.
+   * Note: currently not used in the standard toolbox.
+   * @this Blockly.Block
+   */
   init: function() {
     _initSubject(this);
     this.appendValueInput("SUBJECT")
