@@ -5,7 +5,16 @@ http://sparqlblocks.org/
 
 ## Usage
 
-Just serve statically the content of the directory `/dist`.
+Just serve statically the content of the directory `./dist`.
+
+For example, if you have python installed you can use SimpleHTTPServer
+
+```sh
+cd dist
+python -m SimpleHTTPServer 8080
+```
+
+and then open http://localhost:8080/.
 
 Alternatively, you can use the nodejs server in [SparqlBlocks-Server](https://github.com/miguel76/SparqlBlocks-Server) that offers also logging capability.
 
@@ -54,7 +63,7 @@ To install the dependencies, run this command from the main dir.
 npm install
 ```
 
-To build the static files in '/dist' after a change, run gulp.
+To build the static files in './dist' after a change, run gulp.
 
 ```sh
 gulp
