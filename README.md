@@ -63,7 +63,7 @@ To install the dependencies, run this command from the main dir.
 npm install
 ```
 
-To build the static files in './dist' after a change, run gulp.
+To build the static files in `./dist` after a change, run gulp.
 
 ```sh
 gulp
