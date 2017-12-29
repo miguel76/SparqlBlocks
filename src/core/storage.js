@@ -35,6 +35,7 @@ var LINK_ALERT_GITHUB = 'Share your blocks with this link:\n\n%1' +
 var HASH_ERROR = 'Sorry, "%1" doesn\'t correspond with any saved Blockly file.';
 var XML_ERROR = 'Could not load your saved file.\n'+
     'Perhaps it was created with a different version of Blockly?';
+var dataID; // creating the global variable for sending to Exec file from linkGist1 function
 
 /**
   * Backup code blocks to localStorage.
@@ -125,6 +126,7 @@ var linkGist = function(opt_workspace, callback) {
     url: "https://api.github.com/gists",
     success: function(data) {
       window.location.hash = "gist:" + data.id;
+        dataID = data.id;        //adding local variable to gblobal variable
       if (Blockly.Events.isEnabled()) {
         var saveEvent = new Blockly.Events.Abstract(null);
         saveEvent.type = "save-snapshot";
@@ -155,7 +157,9 @@ var linkGist = function(opt_workspace, callback) {
     }
   });
 };
-
+var linkGist1 = function(){  // creating function  for sending dataID to exec file to show dynamic query link to sparqlblocks page in HTML
+    return dataID
+};
 var setCopyOnThisButton = function(selector) {
   var cb = new Clipboard(selector, {
         text: function(trigger) {
@@ -369,6 +373,7 @@ module.exports = {
   backupOnUnload: backupOnUnload,
   restoreBlocks: restoreBlocks,
   linkGist: linkGist,
+  linkGist1:linkGist1,
   linkGistAndAlert: linkGistAndAlert,
   retrieveXml: retrieveXml,
   startup: startup,
