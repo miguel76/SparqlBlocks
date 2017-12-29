@@ -36,7 +36,7 @@ var baseCustomContextMenu_ = function(callback) {
       text: "Save Block Image as SVG",
       enabled: true,
       callback: function() {
-        exportSvg(thisBlock);
+        exportSvg.svg(thisBlock); //calling svg funtion downloading a Svg block
       }
     });
     if (callback) {
