@@ -17,22 +17,36 @@ var svgAfterStyleForValue =
   fs.readFileSync(__dirname + '/../../resources/svg/_afterStyleForValue.svg', 'utf8');
 var svgEpilogue = fs.readFileSync(__dirname + '/../../resources/svg/_epilogue.svg', 'utf8');
 
-module.exports = function(block) {
-  
-  blockSvg = block.getSvgRoot().innerHTML.replace(/&nbsp;/g, '&#xa0;');
+module.exports = {svg:function(block) { //  this fuction is called from Blocks file for downloading the Svg block image
 
-  var defDisabledId = block.workspace.options.disabledPatternId;
-  var defDisabled = defDisabledId ? document.getElementById(defDisabledId) : null;
-  var defDisabledSvg = defDisabled ? defDisabled.outerHTML : '';
+        blockSvg = block.getSvgRoot().innerHTML.replace(/&nbsp;/g, '&#xa0;');
 
-  var style = Blockly.Css.styleSheet_.ownerNode.outerHTML;
-  var svgAfterStyle = block.outputConnection ?
-    svgAfterStyleForValue :
-    svgAfterStyleForStatement;
+        var defDisabledId = block.workspace.options.disabledPatternId;
+        var defDisabled = defDisabledId ? document.getElementById(defDisabledId) : null;
+        var defDisabledSvg = defDisabled ? defDisabled.outerHTML : '';
 
-  var outputBlob = new Blob(
-    [svgPreamble, defDisabledSvg, svgAfterDefs, style, svgAfterStyle, blockSvg, svgEpilogue],
-    {type : 'image/svg+xml'});
-  FileSaver.saveAs(outputBlob, "block.svg" );
+        var style = Blockly.Css.styleSheet_.ownerNode.outerHTML;
+        var svgAfterStyle = block.outputConnection ?
+            svgAfterStyleForValue :
+            svgAfterStyleForStatement;
 
-};
+        var outputBlob = new Blob(
+            [svgPreamble, defDisabledSvg, svgAfterDefs, style, svgAfterStyle, blockSvg, svgEpilogue],
+            {type: 'image/svg+xml'});
+        FileSaver.saveAs(outputBlob, "block.svg");
+    },
+    svg1:function(block)   // this is called from Exec file for taking the Svg variable to show in html page
+    {
+        blockSvg = block.getSvgRoot().innerHTML.replace(/&nbsp;/g, '&#xa0;');
+
+        var defDisabledId = block.workspace.options.disabledPatternId;
+        var defDisabled = defDisabledId ? document.getElementById(defDisabledId) : null;
+        var defDisabledSvg = defDisabled ? defDisabled.outerHTML : '';
+
+        var style = Blockly.Css.styleSheet_.ownerNode.outerHTML;
+        var svgAfterStyle = block.outputConnection ?
+            svgAfterStyleForValue :
+            svgAfterStyleForStatement;
+        var svg = [svgPreamble, defDisabledSvg, svgAfterDefs, style, svgAfterStyle,blockSvg, svgEpilogue];
+        return svg;
+    }};
