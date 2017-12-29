@@ -26,10 +26,14 @@ var _ = require('underscore'),
     Blocks = require('../core/blocks.js'),
     Exec = require('../core/exec.js'),
     Msg = require('../core/msg.js'),
+    Storage = require('../core/storage.js'),
     ResourcesToPatterns = require('../core/resourcesToPatterns.js'),
     SparqlGen = require('../generators/sparql.js'),
     FileSaver = require('browser-filesaver'),
-    JsonToBlocks = require('../core/jsonToBlocks.js');
+    fs = require('fs'),
+    JsonToBlocks = require('../core/jsonToBlocks.js'),
+    exportSvg = require('../core/exportSvg');
+
 
 require('blob-polyfill');
 
@@ -178,6 +182,8 @@ var execBlock = function(options) {
     customContextMenu: function(options) {
       var thisBlock = this;
       if (this.sparqlQueryStr) {
+          if (this.resultsData)
+          {
         Blocks.insertOptionBeforeHelp(options, {
           text: "Save Query as SPARQL",
           enabled: true,
@@ -215,7 +221,34 @@ var execBlock = function(options) {
             }
           }
         });
+          Blocks.insertOptionBeforeHelp(options, {
+                text: "Dispaly Query&Results in HTML+SVG",
+                enabled: true,
+                callback: function () {
+
+                   var svg = exportSvg.svg1(thisBlock);  // calling a fuction from ExportSvg for showing visual query in HTML
+                   var dataID = Storage.linkGist1();     // calling a function from Strorage for having the dataID for " link to dynamic query".
+                    var jsonString = JSON.stringify(thisBlock.resultsData); // getting a jsonstring for reslut table in htmal page
+                  //  var endpointUri_txt = thisBlock.getFieldValue('ENDPOINT');
+                    //var blocksvg = [thisBlock.svgPreamble, thisBlock.defDisabledSvg, thisBlock.svgAfterDefs, thisBlock.style, thisBlock.svgAfterStyle, thisBlock.blockSvg, thisBlock.svgEpilogue];
+                    var htmlUrl =
+                        "/query?query=" + encodeURIComponent(thisBlock.sparqlQueryStr) + "&json=" + encodeURIComponent(jsonString) + "&SVG=" + encodeURIComponent(svg)+ "&GIST=" + encodeURIComponent(dataID);
+
+                    window.open(htmlUrl, '_self'); //link for html+svg page
+
+
+                    if (Blockly.Events.isEnabled()) {
+                        var event = new Blockly.Events.Ui(null, 'query & results on HTML', null, {
+                            query: thisBlock.sparqlQueryStr,
+                            endpoint: endpointUri_txt
+                        });
+                        event.workspaceId = thisBlock.workspace.id;
+                        Blockly.Events.fire(event);
+                    }
+                }
+            });
       }
+      }    
       if (this.resultsData) {
         Blocks.insertOptionBeforeHelp(options, {
           text: "Save Results as JSON",
