@@ -33,14 +33,14 @@
     "gulp-rename": "^1.2.2",
     "gulp-replace": "^0.5.4",
     "gulp-ruby-sass": "^2.0.6",
-    "gulp-sourcemaps": "^2.0.0-alpha",
+    "gulp-sourcemaps": "^2.6.3",
     "gulp-uglify": "^1.5.3",
     "gulp-util": "^3.0.7",
     "gulp-xslt": "^2.0.0",
     "pathmodify": "^0.5.0",
-    "vinyl-buffer": "^1.0.0",
+    "vinyl-buffer": "^1.0.1",
     "vinyl-fs": "^2.4.3",
-    "vinyl-source-stream": "^1.1.0"
+    "vinyl-source-stream": "^1.1.2"
   },
   "dependencies": {
     "blob-polyfill": "^1.0.20150320",
