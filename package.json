@@ -1,6 +1,6 @@
 {
   "name": "sparqlblocks",
-  "version": "0.3.17",
+  "version": "0.3.18",
   "description": "Building SPARQL queries through block programming",
   "main": "src/index.js",
   "directories": {
@@ -44,7 +44,6 @@
   "dependencies": {
     "blob-polyfill": "^1.0.20150320",
     "browser-filesaver": "^1.1.1",
-    "browserify-fs": "^1.0.0",
     "clipboard": "^1.5.10",
     "jquery": "^3.3.1",
     "js-md5": "^0.4.1",
