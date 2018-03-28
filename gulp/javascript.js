@@ -1,6 +1,5 @@
 var fs = require('fs'),
     gulp = require('gulp'),
-    notify = require("gulp-notify"),
     browserify = require('browserify'),
     uglify = require('gulp-uglify'),
     vfs = require('vinyl-fs'),

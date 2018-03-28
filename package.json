@@ -1,6 +1,6 @@
 {
   "name": "sparqlblocks",
-  "version": "0.3.15",
+  "version": "0.3.16",
   "description": "Building SPARQL queries through block programming",
   "main": "src/index.js",
   "directories": {
@@ -28,7 +28,6 @@
     "gulp": "^3.9.1",
     "gulp-bower": "0.0.13",
     "gulp-insert": "^0.5.0",
-    "gulp-notify": "^2.2.0",
     "gulp-remote-src": "^0.4.1",
     "gulp-rename": "^1.2.2",
     "gulp-replace": "^0.5.4",

@@ -1,6 +1,5 @@
 var gulp = require('gulp'),
-    sass = require('gulp-ruby-sass'),
-    notify = require("gulp-notify");
+    sass = require('gulp-ruby-sass');
 
 var config = {
   sassPath: './resources/scss',
@@ -30,9 +29,9 @@ gulp.task('css', function() {
                   config.nodeDir
                 ]
               }).on(
-                "error", notify.onError(function (error) {
-                return "Error: " + error.message;
-              })).pipe(gulp.dest(config.cssDistDir));
+                "error", function (error) {
+                  console.error("Error: " + error.message);
+                }).pipe(gulp.dest(config.cssDistDir));
 });
 
 
