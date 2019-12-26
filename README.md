@@ -1,5 +1,7 @@
 # SparqlBlocks
-Using Blockly library for building SPARQL queries with blocks.
+Using the [Blockly](https://developers.google.com/blockly) library
+for building [SPARQL](https://en.wikipedia.org/wiki/SPARQL) queries
+using visual blocks instead of code.
 
 http://sparqlblocks.org/
 
