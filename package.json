@@ -45,7 +45,7 @@
     "blob-polyfill": "^1.0.20150320",
     "browser-filesaver": "^1.1.1",
     "clipboard": "^1.5.10",
-    "jquery": "^3.3.1",
+    "jquery": "^3.5.0",
     "js-md5": "^0.4.1",
     "octicons": "^3.5.0",
     "primer-css": "^3.0.1",
